@@ -4,42 +4,101 @@ import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import { Link } from "react-router-dom";
 
+import L from 'leaflet';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import leafGreen from '../../assets/leaf-green.png';
+import leafRed from '../../assets/leaf-red.png';
+import leafOrange from '../../assets/leaf-orange.png';
+import leafShadow from '../../assets/leaf-shadow.png';
+
+
 
 class MapView extends Component {
+
+  
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
   };
 
+  state = {
+    greenIcon: {
+      lat: 35.787449,
+      lng: -78.6438197,
+    },
+    redIcon: {
+      lat: 35.774416,
+      lng: -78.633271,
+    },
+    orangeIcon: {
+      lat: 35.772790,
+      lng: -78.652305,
+    },
+    zoom: 13
+  }
+
+
+  grenIcon = L.icon({
+    iconUrl: leafGreen,
+    shadowUrl: leafShadow,
+    iconSize:     [38, 95], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76]
+  });
+
+  redIcon = L.icon({
+    iconUrl: leafRed,
+    shadowUrl: leafShadow,
+    iconSize:     [38, 95], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -86]
+  });
+
+  orangeIcon = L.icon({
+    iconUrl: leafOrange,
+    shadowUrl: leafShadow,
+    iconSize:     [38, 95], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -86]
+  });
+
+
+
   render() {
     const { user } = this.props.auth;
+    const positionRedIcon = [this.state.redIcon.lat, this.state.redIcon.lng];
+    const positionGreenIcon = [this.state.greenIcon.lat, this.state.greenIcon.lng];
+    const positionOrangeIcon = [this.state.orangeIcon.lat, this.state.orangeIcon.lng];
+
 
     return (
-      <div style={{ height: "75vh" }} className="container valign-wrapper">
-        <div className="row">
-          <div className="landing-copy col s12 center-align">
-            <h4>
-              <b>Lidar Map</b>
-              <p className="flow-text grey-text text-darken-1">
-                data pulled from the USGS.
-              </p>
-            </h4>
-            <Link
-                to="/dashboard"
-                style={{
-                  width: "140px",
-                  marginTop:"1rem",
-                  textAlign: "center",
-                  borderRadius: "3px",
-                  letterSpacing: "1.5px"
-                }}
-                className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-              >
-                Dashboard
-              </Link>
-          </div>
-        </div>
-      </div>
+        <Map className="map" center={positionGreenIcon} zoom={this.state.zoom}>
+        <TileLayer
+          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={positionGreenIcon} icon={this.grenIcon}>
+          <Popup>
+          I am a green leaf
+          </Popup>
+        </Marker>
+        <Marker position={positionRedIcon} icon={this.redIcon}>
+          <Popup>
+          I am a red leaf
+          </Popup>
+        </Marker>
+        <Marker position={positionOrangeIcon} icon={this.orangeIcon}>
+          <Popup>
+          I am an orange leaf
+          </Popup>
+        </Marker>
+      </Map>
     );
   }
 }
