@@ -5,7 +5,7 @@ import { logoutUser } from "../../actions/authActions";
 import { Link } from "react-router-dom";
 
 import L from 'leaflet';
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Map, TileLayer, Marker, Popup, WMSTileLayer, LayersControl, GeoJSON} from 'react-leaflet';
 import leafGreen from '../../assets/leaf-green.png';
 import leafRed from '../../assets/leaf-red.png';
 import leafOrange from '../../assets/leaf-orange.png';
@@ -16,10 +16,15 @@ import leafShadow from '../../assets/leaf-shadow.png';
 class MapView extends Component {
 
   
+  
+
+  
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
   };
+
+
 
   state = {
     greenIcon: {
@@ -68,6 +73,8 @@ class MapView extends Component {
     popupAnchor:  [-3, -86]
   });
 
+  
+
 
 
   render() {
@@ -75,29 +82,43 @@ class MapView extends Component {
     const positionRedIcon = [this.state.redIcon.lat, this.state.redIcon.lng];
     const positionGreenIcon = [this.state.greenIcon.lat, this.state.greenIcon.lng];
     const positionOrangeIcon = [this.state.orangeIcon.lat, this.state.orangeIcon.lng];
-
+    
 
     return (
         <Map className="map" center={positionGreenIcon} zoom={this.state.zoom}>
-        <TileLayer
-          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={positionGreenIcon} icon={this.grenIcon}>
-          <Popup>
-          I am a green leaf
-          </Popup>
-        </Marker>
-        <Marker position={positionRedIcon} icon={this.redIcon}>
-          <Popup>
-          I am a red leaf
-          </Popup>
-        </Marker>
-        <Marker position={positionOrangeIcon} icon={this.orangeIcon}>
-          <Popup>
-          I am an orange leaf
-          </Popup>
-        </Marker>
+          <LayersControl position="topright">
+            <LayersControl.BaseLayer name="Open Street Maps">
+              <TileLayer
+                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+            </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name="3DEP Elevation">
+            <WMSTileLayer
+              url="https://elevation.nationalmap.gov/arcgis/services/3DEPElevation/ImageServer/WMSServer?"
+              layers="3DEPElevation:Hillshade Gray"
+              opacity=".4"
+            />
+          </LayersControl.BaseLayer>
+          <GeoJSON
+            onEachFeature={this.onEachFeature}
+          />
+          <Marker position={positionGreenIcon} icon={this.grenIcon}>
+            <Popup>
+            I am a green leaf
+            </Popup>
+          </Marker>
+          <Marker position={positionRedIcon} icon={this.redIcon}>
+            <Popup>
+            I am a red leaf
+            </Popup>
+          </Marker>
+          <Marker position={positionOrangeIcon} icon={this.orangeIcon}>
+            <Popup>
+            I am an orange leaf
+            </Popup>
+          </Marker>
+        </LayersControl>
       </Map>
     );
   }
