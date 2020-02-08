@@ -11,12 +11,19 @@ import leafRed from '../../assets/leaf-red.png';
 import leafOrange from '../../assets/leaf-orange.png';
 import leafShadow from '../../assets/leaf-shadow.png';
 
+const MyMarker = props => {
 
+  const initMarker = ref => {
+    if (ref) {
+      ref.leafletElement.openPopup()
+    }
+  }
+
+  return <Marker ref={initMarker} {...props}/>
+}
 
 class MapView extends Component {
 
-  
-  
 
   
   onLogoutClick = e => {
@@ -24,54 +31,18 @@ class MapView extends Component {
     this.props.logoutUser();
   };
 
-
-
-  state = {
-    greenIcon: {
-      lat: 35.787449,
-      lng: -78.6438197,
-    },
-    redIcon: {
-      lat: 35.774416,
-      lng: -78.633271,
-    },
-    orangeIcon: {
-      lat: 35.772790,
-      lng: -78.652305,
-    },
-    zoom: 13
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentPos: null
+    };
+    this.handleClick = this.handleClick.bind(this);
   }
 
 
-  grenIcon = L.icon({
-    iconUrl: leafGreen,
-    shadowUrl: leafShadow,
-    iconSize:     [38, 95], // size of the icon
-    shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-    shadowAnchor: [4, 62],  // the same for the shadow
-    popupAnchor:  [-3, -76]
-  });
-
-  redIcon = L.icon({
-    iconUrl: leafRed,
-    shadowUrl: leafShadow,
-    iconSize:     [38, 95], // size of the icon
-    shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-    shadowAnchor: [4, 62],  // the same for the shadow
-    popupAnchor:  [-3, -86]
-  });
-
-  orangeIcon = L.icon({
-    iconUrl: leafOrange,
-    shadowUrl: leafShadow,
-    iconSize:     [38, 95], // size of the icon
-    shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-    shadowAnchor: [4, 62],  // the same for the shadow
-    popupAnchor:  [-3, -86]
-  });
+  handleClick(e){
+    this.setState({ currentPos: e.latlng });
+  }
 
   
 
@@ -79,13 +50,17 @@ class MapView extends Component {
 
   render() {
     const { user } = this.props.auth;
-    const positionRedIcon = [this.state.redIcon.lat, this.state.redIcon.lng];
-    const positionGreenIcon = [this.state.greenIcon.lat, this.state.greenIcon.lng];
-    const positionOrangeIcon = [this.state.orangeIcon.lat, this.state.orangeIcon.lng];
+    const mapCenterLoc = [35.849602, -86.368077];
     
 
     return (
-        <Map className="map" center={positionGreenIcon} zoom={this.state.zoom}>
+        <Map
+        className="map"
+        center={mapCenterLoc}
+        zoom={10}
+        doubleClickZoom={true}
+        oncontextmenu={this.handleClick}
+        >
           <LayersControl position="topright">
             <LayersControl.BaseLayer name="Open Street Maps">
               <TileLayer
@@ -100,25 +75,12 @@ class MapView extends Component {
               opacity=".4"
             />
           </LayersControl.BaseLayer>
-          <GeoJSON
-            onEachFeature={this.onEachFeature}
-          />
-          <Marker position={positionGreenIcon} icon={this.grenIcon}>
-            <Popup>
-            I am a green leaf
-            </Popup>
-          </Marker>
-          <Marker position={positionRedIcon} icon={this.redIcon}>
-            <Popup>
-            I am a red leaf
-            </Popup>
-          </Marker>
-          <Marker position={positionOrangeIcon} icon={this.orangeIcon}>
-            <Popup>
-            I am an orange leaf
-            </Popup>
-          </Marker>
         </LayersControl>
+        {this.state.currentPos && <MyMarker position={this.state.currentPos}>
+            <Popup position={this.state.currentPos}>
+              Current location: <pre>{JSON.stringify(this.state.currentPos, null, 2)}</pre>
+            </Popup>
+          </MyMarker>}
       </Map>
     );
   }
