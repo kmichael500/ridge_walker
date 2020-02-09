@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import { Link } from "react-router-dom";
 
-import L from 'leaflet';
+import L, { map, LayerGroup } from 'leaflet';
 import { Map, TileLayer, Marker, Popup, WMSTileLayer, LayersControl, GeoJSON, CircleMarker} from 'react-leaflet';
 
 import ReactLeafletSearch from "react-leaflet-search";
 import $ from 'jquery';
-import '../../assets/file.js'
+import file from '../../assets/file.js'
 
 
 
@@ -322,13 +322,15 @@ class MapView extends Component {
 
   render() {
     const { user } = this.props.auth;
-    const mapCenterLoc = [35.849602, -86.368077];
+    
+    //39.74739, -105
+    const mapCenterLoc = [35.845600, -86.390300];
     let blah = this.state;
-    console.log(cave_loc_json);
+    console.log(file.bicycleRental);
       return (
           <Map
           className="map"
-          center={[39.74739, -105]}
+          center={mapCenterLoc}
           zoom={10}
           maxZoom = {18}
           doubleClickZoom={true}
@@ -337,18 +339,43 @@ class MapView extends Component {
           <TileLayer
             url="https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
           />
-          <GeoJSON
-            key={Math.random}
-            data={caveloc.responseJSON}
+          
+        <GeoJSON
+            data={file.caving}
+            color='red'
+            fillColor='green'
+            weight={1}
+            
+            onEachFeature={function(feature, layer) {
+                var popupContent = "<p>" + "<b>" +
+                feature.properties.name + "</b><br>" + "Lat/Long: " + 
+                feature.geometry.coordinates[1] + ", " +
+                feature.geometry.coordinates[0] + "</p>";
+                
+                layer.bindPopup(popupContent)
+            }}
             pointToLayer = {function(feature, latlng){
-              return L.circleMarker(latlng, null)
-            }} 
-
-          />
+                return L.circleMarker(latlng, null)
+                }}
+        />
+          
         </Map>
       );
   }
 }
+
+/*
+
+<GeoJSON
+                key={Math.random}
+                data={bicycleRental}
+
+                pointToLayer = {function(feature, latlng){
+                return L.circleMarker(latlng, null)
+                }}
+                
+            />
+*/
 
 MapView.propTypes = {
   logoutUser: PropTypes.func.isRequired,
