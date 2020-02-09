@@ -82,7 +82,7 @@ class MapView extends Component {
             <WMSTileLayer
               url="https://elevation.nationalmap.gov/arcgis/services/3DEPElevation/ImageServer/WMSServer?"
               layers="3DEPElevation:Hillshade Gray"
-              opacity=".4"
+              opacity="1"
             />
           </LayersControl.BaseLayer>
         </LayersControl>

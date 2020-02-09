@@ -6,15 +6,21 @@ class Landing extends Component {
     return (
       <div style={{ height: "75vh" }} className="container valign-wrapper">
         <div className="row">
-          <div className="col s12 center-align">
+          <div className="col s12 left-align">
             <h4>
-              <b>Contribute</b> to a ridgewalking database so you don't have to
+              <b>Contribute</b> to a ridgewalking database so no one has to
               check the same place twice!
     
             </h4>
-            <p className="flow-text grey-text text-darken-1">
-              Create a (minimal) full-stack app with user authentication via
-              passport and JWTs
+            <p className="flow-text grey-text text-darken-1">  
+                      
+              <ul>
+                <li>Mark locations and areas that you have checked.</li>
+                <li>Upload custom points.</li>
+                <li>Overlay USGS hillshade elevation data.</li>
+                <li>Overlay Open Street Maps.</li>
+                <li>Search areas and points.</li>
+              </ul>
             </p>
             <br />
             <div className="col s6">
@@ -29,14 +35,13 @@ class Landing extends Component {
               >
                 Register
               </Link>
-            </div>
-            <div className="col s6">
               <Link
                 to="/login"
                 style={{
                   width: "140px",
                   borderRadius: "3px",
-                  letterSpacing: "1.5px"
+                  letterSpacing: "1.5px",
+                  marginLeft: '30px'
                 }}
                 className="btn btn-large waves-effect waves-light hoverable blue accent-3"
               >
