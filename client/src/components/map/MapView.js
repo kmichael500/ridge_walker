@@ -6,10 +6,9 @@ import { Link } from "react-router-dom";
 
 import L from 'leaflet';
 import { Map, TileLayer, Marker, Popup, WMSTileLayer, LayersControl, GeoJSON} from 'react-leaflet';
-import leafGreen from '../../assets/leaf-green.png';
-import leafRed from '../../assets/leaf-red.png';
-import leafOrange from '../../assets/leaf-orange.png';
-import leafShadow from '../../assets/leaf-shadow.png';
+
+import ReactLeafletSearch from "react-leaflet-search";
+
 
 const MyMarker = props => {
 
@@ -81,6 +80,18 @@ class MapView extends Component {
               Current location: <pre>{JSON.stringify(this.state.currentPos, null, 2)}</pre>
             </Popup>
           </MyMarker>}
+          <ReactLeafletSearch
+            position="topleft"
+            inputPlaceholder="Enter a place"
+            search={[]} // Setting this to [lat, lng] gives initial search input to the component and map flies to that coordinates, its like search from props not from user
+            zoom={15} // Default value is 10
+            showMarker={true}
+            showPopup={false}
+            openSearchOnLoad={false} // By default there's a search icon which opens the input when clicked. Setting this to true opens the search by default.
+            closeResultsOnClick={false} // By default, the search results remain when you click on one, and the map flies to the location of the result. But you might want to save space on your map by closing the results when one is clicked. The results are shown again (without another search) when focus is returned to the search input.
+            providerOptions={{searchBounds: []}} // The BingMap and OpenStreetMap providers both accept bounding coordinates in [se,nw] format. Note that in the case of OpenStreetMap, this only weights the results and doesn't exclude things out of bounds.
+            customProvider={undefined | {search: (searchString)=> {}}} // see examples to usage details until docs are ready
+          />
       </Map>
     );
   }
