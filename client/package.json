@@ -10,15 +10,21 @@
     "@types/node": "^12.12.37",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.7",
+    "@types/react-router-dom": "^5.1.5",
+    "antd": "^4.2.0",
+    "axios": "^0.19.2",
+    "customize-cra": "^0.9.1",
     "react": "^16.13.1",
+    "react-app-rewired": "^2.1.6",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "check": "gts check",
     "clean": "gts clean",
@@ -44,8 +50,9 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "^10.0.3",
+    "babel-plugin-import": "^1.13.0",
     "gts": "^2.0.0",
-    "typescript": "~3.8.0",
-    "@types/node": "^10.0.3"
+    "typescript": "~3.8.0"
   }
 }
