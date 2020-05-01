@@ -96,7 +96,7 @@ class MapView extends Component<any, State> {
         <MarkerClusterGroup>
             {/* loads tcs data in GeoJSON format */}
             <GeoJSON
-                data={this.state.data}
+                data={this.state.data.features}
                 color='red'
                 fillColor='green'
                 weight={1}
