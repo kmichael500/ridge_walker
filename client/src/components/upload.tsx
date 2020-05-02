@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Points } from './geoJsonInterface'
+import { Points, Feature } from '../pages/geoJsonInterface'
 import { Upload, message, Button, Empty} from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { MapView } from "../components/MapView";
+import { MapView } from "./MapView";
 
 
 // const axiosInstance = axios.create({
@@ -38,20 +38,19 @@ interface State {
     points: Points
 }
 
-class UploadCSV extends Component<any, State>{
+interface Props {
+    onUploaded: (point: Points) => void
+}
 
-    state = {
-        points: {} as Points
-      };
-    
+class UploadCSV extends Component<Props, State>{  
       handleChange = info => {
         const { status } = info.file;
         if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
+
         }
         if (status === 'done') {
             message.success(`${info.file.name} file uploaded successfully.`);
-            this.setState({points: (info.file.response)})
+            this.props.onUploaded(info.file.response);
         } else if (status === 'error') {
             message.error(`${info.file.name} file upload failed.`);
         }
@@ -66,23 +65,11 @@ class UploadCSV extends Component<any, State>{
           multiple: false
         };
         return (
-            <div>
-            {this.state.points.features === undefined ?
-            <div>
-                <Upload {...props}>
-                    <Button>
-                    <UploadOutlined /> Click to Upload
-                    </Button>
-                </Upload>
-                <pre>{JSON.stringify(this.state.points, null, 10)}</pre>
-                
-            </div>
-                :
-                <MapView data = {this.state.points.features}></MapView>
-            }
-            </div>
-            
-            
+            <Upload {...props}>
+                <Button>
+                <UploadOutlined /> Click to Upload
+                </Button>
+            </Upload>
         );
       }
 }
