@@ -15,6 +15,7 @@ import ReactLeafletSearch from "react-leaflet-search";
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import { Points } from "./geoJsonInterface.js";
+import 'leaflet/dist/leaflet.css';
 
 // marker for adding points (right click)
 const MyMarker = props => {
@@ -55,12 +56,18 @@ class MapView extends Component<any, State> {
   handleClick(e){
     this.setState({ currentPos: e.latlng });
   }
+
+  getLayers
  
   render() {
     
     return (
+      <div
+        style={{
+            height:"100vh"
+        }}>
         <Map
-          className="map"
+          style={{height:"100vh"}}
           center={this.state.center}
           zoom={this.state.zoom}
           maxZoom = {this.state.maxZoom}
@@ -131,6 +138,7 @@ class MapView extends Component<any, State> {
             // customProvider={undefined | {search: (searchString)=> {}}} // see examples to usage details until docs are ready
           />
       </Map>
+      </div>
     );
   }
 }
