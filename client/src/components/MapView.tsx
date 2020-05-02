@@ -6,6 +6,8 @@ import { Map, TileLayer, Marker, Popup, WMSTileLayer, LayersControl, GeoJSON, Ci
 
 // search bar
 import ReactLeafletSearch from "react-leaflet-search";
+import ContainerDimensions from 'react-container-dimensions'
+
 
 // tcs data in GeoJson format
 // import file from '../../assets/tcsv.js'
@@ -33,7 +35,8 @@ interface State {
     currentPos: any,  // used for right clicking points
     center: any, // starting map loc
     zoom: number,
-    maxZoom: number
+    maxZoom: number,
+    height: number
 }
 
 interface Props {
@@ -48,10 +51,18 @@ class MapView extends Component<Props, State> {
       currentPos: null,  // used for right clicking points
       center: [35.845600, -86.390300], // starting map loc
       zoom: 10,
-      maxZoom: 18
+      maxZoom: 18,
+      height: null
     };
     // used for right click event
     this.handleRightClick = this.handleRightClick.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot){
+    if (this.state.zoom !== prevState.zoom) {
+      // window.scrollTo(0, 0)
+      console.log(this.state.zoom);
+    }
   }
 
   // handles right clicks
@@ -132,18 +143,42 @@ class MapView extends Component<Props, State> {
     )
   }
 
+
+  updateDimensions() {
+    const height = window.innerWidth >= 992 ? window.innerHeight : 400
+    console.log(height)
+    this.setState({ height: height })
+  }
+  componentWillMount() {
+    this.updateDimensions()
+  }
+  componentDidMount() {
+    window.addEventListener("resize", this.updateDimensions.bind(this))
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimensions.bind(this))
+  }
+
+
   
  
   render() {
     console.log("LEAF")
     return (
+        <ContainerDimensions>
+          { ({ width, height })=>
+        
         <Map
-          style={{height:"100vh"}}
+          style={{height:height}}
           center={this.state.center}
           zoom={this.state.zoom}
           maxZoom = {this.state.maxZoom}
           doubleClickZoom={true}
           oncontextmenu={this.handleRightClick} //event lister for right click
+          onViewportChange={(vp)=>{
+            // window.scrollTo(0, 0);
+            this.setState({center: vp.center, zoom: vp.zoom})
+          }}
           
         >
           {/* USGS Lidar and OSM Layers that you can toggle */}
@@ -177,6 +212,8 @@ class MapView extends Component<Props, State> {
             // customProvider={undefined | {search: (searchString)=> {}}} // see examples to usage details until docs are ready
           />
       </Map>
+      }
+      </ContainerDimensions>
     );
   }
 }
