@@ -44,7 +44,7 @@ class MapView extends Component<any, State> {
     this.state = {
       currentPos: null,  // used for right clicking points
       center: [35.845600, -86.390300], // starting map loc
-      data: {} as Points,
+      data: this.props.data,
       zoom: 10,
       maxZoom: 18
     };
@@ -60,7 +60,7 @@ class MapView extends Component<any, State> {
   getLayers
  
   render() {
-    
+    console.log("LEAF")
     return (
       <div
         style={{
@@ -103,7 +103,8 @@ class MapView extends Component<any, State> {
         <MarkerClusterGroup>
             {/* loads tcs data in GeoJSON format */}
             <GeoJSON
-                data={this.state.data.features}
+                data={this.props.data.features}
+                key={this.props.data.features}
                 color='red'
                 fillColor='green'
                 weight={1}

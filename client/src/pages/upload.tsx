@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Points } from './geoJsonInterface'
 import { Upload, message, Button, Empty} from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { MapView } from "./MapView";
 
 
 // const axiosInstance = axios.create({
@@ -66,16 +67,22 @@ class UploadCSV extends Component<any, State>{
         };
         return (
             <div>
+            {this.state.points.features === undefined ?
+            <div>
                 <Upload {...props}>
                     <Button>
                     <UploadOutlined /> Click to Upload
                     </Button>
                 </Upload>
-                {this.state.points.features !== undefined && 
-                    (this.state.points.features[5].properties.length + this.state.points.features[5].properties.length)
-                }
                 <pre>{JSON.stringify(this.state.points, null, 10)}</pre>
+                
             </div>
+                :
+                <MapView data = {this.state.points.features}></MapView>
+            }
+            </div>
+            
+            
         );
       }
 }
