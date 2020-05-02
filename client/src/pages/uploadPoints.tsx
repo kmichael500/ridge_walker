@@ -15,7 +15,8 @@ interface State {
     data: any,
     columns: any,
     searchText,
-    searchedColumn
+    searchedColumn,
+    selectedRowKeys: any
 }
 
 interface Props {
@@ -31,10 +32,28 @@ class uploadPoints extends Component<Props, State>{
             columns: null,
             searchText: '',
             searchedColumn: '',
+            selectedRowKeys: []
         }
 
         this.handleOnUploaded = this.handleOnUploaded.bind(this);
     }
+
+    selectRow = (record) => {
+        const selectedRowKeys = [...this.state.selectedRowKeys];
+        if (selectedRowKeys.indexOf(record.key) >= 0) {
+          selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1);
+        } else {
+          selectedRowKeys.push(record.key);
+        }
+
+        this.setState({ selectedRowKeys });
+      }
+      onSelectedRowKeysChange = (selectedRowKeys) => {
+        console.log(this.state.points.features[selectedRowKeys[0]]);
+        this.setState({ selectedRowKeys });
+      }
+
+    // search 
     getColumnSearchProps = dataIndex => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
           <div style={{ padding: 8 }}>
@@ -103,26 +122,22 @@ class uploadPoints extends Component<Props, State>{
             {
               title: 'Name',
               dataIndex: 'name',
-              key: 'name',
               ...this.getColumnSearchProps('name'),
             },
             {
                 title: 'ID',
                 dataIndex: 'tcsnumber',
-                key: 'tcsnumber',
                 ...this.getColumnSearchProps('tcsnumber'),
               },
             {
                 title: 'Gear',
                 dataIndex: 'gear',
-                key: 'gear',
                 ...this.getColumnSearchProps('gear'),
             },
               
             {
               title: 'Length',
               dataIndex: 'length',
-              key: 'length',
             //   width: '12%',
               sorter: {
                 compare: (a, b) =>  b.length - a.length,
@@ -132,10 +147,18 @@ class uploadPoints extends Component<Props, State>{
             {
                 title: 'Pit Depth',
                 dataIndex: 'pdep',
-                key: 'length',
               //   width: '12%',
                 sorter: {
                   compare: (a, b) => b.pdep - a.pdep,
+                //   multiple: 4,
+                }
+              },
+              {
+                title: 'Depth',
+                dataIndex: 'depth',
+              //   width: '12%',
+                sorter: {
+                  compare: (a, b) => b.depth - a.depth,
                 //   multiple: 4,
                 }
               },
@@ -143,14 +166,12 @@ class uploadPoints extends Component<Props, State>{
                 title: 'Map Status',
                 dataIndex: 'map_status',
                 //   width: '30%',
-                key: 'map_status',
                 ...this.getColumnSearchProps('map_status'),
             },
             {
               title: 'County',
               dataIndex: 'co_name',
             //   width: '30%',
-              key: 'co_name',
               ...this.getColumnSearchProps('co_name'),
             },
           ];
@@ -159,11 +180,13 @@ class uploadPoints extends Component<Props, State>{
         //   console.log(points.features[0])
           for (let i = 0; i<points.features.length; i++){
             let point = {
+                key: i,
                 name: points.features[i].properties.name,
                 tcsnumber: points.features[i].properties.tcsnumber,
                 gear: points.features[i].properties.gear,
                 length: points.features[i].properties.length,
                 pdep: points.features[i].properties.pdep,
+                depth: points.features[i].properties.depth,
                 map_status: points.features[i].properties.map_status,
                 co_name: points.features[i].properties.co_name,
                 Depth:  points.features[i].properties.depth,
@@ -189,17 +212,27 @@ class uploadPoints extends Component<Props, State>{
             )
         }
         else{
+            const { selectedRowKeys } = this.state;
+            const rowSelection = {
+                selectedRowKeys,
+                onChange: this.onSelectedRowKeysChange,
+            };
             
             return (
                 // <pre>{JSON.stringify(this.state.points,null,2)}</pre>
                 <Table
                     columns={this.state.columns}
                     expandable={{
-                    expandedRowRender: record => <p style={{ margin: 0 }}>{record.description}</p>,
-                    rowExpandable: record => record.name !== 'Not Expandable',
-      
-    }}
-    dataSource={this.state.data}
+                        expandedRowRender: record => <p style={{ margin: 0 }}>{record.description}</p>,
+                        rowExpandable: record => record.name !== 'Not Expandable',
+                    }}
+                    rowSelection={rowSelection}
+                    onRow={(record) => ({
+                        onClick: () => {
+                          this.selectRow(record);
+                        },
+                    })}
+                    dataSource={this.state.data}
   />
             );
         }
