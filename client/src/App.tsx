@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 /* route imports */
 import { UploadCSV } from './pages/upload'
-import { MapView } from "./pages/MapView";
+import { MapView } from "./components/MapView";
+import { NavBar } from './components/NavBar'
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <Router>
           <div className="App">
             {/* Protected Routes */}
+            <NavBar></NavBar>
             <Switch>
               {/* Non Protected Routes */}
               <Route exact path="/upload" component={ UploadCSV } />
