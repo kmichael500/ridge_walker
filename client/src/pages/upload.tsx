@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Points } from './geoJsonInterface'
 import { Upload, message, Button, Empty} from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { MapView } from "./MapView";
+import { MapView } from "../components/MapView";
 
 
 // const axiosInstance = axios.create({
