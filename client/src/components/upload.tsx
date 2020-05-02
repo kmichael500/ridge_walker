@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Points, Feature } from '../pages/geoJsonInterface'
 import { Upload, message, Button, Empty} from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { MapView } from "./MapView";
+import { InboxOutlined } from '@ant-design/icons';
+const { Dragger } = Upload;
 
 
 // const axiosInstance = axios.create({
@@ -65,11 +65,15 @@ class UploadCSV extends Component<Props, State>{
           multiple: false
         };
         return (
-            <Upload {...props}>
-                <Button>
-                <UploadOutlined /> Click to Upload
-                </Button>
-            </Upload>
+            <Dragger {...props}>
+                <p className="ant-upload-drag-icon">
+                    <InboxOutlined />
+                </p>
+                <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                <p className="ant-upload-hint">
+                You can upload one file at a time
+                </p>
+            </Dragger>
         );
       }
 }
