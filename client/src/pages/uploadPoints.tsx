@@ -162,6 +162,12 @@ class uploadPoints extends Component<Props, State>{
                 //   multiple: 4,
                 }
               },
+              {
+                title: 'Owner',
+                dataIndex: 'ownership',
+              //   width: '12%',
+                ...this.getColumnSearchProps('ownership'),
+              },
             {
                 title: 'Map Status',
                 dataIndex: 'map_status',
@@ -189,6 +195,7 @@ class uploadPoints extends Component<Props, State>{
                 depth: points.features[i].properties.depth,
                 map_status: points.features[i].properties.map_status,
                 co_name: points.features[i].properties.co_name,
+                ownership: points.features[i].properties.ownership,
                 Depth:  points.features[i].properties.depth,
                 description: "<pre>" + JSON.stringify(points.features[i].properties,null,1) + "</pre>"
             }
