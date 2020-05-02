@@ -3,9 +3,10 @@
 // To change quicktype's target language, run command:
 //
 //   "Set quicktype target language"
+import GeoJsonObject from 'react-leaflet-markercluster'
 
 
-export interface Points {
+export interface Points extends GeoJsonObject {
     type:     string;
     features: Feature[];
 }
