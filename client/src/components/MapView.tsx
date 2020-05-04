@@ -5,6 +5,8 @@ import L, { map, LayerGroup, latLng } from 'leaflet';
 import { Map, TileLayer, Marker, Popup, WMSTileLayer, LayersControl, GeoJSON, CircleMarker} from 'react-leaflet';
 
 import { getAllMasterPoints } from '../dataservice/getPoints'
+import { PointInfoPopup } from '../components/PointInfoPopup'
+
 
 // search bar
 import ReactLeafletSearch from "react-leaflet-search";
@@ -40,7 +42,9 @@ interface State {
     maxZoom: number,
     height: number,
     isLoading: boolean,
-    data: Feature[]
+    data: Feature[],
+    clickedFeature: Feature
+    isFeatureClicked: boolean
 }
 
 interface Props {
@@ -67,10 +71,13 @@ class MapView extends Component<Props, State> {
       maxZoom: 18,
       height: null,
       isLoading: true,
-      data: {} as Feature[]
+      data: {} as Feature[],
+      clickedFeature: {} as Feature,
+      isFeatureClicked: false
     };
     // used for right click event
     this.handleRightClick = this.handleRightClick.bind(this);
+    this.onEachFeature = this.onEachFeature.bind(this);
   }
 
   static getPoints(){
@@ -82,7 +89,6 @@ class MapView extends Component<Props, State> {
   componentDidUpdate(prevProps, prevState, snapshot){
     if (this.state.zoom !== prevState.zoom) {
       // window.scrollTo(0, 0)
-      console.log(this.state.zoom);
     }
   }
 
@@ -101,34 +107,49 @@ class MapView extends Component<Props, State> {
             weight={1}
             onEachFeature={this.onEachFeature} 
             pointToLayer={this.pointToLayer}/>
+            
     );
   }
 
   // information to display for a point
   onEachFeature(feature: Feature, layer) {
     if (feature.properties && feature.properties.name) {
-      const latLong = feature.geometry.coordinates[0] + ", " + feature.geometry.coordinates[1];
-      let popupContent = JSON.stringify(feature.properties, null, 2)
-      popupContent = popupContent.replace(/["{}]/g, "").replace(/:( )*/g, ": ")
-      popupContent = ReactDOMServer.renderToStaticMarkup(
-        <div>
-          <h3
-            style={{textAlign:"center", fontWeight:"bold"}}>
-            {feature.properties.name}
-          </h3>
-          <h4
-            style={{textAlign:"center", fontWeight:550}}>
-            {feature.properties.tcsnumber}
-          </h4>
-          <p
-            style={{textAlign:"center"}}
-            >{latLong}
-          </p>
-          <pre>{popupContent}</pre>
-        </div>
-      )
-      layer.bindPopup(popupContent);
+      // const popupOptions = {
+      //   minWidth: 250,
+      //   maxWidth: 500,
+      //   className: "popup-classname"
+      // };
+
+      const onClick = ()=>{
+        // const that = this;
+        
+      }
+
+      layer.on({
+        click: ()=>{
+          this.setState({isFeatureClicked: true, clickedFeature: feature})
+        }
+      });
+
+      // const popupContentNode = <PointInfoPopup id={feature.properties.tcsnumber}></PointInfoPopup>;
+      // const popupContentHtml = ReactDOMServer.renderToString(popupContentNode);
+    
+      // layer.bindPopup(popupContentHtml, popupOptions);
+
+    
+      
     }
+  }
+
+  renderPopup(){
+    return(
+      <PointInfoPopup
+        id={this.state.clickedFeature.properties.tcsnumber}
+        onClick={()=>{
+          this.setState({isFeatureClicked: false})
+        }}
+      ></PointInfoPopup>
+    )
   }
 
 
@@ -209,6 +230,7 @@ class MapView extends Component<Props, State> {
             // window.scrollTo(0, 0);
             this.setState({center: vp.center, zoom: vp.zoom})
           }}
+
           
         >
           {/* USGS Lidar and OSM Layers that you can toggle */}
@@ -222,11 +244,18 @@ class MapView extends Component<Props, State> {
             </Popup>
           </MyMarker>
         }
+        {this.state.isFeatureClicked &&
+          <div>
+            {this.renderPopup()}
+          </div>
+        }
+        
 
         {/* // Clusters points */}
         <MarkerClusterGroup>
             {this.getGeoJSONComponent()}
         </MarkerClusterGroup>
+        
 
         {/* search box */}
         <ReactLeafletSearch

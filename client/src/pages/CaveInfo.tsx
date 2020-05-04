@@ -6,22 +6,24 @@ import { getMasterPoint } from "../dataservice/getPoints";
 import { cleanString } from "../dataservice/cleanString"
 
 import { MapView } from "../components/MapView"
+import { PointInfoPopup } from "../components/PointInfoPopup";
 
 const { Content } = Layout
 const { Paragraph, Title, Text } = Typography;
 
 interface State {
     point: Feature,
-    isLoading: boolean
+    isLoading: boolean,
 }
 
 interface Props {
-    match:{
+    match?:{
         params: {
             id: string
         }
     },
-    id: string
+    id: string,
+    showMap?: boolean
 }
 
 
@@ -31,7 +33,10 @@ const { Meta } = Card;
 
 
 
-class CaveInfo extends Component<Props, State>{  
+class CaveInfo extends Component<Props, State>{ 
+    static defaultProps ={
+        showMap: true
+    } 
     
     constructor(Props){
         super(Props);
@@ -63,7 +68,7 @@ class CaveInfo extends Component<Props, State>{
                 geometry: {
                     type: "Point",
                     coordinates: [0.0000, 0.0000]
-                }
+                },
             } as Feature
         }
 
@@ -71,9 +76,12 @@ class CaveInfo extends Component<Props, State>{
     }
 
     componentDidMount(){
-        let tcsnumber = this.props.match.params.id;
-        if (this.props.match.params.id === undefined){
+        let tcsnumber = ""
+        if (this.props.match === undefined){
             tcsnumber = this.props.id;
+        }
+        else{
+            tcsnumber = this.props.match.params.id;
         }
         getMasterPoint(tcsnumber).then((requestedPoint)=>{
             requestedPoint.geometry.coordinates.reverse();
@@ -131,11 +139,11 @@ class CaveInfo extends Component<Props, State>{
     
 
     render(){
-            console.log(this.state.point.geometry.coordinates)
         
         return(
             <div className="site-layout-content">
                 <Card
+                    bordered={false}
                     loading={this.state.isLoading}
                     style={{  }}
                     actions={[
@@ -162,21 +170,24 @@ class CaveInfo extends Component<Props, State>{
                 <Meta description={this.renderDescription()}/>
 
 
-
                 
                 <Paragraph>
                     {this.state.point.properties.narr}
                 </Paragraph>
-                <Divider orientation="left">Map</Divider>
 
-                    <div style={{height:"400px"}}>
-                        <MapView
-                            center={this.state.point.geometry.coordinates}
-                            zoom={15}
-                        />
+                {this.props.showMap &&
+                    <div>
+                        <Divider orientation="left">Map</Divider>
+
+                        <div style={{height:"400px"}}>
+                            <MapView
+                                center={this.state.point.geometry.coordinates}
+                                zoom={15}
+                            />
+                        </div>
                     </div>
-                    
-
+                }
+                
                     
                 </Card>
                 
