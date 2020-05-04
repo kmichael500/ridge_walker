@@ -4,6 +4,8 @@ import ReactDOMServer from 'react-dom/server';
 import L, { map, LayerGroup, latLng } from 'leaflet';
 import { Map, TileLayer, Marker, Popup, WMSTileLayer, LayersControl, GeoJSON, CircleMarker} from 'react-leaflet';
 
+import { getAllMasterPoints } from '../dataservice/getPoints'
+
 // search bar
 import ReactLeafletSearch from "react-leaflet-search";
 import ContainerDimensions from 'react-container-dimensions'
@@ -40,22 +42,37 @@ interface State {
 }
 
 interface Props {
-  data: Feature
+  data?: Feature,
+  center?: number[],
+  baseLayer?: number
+  zoom?: number
 }
 
 class MapView extends Component<Props, State> {
+
+  static defaultProps = {
+    center: [35.859710, -86.361997],
+    zoom: 7
+  } as Props
+
   // map data
   constructor(props) {
     super(props);
     this.state = {
       currentPos: null,  // used for right clicking points
-      center: [35.845600, -86.390300], // starting map loc
-      zoom: 10,
+      center: this.props.center, // starting map loc
+      zoom: this.props.zoom,
       maxZoom: 18,
       height: null
     };
     // used for right click event
     this.handleRightClick = this.handleRightClick.bind(this);
+  }
+
+  static getPoints(){
+    getAllMasterPoints().then((points)=>{
+      return points;
+    })
   }
 
   componentDidUpdate(prevProps, prevState, snapshot){
@@ -146,7 +163,6 @@ class MapView extends Component<Props, State> {
 
   updateDimensions() {
     const height = window.innerWidth >= 992 ? window.innerHeight : 400
-    console.log(height)
     this.setState({ height: height })
   }
   componentWillMount() {
@@ -163,7 +179,6 @@ class MapView extends Component<Props, State> {
   
  
   render() {
-    console.log("LEAF")
     return (
         <ContainerDimensions>
           { ({ width, height })=>
