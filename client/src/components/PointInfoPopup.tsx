@@ -71,7 +71,7 @@ class PointInfoPopup extends React.Component<Props,any> {
   render() {
     return (
         <Modal
-          width="65vw"
+          width="80vw"
           bodyStyle={{height:"65vh", overflow: "scroll"}}
           centered          
           visible={this.state.visible}

@@ -28,6 +28,7 @@ class NavBar extends Component<any, any>{
                     >
                     
                     <Menu.Item key="/map">Map</Menu.Item>
+                    <Menu.Item key="/points">Points</Menu.Item>
                     <Menu.Item key="/dashboard">Dashboard</Menu.Item>
                     <Menu.Item key="/upload">Upload</Menu.Item>
                 </Menu>
