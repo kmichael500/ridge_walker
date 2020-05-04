@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Feature } from '../pages/geoJsonInterface'
-import { Card, Descriptions, PageHeader, Row, Typography } from 'antd'
+import { Card, Descriptions, PageHeader, Space,  Col, Row, Typography, Divider, Layout } from 'antd'
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { getMasterPoint } from "../dataservice/getPoints";
 import { cleanString } from "../dataservice/cleanString"
 
 import { MapView } from "../components/MapView"
 
-const { Paragraph } = Typography;
+const { Content } = Layout
+const { Paragraph, Title, Text } = Typography;
 
 interface State {
     point: Feature,
@@ -19,19 +20,12 @@ interface Props {
         params: {
             id: string
         }
-    }
+    },
+    id: string
 }
 
 
 const { Meta } = Card;
-const Content = ({ children, extraContent }) => {
-    return (
-      <Row>
-        <div style={{ flex: 1 }}>{children}</div>
-        <div className="image">{extraContent}</div>
-      </Row>
-    );
-  };
 
 
 
@@ -77,7 +71,11 @@ class CaveInfo extends Component<Props, State>{
     }
 
     componentDidMount(){
-        getMasterPoint(this.props.match.params.id).then((requestedPoint)=>{
+        let tcsnumber = this.props.match.params.id;
+        if (this.props.match.params.id === undefined){
+            tcsnumber = this.props.id;
+        }
+        getMasterPoint(tcsnumber).then((requestedPoint)=>{
             requestedPoint.geometry.coordinates.reverse();
             this.setState({point:requestedPoint, isLoading: false});
         })
@@ -109,10 +107,11 @@ class CaveInfo extends Component<Props, State>{
                 // title={this.state.point.properties.name}
                 
                 bordered
-                column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
+                column={{ xxl: 1, xl: 3, lg: 2, md: 3, sm: 2, xs: 1 }}
             >
                 <Descriptions.Item label="Length">{this.state.point.properties.length}</Descriptions.Item>
-                <Descriptions.Item label="Depth">{this.state.point.properties.pdep}</Descriptions.Item>
+                <Descriptions.Item label="Pit Depth">{this.state.point.properties.pdep}</Descriptions.Item>
+                <Descriptions.Item label="Vertical Extent">{this.state.point.properties.depth}</Descriptions.Item>
                 <Descriptions.Item label="Elevation">{this.state.point.properties.elev}</Descriptions.Item>
                 <Descriptions.Item label="PS">{this.state.point.properties.ps}</Descriptions.Item>
                 <Descriptions.Item label="County">{this.state.point.properties.co_name}</Descriptions.Item>
@@ -125,13 +124,7 @@ class CaveInfo extends Component<Props, State>{
                 <Descriptions.Item label="Geology">{this.state.point.properties.geology}</Descriptions.Item>
                 <Descriptions.Item label="Geology Age">{this.state.point.properties.geo_age}</Descriptions.Item>
             </Descriptions>
-            <Card>
-                <Meta
-                    description={narrative}
-                >
-                    
-                </Meta>
-            </Card>
+            <Divider orientation="left">Narrative</Divider>
             </div>
         )
     }
@@ -142,13 +135,6 @@ class CaveInfo extends Component<Props, State>{
         
         return(
             <div className="site-layout-content">
-                <PageHeader
-                    ghost={false}
-                    className="site-page-header"
-                    title={this.state.point.properties.name}
-                    subTitle={this.state.point.properties.tcsnumber}
-                />
-     
                 <Card
                     loading={this.state.isLoading}
                     style={{  }}
@@ -158,15 +144,35 @@ class CaveInfo extends Component<Props, State>{
                     <EllipsisOutlined key="ellipsis" />,
                     ]}
                     
-                >
-                    <Meta
-                    description={this.renderDescription()}
-                    />
+                >    
+                <Row justify="start">
+                    <Space align="baseline">
+                    <Col>
+                        <Title level={3}>{this.state.point.properties.name}</Title>
+                    </Col>
+                    <Col>
+                        <Text type="secondary">{this.state.point.properties.tcsnumber}</Text>
+                    </Col>
+                    </Space>      
+                </Row>
+                <Row justify="start">
+                    <Text type="secondary">{this.state.point.properties.co_name + " County"}</Text>
+                </Row>
+                <Divider orientation="left"></Divider>
+                <Meta description={this.renderDescription()}/>
+
+
+
+                
+                <Paragraph>
+                    {this.state.point.properties.narr}
+                </Paragraph>
+                <Divider orientation="left">Map</Divider>
 
                     <div style={{height:"400px"}}>
                         <MapView
                             center={this.state.point.geometry.coordinates}
-                            zoom={50}
+                            zoom={15}
                         />
                     </div>
                     
