@@ -99,6 +99,7 @@ class MapView extends Component<Props, State> {
 
   // renders geoJSON data
   getGeoJSONComponent() {
+    if(!this.state.isLoading){
     return(
         <GeoJSON
             data={this.state.data}
@@ -109,11 +110,11 @@ class MapView extends Component<Props, State> {
             pointToLayer={this.pointToLayer}/>
             
     );
+    }
   }
 
   // information to display for a point
   onEachFeature(feature: Feature, layer) {
-    if (feature.properties && feature.properties.name) {
       // const popupOptions = {
       //   minWidth: 250,
       //   maxWidth: 500,
@@ -135,10 +136,6 @@ class MapView extends Component<Props, State> {
       // const popupContentHtml = ReactDOMServer.renderToString(popupContentNode);
     
       // layer.bindPopup(popupContentHtml, popupOptions);
-
-    
-      
-    }
   }
 
   renderPopup(){
@@ -218,7 +215,6 @@ class MapView extends Component<Props, State> {
         <ContainerDimensions>
           { ({ width, height })=>
           <div>
-        {!this.state.isLoading ?
         <Map
           style={{height:height}}
           center={this.state.center}
@@ -271,8 +267,7 @@ class MapView extends Component<Props, State> {
             // customProvider={undefined | {search: (searchString)=> {}}} // see examples to usage details until docs are ready
           />
       </Map>
-      : null
-      }
+      
       </div>
       }
       </ContainerDimensions>
