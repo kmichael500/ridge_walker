@@ -121,7 +121,7 @@ class CaveInfo extends Component<Props, State>{
                 <Descriptions.Item label="Gear">{this.state.point.properties.gear}</Descriptions.Item>
                 <Descriptions.Item label="Enterance Type">{this.state.point.properties.ent_type}</Descriptions.Item>
                 <Descriptions.Item label="Field Indication">{this.state.point.properties.field_indi}</Descriptions.Item>
-                <Descriptions.Item label="Map Status">{this.state.point.properties.gear}</Descriptions.Item>
+                <Descriptions.Item label="Map Status">{this.state.point.properties.map_status}</Descriptions.Item>
                 <Descriptions.Item label="Geology">{this.state.point.properties.geology}</Descriptions.Item>
                 <Descriptions.Item label="Geology Age">{this.state.point.properties.geo_age}</Descriptions.Item>
             </Descriptions>
