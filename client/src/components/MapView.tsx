@@ -141,7 +141,7 @@ class MapView extends Component<Props, State> {
   renderPopup(){
     return(
       <PointInfoPopup
-        id={this.state.clickedFeature.properties.tcsnumber}
+        point={this.state.clickedFeature}
         onClick={()=>{
           this.setState({isFeatureClicked: false})
         }}

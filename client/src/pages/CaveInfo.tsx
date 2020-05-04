@@ -23,7 +23,8 @@ interface Props {
         }
     },
     id: string,
-    showMap?: boolean
+    showMap?: boolean,
+    renderTitle?: boolean
 }
 
 
@@ -35,8 +36,9 @@ const { Meta } = Card;
 
 class CaveInfo extends Component<Props, State>{ 
     static defaultProps ={
-        showMap: true
-    } 
+        showMap: true,
+        renderTitle: true
+    } as Props
     
     constructor(Props){
         super(Props);
@@ -136,6 +138,26 @@ class CaveInfo extends Component<Props, State>{
             </div>
         )
     }
+
+    renderTitle = ()=>{
+        return(
+        <div>
+            <Row justify="start">
+                <Space align="baseline">
+                    <Col>
+                        <Title level={3}>{this.state.point.properties.name}</Title>
+                    </Col>
+                    <Col>
+                        <Text type="secondary">{this.state.point.properties.tcsnumber}</Text>
+                    </Col>
+                </Space>      
+                </Row>
+            <Row justify="start">
+                <Text type="secondary">{this.state.point.properties.co_name + " County"}</Text>
+            </Row>
+        </div>
+        )
+    }
     
 
     render(){
@@ -147,26 +169,19 @@ class CaveInfo extends Component<Props, State>{
                     loading={this.state.isLoading}
                     style={{  }}
                     actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
+                    // <SettingOutlined key="setting" />,
+                    // <EditOutlined key="edit" />,
+                    // <EllipsisOutlined key="ellipsis" />,
                     ]}
                     
                 >    
-                <Row justify="start">
-                    <Space align="baseline">
-                    <Col>
-                        <Title level={3}>{this.state.point.properties.name}</Title>
-                    </Col>
-                    <Col>
-                        <Text type="secondary">{this.state.point.properties.tcsnumber}</Text>
-                    </Col>
-                    </Space>      
-                </Row>
-                <Row justify="start">
-                    <Text type="secondary">{this.state.point.properties.co_name + " County"}</Text>
-                </Row>
-                <Divider orientation="left"></Divider>
+                {this.props.renderTitle &&
+                    <div>
+                        this.renderTitle()
+                        <Divider orientation="left"></Divider>
+                    </div>
+                }
+                
                 <Meta description={this.renderDescription()}/>
 
 
