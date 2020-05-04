@@ -32,7 +32,7 @@ class NavBar extends Component<any, any>{
                     <Menu.Item key="/upload">Upload</Menu.Item>
                 </Menu>
             </Header>
-            <Content >
+            <Content>
                 {/* <div className="site-layout-content"> */}
                     {this.props.children}
                 {/* </div> */}

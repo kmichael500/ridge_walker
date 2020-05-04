@@ -42,4 +42,5 @@ export interface PropertyType {
     geology: string,
     geo_age: string,
     phys_prov: string,
+    narr?: string
 }

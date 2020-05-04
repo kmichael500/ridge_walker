@@ -6,6 +6,8 @@ import { UploadCSV } from './components/upload'
 import { MapView } from "./components/MapView";
 import  { NavBar } from './components/NavBar'
 import { uploadPoints } from "./pages/uploadPoints"
+import { CaveInfo } from "./pages/CaveInfo";
+import { CavePointTable } from "./pages/CavePointTable";
 
 
 function App() {
@@ -18,8 +20,10 @@ function App() {
             <Switch>
               {/* Non Protected Routes */}
               <NavBar>
-              <Route exact path="/upload" component={ uploadPoints } />
-              <Route exact path="/map" component={ MapView } />
+              <Route exact path="/upload" component={uploadPoints} />
+              <Route exact path="/map" component= {MapView} />
+              <Route exact path="/points/" component= {CavePointTable} />
+              <Route exact path="/points/:id" component= {CaveInfo} />
               </NavBar>
             </Switch>
           </div>
