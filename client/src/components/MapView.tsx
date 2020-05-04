@@ -38,7 +38,9 @@ interface State {
     center: any, // starting map loc
     zoom: number,
     maxZoom: number,
-    height: number
+    height: number,
+    isLoading: boolean,
+    data: Feature[]
 }
 
 interface Props {
@@ -63,7 +65,9 @@ class MapView extends Component<Props, State> {
       center: this.props.center, // starting map loc
       zoom: this.props.zoom,
       maxZoom: 18,
-      height: null
+      height: null,
+      isLoading: true,
+      data: {} as Feature[]
     };
     // used for right click event
     this.handleRightClick = this.handleRightClick.bind(this);
@@ -91,7 +95,7 @@ class MapView extends Component<Props, State> {
   getGeoJSONComponent() {
     return(
         <GeoJSON
-            data={this.props.data}
+            data={this.state.data}
             color='red'
             fillColor='green'
             weight={1}
@@ -170,6 +174,16 @@ class MapView extends Component<Props, State> {
   }
   componentDidMount() {
     window.addEventListener("resize", this.updateDimensions.bind(this))
+
+    if (this.props.data == undefined){
+      getAllMasterPoints().then((requestedPoints)=>{
+        this.setState({data: requestedPoints, isLoading: false})
+      })
+    }
+    else{
+      this.setState({data:this.props.data, isLoading:false})
+    }
+    
   }
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateDimensions.bind(this))
@@ -182,7 +196,8 @@ class MapView extends Component<Props, State> {
     return (
         <ContainerDimensions>
           { ({ width, height })=>
-        
+          <div>
+        {!this.state.isLoading ?
         <Map
           style={{height:height}}
           center={this.state.center}
@@ -227,6 +242,9 @@ class MapView extends Component<Props, State> {
             // customProvider={undefined | {search: (searchString)=> {}}} // see examples to usage details until docs are ready
           />
       </Map>
+      : null
+      }
+      </div>
       }
       </ContainerDimensions>
     );
