@@ -31,13 +31,13 @@ class PointInfoPopup extends React.Component<Props,any> {
     this.props.onClick();
   };
 
-//   handleCancel = e => {
-//     console.log(e);
-//     this.setState({
-//       visible: false,
-//     });
-//     this.props.onClick();
-//   };
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+    this.props.onClick();
+  };
 
   render() {
     return (
@@ -48,6 +48,7 @@ class PointInfoPopup extends React.Component<Props,any> {
           onOk={this.handleOk}
           okText="Close"
           cancelButtonProps={{ style: { display: 'none' } }}
+          onCancel={this.handleCancel}
           
         >
           <CaveInfo id={this.props.id} showMap={false}></CaveInfo>
