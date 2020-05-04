@@ -177,7 +177,7 @@ class CaveInfo extends Component<Props, State>{
                 >    
                 {this.props.renderTitle &&
                     <div>
-                        this.renderTitle()
+                        {this.renderTitle()}
                         <Divider orientation="left"></Divider>
                     </div>
                 }
