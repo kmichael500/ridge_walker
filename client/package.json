@@ -12,6 +12,7 @@
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.7",
     "@types/react-leaflet-markercluster": "^2.0.0",
+    "@types/react-pdf": "^4.0.3",
     "@types/react-router-dom": "^5.1.5",
     "antd": "^4.2.0",
     "axios": "^0.19.2",
@@ -24,8 +25,10 @@
     "react-highlight-words": "^0.16.0",
     "react-leaflet-markercluster": "^2.0.0",
     "react-leaflet-search": "^1.0.3",
+    "react-pdf": "^4.1.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "react-slick": "^0.25.2",
     "typescript": "^3.7.5"
   },
   "scripts": {

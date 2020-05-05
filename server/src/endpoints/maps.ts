@@ -33,17 +33,33 @@ var storage = multer.memoryStorage()
 var upload = multer({ storage: storage })
 
 var upload = multer({ storage:storage })
-// Download a map
-mapsAPI.get("/:id", (req, res, next)=>{
+// View map in browser
+mapsAPI.get("/:mapName", (req, res, next)=>{
+    try{
+        res.sendFile(req.params.mapName,{root: "./public/maps"})   
+    }
+    catch(error){
+        res.sendStatus(404);
+    }
+})
+
+// Get map file names
+mapsAPI.get("/:id/getAll", (req, res, next)=>{
     const searchString = req.params.id + '_*.pdf';
     glob(searchString, {cwd:"public/maps"}, function (err, files) {
- 
+        console.log(files)
         if (err) {
      
             console.log(err);
      
         } else {
-            res.sendFile(files[0],{root: "./public/maps"})           
+            try{
+                res.json(files)   
+            }
+            catch(error){
+                res.sendStatus(404);
+            }
+                    
         }
      
     });
@@ -57,16 +73,31 @@ mapsAPI.get("/:id", (req, res, next)=>{
 //         if (err) {
      
 //             console.log(err);
+//             res.sendStatus(404)
      
-//         } else {
-     
-//             var file = fs.createReadStream('./public/maps/' + files[0]);
-//             var stat = fs.statSync('./public/maps/' + files[0]);
-//             res.setHeader('Content-Length', stat.size);
-//             res.setHeader('Content-Type', 'application/pdf');
-//             const fileName = 'attachment; ' + files[0]
-//             res.setHeader('Content-Disposition', fileName);
-//             file.pipe(res);             
+//         }
+//         else {
+//             if (files.length !== 0){
+//                 try{
+//                     var file = fs.createReadStream('./public/maps/' + files[0]);
+//                     var stat = fs.statSync('./public/maps/' + files[0]);
+//                     res.setHeader('Content-Length', stat.size);
+//                     res.setHeader('Content-Type', 'application/pdf');
+//                     const fileName = 'attachment; ' + files[0]
+//                     res.setHeader('Content-Disposition', fileName);
+//                     file.pipe(res); 
+//                 }
+//                 catch(error){
+//                     console.log("File not found")
+//                     console.log(files)
+//                     res.sendStatus(404)
+//                     next(error)
+//                 }
+//             }
+//             else{
+//                 res.sendStatus(404);
+//                 console.log("NotFF")
+//             }              
 //         }
      
 //     });
