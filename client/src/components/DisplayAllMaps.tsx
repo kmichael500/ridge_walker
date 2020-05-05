@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Document, Page, StyleSheet } from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
-import { Card, Row, Col, Spin, Tabs } from 'antd';
-import { getMapFileNames } from '../dataservice/getMaps'
+import { Card, Row, Col, Spin, Tabs, Typography, Button, Popover } from 'antd';
+import { getMapFileNames, getImageFileNames } from '../dataservice/getMaps'
+import { Icon } from 'leaflet';
+import DisplayMap from './DisplayPDF';
 
 const { TabPane } = Tabs;
+const { Text } = Typography;
 
 
 const options = {
@@ -94,7 +97,9 @@ interface DisplayAllMapsProps {
 }
 
 interface DisplayAllMapsState{
-    fileNames:string[]
+    fileNames:string[],
+    showFullScreen: boolean,
+    fullScreenFile: string
 }
 
 export default class DisplayAllMaps extends Component<DisplayAllMapsProps, DisplayAllMapsState> {
@@ -102,30 +107,62 @@ export default class DisplayAllMaps extends Component<DisplayAllMapsProps, Displ
     constructor(Props:DisplayAllMapsProps){
         super(Props);
         this.state = {
-            fileNames: [""]
+            fileNames: [""],
+            showFullScreen: false,
+            fullScreenFile: ""
         }
         this.renderMaps = this.renderMaps.bind(this);
     }
     componentDidMount(){
-        getMapFileNames(this.props.tcsnumber).then((files)=>{
+        // getMapFileNames(this.props.tcsnumber).then((files)=>{
+        //     this.setState({fileNames: files})
+        // })
+        
+
+        getImageFileNames(this.props.tcsnumber).then((files)=>{
             this.setState({fileNames: files})
         })
     }
 
+    
+
     renderMaps(){
+        // const onClick = () =>{
+        //     this.setState({fullScreenFile: ""}, ()=>{
+        //         console.log(t)
+        //     })
+        // }
         return(
-            <Tabs>
+            <Row>
                 {this.state.fileNames.map((file, index) => (
-                    <TabPane forceRender={true} tab={"Map " + (index+1)} key={index.toString()}>
-                        {/* <Space size="small"> */}
-                        <SmallMap fileName={file}></SmallMap>
+                    <Col span={6}>
+                        
+                            {this.state.fullScreenFile === file &&
+                            <DisplayMap
+                                file={file}
+                                visible={this.state.showFullScreen}
+                                onClick={()=>{
+                                    this.setState({showFullScreen: false})
+                                }}
+                            ></DisplayMap>
+                            
+                            }
+                            <div onClick={()=>{this.setState({showFullScreen: !this.state.showFullScreen, fullScreenFile: file})}}>
+                            <Card
+                                hoverable
+                                bordered={false}
+                            >
+                                <img src={file} width="100%"></img>
+
+                            </Card>
+                        </div>
                         {/* </Space> */}
-                    </TabPane>
+                    </Col>
                     
 
 
                 ))}
-            </Tabs>    
+            </Row>    
         )
     }
 

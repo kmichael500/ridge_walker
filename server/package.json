@@ -21,6 +21,7 @@
   "dependencies": {
     "@types/express-fileupload": "^1.1.3",
     "@types/mongoose": "^5.7.14",
+    "@types/pdf-image": "^2.0.0",
     "csv2geojson": "^5.1.1",
     "del": "^5.1.0",
     "express": "^4.17.1",
@@ -29,6 +30,7 @@
     "lokijs": "^1.5.8",
     "mongoose": "^5.9.11",
     "multer": "^1.4.2",
+    "pdf-image": "^2.0.0",
     "ts-node-dev": "^1.0.0-pre.44"
   },
   "devDependencies": {
