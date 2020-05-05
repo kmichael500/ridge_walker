@@ -9,7 +9,10 @@ import { Points } from '../models/MasterPoint'
 import { MasterPoint } from '../models/MasterPoints';
 import * as path from 'path'
 
+import "pdf-image"
+
 import * as glob from 'glob'
+import { PDFImage } from 'pdf-image';
 
 // Initialize an express api and configure it parse requests as JSON
 const mapsAPI = express();
@@ -33,10 +36,42 @@ var storage = multer.memoryStorage()
 var upload = multer({ storage: storage })
 
 var upload = multer({ storage:storage })
-// View map in browser
-mapsAPI.get("/:mapName", (req, res, next)=>{
+// // View map in browser
+// mapsAPI.get("/:mapName", (req, res, next)=>{
+//     try{
+//         res.sendFile(req.params.mapName,{root: "./public/maps"})   
+//     }
+//     catch(error){
+//         res.sendStatus(404);
+//     }
+// })
+
+// Map as image
+mapsAPI.get("/image/:mapName.png", (req, res, next)=>{
     try{
-        res.sendFile(req.params.mapName,{root: "./public/maps"})   
+        var pdfPath = "./public/maps/"+req.params.mapName+".pdf";
+        var pageNumber = 0;
+        
+        var pdfImage = new PDFImage(pdfPath, {
+            convertOptions: {
+                // "-resize": "25%",
+                "-density": "450",
+                "-background": "white",
+                "-alpha": "background -alpha off",
+              },
+              outputDirectory: "./public/maps/images/"
+            
+        });
+        pdfImage.setConvertExtension("png")
+    
+        pdfImage.convertPage(pageNumber).then(function (imagePath) {
+            console.log(imagePath)
+            res.sendFile(imagePath, {root:"./"});
+        }, function (err) {
+        res.send(err, 500);
+    });
+
+         
     }
     catch(error){
         res.sendStatus(404);
@@ -65,43 +100,26 @@ mapsAPI.get("/:id/getAll", (req, res, next)=>{
     });
 })
 
-// // Download a map
-// mapsAPI.get("/:id", (req, res, next)=>{
-//     const searchString = req.params.id + '_*.pdf';
-//     glob(searchString, {cwd:"public/maps"}, function (err, files) {
- 
-//         if (err) {
-     
-//             console.log(err);
-//             res.sendStatus(404)
-     
-//         }
-//         else {
-//             if (files.length !== 0){
-//                 try{
-//                     var file = fs.createReadStream('./public/maps/' + files[0]);
-//                     var stat = fs.statSync('./public/maps/' + files[0]);
-//                     res.setHeader('Content-Length', stat.size);
-//                     res.setHeader('Content-Type', 'application/pdf');
-//                     const fileName = 'attachment; ' + files[0]
-//                     res.setHeader('Content-Disposition', fileName);
-//                     file.pipe(res); 
-//                 }
-//                 catch(error){
-//                     console.log("File not found")
-//                     console.log(files)
-//                     res.sendStatus(404)
-//                     next(error)
-//                 }
-//             }
-//             else{
-//                 res.sendStatus(404);
-//                 console.log("NotFF")
-//             }              
-//         }
-     
-//     });
-// })
+// Download a map
+mapsAPI.get("/:id", (req, res, next)=>{
+        try{
+            var file = fs.createReadStream('./public/maps/' + req.params.id);
+            var stat = fs.statSync('./public/maps/' + req.params.id);
+            res.setHeader('Content-Length', stat.size);
+            res.setHeader('Content-Type', 'application/pdf');
+            const fileName = 'attachment; ' + req.params.id
+            res.setHeader('Content-Disposition', fileName);
+            file.pipe(res); 
+        }
+        catch(error){
+            console.log("File not found")
+            console.log(req.params.id)
+            res.sendStatus(404)
+            next(error)
+        }
+    
+        
+})
 
 //Catches every request to a route we have not defined elsewhere.
 mapsAPI.get('*', (req, res, next) => {

@@ -182,9 +182,6 @@ class CaveInfo extends Component<Props, State>{
                         <Divider orientation="left"></Divider>
                     </div>
                 }
-                <DisplayAllMaps tcsnumber={this.state.point.properties.tcsnumber}></DisplayAllMaps>
-                <Divider orientation="left"></Divider>
-
                 
                 <Meta description={this.renderDescription()}/>
 
@@ -193,10 +190,12 @@ class CaveInfo extends Component<Props, State>{
                 <Paragraph>
                     {this.state.point.properties.narr}
                 </Paragraph>
+                <Divider orientation="left">Maps</Divider>
+                <DisplayAllMaps tcsnumber={this.state.point.properties.tcsnumber}></DisplayAllMaps>
 
                 {this.props.showMap &&
                     <div>
-                        <Divider orientation="left">Map</Divider>
+                        <Divider orientation="left">Location</Divider>
 
                         <div style={{height:"400px"}}>
                             <MapView
