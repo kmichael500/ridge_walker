@@ -6,7 +6,8 @@ import { getMasterPoint } from "../dataservice/getPoints";
 import { cleanString } from "../dataservice/cleanString"
 
 import { MapView } from "../components/MapView"
-import { PointInfoPopup } from "../components/PointInfoPopup";
+import DisplayMap from "../components/DisplayPDF"
+import DisplayAllMaps from "../components/DisplayAllMaps";
 
 const { Content } = Layout
 const { Paragraph, Title, Text } = Typography;
@@ -174,13 +175,16 @@ class CaveInfo extends Component<Props, State>{
                     // <EllipsisOutlined key="ellipsis" />,
                     ]}
                     
-                >    
+                >
                 {this.props.renderTitle &&
                     <div>
                         {this.renderTitle()}
                         <Divider orientation="left"></Divider>
                     </div>
                 }
+                <DisplayAllMaps tcsnumber={this.state.point.properties.tcsnumber}></DisplayAllMaps>
+                <Divider orientation="left"></Divider>
+
                 
                 <Meta description={this.renderDescription()}/>
 
@@ -202,6 +206,7 @@ class CaveInfo extends Component<Props, State>{
                         </div>
                     </div>
                 }
+
                 
                     
                 </Card>
