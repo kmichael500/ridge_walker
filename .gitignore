@@ -8,6 +8,10 @@
 /server/node_modules
 
 
+# maps
+/server/public/maps
+
+
 # testing
 /client/coverage
 
