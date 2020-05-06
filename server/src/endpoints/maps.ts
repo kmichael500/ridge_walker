@@ -54,17 +54,18 @@ mapsAPI.get("/image/:mapName.png", (req, res, next)=>{
         
         var pdfImage = new PDFImage(pdfPath, {
             convertOptions: {
-                // "-resize": "25%",
-                "-density": "450",
+                "-resize": "50%",
+                // "-density": "200",
                 "-background": "white",
                 "-alpha": "background -alpha off",
               },
-              outputDirectory: "./public/maps/images/"
+              outputDirectory: "./public/maps/images/",
+            //   combinedImage: true
             
         });
         pdfImage.setConvertExtension("png")
     
-        pdfImage.convertPage(pageNumber).then(function (imagePath) {
+        pdfImage.convertPage(0).then(function (imagePath) {
             console.log(imagePath)
             res.sendFile(imagePath, {root:"./"});
         }, function (err) {
