@@ -9,6 +9,7 @@ import { uploadPoints } from "./pages/uploadPoints"
 import { CaveInfo } from "./pages/CaveInfo";
 import { CavePointTable } from "./pages/CavePointTable";
 import { AddCave } from "./pages/AddCave";
+import { ReviewPoint } from "./pages/ReviewPoint";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
               <Route exact path="/points/" component= {CavePointTable} />
               <Route exact path="/points/:id" component= {CaveInfo} />
               <Route exact path="/add/points/" component= {AddCave} />
+              <Route exact path="/review/points/" component= {ReviewPoint} />
               </NavBar>
             </Switch>
           </div>
