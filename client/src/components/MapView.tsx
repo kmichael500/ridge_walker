@@ -165,17 +165,23 @@ class MapView extends Component<Props, State> {
   renderLayers(){
     return(
       <LayersControl position="topright">
-            <LayersControl.BaseLayer name="Open Street Maps" checked={true}>
-              <TileLayer
-                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-            </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name="Open Topo" checked={true}>
+            <TileLayer
+              attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
+            />
+          </LayersControl.BaseLayer>
           <LayersControl.BaseLayer name="3DEP Elevation">
             <WMSTileLayer
               url="https://elevation.nationalmap.gov/arcgis/services/3DEPElevation/ImageServer/WMSServer?"
               layers="3DEPElevation:Hillshade Gray"
               opacity= {1}
+            />
+          </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name="Open Street Maps">
+            <TileLayer
+              attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
           </LayersControl.BaseLayer>
       </LayersControl>
