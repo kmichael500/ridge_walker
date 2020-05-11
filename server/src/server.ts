@@ -19,6 +19,7 @@ The file looks like this:
 
 import { mongoURI } from './config/keys'
 import { mapsAPI } from './endpoints/maps';
+import { submittedPointAPI } from './endpoints/submitPointsAPI';
 
 // Connect to MongoDB
 mongoose.connect(
@@ -51,6 +52,8 @@ app.use((req, res, next) => {
 // Routes
 app.use("/api/points/master", masterPointsAPI);
 app.use("/api/maps", mapsAPI);
+app.use("/api/submit/point", submittedPointAPI);
+
 
 app.use(Express.static(__dirname + '/public'))
 const port = process.env.PORT || 5000;

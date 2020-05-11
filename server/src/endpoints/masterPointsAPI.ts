@@ -3,7 +3,6 @@ import * as multer from 'multer'
 import { MongooseDocument } from 'mongoose'
 var csv2geojson = require('csv2geojson');
 import {Request, Response, NextFunction} from 'express';
-import { resolve } from 'dns';
 import { Points } from '../models/MasterPoint'
 import { MasterPoint } from '../models/MasterPoints';
 

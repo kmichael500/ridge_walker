@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { serverBaseURL } from '../config/urlConfig';
-import { Feature } from '../pages/geoJsonInterface'
+import { Feature } from '../interfaces/geoJsonInterface'
 
 const axiosInstance = axios.create({
     baseURL: serverBaseURL

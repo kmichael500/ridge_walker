@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Document, Page, StyleSheet } from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
-import { Modal, Button } from 'antd';
+import { Modal, Button, Space } from 'antd';
 import { serverBaseURL } from '../config/urlConfig';
 
 
@@ -21,7 +21,8 @@ export default class DisplayMap extends Component<Props, any> {
 
     static defaultProps:Props = {
         onClick: ()=>{},
-        file: ""
+        file: "",
+        
     }
     constructor(Props: Props){
         super(Props);
@@ -89,14 +90,16 @@ export default class DisplayMap extends Component<Props, any> {
         cancelButtonProps={{ style: { display: 'none' } }}
         onCancel={this.handleCancel}
 
-        footer={[
+        footer={
+            <Space>
             <Button key="Download" href={this.state.downloadLink}>
               Download
-            </Button>,
+            </Button>
             <Button key="submit" type="primary" loading={loading} onClick={this.handleOk}>
               Close
-            </Button>,
-        ]}
+            </Button>
+            </Space>
+        }
         
         >
             

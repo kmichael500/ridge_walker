@@ -105,7 +105,7 @@ class MapView extends Component<Props, State> {
             data={this.state.data}
             color='red'
             fillColor='green'
-            weight={1}
+            weight={3}
             onEachFeature={this.onEachFeature} 
             pointToLayer={this.pointToLayer}/>
             
@@ -167,6 +167,7 @@ class MapView extends Component<Props, State> {
       <LayersControl position="topright">
           <LayersControl.BaseLayer name="Open Topo" checked={true}>
             <TileLayer
+              maxZoom={25}
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
             />
@@ -226,6 +227,7 @@ class MapView extends Component<Props, State> {
           center={this.state.center}
           zoom={this.state.zoom}
           maxZoom = {this.state.maxZoom}
+          
           doubleClickZoom={true}
           oncontextmenu={this.handleRightClick} //event lister for right click
           onViewportChange={(vp)=>{
@@ -254,7 +256,7 @@ class MapView extends Component<Props, State> {
         
 
         {/* // Clusters points */}
-        <MarkerClusterGroup>
+        <MarkerClusterGroup spiderfyOnMaxZoom={true}>
             {this.getGeoJSONComponent()}
         </MarkerClusterGroup>
         
