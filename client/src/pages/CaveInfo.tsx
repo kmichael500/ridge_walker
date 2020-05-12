@@ -1,15 +1,16 @@
 import React, { Component } from "react";
-import { Feature } from '../pages/geoJsonInterface'
 import { Card, Descriptions, PageHeader, Space,  Col, Row, Typography, Divider, Layout, message, Button, Form, Input } from 'antd'
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { getMasterPoint } from "../dataservice/getPoints";
 import { cleanString } from "../dataservice/cleanString"
 import { addSubmittedPoint } from '../dataservice/submittedPoints'
 import { SubmittedPoint } from '../interfaces/submittedPointInterface'
+import deepEqual from 'deep-equal'
 
 import { MapView } from "../components/MapView"
 import DisplayMap from "../components/DisplayPDF"
 import DisplayAllMaps from "../components/DisplayAllMaps";
+import { Feature } from "../interfaces/geoJsonInterface";
 
 const { Content } = Layout
 const { Paragraph, Title, Text } = Typography;
@@ -137,7 +138,7 @@ class CaveInfo extends Component<Props, State>{
                                 onChange:((val)=>{
                                     if (!isNaN(Number(val))){
                                         const point = this.state.point;
-                                        point.properties.length = val;
+                                        point.properties.length = Number(val);
                                         this.setState({point});
                                     }
                                     else{
@@ -158,7 +159,7 @@ class CaveInfo extends Component<Props, State>{
                                 onChange:((val)=>{
                                     if (!isNaN(Number(val))){
                                         const point = this.state.point;
-                                        point.properties.pdep = val;
+                                        point.properties.pdep = Number(val);
                                         this.setState({point});
                                     }
                                     else{
@@ -179,7 +180,7 @@ class CaveInfo extends Component<Props, State>{
                                 onChange:((val)=>{
                                     if (!isNaN(Number(val))){
                                         const point = this.state.point;
-                                        point.properties.depth = val;
+                                        point.properties.depth = Number(val);
                                         this.setState({point});
                                     }
                                     else{
@@ -200,7 +201,7 @@ class CaveInfo extends Component<Props, State>{
                                 onChange:((val)=>{
                                     if (!isNaN(Number(val))){
                                         const point = this.state.point;
-                                        point.properties.elev = val;
+                                        point.properties.elev = Number(val);
                                         this.setState({point});
                                     }
                                     else{
@@ -221,7 +222,7 @@ class CaveInfo extends Component<Props, State>{
                                 onChange:((val)=>{
                                     if (!isNaN(Number(val))){
                                         const point = this.state.point;
-                                        point.properties.ps = val;
+                                        point.properties.ps = Number(val);
                                         this.setState({point});
                                     }
                                     else{
@@ -498,15 +499,25 @@ class CaveInfo extends Component<Props, State>{
                 <Button
                     type="primary"
                     onClick={()=>{
-                        const point = this.state.point;
+                        const point = JSON.parse(JSON.stringify(this.state.point)) as Feature;
                         point.properties.narr += "\n\n" + this.state.newNarrative;
                         const newSubmission = {
                             submitted_by: "Michael Ketzner",
-                            point: point
+                            point: point,
+                            status: "Pending",
+                            pointType: "Existing"
                         } as SubmittedPoint;
-                        addSubmittedPoint(newSubmission).then(()=>{
-                            message.success("Point is under review.")
-                        })
+
+                        if (!deepEqual(this.state.point, this.state.pointCopy) || this.state.newNarrative === "\n\n"){
+                            
+                            addSubmittedPoint(newSubmission).then(()=>{
+                                message.success("Your changes to " + point.properties.tcsnumber + " are under review.")
+                            })
+                        }
+                        else{
+                            message.warn("You didn't make any changes.")
+                        }
+                        
                         this.setState({
                             proposedChanges: !this.state.proposedChanges,
                             point
