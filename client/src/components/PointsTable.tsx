@@ -138,6 +138,8 @@ class PointsTable extends Component<Props, State>{
             {
               title: 'Name',
               dataIndex: 'name',
+              fixed: "left",
+              // width: "200px",
               ...this.getColumnSearchProps('name'),
             },
             {
@@ -234,6 +236,7 @@ class PointsTable extends Component<Props, State>{
       return (
           <Table
               columns={this.state.columns}
+              scroll={{ x: 1000 }}
               expandable={{
                   expandedRowRender: record => <p style={{ margin: 0 }}>{record.description}</p>,
                   rowExpandable: record => record.name !== 'Not Expandable',
