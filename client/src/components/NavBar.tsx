@@ -26,9 +26,11 @@ class NavBar extends Component<any, any>{
                     defaultSelectedKeys={['2']}
                     onClick={this.handleMenuClick}
                     >
-                    
                     <Menu.Item key="/map">Map</Menu.Item>
-                    <Menu.Item key="/points">Points</Menu.Item>
+                    <Menu.SubMenu title="Points" key="/points" onTitleClick={this.handleMenuClick}>
+                        <Menu.Item key="/add/points">Add</Menu.Item>
+                        <Menu.Item key="/review/points">Review</Menu.Item>
+                    </Menu.SubMenu>
                     <Menu.Item key="/dashboard">Dashboard</Menu.Item>
                     <Menu.Item key="/upload">Upload</Menu.Item>
                 </Menu>
