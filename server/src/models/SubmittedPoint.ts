@@ -12,6 +12,14 @@ const submittedPointSchema = new mongoose.Schema<Feature>({
         type: String,
         required: true
     },
+    status: {
+        type: String,
+        required: true
+    },
+    pointType: {
+        type: String,
+        required: true
+    },
     date:{
         type: Date,
         default: Date.now()

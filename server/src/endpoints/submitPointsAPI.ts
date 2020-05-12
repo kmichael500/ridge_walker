@@ -8,7 +8,9 @@ submittedPointAPI.post("/", (req, res, next) => {
     
         const newSubmission = new SubmittedPoint({
             point: req.body.point,
-            submitted_by: req.body.submitted_by
+            submitted_by: req.body.submitted_by,
+            status: req.body.status,
+            pointType: req.body.pointType,
         })
         newSubmission.save((err) => {
             if (err) {
