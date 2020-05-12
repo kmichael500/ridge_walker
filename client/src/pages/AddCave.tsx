@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Feature } from '../pages/geoJsonInterface'
+import { Feature } from '../interfaces/geoJsonInterface'
+import { tn_counties } from '../dataservice/countyList'
 
 import {
     Form,
@@ -29,6 +30,7 @@ const { Content } = Layout
 const { Paragraph, Title, Text } = Typography;
 
 interface State {
+    autocompleteDisabled: boolean
     point: Feature,
 }
 
@@ -40,6 +42,7 @@ class AddCave extends Component<any, State>{
     constructor(Props){
         super(Props);
         this.state = {
+            autocompleteDisabled: false,
             point: {
                 type: "Feature",
                 properties:{
@@ -179,10 +182,26 @@ class AddCave extends Component<any, State>{
                     </Row>
                     <Row>
                         <Space>
-                            <Form.Item label="County" name="co_name">
-                                <Select placeholder="Please select">
-                                    <Select.Option value="Rutherford">Rutherford</Select.Option>
-                                    <Select.Option value="Sumner">Sumner</Select.Option>
+                            <Form.Item label="County" name="co_name" style={{minWidth: "110px"}}>
+                                <Select
+                                    showSearch
+                                    onFocus={()=>{
+                                        document.querySelectorAll(".ant-select-selector input").forEach((e) => {
+                                            e.setAttribute("autocomplete", "stopDamnAutocomplete");
+                                           //you can put any value but NOT "off" or "false" because they DO NOT works
+                                         })
+                                    }}
+                                    
+                                    autoFocus={false}
+                                    
+                                    placeholder="Select"
+                                    filterOption={(input, option) =>
+                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    }
+                                >
+                                    {tn_counties.map((county)=>(
+                                        <Select.Option value={county}>{county}</Select.Option>
+                                    ))}
                                 </Select>
                             </Form.Item>
                             <Form.Item label="Enterance Number" name="ent_num">
