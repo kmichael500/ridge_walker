@@ -17,10 +17,13 @@ import {
     Divider,
     Card,
     Space,
-    Row
+    Row,
+    message
   } from 'antd';
 import Item from "antd/lib/list/Item";
 import { Store } from "antd/lib/form/interface";
+import { SubmittedPoint } from "../interfaces/submittedPointInterface";
+import { addSubmittedPoint } from "../dataservice/submittedPoints";
 
 const { Content } = Layout
 const { Paragraph, Title, Text } = Typography;
@@ -66,23 +69,65 @@ class AddCave extends Component<any, State>{
                 },
             } as Feature
         }
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    onFinish (values:Store) {
-        console.log('Success:', values);
-    };
+ 
     
     renderCoordinateForm(){
         return(
             <Input.Group compact>
-                <Form.Item label="Latitude">
+                <Form.Item name="lat" label="Latitude">
                     <InputNumber></InputNumber>
                 </Form.Item>
-                <Form.Item label="Longitude">
+                <Form.Item name="long" label="Longitude">
                     <InputNumber></InputNumber>
                 </Form.Item>
             </Input.Group>
         )
+    }
+
+    handleSubmit(values: Store){
+        console.log(values)
+        const newSubmmision = {
+            submitted_by: "Michael Ketzner",
+            status: "Pending",
+            pointType: "New",
+            point: {
+                type: "Feature",
+                properties:{
+                    tcsnumber: values.tcsnumber,
+                    name: values.name,
+                    length: values.length,
+                    depth: values.depth,
+                    pdep: values.pdepth,
+                    ps: values.ps,
+                    co_name: values.co_name,
+                    topo_name: values.topo_name,
+                    topo_indi: values.topo_indi,
+                    elev: values.elev,
+                    ownership: values.ownership.join(" "),
+                    gear: values.gear,
+                    ent_type: values.ent_description[values.ent_description.length-1],
+                    field_indi: values.field_indi,
+                    map_status: values.map_status,
+                    geology: values.geology,
+                    geo_age: values.geo_age,
+                    phys_prov: values.phys_prov,
+                    narr: values.narr
+                },
+                geometry: {
+                    type: "Point",
+                    coordinates: [values.long, values.lat]
+                },
+            }
+        } as SubmittedPoint
+
+        addSubmittedPoint(newSubmmision).then(()=>{
+            message.success(values.name + " submitted successfully.");
+        })
+
+        console.log(newSubmmision);
     }
 
     render(){
@@ -109,9 +154,7 @@ class AddCave extends Component<any, State>{
                     // labelCol={{ span: 8 }}
                     // wrapperCol={{ span: 14 }}
                     layout="vertical"
-                    onFinish={(values)=>{
-                        console.log(values)
-                    }}
+                    onFinish={this.handleSubmit}
                     initialValues={{ remember: true }}
                     
                 >
@@ -168,6 +211,10 @@ class AddCave extends Component<any, State>{
                                             label: 'Owned',
                                         },
                                         {
+                                            value: 'Leased',
+                                            label: 'Leased',
+                                        },
+                                        {
                                             value: 'Park',
                                             label: 'Park',
                                         },
@@ -180,11 +227,7 @@ class AddCave extends Component<any, State>{
                                         {
                                             value: 'Owned Or Leased',
                                             label: 'Owned or Leased',
-                                        },
-                                        {
-                                            value: 'Leased',
-                                            label: 'Leased',
-                                        },
+                                        }
                                         ],
                                     },
                                     {

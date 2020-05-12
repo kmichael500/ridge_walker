@@ -134,7 +134,7 @@ class PointsTable extends Component<Props, State>{
       };
 
     processPoints(points: Feature[]){
-        const columns = [
+        let columns = [
             {
               title: 'Name',
               dataIndex: 'name',
@@ -198,6 +198,7 @@ class PointsTable extends Component<Props, State>{
             },
           ];
 
+          // columns.length=2;
           let data = [];
           for (let i = 0; i<points.length; i++){
             let narrativeStr = cleanString(points[i].properties.narr);
