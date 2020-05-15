@@ -69,7 +69,7 @@ mapsAPI.get("/image/:mapName.png", (req, res, next)=>{
             console.log(imagePath)
             res.sendFile(imagePath, {root:"./"});
         }, function (err) {
-        res.send(err, 500);
+        res.send(500);
     });
 
          
