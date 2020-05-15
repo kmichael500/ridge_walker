@@ -22,12 +22,14 @@ async function getAllSubmittedPoints(): Promise<SubmittedPoint[]> {
 /**
  * Fetch single submitted point from the API.
  * @returns Promise<SubmittedPoint>
- * @param tcsnumber - the tcs number of a point.
+ * @param id - the mongo id of a point.
  */
-async function getMasterPoint(tcsnumber: string): Promise<SubmittedPoint> {
+async function getSubmittedPoint(id: string): Promise<SubmittedPoint> {
     try {
-        const masterPointResponse = await axiosInstance.get('/api/submit/point/'+tcsnumber);
-        return masterPointResponse.data as SubmittedPoint;
+        console.log(id);
+        const submittedPointResponse = await axiosInstance.get('/api/submit/point/'+id);
+        console.log(submittedPointResponse.data)
+        return submittedPointResponse.data as SubmittedPoint;
     } catch(error) {
         return error;
     } 
@@ -52,6 +54,6 @@ async function addSubmittedPoint(point: SubmittedPoint): Promise<AxiosResponse> 
 
 export {
     getAllSubmittedPoints,
-    getMasterPoint,
+    getSubmittedPoint,
     addSubmittedPoint
 }

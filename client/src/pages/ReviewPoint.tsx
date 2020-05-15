@@ -184,12 +184,13 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
                 key: "action",
                 render: (text, record) => (
                     <Space size="middle">
-                    <a>Review {record.tcsnumber}</a>
+                    <a href={"/review/points/"+record.mongoID}>Review</a>
                     <a>Delete</a>
                     </Space>
                 )
             }
           ];
+
 
           // columns.length=2;
           let data = [];
@@ -204,7 +205,8 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
                 tcsnumber: points[i].point.properties.tcsnumber,
                 submitted_by: points[i].submitted_by,
                 status: points[i].status,
-                date: new Date(points[i].date).toLocaleDateString()
+                date: new Date(points[i].date).toLocaleDateString(),
+                mongoID: points[i]._id
                 ,
                 // gear: points[i].point.properties.gear,
                 // length: points[i].point.properties.length,

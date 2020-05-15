@@ -3,7 +3,7 @@ import { Card, Descriptions, PageHeader, Space,  Col, Row, Typography, Divider, 
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { getMasterPoint } from "../dataservice/getPoints";
 import { cleanString } from "../dataservice/cleanString"
-import { addSubmittedPoint } from '../dataservice/submittedPoints'
+import { addSubmittedPoint, getSubmittedPoint } from '../dataservice/submittedPoints'
 import { SubmittedPoint } from '../interfaces/submittedPointInterface'
 import deepEqual from 'deep-equal'
 
@@ -22,6 +22,7 @@ interface State {
     isLoading: boolean,
     proposedChanges: boolean,
     newNarrative: string
+    role: string
 }
 
 interface Props {
@@ -32,7 +33,9 @@ interface Props {
     },
     id: string,
     showMap?: boolean,
-    renderTitle?: boolean
+    renderTitle?: boolean,
+    submittedPoint?: string
+    role?: string
 }
 
 
@@ -45,7 +48,8 @@ const { Meta } = Card;
 class CaveInfo extends Component<Props, State>{ 
     static defaultProps ={
         showMap: true,
-        renderTitle: true
+        renderTitle: true,
+        role: "User"
     } as Props
     
     constructor(Props){
@@ -55,6 +59,7 @@ class CaveInfo extends Component<Props, State>{
             proposedChanges: false,
             newNarrative: "",
             pointCopy: undefined,
+            role: this.props.role,
             point: {
                 type: "Feature",
                 properties:{
@@ -91,18 +96,30 @@ class CaveInfo extends Component<Props, State>{
     }
 
     componentDidMount(){
-        let tcsnumber = ""
-        if (this.props.match === undefined){
-            tcsnumber = this.props.id;
+        if (this.props.submittedPoint === undefined){
+            let tcsnumber = ""
+            if (this.props.match === undefined){
+                tcsnumber = this.props.id;
+            }
+            else{
+                tcsnumber = this.props.match.params.id;
+            }
+            getMasterPoint(tcsnumber).then((requestedPoint)=>{
+                requestedPoint.geometry.coordinates.reverse();
+                const pointCopy = JSON.parse(JSON.stringify(requestedPoint));
+                this.setState({point:requestedPoint, pointCopy,isLoading: false});
+            })
         }
         else{
-            tcsnumber = this.props.match.params.id;
+            getSubmittedPoint(this.props.submittedPoint).then((requestedPoint)=>{
+                console.log("Info", this.props.submittedPoint)
+                console.log(requestedPoint)
+                // requestedPoint.point.geometry.coordinates.reverse();
+                const pointCopy = JSON.parse(JSON.stringify(requestedPoint.point));
+                this.setState({point:requestedPoint.point, pointCopy,isLoading: false});
+            })
         }
-        getMasterPoint(tcsnumber).then((requestedPoint)=>{
-            requestedPoint.geometry.coordinates.reverse();
-            const pointCopy = JSON.parse(JSON.stringify(requestedPoint));
-            this.setState({point:requestedPoint, pointCopy,isLoading: false});
-        })
+        
     }
 
     renderDescription(){
@@ -299,7 +316,7 @@ class CaveInfo extends Component<Props, State>{
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
-                    label="Topo"
+                    label="Gear"
                 >
                         <Text
                             editable={ this.state.proposedChanges && {
@@ -472,29 +489,54 @@ class CaveInfo extends Component<Props, State>{
     }
 
     proposeChangesBar(){
+        let okButtonText = "";
+        let proposeButtonText = "";
+        let cancelButtonText = "";
+        switch(this.props.role){
+            case "User":
+                okButtonText = "Submit";
+                proposeButtonText = "Propose Changes";
+                cancelButtonText = "Cancel";
+                break;
+            case "Admin":
+                okButtonText = "Approve";
+                cancelButtonText = "Edit";
+                break;
+            default:
+                break;
+        }
         return(
         <div>
-        {!this.state.proposedChanges ?
+        {!this.state.proposedChanges && this.props.role === "User" ?
             <Button type="primary"
                 onClick={()=>{
                     this.setState({proposedChanges: !this.state.proposedChanges});
                 }}
             >
-                Propose Changes
+                {proposeButtonText}
             </Button>
             :
             <Space>
                 <Button danger
                     onClick={()=>{
                         const revertPoint = JSON.parse(JSON.stringify(this.state.pointCopy));
-                        this.setState({
-                            proposedChanges: !this.state.proposedChanges,
-                            point: revertPoint
-                        });
+                        if (this.props.role === "User"){
+                            this.setState({
+                                proposedChanges: !this.state.proposedChanges,
+                                point: revertPoint
+                            });
+                        }
+                        else if (this.props.role === "Admin"){
+                            this.setState({
+                                proposedChanges: !this.state.proposedChanges,
+                                // point: revertPoint
+                            });
+                        }
+                        
                         console.log(revertPoint)
                     }}
                     >
-                    Cancel
+                    {cancelButtonText}
                 </Button>
                 <Button
                     type="primary"
@@ -524,7 +566,7 @@ class CaveInfo extends Component<Props, State>{
                         }, ()=>{console.log(this.state.point.properties.narr)});
                     }}
                     >
-                    Submit
+                    {okButtonText}
                 </Button>
             </Space>
         }

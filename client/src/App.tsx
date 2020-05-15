@@ -10,6 +10,7 @@ import { CaveInfo } from "./pages/CaveInfo";
 import { CavePointTable } from "./pages/CavePointTable";
 import { AddCave } from "./pages/AddCave";
 import { ReviewPoint } from "./pages/ReviewPoint";
+import { ReviewCaveInfo } from "./pages/reviewCaveInfo";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
               <Route exact path="/points/:id" component= {CaveInfo} />
               <Route exact path="/add/points/" component= {AddCave} />
               <Route exact path="/review/points/" component= {ReviewPoint} />
+              <Route exact path="/review/points/:id" component= {ReviewCaveInfo} />
               </NavBar>
             </Switch>
           </div>
