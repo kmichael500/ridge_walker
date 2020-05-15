@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Points, Feature } from '../pages/geoJsonInterface'
 import { Upload, message, Button, Empty} from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
+import { serverBaseURL } from '../config/urlConfig'
 const { Dragger } = Upload;
 
 
@@ -60,7 +61,7 @@ class UploadCSV extends Component<Props, State>{
 
         const props = {
           name:"csv",
-          action: "http://localhost:5000/api/points/master/upload",
+          action: serverBaseURL + "api/points/master/upload",
           onChange: this.handleChange,
           multiple: false
         };
