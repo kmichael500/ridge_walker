@@ -2,7 +2,30 @@
 import React, { Component } from "react";
 
 import { registerUser } from '../dataservice/authentication';
-// import '../css/Login.css'
+
+import { tn_counties } from '../dataservice/countyList'
+
+import {
+    Form,
+    Input,
+    Button,
+    Radio,
+    Select,
+    Cascader,
+    DatePicker,
+    InputNumber,
+    TreeSelect,
+    Switch,
+    Layout,
+    Typography,
+    Divider,
+    Card,
+    Space,
+    Row,
+    message,
+  } from 'antd';
+import Item from "antd/lib/list/Item";
+import { Store } from "antd/lib/form/interface";
 
 
 interface State{
@@ -20,8 +43,8 @@ interface Props{
 
 class Register extends Component<Props,State> {
 
-    constructor(props){
-        super(props);
+    constructor(Props: Props){
+        super(Props);
         this.state = {
             email: "",
             password: "",
@@ -47,43 +70,157 @@ class Register extends Component<Props,State> {
         this.setState({repeat_password: e.target.value})
     }
 
-    handleSubmit(e: React.FormEvent<HTMLButtonElement>){
-        e.preventDefault();
+    handleSubmit(value: any){
 
-        if (this.state.password !== this.state.repeat_password){
-            this.setState({error_msg: "Passwords are not the same.", error: true})
-        }
-        else if (this.state.email === ""){
-            this.setState({error_msg: "Email can't be empty.", error: true})
-        }
-        else if (this.state.password === ""){
-            this.setState({error_msg: "Password can't be empty", error: true})
-        }
-        else{
-            registerUser(this.state.email, this.state.password).then((response)=>{
-                this.props.history.push("/admin/login");
-            }).catch((error)=>{
-                this.setState({error_msg: error, error: true})
-            })
-        }
+        console.log(value);
+
+        registerUser(value.email, value.password).then((response)=>{
+                    this.props.history.push("/admin/login");
+                }).catch((error)=>{
+                    message.error(error);
+        });
+        // e.preventDefault();
+
+        // if (this.state.password !== this.state.repeat_password){
+        //     this.setState({error_msg: "Passwords are not the same.", error: true})
+        // }
+        // else if (this.state.email === ""){
+        //     this.setState({error_msg: "Email can't be empty.", error: true})
+        // }
+        // else if (this.state.password === ""){
+        //     this.setState({error_msg: "Password can't be empty", error: true})
+        // }
+        // else{
+        //     registerUser(this.state.email, this.state.password).then((response)=>{
+        //         this.props.history.push("/admin/login");
+        //     }).catch((error)=>{
+        //         this.setState({error_msg: error, error: true})
+        //     })
+        // }
         
     }
 
   render() {
     return(
-        <div className="loginContainer">
-        <form className="loginForm">
-            <div className="loginFormContent">
-                <h1>Sign Up</h1>
-                <input type="text" placeholder="Email" name="username" onChange={this.handleEmail}></input>
-                <input type="password" placeholder="Enter Password" name="psw" onChange={this.handlePassword}></input>
-                <input type="password" placeholder="Repeat Password" name="psw" onChange={this.handlePasswordRepeat}></input>
-                {this.state.error &&
-                    <p>{this.state.error_msg}</p>
-                }
-                <button className="loginButton" type="submit" onClick = {this.handleSubmit}>Register</button>
-            </div>
-        </form>
+        <div className="site-layout-content">
+        <Card>
+            <Divider></Divider>
+            <Form
+                // labelCol={{ span: 8 }}
+                // wrapperCol={{ span: 14 }}
+                layout="vertical"
+                onFinish={this.handleSubmit}
+                initialValues={{ remember: true }}
+                
+            >
+                <Row>
+                    <Space>
+                        <Form.Item label="First Name" name="firstname"
+                        rules={[{ required: true, message: 'Please input your first name!', whitespace: true }]}
+                        >
+                            <Input></Input>
+                        </Form.Item>
+                        <Form.Item label="Last Name" name="lastname"
+                            rules={[{ required: true, message: 'Please input your last name!', whitespace: true }]}
+                            >
+                            <Input></Input>
+                        </Form.Item>
+                        <Form.Item label="NSS Number" name="nssnumber"
+                            rules={[{ required: true, type: "number", message: 'Please input your NSS Number!', whitespace: true }]}
+                            >
+                            <InputNumber min={0}></InputNumber>
+                        </Form.Item>
+                    </Space>
+                </Row>
+                <Form.Item label="Address" name="address"
+                        rules={[{ required: true, message: 'Please input your address!', whitespace: true }]}
+                        >
+                            <Input></Input>
+                </Form.Item>
+                <Row>
+                    <Space>
+                        <Form.Item label="City" name="city"
+                            rules={[{ required: true, message: 'Please input your last name!', whitespace: true }]}
+                            >
+                            <Input></Input>
+                        </Form.Item>
+                        <Form.Item label="State" name="State"
+                            rules={[{ required: true, message: 'Please input your state!', whitespace: true }]}
+                            >
+                            <Input></Input>
+                        </Form.Item>
+                        <Form.Item label="Zip Code" name="zipcode"
+                            rules={[{ required: true, pattern: /^\d{5}$/g, message: 'Invalid zip code!', whitespace: true }]}
+                            >
+                            <Input></Input>
+                        </Form.Item>
+                    </Space>
+                </Row>
+                <Form.Item label="Phone Number" name="phonenumber"
+                        rules={[{ required: true, message: 'Please input your phone number!', whitespace: true }]}
+                        >
+                            <Input></Input>
+                </Form.Item>
+                <Form.Item
+                    name="email"
+                    label="E-mail"
+                    rules={[
+                        {
+                        type: 'email',
+                        message: 'The input is not valid E-mail!',
+                        },
+                        {
+                        required: true,
+                        message: 'Please input your E-mail!',
+                        },
+                    ]}
+                    >
+                    <Input />                
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    label="Password"
+                    rules={[
+                    {
+                        required: true,
+                        message: 'Please input your password!',
+                    },
+                    ]}
+                    hasFeedback
+                >
+                    <Input.Password />
+                </Form.Item>
+
+                <Form.Item
+                    name="confirm"
+                    label="Confirm Password"
+                    dependencies={['password']}
+                    hasFeedback
+                    rules={[
+                    {
+                        required: true,
+                        message: 'Please confirm your password!',
+                    },
+                    ({ getFieldValue }) => ({
+                        validator(rule, value) {
+                        if (!value || getFieldValue('password') === value) {
+                            return Promise.resolve();
+                        }
+                        return Promise.reject('The two passwords that you entered do not match!');
+                        },
+                    }),
+                    ]}
+                >
+                    <Input.Password />
+                </Form.Item>
+                <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                        Submit
+                        </Button>
+                </Form.Item>
+                
+            </Form>
+        </Card>
         </div>
     )
   }
