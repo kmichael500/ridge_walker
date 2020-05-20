@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 
 import { registerUser } from '../dataservice/authentication';
+import { userContext } from '../context/userContext'
 
 import { tn_counties } from '../dataservice/countyList'
 
@@ -26,7 +27,7 @@ import {
   } from 'antd';
 import Item from "antd/lib/list/Item";
 import { Store } from "antd/lib/form/interface";
-import { UserInterface } from "../interfaces/UserInterface";
+import { RegisterUserInterface } from "../interfaces/UserInterface";
 
 
 interface State{
@@ -60,6 +61,8 @@ class Register extends Component<Props,State> {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+
+
     handleEmail(e: React.ChangeEvent<HTMLInputElement>){
         this.setState({email: e.target.value})
     }
@@ -72,7 +75,6 @@ class Register extends Component<Props,State> {
     }
 
     handleSubmit(value: any){
-
         console.log(value);
         const newUser = {
             user: {
@@ -87,36 +89,18 @@ class Register extends Component<Props,State> {
                 phoneNumber: Number(value.phonenumber),
                 nssNumber: Number(value.nssnumber),
             }
-        } as UserInterface
+        } as RegisterUserInterface
         registerUser(newUser).then((response)=>{
-                    message.success("Your application is under review!");
-                }).catch((error)=>{
-                    message.error(error);
-        });
-        // e.preventDefault();
-
-        // if (this.state.password !== this.state.repeat_password){
-        //     this.setState({error_msg: "Passwords are not the same.", error: true})
-        // }
-        // else if (this.state.email === ""){
-        //     this.setState({error_msg: "Email can't be empty.", error: true})
-        // }
-        // else if (this.state.password === ""){
-        //     this.setState({error_msg: "Password can't be empty", error: true})
-        // }
-        // else{
-        //     registerUser(this.state.email, this.state.password).then((response)=>{
-        //         this.props.history.push("/admin/login");
-        //     }).catch((error)=>{
-        //         this.setState({error_msg: error, error: true})
-        //     })
-        // }
-        
+            message.success("Your application is under review!");
+        }).catch((error)=>{
+            message.error(error);
+        });     
     }
 
   render() {
     return(
         <div className="site-layout-content">
+            {JSON.stringify(this.context)}
         <Card>
             <Divider></Divider>
             <Form
@@ -239,5 +223,7 @@ class Register extends Component<Props,State> {
     )
   }
 }
+
+Register.contextType = userContext;
 
 export { Register }

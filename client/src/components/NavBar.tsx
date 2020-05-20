@@ -5,6 +5,8 @@ import {ClickParam} from 'antd/lib/menu'
 import { withRouter } from 'react-router-dom';
 
 
+
+
 const { Header, Content, Footer } = Layout;
 
 class NavBar extends Component<any, any>{
@@ -14,6 +16,10 @@ class NavBar extends Component<any, any>{
     }
     handleMenuClick(param: ClickParam){
         this.props.history.push(param.key)
+    }
+
+    onFinish(vals){
+        console.log(vals);
     }
     render(){
         return(
@@ -33,6 +39,7 @@ class NavBar extends Component<any, any>{
                     </Menu.SubMenu>
                     <Menu.Item key="/dashboard">Dashboard</Menu.Item>
                     <Menu.Item key="/upload">Upload</Menu.Item>
+                    <Menu.Item key="/login">Login</Menu.Item>
                 </Menu>
             </Header>
             <Content>
