@@ -114,9 +114,10 @@ class CaveInfo extends Component<Props, State>{
             getSubmittedPoint(this.props.submittedPoint).then((requestedPoint)=>{
                 console.log("Info", this.props.submittedPoint)
                 console.log(requestedPoint)
+                const newNarrative = requestedPoint.point.properties.narr;
                 // requestedPoint.point.geometry.coordinates.reverse();
                 const pointCopy = JSON.parse(JSON.stringify(requestedPoint.point));
-                this.setState({point:requestedPoint.point, pointCopy,isLoading: false});
+                this.setState({point:requestedPoint.point, pointCopy,isLoading: false, newNarrative});
             })
         }
         
@@ -137,10 +138,21 @@ class CaveInfo extends Component<Props, State>{
                 description: this.state.point.properties.pdep
             },
         ];
-        let narrativeStr = cleanString(this.state.point.properties.narr);
-        const narrative = narrativeStr.split('\n').map((item, i) => {
-            return <Paragraph key={i}>{item}</Paragraph>;
-        });
+
+        let narrative;
+        if (this.props.role === "User"){
+            let narrativeStr = cleanString(this.state.point.properties.narr);
+            narrative = narrativeStr.split('\n').map((item, i) => {
+                return <Paragraph key={i}>{item}</Paragraph>;
+            });
+        }
+        else if (this.props.role === "Admin"){
+            let narrativeStr = cleanString(this.state.newNarrative);
+            narrative = narrativeStr.split('\n').map((item, i) => {
+                return <Paragraph key={i}>{item}</Paragraph>;
+            });
+        }
+        
         return(
             <div>
             <Descriptions                
@@ -444,19 +456,45 @@ class CaveInfo extends Component<Props, State>{
             </Descriptions>
             <Divider orientation="left">Narrative</Divider>
             
-            <Paragraph>
-                {narrative}
-            </Paragraph>
-            {this.state.proposedChanges &&
-                <TextArea
-                    placeholder="Add to the narrative."
-                    autoSize={{ minRows: 4 }}
-                    onChange={(newNarrative)=>{
-                        this.setState({newNarrative: newNarrative.target.value})
-                    }}
-                >
-                    {this.state.newNarrative}
-                </TextArea>
+            {this.props.role === "User" &&
+            <div>
+                <Paragraph>
+                    {narrative}
+                </Paragraph>
+                {this.state.proposedChanges &&
+                    <TextArea
+                        placeholder="Add to the narrative."
+                        autoSize={{ minRows: 4 }}
+                        onChange={(newNarrative)=>{
+                            this.setState({newNarrative: newNarrative.target.value})
+                        }}
+                    >
+                        {this.state.newNarrative}
+                    </TextArea>
+                }
+                </div>
+            }
+
+            {this.props.role === "Admin" &&
+            <div>
+                
+                {this.state.proposedChanges ?
+                    <TextArea
+                        value = {this.state.newNarrative}
+                        autoSize={{ minRows: 4 }}
+                        onChange={(newNarrative)=>{
+                            this.setState({newNarrative: newNarrative.target.value})
+                        }}
+                    >
+                        {this.state.newNarrative}
+                    </TextArea>
+                    :
+                    <Paragraph>
+                        {narrative}
+                    </Paragraph>
+
+                }
+                </div>
             }
             </div>
         )
@@ -550,7 +588,7 @@ class CaveInfo extends Component<Props, State>{
                             pointType: "Existing"
                         } as SubmittedPoint;
 
-                        if (!deepEqual(this.state.point, this.state.pointCopy) || this.state.newNarrative === "\n\n"){
+                        if (!deepEqual(this.state.point, this.state.pointCopy) || this.state.newNarrative !== ""){
                             
                             addSubmittedPoint(newSubmission).then(()=>{
                                 message.success("Your changes to " + point.properties.tcsnumber + " are under review.")
