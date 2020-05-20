@@ -26,6 +26,7 @@ import {
   } from 'antd';
 import Item from "antd/lib/list/Item";
 import { Store } from "antd/lib/form/interface";
+import { UserInterface } from "../interfaces/UserInterface";
 
 
 interface State{
@@ -73,9 +74,22 @@ class Register extends Component<Props,State> {
     handleSubmit(value: any){
 
         console.log(value);
-
-        registerUser(value.email, value.password).then((response)=>{
-                    this.props.history.push("/admin/login");
+        const newUser = {
+            user: {
+                email: value.email,
+                password: value.password,
+                firstName: value.firstname,
+                lastName: value.lastname,
+                address: value.address,
+                city: value.city,
+                state: value.state,
+                zipCode: Number(value.zipcode),
+                phoneNumber: Number(value.phonenumber),
+                nssNumber: Number(value.nssnumber),
+            }
+        } as UserInterface
+        registerUser(newUser).then((response)=>{
+                    message.success("Your application is under review!");
                 }).catch((error)=>{
                     message.error(error);
         });
@@ -144,7 +158,7 @@ class Register extends Component<Props,State> {
                             >
                             <Input></Input>
                         </Form.Item>
-                        <Form.Item label="State" name="State"
+                        <Form.Item label="State" name="state"
                             rules={[{ required: true, message: 'Please input your state!', whitespace: true }]}
                             >
                             <Input></Input>

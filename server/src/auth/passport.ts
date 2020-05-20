@@ -1,16 +1,28 @@
 import * as passport from 'passport';
 
 import { Strategy as localStrategy } from 'passport-local'
-import { UserModel } from '../models/User';
+import { UserModel, UserInterface } from '../models/User';
 
 //Create a passport middleware to handle user registration
 passport.use('signup', new localStrategy({
   usernameField : 'email',
-  passwordField : 'password'
-}, async (email: string, password: string, done) => {
+  passwordField : 'password',
+  passReqToCallback : true
+}, async (req, email: string, password: string, done) => {
     try {
       //Save the information provided by the user to the the database
-      const user = await UserModel.create({ email, password });
+      const user = await UserModel.create({
+        email,
+        password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        address: req.body.address,
+        city: req.body.city,
+        state: req.body.state,
+        zipCode: req.body.zipCode,
+        phoneNumber: req.body.phoneNumber,
+        nssNumber: req.body.nssNumber
+      } as UserInterface);
       //Send the user information to the next middleware
       return done(null, user);
     } catch (error) {
@@ -29,7 +41,7 @@ passport.use('signup', new localStrategy({
 //Create a passport middleware to handle User login
 passport.use('login', new localStrategy({
   usernameField : 'email',
-  passwordField : 'password'
+  passwordField : 'password',
 }, async (email, password, done) => {
   try {
     //Find the user associated with the email provided by the user

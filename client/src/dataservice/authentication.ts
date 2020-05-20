@@ -12,17 +12,18 @@ const axiosInstance = axios.create({
  * @param password - users password.
  * @param email - users email
  */
-async function registerUser(email: string, password: string): Promise<UserInterface> {
+async function registerUser(newUser: UserInterface): Promise<UserInterface> {
 
     return new Promise(async (resolve, reject) => {
         try {
             const getRegisterResponse = await axios({
                 method: 'post',
                 url: serverBaseURL+'api/user/signup',
-                data: qs.stringify({
-                email,
-                password
-                }),
+                params:{
+                    email: newUser.user.email,
+                    password: newUser.user.password
+                },
+                data: qs.stringify(newUser.user),
                 headers: {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
                 }

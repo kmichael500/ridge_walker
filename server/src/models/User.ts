@@ -4,9 +4,16 @@ import * as  bcrypt from 'bcrypt';
 const Schema = mongoose.Schema;
 
 export interface UserInterface extends mongoose.Document {
-    username: string,
     email: string,
     password: string,
+    firstName: string,
+    lastName: string,
+    address: string,
+    city: string,
+    state: string,
+    zipCode: number,
+    phoneNumber: number,
+    nssNumber: number,
     isValidPassword(password: string): Promise<boolean>;
 }
 // tslint:disable-next-line: variable-name
@@ -19,7 +26,39 @@ const UserSchema = new Schema({
   password : {
     type : String,
     required : true
-  }
+  },
+  firstName : {
+    type : String,
+    required : true,
+  },
+  lastName : {
+    type : String,
+    required : true
+  },
+  address : {
+    type : String,
+    required : true,
+  },
+  city : {
+    type : String,
+    required : true
+  },
+  state : {
+    type : String,
+    required : true,
+  },
+  zipCode : {
+    type : Number,
+    required : true
+  },
+  phoneNumber : {
+    type : Number,
+    required : true,
+  },
+  nssNumber : {
+    type : Number,
+    required : true
+  },
 });
 
 
@@ -33,6 +72,7 @@ UserSchema.pre<UserInterface>('save', async function(next: any){
     const hash = await bcrypt.hash(this.password, 10);
     //Replace the plain text password with the hash and then store it
     this.password = hash;
+
     //Indicates we're done and moves on to the next middleware
     next();
   });
