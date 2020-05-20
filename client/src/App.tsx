@@ -12,6 +12,9 @@ import { AddCave } from "./pages/AddCave";
 import { ReviewPoint } from "./pages/ReviewPoint";
 import { ReviewCaveInfo } from "./pages/reviewCaveInfo";
 
+// Authentication
+import { Register } from "./pages/Register";
+
 
 function App() {
   return (
@@ -30,6 +33,7 @@ function App() {
               <Route exact path="/add/points/" component= {AddCave} />
               <Route exact path="/review/points/" component= {ReviewPoint} />
               <Route exact path="/review/points/:id" component= {ReviewCaveInfo} />
+              <Route exact path="/register" component= {Register} />
               </NavBar>
             </Switch>
           </div>
