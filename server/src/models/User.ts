@@ -6,6 +6,8 @@ const Schema = mongoose.Schema;
 export interface UserInterface extends mongoose.Document {
     email: string,
     password: string,
+    role?: string,
+    status?: string,
     firstName: string,
     lastName: string,
     address: string,
@@ -26,6 +28,14 @@ const UserSchema = new Schema({
   password : {
     type : String,
     required : true
+  },
+  role: {
+    type : String,
+    default : "User"
+  },
+  status: {
+    type : String,
+    default : "Pending"
   },
   firstName : {
     type : String,
