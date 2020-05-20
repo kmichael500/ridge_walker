@@ -41,7 +41,7 @@ passport.use('signup', new localStrategy({
 //Create a passport middleware to handle User login
 passport.use('login', new localStrategy({
   usernameField : 'email',
-  passwordField : 'password',
+  passwordField : 'password'
 }, async (email, password, done) => {
   try {
     //Find the user associated with the email provided by the user

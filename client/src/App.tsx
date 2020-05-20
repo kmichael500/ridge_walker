@@ -11,14 +11,17 @@ import { CavePointTable } from "./pages/CavePointTable";
 import { AddCave } from "./pages/AddCave";
 import { ReviewPoint } from "./pages/ReviewPoint";
 import { ReviewCaveInfo } from "./pages/reviewCaveInfo";
-
+import { UserContextProvider } from "./context/userContext"
 // Authentication
 import { Register } from "./pages/Register";
+import { LoginPage } from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 function App() {
   return (
     <div className="App">
+      <UserContextProvider>
       <Router>
           <div className="App">
             {/* Protected Routes */}
@@ -26,18 +29,21 @@ function App() {
             <Switch>
               {/* Non Protected Routes */}
               <NavBar>
-              <Route exact path="/upload" component={uploadPoints} />
-              <Route exact path="/map" component= {MapView} />
-              <Route exact path="/points/" component= {CavePointTable} />
-              <Route exact path="/points/:id" component= {CaveInfo} />
-              <Route exact path="/add/points/" component= {AddCave} />
-              <Route exact path="/review/points/" component= {ReviewPoint} />
-              <Route exact path="/review/points/:id" component= {ReviewCaveInfo} />
+              {/* <Route exact path="/upload" component={uploadPoints} /> */}
+              <ProtectedRoute exact path="/upload" component = {uploadPoints} userType="Admin"/>
+              <ProtectedRoute exact path="/map" component= {MapView} />
+              <ProtectedRoute exact path="/points/" component= {CavePointTable} />
+              <ProtectedRoute exact path="/points/:id" component= {CaveInfo} />
+              <ProtectedRoute exact path="/add/points/" component= {AddCave} />
+              <ProtectedRoute exact path="/review/points/" component= {ReviewPoint} />
+              <ProtectedRoute exact path="/review/points/:id" component= {ReviewCaveInfo} />
               <Route exact path="/register" component= {Register} />
+              <Route exact path="/login" component= {LoginPage} />
               </NavBar>
             </Switch>
           </div>
         </Router>
+        </UserContextProvider>
     </div>
   );
 }

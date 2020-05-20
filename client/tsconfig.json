@@ -22,6 +22,6 @@
   },
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts", "src/pages/Register.tsx"
+    "test/**/*.ts", "src/pages/Register.tsx", "src/context/userContext.tsx"
   ]
 }
