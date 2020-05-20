@@ -2,6 +2,14 @@ import * as Express from 'express';
 import * as mongoose from 'mongoose'
 
 import { masterPointsAPI } from './endpoints/masterPointsAPI'
+import { mongoURI } from './config/keys'
+import { mapsAPI } from './endpoints/maps';
+import { submittedPointAPI } from './endpoints/submitPointsAPI';
+
+
+import * as bodyParser from 'body-parser';
+import * as passport from 'passport';
+import './auth/passport';
 
 
 const app = Express();
@@ -17,9 +25,6 @@ The file looks like this:
 
 */
 
-import { mongoURI } from './config/keys'
-import { mapsAPI } from './endpoints/maps';
-import { submittedPointAPI } from './endpoints/submitPointsAPI';
 
 // Connect to MongoDB
 mongoose.connect(
@@ -48,8 +53,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// Passport stuff
+app.use( bodyParser.urlencoded({ extended : false }) );
+import { userAPI } from './endpoints/authentication'
+import { userInfoAPI } from './endpoints/userinformation';
+
+
 
 // Routes
+app.use("/api/user", userAPI)
 app.use("/api/points/master", masterPointsAPI);
 app.use("/api/maps", mapsAPI);
 app.use("/api/submit/point", submittedPointAPI);
