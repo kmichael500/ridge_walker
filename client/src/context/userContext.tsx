@@ -47,7 +47,6 @@ class UserContextProvider extends Component<Props, State>{
         getUserProfile().then((user)=>{
             this.setState({user, isAuthenticated: true, loading: false});
         }).catch((error)=>{
-            message.error(error);
             this.setState({loading: false, isAuthenticated: false});
         })
     }

@@ -49,7 +49,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = props => {
 ProtectedRoute.defaultProps = {
     isAllowed: true,
     userType: "User",
-    restrictedPath: "/admin",
+    restrictedPath: "/map",
     authenticationPath: "/login"
 }
 

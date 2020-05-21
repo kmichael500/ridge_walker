@@ -55,6 +55,23 @@ submittedPointAPI.get('/:id', (req, res, next) => {
       });
 });
 
+// Endpoint to get a single point
+submittedPointAPI.delete('/:id', (req, res, next) => {
+    SubmittedPoint.findByIdAndDelete(req.params.id, (err, submittedPoint) => {
+        if (err) {
+            console.log("\nsubmittedPointAPI.get('/:id')  error");
+            next(err)
+        } else if (submittedPoint == null) {
+            console.log("\nsubmittedPointAPI.get('/:id')  error");
+            err = new Error("Submitted point for Id does not exist");
+            next(err)
+        }
+        else {
+            res.send("Sucsess");
+        }
+      });
+});
+
 //Catches every request to a route we have not defined elsewhere.
 submittedPointAPI.get('*', (req, res, next) => {
     const err = new Error('Page Not Found');

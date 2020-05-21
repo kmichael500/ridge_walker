@@ -2,14 +2,16 @@ import React, { Component } from "react";
 import { SubmittedPoint } from '../interfaces/submittedPointInterface'
 import { Feature } from '../interfaces/geoJsonInterface'
 import { PointsTable } from '../components/PointsTable'
-import { getAllSubmittedPoints } from '../dataservice/submittedPoints'
-import { List, Card, Skeleton, Button, Tabs, Space, Input, Typography } from 'antd'
+import { getAllSubmittedPoints, deleteOneSubmittedPointByID } from '../dataservice/submittedPoints'
+import { List, Card, Skeleton, Button, Tabs, Space, Input, Typography, message, Popconfirm } from 'antd'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { cleanString } from "../dataservice/cleanString"
 import { Table } from 'antd'
 import { withRouter } from 'react-router-dom';
+import { getOneUserByID } from '../dataservice/authentication'
 const { Paragraph } = Typography;
+
 
 
 const { TabPane } = Tabs;
@@ -43,7 +45,6 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
         }
 
         this.processPoints = this.processPoints.bind(this);
-        // console.log(this.props.points)
     }
 
     componentDidMount(){
@@ -54,7 +55,6 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
     }
     componentDidUpdate(prevProps) {
       if (this.props.points !== prevProps.points) {
-        console.log(this.props.points)
         this.processPoints(this.props.points);
         this.setState({isLoading: false})
       }
@@ -75,7 +75,7 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
         // this.setState({ selectedRowKeys });
       }
       onSelectedRowKeysChange = (selectedRowKeys) => {
-        console.log(this.props.points[selectedRowKeys[0]]);
+        // console.log(this.props.points[selectedRowKeys[0]]);
         this.setState({ selectedRowKeys });
       }
 
@@ -144,7 +144,6 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
       };
 
     processPoints(points: SubmittedPoint[]){
-        console.log(points)
         let columns = [
             {
               title: 'Name',
@@ -184,8 +183,24 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
                 key: "action",
                 render: (text, record) => (
                     <Space size="middle">
-                    <a href={"/review/points/"+record.mongoID}>Review</a>
-                    <a>Delete</a>
+                    <a href={"/review/points/"+record._id}>Review</a>
+                    <Popconfirm
+                      title={"Are you sure delete " + record.name}
+                      onConfirm={()=>{
+                        deleteOneSubmittedPointByID(record._id).then(()=>{
+                          let data = JSON.parse(JSON.stringify(this.state.data));
+                          delete data[record.key]
+                          // console.log(data)
+                          this.setState({data});
+                        })
+                      }}
+                      onCancel={()=>{
+                      }}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <a href="#">Delete</a>
+                    </Popconfirm>
                     </Space>
                 )
             }
@@ -195,6 +210,9 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
           // columns.length=2;
           let data = [];
           for (let i = 0; i<points.length; i++){
+            console.log(i);
+            
+            
             let narrativeStr = cleanString(points[i].point.properties.narr);
             const narrative = narrativeStr.split('\n').map((item, i) => {
                 return <Paragraph key={i}>{item}</Paragraph>;
@@ -203,10 +221,10 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
                 key: i,
                 name: points[i].point.properties.name,
                 tcsnumber: points[i].point.properties.tcsnumber,
-                submitted_by: points[i].submitted_by,
+                submitted_by: "",
                 status: points[i].status,
                 date: new Date(points[i].date).toLocaleDateString(),
-                mongoID: points[i]._id
+                _id: points[i]._id
                 ,
                 // gear: points[i].point.properties.gear,
                 // length: points[i].point.properties.length,
@@ -217,7 +235,11 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
                 // ownership: points[i].point.properties.ownership,
                 // Depth:  points[i].point.properties.depth,
                 // description: narrative
+                
             }
+            getOneUserByID(points[i].submitted_by).then((user)=>{
+              point.submitted_by = user.firstName + " " + user.lastName;
+            });
             data.push(point);
           }
 
@@ -281,7 +303,6 @@ class ReviewPoint extends Component<Props, State>{
 
     componentDidMount(){
         getAllSubmittedPoints().then((requstedSubmissions)=>{
-            // console.log(requstedPoints);
             let newPoints = [];
             let existingPoints = []
             requstedSubmissions.map((submission)=>{

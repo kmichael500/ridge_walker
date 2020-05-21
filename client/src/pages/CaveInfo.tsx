@@ -11,6 +11,7 @@ import { MapView } from "../components/MapView"
 import DisplayMap from "../components/DisplayPDF"
 import DisplayAllMaps from "../components/DisplayAllMaps";
 import { Feature } from "../interfaces/geoJsonInterface";
+import { userContext } from "../context/userContext";
 
 const { Content } = Layout
 const { Paragraph, Title, Text } = Typography;
@@ -582,7 +583,7 @@ class CaveInfo extends Component<Props, State>{
                         const point = JSON.parse(JSON.stringify(this.state.point)) as Feature;
                         point.properties.narr += "\n\n" + this.state.newNarrative;
                         const newSubmission = {
-                            submitted_by: "Michael Ketzner",
+                            submitted_by: this.context.user._id,
                             point: point,
                             status: "Pending",
                             pointType: "Existing"
@@ -646,6 +647,7 @@ class CaveInfo extends Component<Props, State>{
                             <MapView
                                 center={this.state.point.geometry.coordinates}
                                 zoom={15}
+                                showFullScreen={true}
                             />
                         </div>
                     </div>
@@ -658,4 +660,6 @@ class CaveInfo extends Component<Props, State>{
         )
     }
 }
+
+CaveInfo.contextType = userContext;
 export { CaveInfo };

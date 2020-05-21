@@ -64,6 +64,7 @@ async function loginUser(email: string, password: string): Promise<UserInterface
             });
     
             localStorage.setItem('JWT', getLoginResponse.data.token);
+            params.secret_token = getLoginResponse.data.token;
             resolve(getLoginResponse.data.user as UserInterface);
         } catch(error) {
             reject(error.response.data.message);
@@ -76,7 +77,7 @@ async function loginUser(email: string, password: string): Promise<UserInterface
  * @param password - users password.
  * @param email - users email
  */
-async function getUserProfile(): Promise<UserInterface> {
+async function getCurrentUserProfile(): Promise<UserInterface> {
     return new Promise(async (resolve, reject) => {
         try {
             if (localStorage.getItem("JWT") === null){
@@ -98,11 +99,26 @@ function logoutUser(): void {
     params.secret_token = "";
 }
 
+/**
+ * Fetch single user from the API.
+ * @returns Promise<UserInterface>
+ * @param id - the mongo id of the user.
+ */
+async function getOneUserByID(id: string): Promise<UserInterface> {
+    try {
+        const userResponse = await axiosInstance.get('/api/user/'+id, {params});
+        return userResponse.data as UserInterface;
+    } catch(error) {
+        return error;
+    } 
+}
+
 
 
 export {
     registerUser,
     loginUser,
-    getUserProfile,
-    logoutUser
+    getCurrentUserProfile as getUserProfile,
+    logoutUser,
+    getOneUserByID
 }
