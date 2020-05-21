@@ -245,7 +245,7 @@ class CaveInfo extends Component<Props, State>{
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
-                    label="PS"
+                    label="Pits"
                 >
                         <Text
                             editable={ this.state.proposedChanges && {

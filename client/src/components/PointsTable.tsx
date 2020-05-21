@@ -172,7 +172,7 @@ class PointsTable extends Component<Props, State>{
                 }
               },
               {
-                title: 'Depth',
+                title: 'Vertical Extent',
                 dataIndex: 'depth',
               //   width: '12%',
                 sorter: {

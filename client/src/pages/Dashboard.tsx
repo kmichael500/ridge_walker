@@ -51,6 +51,7 @@ class Dashboard extends Component<any, State>{
         return(
             <div className="site-layout-content">
                 <Card title="Dashboard">
+                    <Button shape="round" size="large"><a href='http://localhost:5000/api/points/master/download/gpx' download>Download All Points</a></Button>
                 </Card>
             </div>
         )
