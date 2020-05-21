@@ -124,7 +124,7 @@ masterPointsAPI.get("/download/gpx", (req, res, next)=>{
             }
         }
         let gpx = togpx(geojson, options)
-        res.attachment('tcs' + new Date().getFullYear() + ".gpx")
+        res.attachment('TCSDATA' + new Date().getFullYear() + ".gpx")
         res.type('gpx')
         res.send(gpx)
     });
@@ -159,13 +159,98 @@ masterPointsAPI.get("/download/csv", (req, res, next)=>{
             },
             {
                 label: 'latitude', // Optional, column will be labeled 'path.to.something' if not defined)
-                value: 'geometry.coordinates[0]', // data.path.to.something
+                value: 'geometry.coordinates[1]', // data.path.to.something
                 default: '' // default if value is not found (Optional, overrides `defaultValue` for column)
             },
             {
                 label: 'longitude', // Optional, column will be labeled 'path.to.something' if not defined)
-                value: 'geometry.coordinates[1]', // data.path.to.something
+                value: 'geometry.coordinates[0]', // data.path.to.something
                 default: '' // default if value is not found (Optional, overrides `defaultValue` for column)
+            },
+            {
+                label: 'length', // Optional, column will be labeled 'path.to.something' if not defined)
+                value: 'properties.length', // data.path.to.something
+                default: '' // default if value is not found (Optional, overrides `defaultValue` for column)
+            },
+            {
+                label: 'depth', 
+                value: 'properties.depth',
+                default: '' 
+            },
+            {
+                label: 'pdep', 
+                value: 'properties.pdep',
+                default: '' 
+            },
+            {
+                label: 'ps', 
+                value: 'properties.ps',
+                default: '' 
+            },
+            {
+                label: 'co_name', 
+                value: 'properties.co_name',
+                default: '' 
+            },
+            {
+                label: 'topo_name', 
+                value: 'properties.topo_name',
+                default: '' 
+            },
+            {
+                label: 'topo_indi', 
+                value: 'properties.topo_indi',
+                default: '' 
+            },
+            {
+                label: 'elev', 
+                value: 'properties.elev',
+                default: '' 
+            },
+            {
+                label: 'ownership', 
+                value: 'properties.ownership',
+                default: '' 
+            },
+            {
+                label: 'gear', 
+                value: 'properties.gear',
+                default: '' 
+            },
+            {
+                label: 'ent_type', 
+                value: 'properties.ent_type',
+                default: '' 
+            },
+            {
+                label: 'field_inid', 
+                value: 'properties.field_indi',
+                default: '' 
+            },
+            {
+                label: 'map_status', 
+                value: 'properties.map_status',
+                default: '' 
+            },
+            {
+                label: 'geology', 
+                value: 'properties.geology',
+                default: '' 
+            },
+            {
+                label: 'geo_age', 
+                value: 'properties.geo_age',
+                default: '' 
+            },
+            {
+                label: 'phys_prov', 
+                value: 'properties.phys_prov',
+                default: '' 
+            },
+            {
+                label: 'narr', 
+                value: 'properties.narr',
+                default: '' 
             },
         ]
         const opts = { fields };
@@ -173,43 +258,14 @@ masterPointsAPI.get("/download/csv", (req, res, next)=>{
         try {
             const parser = new Parser(opts);
             const csv = parser.parse(points);
-            console.log(csv);
-            res.send(csv);
+            res.attachment('TCSDATA' + new Date().getFullYear() + ".csv")
+            res.type('csv')
+            res.send(csv)
         } catch (err) {
-            console.error(err);
+            console.log("\nError converting to csv");
+            next(err)
         }
-
-        let options = {
-            creator: "TCS",
-            featureDescription: (val: any)=>{
-                let desc = ""
-                desc += "\nLength: " + val.length;
-                desc += "\nVertical Extent: " + val.depth;
-                desc += "\nPit Depth: " + val.pdep;
-                desc += "\nPits: " + val.ps;
-                desc += "\nCounty: " + val.co_name;
-                desc += "\nTopo: " + val.topo_name;
-                desc += "\nTopo Indication: " + val.topo_indi;
-                desc += "\nElevation: " + val.elev;
-                desc += "\nOwnership: " + val.ownership;
-                desc += "\nEquipment: " + val.gear;
-                desc += "\nEntry: " + val.ent_type;
-                desc += "\nField Indication: " + val.field_indi;
-                desc += "\nMap Status: " + val.map_status;
-                desc += "\nGeology: " + val.geology;
-                desc += "\nGeology Age: " + val.geo_age;
-                desc += "\nPhys Prov: " + val.phys_prov;
-                desc += "\n\n" + val.narr.replace(/[^\x00-\x7F]/g, "");
-                return(desc)
-            },
-            featureTitle: (val: any) => {
-                return (val.tcsnumber + " " + val.name)
-            }
-        }
-        let gpx = togpx(geojson, options)
-        res.attachment('tcs' + new Date().getFullYear() + ".gpx")
-        res.type('gpx')
-        res.send(gpx)
+        
     });
 
 
