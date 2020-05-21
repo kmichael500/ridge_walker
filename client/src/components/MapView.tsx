@@ -2,6 +2,9 @@
 import React, { Component } from "react";
 import ReactDOMServer from 'react-dom/server';
 import L, { map, LayerGroup, latLng } from 'leaflet';
+import Control from 'react-leaflet-control';
+import { FullscreenOutlined } from '@ant-design/icons'
+import { Row } from 'antd'
 import { Map, TileLayer, Marker, Popup, WMSTileLayer, LayersControl, GeoJSON, CircleMarker} from 'react-leaflet';
 
 import { getAllMasterPoints } from '../dataservice/getPoints'
@@ -22,6 +25,7 @@ import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import { Points, Feature } from "../pages/geoJsonInterface.js";
 import 'leaflet/dist/leaflet.css';
+import { withRouter } from "react-router-dom";
 
 // marker for adding points (right click)
 const MyMarker = props => {
@@ -51,14 +55,17 @@ interface Props {
   data?: Feature,
   center?: number[],
   baseLayer?: number
-  zoom?: number
+  zoom?: number,
+  showFullScreen?: boolean
+  onCenterChange?: (center: number[])=>void
 }
 
 class MapView extends Component<Props, State> {
 
   static defaultProps = {
     center: [35.859710, -86.361997],
-    zoom: 7
+    zoom: 7,
+    showFullScreen: false
   } as Props
 
   // map data
@@ -199,7 +206,12 @@ class MapView extends Component<Props, State> {
   }
   componentDidMount() {
     window.addEventListener("resize", this.updateDimensions.bind(this))
-
+    if(this.props.match != undefined && this.props.match.params.lat !== undefined && this.props.match.params.long !== undefined){
+      this.setState({
+        center: [this.props.match.params.lat, this.props.match.params.long],
+        zoom:15
+      })
+    };
     if (this.props.data == undefined){
       getAllMasterPoints().then((requestedPoints)=>{
         this.setState({data: requestedPoints, isLoading: false})
@@ -233,10 +245,25 @@ class MapView extends Component<Props, State> {
           onViewportChange={(vp)=>{
             // window.scrollTo(0, 0);
             this.setState({center: vp.center, zoom: vp.zoom})
-          }}
 
-          
+            if(this.props.onCenterChange){
+              this.props.onCenterChange(vp.center);
+            }
+            
+          }}
         >
+        
+        {this.props.showFullScreen &&
+        <Control position="topright">
+            <Row style={{background:"white", padding: "5px", borderRadius:"5px", boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} align="middle">
+              <FullscreenOutlined style={{fontSize:"25px", color:"black"}}
+                onClick={ () => {this.props.history.push("/map/"+this.state.center[0]+"/"+this.state.center[1])} }
+              >
+                Full Screen
+          </FullscreenOutlined>
+          </Row>
+        </Control>
+        }
           {/* USGS Lidar and OSM Layers that you can toggle */}
           {this.renderLayers()}
 
@@ -253,6 +280,8 @@ class MapView extends Component<Props, State> {
             {this.renderPopup()}
           </div>
         }
+
+       
         
 
         {/* // Clusters points */}
@@ -283,5 +312,6 @@ class MapView extends Component<Props, State> {
   }
 }
 
+const mapView = withRouter(MapView)
 
-export {MapView}
+export {mapView as MapView}

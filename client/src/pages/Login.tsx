@@ -4,8 +4,6 @@ import { userContext } from '../context/userContext'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { loginUser } from "../dataservice/authentication"
 
-
-
 import {
     Form,
     Input,
@@ -25,6 +23,7 @@ import {
     Col,
     message,
   } from 'antd';
+const { Paragraph, Title, Text } = Typography;
 
 interface State{
     email: string,
@@ -65,13 +64,13 @@ class Login extends Component<Props,State> {
             console.log(response)
             this.context.setUser(response);
             this.context.setAuthenticated(true, ()=>{
-                let redirectPath = "/admin";
+                let redirectPath = "/map";
                 console.log(this.props.location)
                 try{
                     redirectPath = this.props.location.state.from;
                 }
                 catch(error){
-                    redirectPath = "/admin"
+                    redirectPath = "/map"
                 }
                 
                 this.props.history.push(redirectPath)
@@ -79,16 +78,21 @@ class Login extends Component<Props,State> {
             });
             
         }).catch((error)=>{
-            console.log(error)
+            message.error(error);
         })
     }
 
   render() {
     return(
-        <Row justify="center" align="middle" style={{minHeight: '100vh'}}>
+        <Row justify="center" align="middle" style={{height:"100%", background:"white"}}>
+        <div style={{width:"90%", borderRadius:"10px"}}>
+        <Row justify="center">
+        <Title>Access Member Portal</Title>
+        </Row>
         <Form name="horizontal_login" onFinish={this.handleSubmit} size="large">
             <Form.Item
                 name="email"
+                
                 rules={[
                     {
                     type: 'email',
@@ -100,7 +104,7 @@ class Login extends Component<Props,State> {
                     },
                 ]}
                 >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
+                <Input size="large" prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
             </Form.Item>
             <Form.Item
                 name="password"
@@ -108,21 +112,26 @@ class Login extends Component<Props,State> {
             >
                 <Input
                     prefix={<LockOutlined className="site-form-item-icon" />}
+                    size="large"
                     type="password"
                     placeholder="Password"
                 />
             </Form.Item>
             <Form.Item shouldUpdate={true}>
                 {() => (
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                    >
-                        Log in
-                    </Button>
+                    <Row justify="center">
+                        <Button
+                            size="large"
+                            type="primary"
+                            htmlType="submit"
+                        >
+                            Log in
+                        </Button>
+                    </Row>
                 )}
             </Form.Item>
         </Form>
+        </div>
         </Row>
     )
   }

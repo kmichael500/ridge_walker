@@ -93,5 +93,39 @@ userAPI.get('/profile', passport.authenticate('jwt', { session : false }), (req,
   // })
 });
 
+//Displays information tailored according to the logged in user
+userAPI.get('/:id', passport.authenticate('jwt', { session : false }), (req, res, next) => {
+
+  const role = (<any>req).user.role;
+  console.log((<any>req).user._id)
+  if (role === "Admin"){
+    UserModel.findById(req.params.id, (err, currentUser) => {
+      if (err) {
+          console.log("\nuserAPI.get('/:id')  error");
+          next(err)
+      } else if (currentUser == null) {
+          console.log("\nuserAPI.get('/:id')  error");
+          err = new Error("User does not exist");
+          next(err)
+      }
+      else {
+          currentUser.password = "undefined";
+          res.json(currentUser)
+      }
+    });  
+  }
+  else{
+    console.log("\nuserAPI.get('/:id') error");
+    const err = new Error("Unauthorized");
+    next(err)
+  }
+  //We'll just send back the user details and the token
+  // res.json({
+  //   message : 'You made it to the secure route',
+  //   user : req.user,
+  //   token : req.query.secret_token
+  // })
+});
+
   
 export { userAPI };

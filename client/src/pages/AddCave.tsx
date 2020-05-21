@@ -25,6 +25,7 @@ import Item from "antd/lib/list/Item";
 import { Store } from "antd/lib/form/interface";
 import { SubmittedPoint } from "../interfaces/submittedPointInterface";
 import { addSubmittedPoint } from "../dataservice/submittedPoints";
+import { userContext } from "../context/userContext";
 
 const { Content } = Layout
 const { Paragraph, Title, Text } = Typography;
@@ -93,7 +94,7 @@ class AddCave extends Component<any, State>{
     handleSubmit(values: Store){
         console.log(values)
         const newSubmmision = {
-            submitted_by: "Michael Ketzner",
+            submitted_by: this.context.user._id,
             status: "Pending",
             pointType: "New",
             point: {
@@ -121,13 +122,14 @@ class AddCave extends Component<any, State>{
                 },
                 geometry: {
                     type: "Point",
-                    coordinates: [values.long, values.lat]
+                    coordinates: [values.lat, values.long]
                 },
             }
         } as SubmittedPoint
 
         addSubmittedPoint(newSubmmision).then(()=>{
             message.success(values.name + " submitted successfully.");
+            this.props.history.goBack();
         })
 
         console.log(newSubmmision);
@@ -151,8 +153,7 @@ class AddCave extends Component<any, State>{
         
         return(
             <div className="site-layout-content">
-                <Card>
-                <Divider></Divider>
+                <Card title="Add a New Cave">
                 <Form
                     // labelCol={{ span: 8 }}
                     // wrapperCol={{ span: 14 }}
@@ -385,4 +386,6 @@ class AddCave extends Component<any, State>{
         )
     }
 }
+
+AddCave.contextType = userContext
 export { AddCave };

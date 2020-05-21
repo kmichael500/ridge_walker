@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import 'antd/dist/antd.css';
+import React, { Component, Fragment } from 'react';
 import { Layout, Menu, Breadcrumb } from 'antd';
+import { UserOutlined } from '@ant-design/icons'
 import {ClickParam} from 'antd/lib/menu'
 import { withRouter } from 'react-router-dom';
 import SubMenu from 'antd/lib/menu/SubMenu';
-import { Icon } from 'leaflet';
 import { userContext } from '../context/userContext';
 import { logoutUser } from '../dataservice/authentication'
 
@@ -18,6 +17,7 @@ class NavBar extends Component<any, any>{
         super(props);
         this.handleMenuClick = this.handleMenuClick.bind(this);
         this.loggedInSubMenu = this.loggedInSubMenu.bind(this);
+        this.loggedInMenu = this.loggedInMenu.bind(this);
     }
     handleMenuClick(param: ClickParam){
         if (param.key === "logout"){
@@ -35,10 +35,50 @@ class NavBar extends Component<any, any>{
         console.log(vals);
     }
 
+    loggedInMenu(){
+        if (this.context.isAuthenticated){
+            return(
+                <Menu
+                selectable={true}
+                theme="dark"
+                mode="horizontal"
+                // defaultSelectedKeys={['2']}
+                onClick={this.handleMenuClick}
+                >
+
+                    <Menu.Item key="/map">Map</Menu.Item>
+                    <Menu.SubMenu title="Points" key="/points" onTitleClick={this.handleMenuClick}>
+                        <Menu.Item key="/add/points">Add</Menu.Item>
+                        <Menu.Item key="/review/points">Review</Menu.Item>
+                    </Menu.SubMenu>
+                    <Menu.Item key="/dashboard">Dashboard</Menu.Item>
+                    <Menu.Item key="/upload">Upload</Menu.Item>
+                    {this.loggedInSubMenu()}
+                </Menu>
+            )
+        }
+        else{
+            return(
+                <Menu
+                selectable={false}
+                
+                theme="dark"
+                mode="horizontal"
+                // defaultSelectedKeys={['2']}
+                onClick={this.handleMenuClick}
+                >
+
+                    <Menu.Item key="/">Tennessee Cave Survey</Menu.Item>
+                    
+                    {this.loggedInSubMenu()}
+                </Menu>
+            )
+        }
+    }
     loggedInSubMenu(){
         if (this.context.isAuthenticated){
             return(
-                <Menu.SubMenu style={{float: 'right'}} title={"Welcome, " + this.context.user.firstName + "!"}>
+                <Menu.SubMenu icon={<UserOutlined />} style={{float: 'right'}} title={"Welcome, " + this.context.user.firstName + "!"}>
                     <Menu.Item key="/settings">Settings</Menu.Item>
                     <Menu.Item key="logout">Logout</Menu.Item>
                 </Menu.SubMenu>
@@ -46,7 +86,7 @@ class NavBar extends Component<any, any>{
         }
         else{
             return(
-                <Menu.SubMenu style={{float: 'right'}} title="Login" key="/login" onTitleClick={this.handleMenuClick}>
+                <Menu.SubMenu icon={<UserOutlined />} style={{float: 'right'}} title="Login" key="/login" onTitleClick={this.handleMenuClick}>
                 </Menu.SubMenu>
             )
         }
@@ -57,23 +97,7 @@ class NavBar extends Component<any, any>{
         <Layout className="layout" style={{height:"100vh"}}>
             <Header>
                 <div className="logo" />
-                <Menu
-                    selectable={true}
-                    
-                    theme="dark"
-                    mode="horizontal"
-                    // defaultSelectedKeys={['2']}
-                    onClick={this.handleMenuClick}
-                    >
-                    <Menu.Item key="/map">Map</Menu.Item>
-                    <Menu.SubMenu title="Points" key="/points" onTitleClick={this.handleMenuClick}>
-                        <Menu.Item key="/add/points">Add</Menu.Item>
-                        <Menu.Item key="/review/points">Review</Menu.Item>
-                    </Menu.SubMenu>
-                    <Menu.Item key="/dashboard">Dashboard</Menu.Item>
-                    <Menu.Item key="/upload">Upload</Menu.Item>
-                    {this.loggedInSubMenu()}
-                </Menu>
+                {this.loggedInMenu()}
             </Header>
             <Content>
                 {/* <div className="site-layout-content"> */}
