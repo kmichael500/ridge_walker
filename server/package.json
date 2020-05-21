@@ -33,6 +33,7 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.1.7-alpha.3",
     "glob": "^7.1.6",
+    "json2csv": "^5.0.1",
     "jsonwebtoken": "^8.5.1",
     "lokijs": "^1.5.8",
     "mongoose": "^5.9.11",
@@ -41,6 +42,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pdf-image": "^2.0.0",
+    "togpx": "^0.5.4",
     "ts-node-dev": "^1.0.0-pre.44"
   },
   "devDependencies": {
