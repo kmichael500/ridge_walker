@@ -11,7 +11,9 @@ import { CavePointTable } from "./pages/CavePointTable";
 import { AddCave } from "./pages/AddCave";
 import { ReviewPoint } from "./pages/ReviewPoint";
 import { ReviewCaveInfo } from "./pages/reviewCaveInfo";
-import { UserContextProvider } from "./context/userContext"
+import { UserContextProvider } from "./context/userContext";
+import { Dashboard} from './pages/Dashboard';
+import { HomePage } from './pages/HomePage'
 // Authentication
 import { Register } from "./pages/Register";
 import { LoginPage } from "./pages/Login";
@@ -29,15 +31,18 @@ function App() {
                 {/* Non Protected Routes */}
                 <Route exact path="/register" component= {Register} />
                 <Route exact path="/login" component= {LoginPage} />
+                <Route exact path="/" component={HomePage}/>
+
 
                 {/* Protected Routes */}
                 <ProtectedRoute exact path="/upload" component = {uploadPoints} userType="Admin"/>
-                <ProtectedRoute exact path="/map" component= {MapView} />
+                <ProtectedRoute exact path="/dashboard" component = {Dashboard} />
+                <ProtectedRoute exact path="/map/:lat?/:long?" component= {MapView} />
                 <ProtectedRoute exact path="/points/" component= {CavePointTable} />
                 <ProtectedRoute exact path="/points/:id" component= {CaveInfo} />
                 <ProtectedRoute exact path="/add/points/" component= {AddCave} />
-                <ProtectedRoute exact path="/review/points/" component= {ReviewPoint} />
-                <ProtectedRoute exact path="/review/points/:id" component= {ReviewCaveInfo} />
+                <ProtectedRoute exact path="/review/points/" component= {ReviewPoint} userType="Admin" />
+                <ProtectedRoute exact path="/review/points/:id" component= {ReviewCaveInfo} userType="Admin" />
               </NavBar>
             </Switch>
           </div>
