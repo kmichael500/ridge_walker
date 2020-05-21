@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Affix } from 'antd';
 import { UserOutlined } from '@ant-design/icons'
 import {ClickParam} from 'antd/lib/menu'
 import { withRouter } from 'react-router-dom';
@@ -61,7 +61,6 @@ class NavBar extends Component<any, any>{
             return(
                 <Menu
                 selectable={false}
-                
                 theme="dark"
                 mode="horizontal"
                 // defaultSelectedKeys={['2']}
@@ -95,10 +94,12 @@ class NavBar extends Component<any, any>{
     render(){
         return(
         <Layout className="layout" style={{height:"100vh"}}>
+            <Affix>
             <Header>
                 <div className="logo" />
                 {this.loggedInMenu()}
             </Header>
+            </Affix>
             <Content>
                 {/* <div className="site-layout-content"> */}
                     {this.props.children}
