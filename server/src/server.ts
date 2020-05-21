@@ -1,5 +1,6 @@
 import * as Express from 'express';
 import * as mongoose from 'mongoose'
+import * as compression from 'compression'
 
 import { masterPointsAPI } from './endpoints/masterPointsAPI'
 import { mongoURI } from './config/keys'
@@ -43,6 +44,19 @@ app.use((err: any, req: any, res: any, next: any) => {
   res.status(err.status || 500);
   res.json({ error : err });
 });
+
+// Compression
+const shouldCompress = (req: Express.Request, res: Express.Response) => {
+  if (req.headers['x-no-compression']) {
+    return false
+  }
+  return compression.filter(req, res);
+}
+
+app.use(compression({
+  // filter: shouldCompress,
+}));
+
 
 
 // fixes CORS issues
