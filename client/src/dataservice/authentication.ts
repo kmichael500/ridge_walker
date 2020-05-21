@@ -93,10 +93,16 @@ async function getUserProfile(): Promise<UserInterface> {
     })
 }
 
+function logoutUser(): void {
+    localStorage.removeItem("JWT");
+    params.secret_token = "";
+}
+
 
 
 export {
     registerUser,
     loginUser,
-    getUserProfile
+    getUserProfile,
+    logoutUser
 }

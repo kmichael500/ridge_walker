@@ -23,22 +23,21 @@ function App() {
     <div className="App">
       <UserContextProvider>
       <Router>
-          <div className="App">
-            {/* Protected Routes */}
-            
+          <div className="App">            
             <Switch>
-              {/* Non Protected Routes */}
               <NavBar>
-              {/* <Route exact path="/upload" component={uploadPoints} /> */}
-              <ProtectedRoute exact path="/upload" component = {uploadPoints} userType="Admin"/>
-              <ProtectedRoute exact path="/map" component= {MapView} />
-              <ProtectedRoute exact path="/points/" component= {CavePointTable} />
-              <ProtectedRoute exact path="/points/:id" component= {CaveInfo} />
-              <ProtectedRoute exact path="/add/points/" component= {AddCave} />
-              <ProtectedRoute exact path="/review/points/" component= {ReviewPoint} />
-              <ProtectedRoute exact path="/review/points/:id" component= {ReviewCaveInfo} />
-              <Route exact path="/register" component= {Register} />
-              <Route exact path="/login" component= {LoginPage} />
+                {/* Non Protected Routes */}
+                <Route exact path="/register" component= {Register} />
+                <Route exact path="/login" component= {LoginPage} />
+
+                {/* Protected Routes */}
+                <ProtectedRoute exact path="/upload" component = {uploadPoints} userType="Admin"/>
+                <ProtectedRoute exact path="/map" component= {MapView} />
+                <ProtectedRoute exact path="/points/" component= {CavePointTable} />
+                <ProtectedRoute exact path="/points/:id" component= {CaveInfo} />
+                <ProtectedRoute exact path="/add/points/" component= {AddCave} />
+                <ProtectedRoute exact path="/review/points/" component= {ReviewPoint} />
+                <ProtectedRoute exact path="/review/points/:id" component= {ReviewCaveInfo} />
               </NavBar>
             </Switch>
           </div>

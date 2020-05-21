@@ -3,6 +3,10 @@ import 'antd/dist/antd.css';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import {ClickParam} from 'antd/lib/menu'
 import { withRouter } from 'react-router-dom';
+import SubMenu from 'antd/lib/menu/SubMenu';
+import { Icon } from 'leaflet';
+import { userContext } from '../context/userContext';
+import { logoutUser } from '../dataservice/authentication'
 
 
 
@@ -13,13 +17,40 @@ class NavBar extends Component<any, any>{
     constructor(props){
         super(props);
         this.handleMenuClick = this.handleMenuClick.bind(this);
+        this.loggedInSubMenu = this.loggedInSubMenu.bind(this);
     }
     handleMenuClick(param: ClickParam){
-        this.props.history.push(param.key)
+        if (param.key === "logout"){
+            logoutUser();
+            this.context.setAuthenticated(false);
+            this.props.history.push("/")
+        }
+        else {
+            this.props.history.push(param.key)
+        }
+        
     }
 
     onFinish(vals){
         console.log(vals);
+    }
+
+    loggedInSubMenu(){
+        if (this.context.isAuthenticated){
+            return(
+                <Menu.SubMenu style={{float: 'right'}} title={"Welcome, " + this.context.user.firstName + "!"}>
+                    <Menu.Item key="/settings">Settings</Menu.Item>
+                    <Menu.Item key="logout">Logout</Menu.Item>
+                </Menu.SubMenu>
+            );
+        }
+        else{
+            return(
+                <Menu.SubMenu style={{float: 'right'}} title="Login" key="/login" onTitleClick={this.handleMenuClick}>
+                </Menu.SubMenu>
+            )
+        }
+        
     }
     render(){
         return(
@@ -27,9 +58,11 @@ class NavBar extends Component<any, any>{
             <Header>
                 <div className="logo" />
                 <Menu
+                    selectable={true}
+                    
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={['2']}
+                    // defaultSelectedKeys={['2']}
                     onClick={this.handleMenuClick}
                     >
                     <Menu.Item key="/map">Map</Menu.Item>
@@ -39,7 +72,7 @@ class NavBar extends Component<any, any>{
                     </Menu.SubMenu>
                     <Menu.Item key="/dashboard">Dashboard</Menu.Item>
                     <Menu.Item key="/upload">Upload</Menu.Item>
-                    <Menu.Item key="/login">Login</Menu.Item>
+                    {this.loggedInSubMenu()}
                 </Menu>
             </Header>
             <Content>
@@ -52,6 +85,8 @@ class NavBar extends Component<any, any>{
         );
     }
 }
+
+NavBar.contextType = userContext;
 
 const navBar = withRouter(NavBar);
 export {navBar as NavBar}
