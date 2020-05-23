@@ -1,11 +1,14 @@
 import * as express from 'express';
 import * as multer from 'multer'
 import { MongooseDocument } from 'mongoose'
-var csv2geojson = require('csv2geojson');
+import { Parser, transforms } from 'json2csv';
 
+
+import json2csv from 'json2csv'
 import {Request, Response, NextFunction} from 'express';
 import { Points, Feature, Geometry } from '../models/MasterPoint'
 import { MasterPoint } from '../models/MasterPoints';
+import { TextEncoder } from 'util';
 
 // Initialize an express api and configure it parse requests as JSON
 const masterPointsAPI = express();
@@ -34,28 +37,36 @@ var upload = multer({ storage:storage })
 // Endpoint to add all TCS points a submission by ID
 masterPointsAPI.post("/upload", upload.single("csv"), (req, res, next) => {
     
-    let geojson = {} as Points
-    csv2geojson.csv2geojson(req.file.buffer.toString(), (err:any, data:any)=>{
-        geojson = data;
-    });
+    const csv=require('csvtojson')
+    csv()
+    .fromString(req.file.buffer.toString())
+    .then((jsonObj: any)=>{
+        let geojson = {} as Points;
+        console.log(jsonObj[0]);
+        var GeoJSON = require('geojson');
+        geojson = GeoJSON.parse(jsonObj, {Point: ['latitude', 'longitude']});
+
+        for (let i = 0; i<geojson.features.length; i++){
+            const newMasterPoint = new MasterPoint({
+                type: geojson.features[i].type,
+                properties: geojson.features[i].properties,
+                geometry: geojson.features[i].geometry
+            })
+            newMasterPoint.save((err) => {
+                if (err) {
+                    console.log("\n `err`");
+                    next(err)
+                }
+                else {
+                    console.log(geojson.features[i].properties.tcsnumber + ' saved successfully!');
+                }
+            });
+        }
+        res.send(geojson)
+    })
+
     
-    for (let i = 0; i<geojson.features.length; i++){
-        const newMasterPoint = new MasterPoint({
-            type: geojson.features[i].type,
-            properties: geojson.features[i].properties,
-            geometry: geojson.features[i].geometry
-        })
-        newMasterPoint.save((err) => {
-            if (err) {
-                console.log("\n `err`");
-                next(err)
-            }
-            else {
-                console.log(geojson.features[i]. properties.tcsnumber + ' saved successfully!');
-            }
-        });
-    }
-    res.send(geojson)
+    
 });
 
 // get all master points
@@ -66,7 +77,7 @@ masterPointsAPI.get("/", (req, res, next)=>{
             next(err)
         }
         else {
-            res.json(requestedPoints)
+            res.send(requestedPoints)
         }
     }).lean();
 
@@ -142,9 +153,11 @@ masterPointsAPI.get("/download/csv", (req, res, next)=>{
         else {
         }
     }).lean().then((response)=>{
+        
+
         let points = (response) as unknown as Feature[];
         let geojson = { type:"FeatureCollection", features:points} as Points;
-        const { Parser } = require('json2csv');
+        
  
         const fields = [
             {
@@ -253,7 +266,7 @@ masterPointsAPI.get("/download/csv", (req, res, next)=>{
                 default: '' 
             },
         ]
-        const opts = { fields };
+        const opts = { fields, withBOM:true } as json2csv.Options<any>;
         
         try {
             const parser = new Parser(opts);

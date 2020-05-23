@@ -3,6 +3,7 @@ import * as passport from 'passport'
 import * as jwt from 'jsonwebtoken'
 import { UserModel } from '../models/User';
 import { isUndefined } from 'util';
+import { SubmittedPoint } from '../models/SubmittedPoint';
 
 const userAPI = express();
 
@@ -92,6 +93,29 @@ userAPI.get('/profile', passport.authenticate('jwt', { session : false }), (req,
   //   token : req.query.secret_token
   // })
 });
+
+//Displays information tailored according to the logged in user
+userAPI.get('/submissions', passport.authenticate('jwt', { session : false }), (req, res, next) => {
+
+  // const id = (<any>req).user._id;
+
+  SubmittedPoint.find({"submitted_by":(<any>req).user._id}, (err, submittedPoints) => {
+    if (err) {
+        console.log("\nuserAPI.get('/submissions')  error");
+        next(err)
+    }
+    else {
+        res.json(submittedPoints)
+    }
+  });
+  //We'll just send back the user details and the token
+  // res.json({
+  //   message : 'You made it to the secure route',
+  //   user : req.user,
+  //   token : req.query.secret_token
+  // })
+});
+
 
 //Displays information tailored according to the logged in user
 userAPI.get('/:id', passport.authenticate('jwt', { session : false }), (req, res, next) => {

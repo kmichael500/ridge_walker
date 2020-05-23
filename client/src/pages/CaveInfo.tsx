@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Card, Descriptions, PageHeader, Space,  Col, Row, Typography, Divider, Layout, message, Button, Form, Input } from 'antd'
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { getMasterPoint } from "../dataservice/getPoints";
-import { cleanString } from "../dataservice/cleanString"
 import { addSubmittedPoint, getSubmittedPoint } from '../dataservice/submittedPoints'
 import { SubmittedPoint } from '../interfaces/submittedPointInterface'
 import deepEqual from 'deep-equal'
@@ -36,7 +35,7 @@ interface Props {
     showMap?: boolean,
     renderTitle?: boolean,
     submittedPoint?: string
-    role?: string
+    action?: string
 }
 
 
@@ -50,7 +49,7 @@ class CaveInfo extends Component<Props, State>{
     static defaultProps ={
         showMap: true,
         renderTitle: true,
-        role: "User"
+        action: "View"
     } as Props
     
     constructor(Props){
@@ -60,7 +59,7 @@ class CaveInfo extends Component<Props, State>{
             proposedChanges: false,
             newNarrative: "",
             pointCopy: undefined,
-            role: this.props.role,
+            role: this.props.action,
             point: {
                 type: "Feature",
                 properties:{
@@ -141,15 +140,13 @@ class CaveInfo extends Component<Props, State>{
         ];
 
         let narrative;
-        if (this.props.role === "User"){
-            let narrativeStr = cleanString(this.state.point.properties.narr);
-            narrative = narrativeStr.split('\n').map((item, i) => {
+        if (this.props.action === "View"){
+            narrative = this.state.point.properties.narr.split('\n').map((item, i) => {
                 return <Paragraph key={i}>{item}</Paragraph>;
             });
         }
-        else if (this.props.role === "Admin"){
-            let narrativeStr = cleanString(this.state.newNarrative);
-            narrative = narrativeStr.split('\n').map((item, i) => {
+        else if (this.props.action === "Review"){
+            narrative = this.state.newNarrative.split('\n').map((item, i) => {
                 return <Paragraph key={i}>{item}</Paragraph>;
             });
         }
@@ -457,7 +454,7 @@ class CaveInfo extends Component<Props, State>{
             </Descriptions>
             <Divider orientation="left">Narrative</Divider>
             
-            {this.props.role === "User" &&
+            {this.props.action === "View" &&
             <div>
                 <Paragraph>
                     {narrative}
@@ -476,7 +473,7 @@ class CaveInfo extends Component<Props, State>{
                 </div>
             }
 
-            {this.props.role === "Admin" &&
+            {this.props.action === "Review" &&
             <div>
                 
                 {this.state.proposedChanges ?
@@ -531,13 +528,13 @@ class CaveInfo extends Component<Props, State>{
         let okButtonText = "";
         let proposeButtonText = "";
         let cancelButtonText = "";
-        switch(this.props.role){
-            case "User":
+        switch(this.props.action){
+            case "View":
                 okButtonText = "Submit";
                 proposeButtonText = "Propose Changes";
                 cancelButtonText = "Cancel";
                 break;
-            case "Admin":
+            case "Review":
                 okButtonText = "Approve";
                 cancelButtonText = "Edit";
                 break;
@@ -546,26 +543,26 @@ class CaveInfo extends Component<Props, State>{
         }
         return(
         <div>
-        {!this.state.proposedChanges && this.props.role === "User" ?
+        {!this.state.proposedChanges && this.props.action === "View" ?
             <Button type="primary"
                 onClick={()=>{
                     this.setState({proposedChanges: !this.state.proposedChanges});
                 }}
             >
-                {proposeButtonText}
+                {"Propose Changes"}
             </Button>
             :
             <Space>
                 <Button danger
                     onClick={()=>{
                         const revertPoint = JSON.parse(JSON.stringify(this.state.pointCopy));
-                        if (this.props.role === "User"){
+                        if (this.props.action === "View"){
                             this.setState({
                                 proposedChanges: !this.state.proposedChanges,
                                 point: revertPoint
                             });
                         }
-                        else if (this.props.role === "Admin"){
+                        else if (this.props.action === "Review"){
                             this.setState({
                                 proposedChanges: !this.state.proposedChanges,
                                 // point: revertPoint
@@ -609,6 +606,7 @@ class CaveInfo extends Component<Props, State>{
                 </Button>
             </Space>
         }
+        
         </div>
         )
     }

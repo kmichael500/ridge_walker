@@ -20,126 +20,56 @@ import {
     Card,
     Space,
     Row,
-    message
+    message,
+    Col,
+    Tabs
   } from 'antd';
 import Item from "antd/lib/list/Item";
 import { Store } from "antd/lib/form/interface";
 import { SubmittedPoint } from "../interfaces/submittedPointInterface";
-import { addSubmittedPoint } from "../dataservice/submittedPoints";
+import { getCurrentUserSubmissions } from '../dataservice/authentication'
+import { addSubmittedPoint, getAllSubmittedPoints } from "../dataservice/submittedPoints";
 import { getAllMasterPoints } from "../dataservice/getPoints";
+import { DownloadCSVButton, DownloadGPXButton } from "../components/downloadData/DownloadButtons";
+import { ReviewTable } from "./ReviewPoint";
 
 const { Content } = Layout
 const { Paragraph, Title, Text } = Typography;
-
-
-const renderActiveShape = (props) => {
-    const RADIAN = Math.PI / 180;
-    const {
-      cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
-      fill, payload, percent, value,
-    } = props;
-    const sin = Math.sin(-RADIAN * midAngle);
-    const cos = Math.cos(-RADIAN * midAngle);
-    const sx = cx + (outerRadius + 10) * cos;
-    const sy = cy + (outerRadius + 10) * sin;
-    const mx = cx + (outerRadius + 30) * cos;
-    const my = cy + (outerRadius + 30) * sin;
-    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-    const ey = my;
-    const textAnchor = cos >= 0 ? 'start' : 'end';
-  
-    return (
-      <g>
-        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>{payload.name}</text>
-        <Sector
-          cx={cx}
-          cy={cy}
-          innerRadius={innerRadius}
-          outerRadius={outerRadius}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          fill={fill}
-        />
-        <Sector
-          cx={cx}
-          cy={cy}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          innerRadius={outerRadius + 6}
-          outerRadius={outerRadius + 10}
-          fill={fill}
-        />
-        <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
-        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-        <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`PV ${value}`}</text>
-        <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
-          {`(Rate ${(percent * 100).toFixed(2)}%)`}
-        </text>
-      </g>
-    );
-  };
-
+const { TabPane } = Tabs;
 interface State {
-    points: Feature[],
-    mapped: number,
-    unmapped: number,
-    mapDictionary: any,
-    activeIndex: number
+    submittedPoints: SubmittedPoint[]
+    newPoints: SubmittedPoint[],
+    existingPoints: SubmittedPoint[],
 }
 class Dashboard extends Component<any, State>{ 
     
     constructor(Props){
         super(Props);
         this.state = {
-            points: {} as Feature[],
-            mapped: null,
-            unmapped: null,
-            mapDictionary: null,
-            activeIndex: 0
+          submittedPoints: undefined,
+          newPoints: undefined,
+          existingPoints: undefined
         }
     }
 
     componentDidMount(){
-        getAllMasterPoints().then((points)=>{
-            let m = 0;
-            let u = 0;
-            let mapDictionary = {};
-            for (let i = 0; i< points.length; i++){
-                if (points[i].properties.map_status === "Mapped"){
-                    m++;
-                }
-                else{
-                    u++;
-                }
-
-                if (points[i].properties.map_status === ""){
-
-                }
-                else if (mapDictionary[points[i].properties.map_status] === undefined){
-                    mapDictionary[points[i].properties.map_status] = 0;
-                }
-                else{
-                    mapDictionary[points[i].properties.map_status]++;
-                }
+      getCurrentUserSubmissions().then((requstedSubmissions)=>{
+        let newPoints = [];
+        let existingPoints = []
+        requstedSubmissions.map((submission)=>{
+            if (submission.pointType === "New"){
+                newPoints.push(submission)
             }
-            // console.log(mapDictionary)
-            let values = []
-            for (const key in mapDictionary){
-                values.push({
-                    name:key,
-                    value: mapDictionary[key]
-                })
+            else if (submission.pointType === "Existing"){
+                existingPoints.push(submission)
             }
-            this.setState({points, unmapped: u, mapped: m, mapDictionary: values})
-
+            
         })
-    }
 
-    onPieEnter = (data, index) => {
-        this.setState({
-          activeIndex: index,
-        });
-      };
+        this.setState({submittedPoints: requstedSubmissions, newPoints, existingPoints})
+    })
+
+    }
 
 
     render(){
@@ -147,47 +77,33 @@ class Dashboard extends Component<any, State>{
 
         return(
             <div className="site-layout-content">
-                <Card title="Dashboard">
-                    <Button
-                        shape="round"
-                        size="large"
-                    >
-                    <a
-                        href='http://localhost:5000/api/points/master/download/gpx'
-                        download
-                    >
-                        Download GPX
-                    </a
-                    ></Button>
-                    <Button
-                        shape="round"
-                        size="large"
-                    >
-                    <a
-                        href='http://localhost:5000/api/points/master/download/csv'
-                        download
-                    >
-                        Download CSV
-                    </a
-                    ></Button>
-                    <Paragraph>{"Unmapped: " + this.state.unmapped + "\nMapped: " + this.state.mapped}</Paragraph>
-                    <Paragraph>{JSON.stringify(this.state.mapDictionary)}</Paragraph>
-                    <PieChart width={400} height={400}>
-        <Pie
-          activeIndex={this.state.activeIndex}
-          activeShape={renderActiveShape}
-          data={this.state.mapDictionary}
-        //   cx={200}
-        //   cy={200}
-        //   innerRadius={60}
-        //   outerRadius={80}
-          fill="#8884d8"
-          dataKey="value"
-          onMouseEnter={this.onPieEnter}
-        />
-      </PieChart>
+              
+                <Row justify="center" align="middle" style={{background:"white", minHeight:"300px", padding: "50px"}}>
+                <Title>Submission Status</Title>
+                  <Card style={{minWidth:"100%"}}>
+                  <Tabs defaultActiveKey="1">
+                    <TabPane tab="New Caves" key="1">
+                      <ReviewTable points={this.state.newPoints} action="Edit"></ReviewTable>
+                    </TabPane>
+                    <TabPane tab="Existing Caves" key="2">
+                      <ReviewTable points={this.state.existingPoints} action="Edit"></ReviewTable>
 
+                    </TabPane>
+                </Tabs>
                 </Card>
+                </Row>
+                <Row justify="center" align="middle" style={{background:"white", minHeight:"300px"}}>
+                  <Space>
+                  <div style={{background:"", flexBasis:"fit-content"}}>
+                  <Title style={{textAlign:"center"}}>Download Files</Title>                    
+                    <Space>
+                    <DownloadCSVButton></DownloadCSVButton>
+                    <DownloadGPXButton></DownloadGPXButton>
+                    </Space>
+                    </div>
+
+                  </Space>
+                  </Row>
             </div>
         )
     }

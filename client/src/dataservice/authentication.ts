@@ -4,6 +4,7 @@ import { RegisterUserInterface, UserInterface } from '../interfaces/UserInterfac
 import qs from 'qs';
 import { useContext } from 'react';
 import { userContext } from '../context/userContext';
+import { SubmittedPoint } from '../interfaces/submittedPointInterface';
 
 const axiosInstance = axios.create({
     baseURL: serverBaseURL
@@ -113,6 +114,20 @@ async function getOneUserByID(id: string): Promise<UserInterface> {
     } 
 }
 
+/**
+ * Fetch points that the current user submitted.
+ * @returns Promise<SubmittedPoint[]>
+ * @param id - the mongo id of the user.
+ */
+async function getCurrentUserSubmissions(): Promise<SubmittedPoint[]> {
+    try {
+        const userResponse = await axiosInstance.get('/api/user/submissions', {params});
+        return userResponse.data as SubmittedPoint[];
+    } catch(error) {
+        return error;
+    } 
+}
+
 
 
 export {
@@ -120,5 +135,6 @@ export {
     loginUser,
     getCurrentUserProfile as getUserProfile,
     logoutUser,
-    getOneUserByID
+    getOneUserByID,
+    getCurrentUserSubmissions
 }
