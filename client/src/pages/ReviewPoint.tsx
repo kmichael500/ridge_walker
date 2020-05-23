@@ -6,9 +6,8 @@ import { getAllSubmittedPoints, deleteOneSubmittedPointByID } from '../dataservi
 import { List, Card, Skeleton, Button, Tabs, Space, Input, Typography, message, Popconfirm } from 'antd'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
-import { cleanString } from "../dataservice/cleanString"
 import { Table } from 'antd'
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { getOneUserByID } from '../dataservice/authentication'
 const { Paragraph } = Typography;
 
@@ -27,7 +26,8 @@ interface ReviewTableState {
 }
 
 interface ReviewTableProps {
-    points: SubmittedPoint[]
+    points: SubmittedPoint[],
+    action?: string
 }
 
 class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
@@ -183,7 +183,15 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
                 key: "action",
                 render: (text, record) => (
                     <Space size="middle">
-                    <a href={"/review/points/"+record._id}>Review</a>
+                    {/* <Button> */}
+                      <Link to={
+                        {
+                          pathname:"/review/points/"+record._id,
+                          state:{
+                            action:this.props.action
+                          }
+                        }}>{this.props.action === "Review" ? "Review" : "Edit"}</Link>
+                    {/* </Button> */}
                     <Popconfirm
                       title={"Are you sure delete " + record.name}
                       onConfirm={()=>{
@@ -206,6 +214,10 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
             }
           ];
 
+          if (this.props.action === "Edit"){
+            delete columns[2]
+          }
+
 
           // columns.length=2;
           let data = [];
@@ -213,8 +225,7 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
             console.log(i);
             
             
-            let narrativeStr = cleanString(points[i].point.properties.narr);
-            const narrative = narrativeStr.split('\n').map((item, i) => {
+            const narrative = points[i].point.properties.narr.split('\n').map((item, i) => {
                 return <Paragraph key={i}>{item}</Paragraph>;
             });
             let point = {
@@ -323,6 +334,7 @@ class ReviewPoint extends Component<Props, State>{
         return(
             // <Card>
                 <ReviewTable
+                    action="Review"
                     points={this.state.newPoints}
                 >
 
@@ -335,6 +347,7 @@ class ReviewPoint extends Component<Props, State>{
         return(
             // <Card>
                 <ReviewTable
+                    action="Review"
                     points={this.state.existingPoints}
                 >
 
@@ -348,15 +361,17 @@ class ReviewPoint extends Component<Props, State>{
     
 
     render(){
+        const newPointsLength = this.state.newPoints === undefined ? 0 : this.state.newPoints.length;
+        const existingPointLength = this.state.existingPoints === undefined ? 0 : this.state.existingPoints.length;
         return(
             <div className="site-layout-content">
                 <Card>
                 {/* <Space> */}
                 <Tabs defaultActiveKey="1">
-                    <TabPane tab="New Caves" key="1">
+                    <TabPane tab={"New Caves (" + (newPointsLength) + ")"} key="1">
                         {this.renderNewCaves()}
                     </TabPane>
-                    <TabPane tab="Existing Caves" key="2">
+                    <TabPane tab={"Existing Caves (" + existingPointLength + ")"} key="2">
                         {this.renderExistingCaves()}
                     </TabPane>
                 </Tabs>

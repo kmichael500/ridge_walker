@@ -4,7 +4,6 @@ import { Feature } from '../pages/geoJsonInterface'
 import { Input, Button, Space, Typography } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
-import { cleanString } from "../dataservice/cleanString"
 import { Table } from 'antd'
 import { withRouter } from 'react-router-dom';
 
@@ -203,8 +202,7 @@ class PointsTable extends Component<Props, State>{
           // columns.length=2;
           let data = [];
           for (let i = 0; i<points.length; i++){
-            let narrativeStr = cleanString(points[i].properties.narr);
-            const narrative = narrativeStr.split('\n').map((item, i) => {
+            const narrative = points[i].properties.narr.split('\n').map((item, i) => {
                 return <Paragraph key={i}>{item}</Paragraph>;
             });
             let point = {
@@ -223,6 +221,7 @@ class PointsTable extends Component<Props, State>{
             }
             data.push(point);
           }
+
 
           this.setState({data, columns})
     }

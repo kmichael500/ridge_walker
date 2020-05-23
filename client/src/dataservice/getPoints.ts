@@ -12,8 +12,8 @@ const axiosInstance = axios.create({
  */
 async function getAllMasterPoints(): Promise<Feature[]> {
     try {
-        const getInterviewsResponse = await axiosInstance.get('/api/points/master');
-        return getInterviewsResponse.data as Feature[];
+        const masterPointResponse = await axiosInstance.get('/api/points/master');
+        return masterPointResponse.data as Feature[];
     } catch(error) {
         return error;
     } 

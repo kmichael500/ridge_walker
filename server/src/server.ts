@@ -71,11 +71,13 @@ app.use((req, res, next) => {
 app.use( bodyParser.urlencoded({ extended : false }) );
 import { userAPI } from './endpoints/authentication'
 import { userInfoAPI } from './endpoints/userinformation';
+import { statisticsAPI } from './endpoints/statistics';
 
 
 
 // Routes
 app.use("/api/user", userAPI)
+app.use("/api/stats", statisticsAPI)
 app.use("/api/points/master", masterPointsAPI);
 app.use("/api/maps", mapsAPI);
 app.use("/api/submit/point", submittedPointAPI);
