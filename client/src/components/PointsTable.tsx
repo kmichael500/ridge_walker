@@ -159,7 +159,8 @@ class PointsTable extends Component<Props, State>{
               sorter: {
                 compare: (a, b) =>  b.length - a.length,
                 // multiple: 3,
-              }
+              },
+              defaultSortOrder: "ascend"
             },
             {
                 title: 'Pit Depth',

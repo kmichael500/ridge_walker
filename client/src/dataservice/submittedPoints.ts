@@ -67,9 +67,25 @@ async function deleteOneSubmittedPointByID(id: string): Promise<AxiosResponse> {
     } 
 }
 
+/**
+ * Delete a single submitted point by id
+ * @returns void
+ * @param id - the id of the point for deletion.
+ */
+async function updateOneSubmittedPointByID(id: string, point: SubmittedPoint): Promise<AxiosResponse> {
+    try {
+        const masterPointResponse = await axiosInstance.put('/api/submit/point/' + id, point);
+        return masterPointResponse;
+    } catch(error) {
+        
+        return error;
+    } 
+}
+
 export {
     getAllSubmittedPoints,
     getSubmittedPoint,
     addSubmittedPoint,
-    deleteOneSubmittedPointByID
+    deleteOneSubmittedPointByID,
+    updateOneSubmittedPointByID
 }

@@ -55,7 +55,21 @@ submittedPointAPI.get('/:id', (req, res, next) => {
       });
 });
 
-// Endpoint to get a single point
+// Endpoint to update a single point
+submittedPointAPI.put('/:id', (req, res, next) => {
+    SubmittedPoint.findByIdAndUpdate(req.params.id, req.body, (err, submittedPoint) => {
+        if (err) {
+            console.log("\nsubmittedPointAPI.put('/:id')  error");
+            next(err)
+        }
+        else{
+            res.sendStatus(200);
+        }
+        
+    });
+});
+
+// Endpoint to delete a single point
 submittedPointAPI.delete('/:id', (req, res, next) => {
     SubmittedPoint.findByIdAndDelete(req.params.id, (err, submittedPoint) => {
         if (err) {

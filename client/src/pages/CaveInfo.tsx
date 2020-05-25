@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Card, Descriptions, PageHeader, Space,  Col, Row, Typography, Divider, Layout, message, Button, Form, Input } from 'antd'
+import { Card, Descriptions, PageHeader, Space,  Col, Row, Typography, Divider, Layout, message, Button, Form, Input, Popconfirm } from 'antd'
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { getMasterPoint } from "../dataservice/getPoints";
-import { addSubmittedPoint, getSubmittedPoint } from '../dataservice/submittedPoints'
+import { addSubmittedPoint, getSubmittedPoint, updateOneSubmittedPointByID } from '../dataservice/submittedPoints'
 import { SubmittedPoint } from '../interfaces/submittedPointInterface'
 import deepEqual from 'deep-equal'
 
@@ -11,6 +11,7 @@ import DisplayMap from "../components/DisplayPDF"
 import DisplayAllMaps from "../components/DisplayAllMaps";
 import { Feature } from "../interfaces/geoJsonInterface";
 import { userContext } from "../context/userContext";
+import { withRouter } from "react-router-dom";
 
 const { Content } = Layout
 const { Paragraph, Title, Text } = Typography;
@@ -22,7 +23,9 @@ interface State {
     isLoading: boolean,
     proposedChanges: boolean,
     newNarrative: string
-    role: string
+    role: string,
+    submittedPoint?: SubmittedPoint,
+    loadingButtons: any
 }
 
 interface Props {
@@ -60,6 +63,7 @@ class CaveInfo extends Component<Props, State>{
             newNarrative: "",
             pointCopy: undefined,
             role: this.props.action,
+            loadingButtons: {approveloading: false, rejectloading: false},
             point: {
                 type: "Feature",
                 properties:{
@@ -87,6 +91,7 @@ class CaveInfo extends Component<Props, State>{
                     type: "Point",
                     coordinates: [0.0000, 0.0000]
                 },
+                submittedPoint: undefined,
             } as Feature
         }
 
@@ -101,6 +106,9 @@ class CaveInfo extends Component<Props, State>{
             if (this.props.match === undefined){
                 tcsnumber = this.props.id;
             }
+            else if (this.props.match.params.id === undefined){
+                tcsnumber = this.props.id;
+            }
             else{
                 tcsnumber = this.props.match.params.id;
             }
@@ -112,12 +120,10 @@ class CaveInfo extends Component<Props, State>{
         }
         else{
             getSubmittedPoint(this.props.submittedPoint).then((requestedPoint)=>{
-                console.log("Info", this.props.submittedPoint)
-                console.log(requestedPoint)
                 const newNarrative = requestedPoint.point.properties.narr;
-                // requestedPoint.point.geometry.coordinates.reverse();
+                requestedPoint.point.geometry.coordinates.reverse();
                 const pointCopy = JSON.parse(JSON.stringify(requestedPoint.point));
-                this.setState({point:requestedPoint.point, pointCopy,isLoading: false, newNarrative});
+                this.setState({point:requestedPoint.point, pointCopy,isLoading: false, newNarrative, submittedPoint: requestedPoint});
             })
         }
         
@@ -158,6 +164,45 @@ class CaveInfo extends Component<Props, State>{
                 column={{ xxl: 1, xl: 3, lg: 2, md: 3, sm: 2, xs: 1 }}
             >
                 <Descriptions.Item
+                    label="Coordinates"
+                >
+                        <Text
+                            editable={ this.state.proposedChanges && {
+                                onChange:((val)=>{
+                                    if (!isNaN(Number(val))){
+                                        const point = this.state.point;
+                                        point.geometry.coordinates[0] = Number(val);
+                                        this.setState({point});
+                                    }
+                                    else{
+                                        message.warn("Latitude must be a number");
+                                    }
+                                    
+                                })
+                            }}
+                            
+                            >{this.state.point.geometry.coordinates[0] + ""}
+                        </Text>
+                        {", "}
+                        <Text
+                            editable={ this.state.proposedChanges && {
+                                onChange:((val)=>{
+                                    if (!isNaN(Number(val))){
+                                        const point = this.state.point;
+                                        point.geometry.coordinates[1] = Number(val);
+                                        this.setState({point});
+                                    }
+                                    else{
+                                        message.warn("Longitude must be a number");
+                                    }
+                                    
+                                })
+                            }}
+                            
+                            >{this.state.point.geometry.coordinates[1] + ""}
+                        </Text>
+                </Descriptions.Item>
+                <Descriptions.Item
                     label="Length"
                 >
                         <Text
@@ -175,7 +220,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.length}
+                            >{this.state.point.properties.length + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -196,7 +241,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.pdep}
+                            >{this.state.point.properties.pdep + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -217,7 +262,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.depth}
+                            >{this.state.point.properties.depth + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -238,7 +283,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.elev}
+                            >{this.state.point.properties.elev + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -259,7 +304,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.ps}
+                            >{this.state.point.properties.ps + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -280,7 +325,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.co_name}
+                            >{this.state.point.properties.co_name + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -301,7 +346,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.topo_name}
+                            >{this.state.point.properties.topo_name + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -322,7 +367,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.topo_indi}
+                            >{this.state.point.properties.topo_indi + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -343,7 +388,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.gear}
+                            >{this.state.point.properties.gear + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -364,7 +409,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.ent_type}
+                            >{this.state.point.properties.ent_type + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -385,7 +430,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.field_indi}
+                            >{this.state.point.properties.field_indi + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -406,7 +451,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.map_status}
+                            >{this.state.point.properties.map_status + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -427,7 +472,7 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.geology}
+                            >{this.state.point.properties.geology + ""}
                         </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -448,7 +493,28 @@ class CaveInfo extends Component<Props, State>{
                                 })
                             }}
                             
-                            >{this.state.point.properties.geo_age}
+                            >{this.state.point.properties.geo_age + ""}
+                        </Text>
+                </Descriptions.Item>
+                <Descriptions.Item
+                    label="Physiographic Province"
+                >
+                        <Text
+                            editable={ this.state.proposedChanges && {
+                                onChange:((val)=>{
+                                    if (val.length !== 0){
+                                        const point = this.state.point;
+                                        point.properties.phys_prov = val;
+                                        this.setState({point});
+                                    }
+                                    else{
+                                        message.warn("Physiographic Province can't be blank.");
+                                    }
+                                    
+                                })
+                            }}
+                            
+                            >{this.state.point.properties.phys_prov + ""}
                         </Text>
                 </Descriptions.Item>
             </Descriptions>
@@ -525,34 +591,21 @@ class CaveInfo extends Component<Props, State>{
     }
 
     proposeChangesBar(){
-        let okButtonText = "";
-        let proposeButtonText = "";
-        let cancelButtonText = "";
-        switch(this.props.action){
-            case "View":
-                okButtonText = "Submit";
-                proposeButtonText = "Propose Changes";
-                cancelButtonText = "Cancel";
-                break;
-            case "Review":
-                okButtonText = "Approve";
-                cancelButtonText = "Edit";
-                break;
-            default:
-                break;
-        }
-        return(
-        <div>
-        {!this.state.proposedChanges && this.props.action === "View" ?
-            <Button type="primary"
-                onClick={()=>{
-                    this.setState({proposedChanges: !this.state.proposedChanges});
-                }}
-            >
-                {"Propose Changes"}
-            </Button>
-            :
-            <Space>
+        if (this.props.action === "View"){
+            if (!this.state.proposedChanges){
+                return(
+                    <Button type="primary"
+                    onClick={()=>{
+                        this.setState({proposedChanges: !this.state.proposedChanges});
+                    }}
+                >
+                    {"Propose Changes"}
+                </Button>
+                )
+            }
+            else{
+                return(
+                <Space>
                 <Button danger
                     onClick={()=>{
                         const revertPoint = JSON.parse(JSON.stringify(this.state.pointCopy));
@@ -562,17 +615,9 @@ class CaveInfo extends Component<Props, State>{
                                 point: revertPoint
                             });
                         }
-                        else if (this.props.action === "Review"){
-                            this.setState({
-                                proposedChanges: !this.state.proposedChanges,
-                                // point: revertPoint
-                            });
-                        }
-                        
-                        console.log(revertPoint)
                     }}
                     >
-                    {cancelButtonText}
+                    {"Cancel"}
                 </Button>
                 <Button
                     type="primary"
@@ -599,16 +644,157 @@ class CaveInfo extends Component<Props, State>{
                         this.setState({
                             proposedChanges: !this.state.proposedChanges,
                             point
-                        }, ()=>{console.log(this.state.point.properties.narr)});
+                        });
                     }}
                     >
-                    {okButtonText}
+                    {"Submit"}
                 </Button>
             </Space>
+                )
+            }
+            
+        }
+
+        if (this.props.action === "Review"){
+            let rejectMessage = ""
+            return(
+                <Space>
+                <Button danger
+                    onClick={()=>{
+                        if (this.state.proposedChanges){
+                            const revertPoint = JSON.parse(JSON.stringify(this.state.pointCopy));
+                            console.log("revert", this.state.pointCopy)
+                            this.setState({
+                                proposedChanges: !this.state.proposedChanges,
+                                point: revertPoint
+                            });
+                        }
+                        else{
+                            console.log("edit", this.state.pointCopy)
+                            this.setState({
+                                proposedChanges: !this.state.proposedChanges,
+                            });
+                        }
+                        
+                        
+                    }}
+                    >
+                    {this.state.proposedChanges ? "Revert" : "Edit"}
+                </Button>
+                <Popconfirm
+                    title={
+                        <div>
+                        <Text>Add a Reason</Text>
+                        <TextArea
+                            onChange={(e)=>{
+                                rejectMessage = e.target.value;
+                            }}
+                        >
+                        </TextArea>
+                        </div>
+                        
+                    }
+
+                    onConfirm={()=>{
+                        console.log(rejectMessage);
+                        this.setState({loadingButtons:{rejectloading: true}})
+                        const updateSubmission = {
+                            status: "Rejected",
+                            message: "Rejected on " + new Date().toDateString() + "\nRejected by " + this.context.user._id + "\nReason for Rejection:\n"+rejectMessage
+                        } as SubmittedPoint;
+                        updateOneSubmittedPointByID(this.state.submittedPoint._id, updateSubmission).then(()=>{
+                            message.error(this.state.point.properties.tcsnumber + " has been rejected.")
+                            this.props.history.push("/review/points")
+                        })
+                    }}
+                >
+                    <Button
+                        type="primary"
+                        loading={this.state.loadingButtons.rejectloading}
+                        danger
+                        >
+                        {"Reject"}
+                    </Button>
+                </Popconfirm>
+                <Button
+                    type="primary"
+                    loading={this.state.loadingButtons.approveloading}
+                    onClick={()=>{
+                        this.setState({loadingButtons:{approveloading: true}})
+                        const updateSubmission = {
+                            point: this.state.point,
+                            status: "Approved",
+                            message: "Approved on " + new Date().toDateString() + "\nApproved by " + this.context.user._id,
+                        } as SubmittedPoint;
+                        updateOneSubmittedPointByID(this.state.submittedPoint._id, updateSubmission).then(()=>{
+                            message.success(this.state.point.properties.tcsnumber + " has been approved.")
+                            this.props.history.push("/review/points")
+                        })
+                    }}
+                    >
+                    {"Approve"}
+                </Button>
+            </Space>
+            )
+        }
+        if (this.props.action === "Edit"){
+            let rejectMessage = ""
+            return(
+                <Space>
+                <Button danger
+                    onClick={()=>{
+                        if (this.state.proposedChanges){
+                            const revertPoint = JSON.parse(JSON.stringify(this.state.pointCopy));
+                            this.setState({
+                                proposedChanges: !this.state.proposedChanges,
+                                point: revertPoint
+                            });
+                        }
+                        else{
+                            console.log("edit", this.state.pointCopy)
+                            this.setState({
+                                proposedChanges: !this.state.proposedChanges,
+                            });
+                        }
+                        
+                        
+                    }}
+                    >
+                    {this.state.proposedChanges ? "Revert" : "Edit"}
+                </Button>
+                <Button
+                    type="primary"
+                    loading={this.state.loadingButtons.approveloading}
+                    onClick={()=>{
+                        if (!deepEqual(this.state.point, this.state.pointCopy)){
+                            this.setState({loadingButtons:{approveloading: true}})
+                            const updateSubmission = {
+                                point: this.state.point,
+                                status: "Pending",
+                                date: new Date(),
+                                message: ""
+                            } as SubmittedPoint;
+                            updateOneSubmittedPointByID(this.state.submittedPoint._id, updateSubmission).then(()=>{
+                                message.success("Your changes to " + this.state.point.properties.tcsnumber + " are under review.")
+                                this.props.history.push("/dashboard")
+                            })
+                        }
+                        else{
+                            this.setState({
+                                // proposedChanges: !this.state.proposedChanges,
+                                // point
+                            });
+                            message.warn("You didn't make any changes.")
+                        }
+                        
+                    }}
+                    >
+                    {"Update"}
+                </Button>
+            </Space>
+            )
         }
         
-        </div>
-        )
     }
     
 
@@ -660,4 +846,6 @@ class CaveInfo extends Component<Props, State>{
 }
 
 CaveInfo.contextType = userContext;
-export { CaveInfo };
+
+const caveInfo = withRouter(CaveInfo)
+export { caveInfo as CaveInfo };

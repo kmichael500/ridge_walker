@@ -3,14 +3,27 @@ import { SubmittedPoint } from '../interfaces/submittedPointInterface'
 import { Feature } from '../interfaces/geoJsonInterface'
 import { PointsTable } from '../components/PointsTable'
 import { getAllSubmittedPoints, deleteOneSubmittedPointByID } from '../dataservice/submittedPoints'
-import { List, Card, Skeleton, Button, Tabs, Space, Input, Typography, message, Popconfirm } from 'antd'
+import { List, Card, Skeleton, Button, Tabs, Space, Input, Typography, message, Popconfirm, Tag } from 'antd'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { Table } from 'antd'
 import { withRouter, Link } from 'react-router-dom';
 import { getOneUserByID } from '../dataservice/authentication'
+import {ColumnsType} from 'antd/lib/table'
+import { UserSlider } from "../components/userInfo/UserSlider";
+
 const { Paragraph } = Typography;
 
+interface ColInterface {
+  key: number,
+  name: string,
+  tcsnumber: string
+  submitted_by: string
+  status: string
+  date: Date
+  _id: string
+  description: string
+}
 
 
 const { TabPane } = Tabs;
@@ -36,8 +49,8 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
         super(props);
         this.state = {
             points: undefined,
-            data: null,
-            columns: null,
+            data: undefined,
+            columns: undefined,
             searchText: '',
             searchedColumn: '',
             selectedRowKeys: [],
@@ -50,13 +63,11 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
     componentDidMount(){
         if (this.props.points !== undefined){
             this.processPoints(this.props.points);
-            this.setState({isLoading: false})
         }
     }
     componentDidUpdate(prevProps) {
       if (this.props.points !== prevProps.points) {
         this.processPoints(this.props.points);
-        this.setState({isLoading: false})
       }
     }
 
@@ -129,6 +140,7 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
             text
           ),
       });
+
     
       handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -143,7 +155,7 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
         this.setState({ searchText: '' });
       };
 
-    processPoints(points: SubmittedPoint[]){
+    async processPoints(points: SubmittedPoint[]){
         let columns = [
             {
               title: 'Name',
@@ -158,29 +170,57 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
             {
                 title: 'Submitted By',
                 dataIndex: 'submitted_by',
-                ...this.getColumnSearchProps('submitted_by'),
+                render: (text, row, index) => {
+                    return <UserSlider userID={text}></UserSlider>;
+                },
+                // ...this.getColumnSearchProps('submitted_by'),
             }, 
             {
               title: 'Date',
               dataIndex: 'date',
+              defaultSortOrder: "ascend",
             //   width: '12%',
               sorter: {
-                compare: (a, b) =>  b.length - a.length,
+                compare: (a, b) =>  new Date(b.date).getTime() - new Date(a.date).getTime(),
                 // multiple: 3,
-              }
+              },
             },
             {
                 title: 'Status',
                 dataIndex: 'status',
-              //   width: '12%',
-                sorter: {
-                  compare: (a, b) =>  b.length - a.length,
-                  // multiple: 3,
-                }
+                render: status => {
+                  let color
+                  switch(status){
+                    case "Rejected":
+                      color = "volcano"
+                      break;
+                    case "Approved":
+                      color = "green"
+                      break;
+                    default:
+                      color = "geekblue";
+                      break;
+                  }
+                  return(
+                    <Tag color={color}>
+                      {status}
+                    </Tag>
+                  )
+                },
+                filters: [
+                  { text: 'Pending', value: 'Pending' },
+                  { text: 'Approved', value: 'Approved' },
+                  { text: 'Rejected', value: 'Rejected' },
+                ],
+                // defaultFilteredValue: ['Pending'],
+                onFilter: (value, record) => {
+                  return record.status.indexOf(value.toString()) === 0
+                },
               },
+              
             {
                 title: "Action",
-                key: "action",
+                // key: "action",
                 render: (text, record) => (
                     <Space size="middle">
                     {/* <Button> */}
@@ -192,27 +232,30 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
                           }
                         }}>{this.props.action === "Review" ? "Review" : "Edit"}</Link>
                     {/* </Button> */}
-                    <Popconfirm
-                      title={"Are you sure delete " + record.name}
-                      onConfirm={()=>{
-                        deleteOneSubmittedPointByID(record._id).then(()=>{
-                          let data = JSON.parse(JSON.stringify(this.state.data));
-                          delete data[record.key]
-                          // console.log(data)
-                          this.setState({data});
-                        })
-                      }}
-                      onCancel={()=>{
-                      }}
-                      okText="Yes"
-                      cancelText="No"
-                    >
-                      <a href="#">Delete</a>
-                    </Popconfirm>
+                    {record.status !== "Approved" &&
+                      <Popconfirm
+                        title={"Are you sure delete " + record.name}
+                        onConfirm={()=>{
+                          deleteOneSubmittedPointByID(record._id).then(()=>{
+                            let data = JSON.parse(JSON.stringify(this.state.data));
+                            delete data[record.key]
+                            // console.log(data)
+                            this.setState({data});
+                          })
+                        }}
+                        onCancel={()=>{
+                        }}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <a href="#">Delete</a>
+                      </Popconfirm>
+                    }
+                    
                     </Space>
                 )
             }
-          ];
+          ] as ColumnsType<ColInterface>;
 
           if (this.props.action === "Edit"){
             delete columns[2]
@@ -222,21 +265,21 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
           // columns.length=2;
           let data = [];
           for (let i = 0; i<points.length; i++){
-            console.log(i);
+
             
-            
-            const narrative = points[i].point.properties.narr.split('\n').map((item, i) => {
+            // const user = await getOneUserByID(points[i].submitted_by);
+
+            const message = points[i].message.split('\n').map((item, i) => {
                 return <Paragraph key={i}>{item}</Paragraph>;
             });
             let point = {
                 key: i,
                 name: points[i].point.properties.name,
                 tcsnumber: points[i].point.properties.tcsnumber,
-                submitted_by: "",
+                submitted_by: points[i].submitted_by,
                 status: points[i].status,
                 date: new Date(points[i].date).toLocaleDateString(),
-                _id: points[i]._id
-                ,
+                _id: points[i]._id,
                 // gear: points[i].point.properties.gear,
                 // length: points[i].point.properties.length,
                 // pdep: points[i].point.properties.pdep,
@@ -245,16 +288,14 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
                 // co_name: points[i].point.properties.co_name,
                 // ownership: points[i].point.properties.ownership,
                 // Depth:  points[i].point.properties.depth,
-                // description: narrative
+                description: message
                 
             }
-            getOneUserByID(points[i].submitted_by).then((user)=>{
-              point.submitted_by = user.firstName + " " + user.lastName;
-            });
             data.push(point);
           }
 
           this.setState({data, columns})
+          this.setState({isLoading: false})
     }
     
     render() {
@@ -264,6 +305,8 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
           onChange: this.onSelectedRowKeysChange,
       };
       return (
+        <div>
+        {!this.state.isLoading ?
           <Table
               columns={this.state.columns}
               size="middle"
@@ -281,6 +324,10 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
               dataSource={this.state.data}
               loading={this.state.isLoading}
           />
+          :
+          null
+            }
+        </div>
       );
   }
 }
@@ -361,8 +408,8 @@ class ReviewPoint extends Component<Props, State>{
     
 
     render(){
-        const newPointsLength = this.state.newPoints === undefined ? 0 : this.state.newPoints.length;
-        const existingPointLength = this.state.existingPoints === undefined ? 0 : this.state.existingPoints.length;
+        const newPointsLength = this.state.newPoints === undefined ? 0 : this.state.newPoints.filter((value)=>(value.status==="Pending")).length;
+        const existingPointLength = this.state.existingPoints === undefined ? 0 : this.state.existingPoints.filter((value)=>(value.status==="Pending")).length;
         return(
             <div className="site-layout-content">
                 <Card>
