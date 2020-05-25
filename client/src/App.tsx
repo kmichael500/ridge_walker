@@ -42,7 +42,7 @@ function App() {
                 <ProtectedRoute exact path="/points/:id" component= {CaveInfo} />
                 <ProtectedRoute exact path="/add/points/" component= {AddCave} />
                 <ProtectedRoute exact path="/review/points/" component= {ReviewPoint} userType="Admin" />
-                <ProtectedRoute exact path="/review/points/:id" component= {ReviewCaveInfo} userType="Admin" />
+                <ProtectedRoute exact path="/review/points/:id" component= {ReviewCaveInfo} />
               </NavBar>
             </Switch>
           </div>

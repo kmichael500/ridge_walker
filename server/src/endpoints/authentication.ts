@@ -121,8 +121,25 @@ userAPI.get('/submissions', passport.authenticate('jwt', { session : false }), (
 userAPI.get('/:id', passport.authenticate('jwt', { session : false }), (req, res, next) => {
 
   const role = (<any>req).user.role;
+  const status = (<any>req).user.status;
   console.log((<any>req).user._id)
   if (role === "Admin"){
+    UserModel.findById(req.params.id, (err, currentUser) => {
+      if (err) {
+          console.log("\nuserAPI.get('/:id')  error");
+          next(err)
+      } else if (currentUser == null) {
+          console.log("\nuserAPI.get('/:id')  error");
+          err = new Error("User does not exist");
+          next(err)
+      }
+      else {
+          currentUser.password = "undefined";
+          res.json(currentUser)
+      }
+    });  
+  }
+  else if (role === "User" && status !== "Pending"){
     UserModel.findById(req.params.id, (err, currentUser) => {
       if (err) {
           console.log("\nuserAPI.get('/:id')  error");

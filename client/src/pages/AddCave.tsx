@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Feature } from '../interfaces/geoJsonInterface'
+import { Feature, PropertyType } from '../interfaces/geoJsonInterface'
 import { tn_counties } from '../dataservice/countyList'
 
 import {
@@ -122,14 +122,14 @@ class AddCave extends Component<any, State>{
                 },
                 geometry: {
                     type: "Point",
-                    coordinates: [values.lat, values.long]
+                    coordinates: [values.long, values.lat]
                 },
             }
         } as SubmittedPoint
 
         addSubmittedPoint(newSubmmision).then(()=>{
             message.success(values.name + " submitted successfully.");
-            this.props.history.goBack();
+            this.props.history.push("/dashboard");
         })
 
         console.log(newSubmmision);
@@ -174,6 +174,9 @@ class AddCave extends Component<any, State>{
                                 <InputNumber defaultValue={0} min={0}></InputNumber>
                             </Form.Item>
                             <Form.Item label="Pit Depth (ft)" name="pdepth">
+                                <InputNumber defaultValue={0} min={0}></InputNumber>
+                            </Form.Item>
+                            <Form.Item label="Number of Pits" name="ps">
                                 <InputNumber defaultValue={0} min={0}></InputNumber>
                             </Form.Item>
                             <Form.Item label="Elevation (ft)" name="elev">
@@ -321,7 +324,7 @@ class AddCave extends Component<any, State>{
                                             label: 'Bells Out',
                                         },
                                         {
-                                            value: 'Chimney/CLimb',
+                                            value: 'Chimney/Climb',
                                             label: 'Chinmey/Climb',
                                         },
                                         {
@@ -362,14 +365,29 @@ class AddCave extends Component<any, State>{
                                 <Select.Option value="Marked as Cave">Marked as Cave</Select.Option>
                             </Select>
                         </Form.Item>
-                            <Form.Item label="Geologic Formation" name="geology">
-                                <Input></Input>
-                            </Form.Item>
-                            <Form.Item label="Physiographic Province" name="phys_prov">
-                                <Input></Input>
-                            </Form.Item>
+                        <Form.Item label="Topo Name" name="topo_name">
+                            <Input></Input>
+                        </Form.Item>
+                        <Form.Item label="Geologic Formation" name="geology">
+                            <Input></Input>
+                        </Form.Item>
+                        <Form.Item label="Geology Age" name="geo_age">
+                            <Input></Input>
+                        </Form.Item>
+                        <Form.Item label="Physiographic Province" name="phys_prov">
+                            <Input></Input>
+                        </Form.Item>
                         </Space>
                     </Row>
+                    <Form.Item label="Map Status" name="map_status">
+                            <Select placeholder="Please select">
+                                <Select.Option value="Mapped">Mapped</Select.Option>
+                                <Select.Option value="Unmaped">Unmaped</Select.Option>
+                                <Select.Option value="Sketch">Sketch</Select.Option>
+                                <Select.Option value={"Pace & Compass"}>{"Pace & Compass"}</Select.Option>
+                                <Select.Option value={"Tape & Compass"}>{"Tape & Compass"}</Select.Option>
+                            </Select>
+                        </Form.Item>
                     <Form.Item label="Narrative" name="narr">
                         <Input.TextArea style={{height:"300px"}} placeholder={narrPlaceholder}>
 

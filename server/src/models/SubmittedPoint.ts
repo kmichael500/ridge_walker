@@ -16,6 +16,10 @@ const submittedPointSchema = new mongoose.Schema<Feature>({
         type: String,
         required: true
     },
+    message: {
+        type: String,
+        default: ""
+    },
     pointType: {
         type: String,
         required: true

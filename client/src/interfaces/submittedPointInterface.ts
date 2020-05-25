@@ -5,6 +5,7 @@ export interface SubmittedPoint {
     submitted_by: string,
     date?: Date,
     status: StatusType,
+    message?: string
     pointType: PointType,
     _id?: string
 }
