@@ -18,6 +18,7 @@ import { HomePage } from './pages/HomePage'
 import { Register } from "./pages/Register";
 import { LoginPage } from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { UploadLeads } from "./components/UploadLeads";
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
 
                 {/* Protected Routes */}
                 <ProtectedRoute exact path="/upload" component = {uploadPoints} userType="Admin"/>
+                <ProtectedRoute exact path="/upload/leads" component = {UploadLeads}/>
                 <ProtectedRoute exact path="/dashboard" component = {Dashboard} />
                 <ProtectedRoute exact path="/map/:lat?/:long?" component= {MapView} />
                 <ProtectedRoute exact path="/points/" component= {CavePointTable} />

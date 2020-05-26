@@ -7,26 +7,12 @@ import { Parser, transforms } from 'json2csv';
 import json2csv from 'json2csv'
 import {Request, Response, NextFunction} from 'express';
 import { Points, Feature, Geometry } from '../models/MasterPoint'
-import { MasterPoint } from '../models/MasterPoints';
+import { LeadPoint } from '../models/LeadPoint'
 import { TextEncoder } from 'util';
 
 // Initialize an express api and configure it parse requests as JSON
-const masterPointsAPI = express();
-masterPointsAPI.use(express.json());
-
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, 'public')
-//     },
-//     filename: function (req, file, cb) {
-//         // You could rename the file name
-//         // cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-
-//         // You could use the original name
-//         cb(null, file.originalname)
-        
-//     }
-// });
+const leadPointAPI = express();
+leadPointAPI.use(express.json());
 
 var storage = multer.memoryStorage()
 var upload = multer({ storage: storage })
@@ -35,19 +21,32 @@ var upload = multer({ storage:storage })
 
 
 // Endpoint to add all TCS points a submission by ID
-masterPointsAPI.post("/upload", upload.single("csv"), (req, res, next) => {
-    
+leadPointAPI.post("/upload", upload.single("csv"), (req, res, next) => {
+    console.log()
     const csv=require('csvtojson')
     csv()
     .fromString(req.file.buffer.toString())
     .then((jsonObj: any)=>{
         let geojson = {} as Points;
-        console.log(jsonObj[0]);
         var GeoJSON = require('geojson');
-        geojson = GeoJSON.parse(jsonObj, {Point: ['latitude', 'longitude']});
+        geojson = GeoJSON.parse(jsonObj, {Point: [req.body.lat, req.body.long]});
+        let valid = true;
+        for (const key in geojson.features){
+            if (geojson.features[key].geometry.coordinates === undefined){
+                valid = false;
+                break;
+            }
+        }
+        if (valid){
+            res.json(geojson)
+        }
+        else{
+            res.status(422).send("Bad Coordinate Fields")
+        }
+        
 
         // for (let i = 0; i<geojson.features.length; i++){
-        //     const newMasterPoint = new MasterPoint({
+        //     const newMasterPoint = new LeadPoint({
         //         type: geojson.features[i].type,
         //         properties: geojson.features[i].properties,
         //         geometry: geojson.features[i].geometry
@@ -62,7 +61,6 @@ masterPointsAPI.post("/upload", upload.single("csv"), (req, res, next) => {
         //         }
         //     });
         // }
-        res.send(geojson)
     })
 
     
@@ -70,8 +68,8 @@ masterPointsAPI.post("/upload", upload.single("csv"), (req, res, next) => {
 });
 
 // get all master points
-masterPointsAPI.get("/", (req, res, next)=>{
-    MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
+leadPointAPI.get("/", (req, res, next)=>{
+    LeadPoint.find((err: Error, requestedPoints: MongooseDocument) => {
         if (err) {
             console.log("\n Can't get master submissions");
             next(err)
@@ -86,17 +84,17 @@ masterPointsAPI.get("/", (req, res, next)=>{
 // get a single master point by tcsnumber
 
 // Endpoint to get a single submission by id
-masterPointsAPI.get('/:id', (req, res, next) => {
-    MasterPoint.find({'properties.tcsnumber':req.params.id}, (err, requestedPoint)=>{
-        res.json(requestedPoint[0]);
+leadPointAPI.get('/:id', (req, res, next) => {
+    LeadPoint.findById(req.params.id, (err, requestedPoint)=>{
+        res.json(requestedPoint);
     })
 
 });
 
 
 // get all master points as gpx
-masterPointsAPI.get("/download/gpx", (req, res, next)=>{
-    MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
+leadPointAPI.get("/download/gpx", (req, res, next)=>{
+    LeadPoint.find((err: Error, requestedPoints: MongooseDocument) => {
         if (err) {
             console.log("\n Can't get master submissions");
             next(err)
@@ -144,8 +142,8 @@ masterPointsAPI.get("/download/gpx", (req, res, next)=>{
 })
 
 // get all master points as gpx
-masterPointsAPI.get("/download/csv", (req, res, next)=>{
-    MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
+leadPointAPI.get("/download/csv", (req, res, next)=>{
+    LeadPoint.find((err: Error, requestedPoints: MongooseDocument) => {
         if (err) {
             console.log("\n Can't get master points");
             next(err)
@@ -286,19 +284,18 @@ masterPointsAPI.get("/download/csv", (req, res, next)=>{
 
 
 //Catches every request to a route we have not defined elsewhere.
-masterPointsAPI.get('*', (req, res, next) => {
+leadPointAPI.get('*', (req, res, next) => {
     const err = new Error('Page Not Found');
     next(err);
 });
 
 
 //General server error handler
-masterPointsAPI.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+leadPointAPI.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     res.sendStatus(500)
     console.error("ERROR MESSAGE")
     console.error(err.message);
-    console.log();
 })
 
 
-export { masterPointsAPI };
+export { leadPointAPI };
