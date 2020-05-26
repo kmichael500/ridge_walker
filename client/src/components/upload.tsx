@@ -40,7 +40,10 @@ interface State {
 }
 
 interface Props {
-    onUploaded: (point: Points) => void
+    onUploaded: (point: Points) => void,
+    uploadPath: string,
+    lat: string,
+    long: string,
 }
 
 class UploadCSV extends Component<Props, State>{  
@@ -53,7 +56,8 @@ class UploadCSV extends Component<Props, State>{
             message.success(`${info.file.name} file uploaded successfully.`);
             this.props.onUploaded(info.file.response);
         } else if (status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
+            message.error(`${info.file.response}`);
+            console.log(info)
         }
       };
     
@@ -61,12 +65,15 @@ class UploadCSV extends Component<Props, State>{
 
         const props = {
           name:"csv",
-          action: serverBaseURL + "api/points/master/upload",
+          action: serverBaseURL + this.props.uploadPath,
           onChange: this.handleChange,
           multiple: false
         };
         return (
-            <Dragger {...props}>
+            <Dragger {...props}
+            data={{"lat":this.props.lat, long:this.props.long}}
+            
+            >
                 <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                 </p>

@@ -214,6 +214,7 @@ class uploadPoints extends Component<Props, State>{
                             this.handleOnUploaded(points);
                         });
                     }}
+                    uploadPath="api/points/master/upload"
                 >
                 </UploadCSV>
             )
@@ -240,7 +241,7 @@ class uploadPoints extends Component<Props, State>{
                         },
                     })}
                     dataSource={this.state.data}
-  />
+                />
             );
         }
     }

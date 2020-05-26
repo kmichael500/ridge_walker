@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Feature } from '../interfaces/geoJsonInterface'
 import { tn_counties } from '../dataservice/countyList'
 import { PieChart, Pie, Sector } from 'recharts';
+import { UploadLeads } from '../components/UploadLeads'
 
 import {
     Form,
@@ -81,17 +82,24 @@ class Dashboard extends Component<any, State>{
                 <Row justify="center" align="middle" style={{background:"white", minHeight:"300px", padding: "50px"}}>
                 <Title>Submission Status</Title>
                   <Card style={{minWidth:"100%"}}>
-                  <Tabs defaultActiveKey="1">
-                    <TabPane tab="New Caves" key="1">
-                      <ReviewTable points={this.state.newPoints} action="Edit"></ReviewTable>
-                    </TabPane>
-                    <TabPane tab="Existing Caves" key="2">
-                      <ReviewTable points={this.state.existingPoints} action="Edit"></ReviewTable>
+                    <Tabs defaultActiveKey="1">
+                      <TabPane tab="New Caves" key="1">
+                        <ReviewTable points={this.state.newPoints} action="Edit"></ReviewTable>
+                      </TabPane>
+                      <TabPane tab="Existing Caves" key="2">
+                        <ReviewTable points={this.state.existingPoints} action="Edit"></ReviewTable>
 
-                    </TabPane>
-                </Tabs>
-                </Card>
+                      </TabPane>
+                    </Tabs>
+                  </Card>
                 </Row>
+                <Row justify="center" align="middle" style={{background:"white", minHeight:"300px", minWidth:"100%", padding: "50px"}}>
+                  <UploadLeads>
+                    
+                  </UploadLeads>
+                  
+                </Row>
+
                 <Row justify="center" align="middle" style={{background:"white", minHeight:"300px"}}>
                   <Space>
                   <div style={{background:"", flexBasis:"fit-content"}}>
