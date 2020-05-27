@@ -28,10 +28,14 @@ import {
     Col,
     Tabs,
     Table,
-    Checkbox
+    Checkbox,
+    Tag
   } from 'antd';
-import { UploadCSV } from "./upload";
 
+import { UploadCSV } from "./upload";
+import { point } from "leaflet";
+
+const { TextArea } = Input
 const { Content } = Layout
 const { Paragraph, Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -43,7 +47,7 @@ interface State {
     selectedRowKeys: any
     latField: string,
     longField: string,
-    defaultStatus: CheckedStatusType
+    descField: string, 
 }
 class UploadLeads extends Component<any, State>{ 
     
@@ -58,7 +62,7 @@ class UploadLeads extends Component<any, State>{
             selectedRowKeys: [],
             latField: "latitude",
             longField: "longitude",
-            defaultStatus: CheckedStatusType.NOTCAVE
+            descField: "description"
         }
 
         this.handleOnUploaded = this.handleOnUploaded.bind(this);
@@ -139,7 +143,7 @@ class UploadLeads extends Component<any, State>{
     handleOnUploaded(points: LeadPoints){
         let columns = [];
         for (const key in points.features[0].properties){
-            if (key !== "narr"){
+            if (key !== this.state.descField){
                 columns.push({
                     title: key,
                     dataIndex: key,
@@ -156,40 +160,40 @@ class UploadLeads extends Component<any, State>{
             dataIndex: "longitude",
         })
         columns.push({
-            title: "Lead Type",
-            dataIndex: "lead_type",
-        })
-        columns.push({
             title: "Status",
             dataIndex: "status",
+            render: (val, record)=>{
+                return(
+                    <Tag color="volcano">{val}</Tag>
+                )
+            }
         })
-        const defaultStatus = this.state.defaultStatus
+        columns.push({
+            title: "Description",
+            dataIndex: "description",
+            render: (val, record)=>{
+                return(
+                    <TextArea
+                        rows={4}
+                        defaultValue={val}
+                        placeholder={"Please describe the karst feature."}
+                        onChange={(e)=>{
+                            const newDesc = [...this.state.data];
+                            newDesc[record.key].description = e.target.value;
+                            console.log(newDesc[record.key].description)
+                            this.setState({data: newDesc})
+                        }}
+                    />
+                )
+            }
+        })
         const data = points.features.map((feature, index)=>({
             key: index,
             longitude: points.features[index].geometry.coordinates[0],
             latitude: points.features[index].geometry.coordinates[1],
+            status: CheckedStatusType.NOTCAVE,
             lead_type: LeadType.KARSTFEATURE,
-            status:
-                <Form.Item>
-                    <Radio.Group
-                        onChange={(e)=>{
-                                const val = [...this.state.data];
-                                val[e.target.id].status_value = e.target.value;
-                                this.setState({data: val})
-                            }}
-                        defaultValue={defaultStatus}
-                    >
-                        <Radio id={index.toString()} value={CheckedStatusType.NOTCAVE}>
-                        {CheckedStatusType.NOTCAVE}
-                        </Radio>
-                        <Radio id={index.toString()} value={CheckedStatusType.PENDING}>
-                        {CheckedStatusType.PENDING}
-                        </Radio>
-
-                    </Radio.Group>
-                </Form.Item>
-            ,
-            status_value: defaultStatus,
+            description: points.features[index].properties[this.state.descField] !== undefined ? points.features[index].properties.desc : "",
                 
             ...feature.properties,
         }))
@@ -200,15 +204,20 @@ class UploadLeads extends Component<any, State>{
     renderTable(){
         return(
         <div>
-        <Table
-            columns={this.state.columns}
-            dataSource={this.state.data}
-        />
-        <Button type="primary" onClick={()=>{
-            console.log(this.state.data);
-        }}>
-          Submit
-        </Button>
+            <Paragraph>
+                Please ensure the data is correct. Please note, the only columns that will be saved are latitude, longitude, and the description.
+            </Paragraph>
+            <Table
+                size="small"
+                pagination={{ pageSize: 5}}
+                columns={this.state.columns}
+                dataSource={this.state.data}
+            />
+            <Button type="primary" onClick={()=>{
+                console.log(this.state.data);
+            }}>
+            Submit
+            </Button>
         </div>
         )
     }
@@ -225,15 +234,15 @@ class UploadLeads extends Component<any, State>{
         
 
         return(
-            <Card className="site-layout-content">
+            <div className="site-layout-content">
                 <Row justify="center" style={{background:""}}>
                 <Col span={24}>
-                    <Title style={{textAlign:"center"}}>Upload Leads</Title>
+                    <Title style={{textAlign:"start"}}>Upload Karst Features</Title>
                 </Col>
                 <Col span={24}>
                     {this.state.data === null ?
                         <div>
-                            <Row justify="left">
+                            <Row justify="start">
                             <Col span={24}>
                                     <Paragraph style={{textAlign:"left"}}>Upload karst features that you have confirmed are not a cave so no one has to check the same place twice!</Paragraph>
                             </Col>
@@ -246,17 +255,17 @@ class UploadLeads extends Component<any, State>{
                                     
                                     <Col >
                                         <Input
-                                            placeholder="Latitude Field"
-                                            defaultValue={this.state.latField}
+                                            placeholder="Latitude Column"
+                                            // defaultValue={this.state.latField}
                                             onChange={(e)=>{
                                                 this.setState({latField: e.target.value})
                                             }}
                                         />
                                     </Col>
-                                    <Col>
+                                    <Col span={12}>
                                         <Input
-                                            placeholder="Longitude Field"
-                                            defaultValue={this.state.longField}
+                                            placeholder="Longitude Column"
+                                            // defaultValue={this.state.longField}
                                             onChange={(e)=>{
                                                 this.setState({longField: e.target.value})
                                             }}
@@ -264,26 +273,20 @@ class UploadLeads extends Component<any, State>{
                                     </Col>
                                 </Row>
                             </div>
-                            <div>
-                                <Paragraph>
-                                    Please specify the default value of the points you are uploading.
-                                </Paragraph>
-                                <Radio.Group
-                                    onChange={(e)=>{ 
-                                            this.setState({defaultStatus: e.target.value})
-                                        }}
-                                    defaultValue={this.state.defaultStatus}
-                                >
-                                    <Radio value={CheckedStatusType.NOTCAVE}>
-                                        {CheckedStatusType.NOTCAVE}
-                                    </Radio>
-                                    <Radio value={CheckedStatusType.PENDING}>
-                                        {CheckedStatusType.PENDING}
-                                    </Radio>
-                                </Radio.Group>
-                            </div>
                             </Space>
                             </Row>
+                            <Space direction="vertical">
+                            <Paragraph>
+                                    Please specify the names of the description column.
+                            </Paragraph>
+                            <Input
+                                placeholder="Description Field"
+                                // defaultValue={this.state.descField}
+                                onChange={(e)=>{
+                                    this.setState({descField: e.target.value})
+                                }}
+                            />
+                            </Space>
                             <Divider></Divider>
                             <div>
                             <UploadCSV
@@ -301,7 +304,7 @@ class UploadLeads extends Component<any, State>{
                     }
                 </Col>   
                 </Row> 
-            </Card>
+            </div>
         )
     }
 }

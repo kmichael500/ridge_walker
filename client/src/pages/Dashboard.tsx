@@ -93,7 +93,7 @@ class Dashboard extends Component<any, State>{
                     </Tabs>
                   </Card>
                 </Row>
-                <Row justify="center" align="middle" style={{background:"white", minHeight:"300px", minWidth:"100%", padding: "50px"}}>
+                <Row justify="center" align="middle" style={{background:"#f5f8fa", minHeight:"300px", minWidth:"100%", padding: "50px"}}>
                   <UploadLeads>
                     
                   </UploadLeads>
