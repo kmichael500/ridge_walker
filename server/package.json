@@ -19,6 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mapbox/togeojson": "^0.16.0",
     "@types/bcrypt": "^3.0.0",
     "@types/compression": "^1.7.0",
     "@types/csvtojson": "^1.1.5",
