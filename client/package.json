@@ -67,7 +67,7 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^12.12.41",
+    "@types/node": "^12.12.42",
     "babel-plugin-import": "^1.13.0",
     "gts": "^2.0.0",
     "typescript": "~3.8.0"

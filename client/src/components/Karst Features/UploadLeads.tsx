@@ -185,7 +185,7 @@ class UploadLeads extends Component<any, State>{
                             },
                             geometry: {
                                 type: "Point",
-                                coordinates: [data.latitude, data.longitude]
+                                coordinates: [data.longitude, data.latitude]
                             }
                         }
                     } as LeadPointInterface
