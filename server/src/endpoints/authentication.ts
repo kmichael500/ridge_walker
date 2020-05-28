@@ -140,6 +140,7 @@ userAPI.get('/:id', passport.authenticate('jwt', { session : false }), (req, res
     });  
   }
   else if (role === "User" && status !== "Pending"){
+    console.log("Requested User");
     UserModel.findById(req.params.id, (err, currentUser) => {
       if (err) {
           console.log("\nuserAPI.get('/:id')  error");
