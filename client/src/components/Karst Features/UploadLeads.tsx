@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { tn_counties } from '../dataservice/countyList'
-import { PieChart, Pie, Sector } from 'recharts';
-import { CheckedStatusType, LeadType, LeadPointInterface, LeadPoints } from '../interfaces/LeadPointInterface';
+import { tn_counties } from '../../dataservice/countyList'
+import { addLeadPoints } from '../../dataservice/leadPoints'
+import { CheckedStatusType, LeadType, LeadPointInterface, LeadPoints } from '../../interfaces/LeadPointInterface';
 
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
+import ContainerDimensions from 'react-container-dimensions';
 
 
 import {
@@ -29,11 +30,14 @@ import {
     Tabs,
     Table,
     Checkbox,
-    Tag
+    Tag,
+    Alert
   } from 'antd';
 
-import { UploadCSV } from "./upload";
+import { UploadCSV } from "../upload";
 import { point } from "leaflet";
+import { KarstFeaturesTable } from "./KarstFeaturesTable";
+import { userContext, UserContextInterface } from "../../context/userContext";
 
 const { TextArea } = Input
 const { Content } = Layout
@@ -74,81 +78,24 @@ class UploadLeads extends Component<any, State>{
     }
 
 
-
-
-    // search 
-    getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-          <div style={{ padding: 8 }}>
-            <Input
-              ref={node => {
-                this.searchInput = node;
-              }}
-              placeholder={`Search ${dataIndex}`}
-              value={selectedKeys[0]}
-              onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-              onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-              style={{ width: 188, marginBottom: 8, display: 'block' }}
-            />
-            <Space>
-              <Button
-                type="primary"
-                onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                icon={<SearchOutlined />}
-                size="small"
-                style={{ width: 90 }}
-              >
-                Search
-              </Button>
-              <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-                Reset
-              </Button>
-            </Space>
-          </div>
-        ),
-        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) =>
-          record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-        onFilterDropdownVisibleChange: visible => {
-          if (visible) {
-            setTimeout(() => this.searchInput.select());
-          }
-        },
-        render: text =>
-          this.state.searchedColumn === dataIndex ? (
-            <Highlighter
-              highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-              searchWords={[this.state.searchText]}
-              autoEscape
-              textToHighlight={text.toString()}
-            />
-          ) : (
-            text
-          ),
-      });
-    
-      handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        this.setState({
-          searchText: selectedKeys[0],
-          searchedColumn: dataIndex,
-        });
-      };
-    
-      handleReset = clearFilters => {
-        clearFilters();
-        this.setState({ searchText: '' });
-      };
-
     handleOnUploaded(points: LeadPoints){
         let columns = [];
         for (const key in points.features[0].properties){
             if (key !== this.state.descField){
-                columns.push({
-                    title: key,
-                    dataIndex: key,
-                    ...this.getColumnSearchProps(key)
-                })
+
+                // don't add columns that are entirely blank
+                for (let i = 0; i<points.features.length; i++){
+                    if (points.features[i].properties[key] === ""){
+
+                    }
+                    else if (points.features[i].properties[key] !== undefined){
+                        columns.push({
+                            title: key,
+                            dataIndex: key,
+                        })
+                        break;
+                    }
+                }
             } 
         }
         columns.push({
@@ -170,33 +117,32 @@ class UploadLeads extends Component<any, State>{
         })
         columns.push({
             title: "Description",
+            fixed: "right",
             dataIndex: "description",
-            render: (val, record)=>{
-                return(
-                    <TextArea
-                        rows={4}
-                        defaultValue={val}
-                        placeholder={"Please describe the karst feature."}
-                        onChange={(e)=>{
-                            const newDesc = [...this.state.data];
-                            newDesc[record.key].description = e.target.value;
-                            console.log(newDesc[record.key].description)
-                            this.setState({data: newDesc})
-                        }}
-                    />
-                )
-            }
+            width:"auto",
+            editable: true,
         })
-        const data = points.features.map((feature, index)=>({
-            key: index,
-            longitude: points.features[index].geometry.coordinates[0],
-            latitude: points.features[index].geometry.coordinates[1],
-            status: CheckedStatusType.NOTCAVE,
-            lead_type: LeadType.KARSTFEATURE,
-            description: points.features[index].properties[this.state.descField] !== undefined ? points.features[index].properties.desc : "",
-                
-            ...feature.properties,
-        }))
+        const data = points.features.map((feature, index)=>{
+            let description = "No description provided!";
+            if (points.features[index].properties[this.state.descField] === ""){
+
+            }
+            else if (points.features[index].properties[this.state.descField] !== undefined){
+                description = points.features[index].properties.desc;
+            }
+            
+            return(
+                {
+                    key: index,
+                    longitude: points.features[index].geometry.coordinates[0],
+                    latitude: points.features[index].geometry.coordinates[1],
+                    status: CheckedStatusType.NOTCAVE,
+                    lead_type: LeadType.KARSTFEATURE,
+                    description,
+                    ...feature.properties,
+                }
+            )
+        })
         console.log(data);
         this.setState({data:data, columns})
     }
@@ -204,18 +150,19 @@ class UploadLeads extends Component<any, State>{
     renderTable(){
         return(
         <div>
-            <Paragraph>
-                Please ensure the data is correct. Please note, the only columns that will be saved are latitude, longitude, and the description.
-            </Paragraph>
-            <Table
-                size="small"
-                pagination={{ pageSize: 5}}
+            <Space direction="vertical">
+                <Alert message="Please ensure the data is correct. Click on a description to edit it."/>
+                <Alert type="warning" message="The only columns that will be saved are latitude, longitude, and the description."/>
+            </Space>
+            <Divider></Divider>
+            <div style={{background:""}}>
+            <KarstFeaturesTable
                 columns={this.state.columns}
                 dataSource={this.state.data}
+                onChange={(data)=>{this.setState({data})}}
             />
-            <Button type="primary" onClick={()=>{
-                console.log(this.state.data);
-            }}>
+            </div>
+            <Button type="primary" onClick={this.handleSubmit}>
             Submit
             </Button>
         </div>
@@ -223,10 +170,47 @@ class UploadLeads extends Component<any, State>{
     }
 
     handleSubmit(){
-        const newSubmission = {
-            
-        } as LeadPointInterface;
-        console.log(this.state.data);
+        const user = this.context as UserContextInterface
+        
+        const newSubmission = this.state.data.map((data)=>{
+                return(
+                    {
+                        point:{
+                            type: "Feature",
+                            properties: {
+                                submitted_by: user.user._id,
+                                lead_type: data.lead_type,
+                                checked_status: data.status,
+                                description: data.description,
+                            },
+                            geometry: {
+                                type: "Point",
+                                coordinates: [data.latitude, data.longitude]
+                            }
+                        }
+                    } as LeadPointInterface
+                )
+            }) as LeadPointInterface[]
+            addLeadPoints(newSubmission).then((res)=>{
+                console.log("then")
+                message.success(res.data)
+            }).catch((err)=>{
+                console.log("error")
+                message.error("Error!")
+            }).then(()=>{
+                console.log("finally")
+                this.setState({
+                    data: null,
+                    columns: null,
+                    searchText: '',
+                    searchedColumn: '',
+                    selectedRowKeys: [],
+                    latField: "latitude",
+                    longField: "longitude",
+                    descField: "description"
+                })
+            })
+        
     }
 
 
@@ -234,10 +218,10 @@ class UploadLeads extends Component<any, State>{
         
 
         return(
-            <div className="site-layout-content">
+            <div className="site-layout-content" style={{width:"100%"}}>
                 <Row justify="center" style={{background:""}}>
                 <Col span={24}>
-                    <Title style={{textAlign:"start"}}>Upload Karst Features</Title>
+                    <Title style={{textAlign:"start"}}>Upload Dead Leads</Title>
                 </Col>
                 <Col span={24}>
                     {this.state.data === null ?
@@ -298,9 +282,13 @@ class UploadLeads extends Component<any, State>{
                             </div>
                         </div>
                         :
-                        <div>
-                            {this.renderTable()}
-                        </div>
+                        <ContainerDimensions>
+                            { ({ width, height })=>
+                            <div style={{maxWidth: width}}>
+                                {this.renderTable()}
+                            </div>
+                            }
+                        </ContainerDimensions>
                     }
                 </Col>   
                 </Row> 
@@ -308,4 +296,6 @@ class UploadLeads extends Component<any, State>{
         )
     }
 }
+
+UploadLeads.contextType = userContext
 export { UploadLeads };

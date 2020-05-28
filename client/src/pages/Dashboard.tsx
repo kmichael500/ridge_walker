@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Feature } from '../interfaces/geoJsonInterface'
 import { tn_counties } from '../dataservice/countyList'
 import { PieChart, Pie, Sector } from 'recharts';
-import { UploadLeads } from '../components/UploadLeads'
+import { UploadLeads } from '../components/Karst Features/UploadLeads'
 
 import {
     Form,
@@ -79,7 +79,7 @@ class Dashboard extends Component<any, State>{
         return(
             <div className="site-layout-content">
               
-                <Row justify="center" align="middle" style={{background:"white", minHeight:"300px", padding: "50px"}}>
+                <Row justify="start" align="middle" style={{background:"white", minHeight:"300px", padding: "50px"}}>
                 <Title>Submission Status</Title>
                   <Card style={{minWidth:"100%"}}>
                     <Tabs defaultActiveKey="1">
@@ -100,7 +100,7 @@ class Dashboard extends Component<any, State>{
                   
                 </Row>
 
-                <Row justify="center" align="middle" style={{background:"white", minHeight:"300px"}}>
+                <Row justify="center" align="middle" style={{background:"white", minHeight:"200px"}}>
                   <Space>
                   <div style={{background:"", flexBasis:"fit-content"}}>
                   <Title style={{textAlign:"center"}}>Download Files</Title>                    

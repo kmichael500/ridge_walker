@@ -7,8 +7,9 @@ import { Parser, transforms } from 'json2csv';
 import json2csv from 'json2csv'
 import {Request, Response, NextFunction} from 'express';
 import { Points, Feature, Geometry } from '../models/MasterPoint'
-import { LeadPoint } from '../models/LeadPoint'
+import { LeadPoint, LeadPoints, LeadPointInterface } from '../models/LeadPoint'
 import { TextEncoder } from 'util';
+import { resolve } from 'dns';
 
 // Initialize an express api and configure it parse requests as JSON
 const leadPointAPI = express();
@@ -62,10 +63,47 @@ leadPointAPI.post("/upload", upload.single("csv"), (req, res, next) => {
         //     });
         // }
     })
+});
+
+leadPointAPI.post("/", (req, res, next) => {
+    const test = async ()=>(
+
+        await new Promise( async (resolve, reject)=>{
+            const points = req.body as LeadPointInterface[];
+
+            const promises = points.map((point)=>{
+                const newSubmission = new LeadPoint({
+                    ...point
+                })
+
+                newSubmission.save().catch((err)=>{
+                    reject(err)
+                });
+            })
+
+            Promise.all(promises).then( results=>{
+                resolve("Successfully Uploaded")
+            }).catch((error)=>{
+                reject(error)
+            })
+        })
+
+    )
+    test().then((message)=>{
+        res.status(201).send(message)
+    }).catch((error)=>{
+        console.log(error)
+        next(error)
+    });
+    
 
     
-    
+
+
 });
+
+
+
 
 // get all master points
 leadPointAPI.get("/", (req, res, next)=>{
@@ -292,7 +330,8 @@ leadPointAPI.get('*', (req, res, next) => {
 
 //General server error handler
 leadPointAPI.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    res.sendStatus(500)
+    // res.statusMessage = err.message;
+    res.status(500).send(err.message)
     console.error("ERROR MESSAGE")
     console.error(err.message);
 })
