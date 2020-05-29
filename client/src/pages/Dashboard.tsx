@@ -104,81 +104,80 @@ class Dashboard extends Component<any, State>{
 
 
     render(){
-        
+      const newPointsLength = this.state.newPoints === undefined ? 0 : this.state.newPoints.filter((value)=>(value.status==="Pending")).length;
+      const existingPointLength = this.state.existingPoints === undefined ? 0 : this.state.existingPoints.filter((value)=>(value.status==="Pending")).length;
 
-        return(
-            <div className="site-layout-content">
-              {this.context.user.role === "Admin" &&
-                <div>
-                  <Row justify="start" align="middle" style={{background:"#fbfdfe", minHeight:"200px", padding:"50px"}}>
-                    <Title>Review Submissions</Title>
-                    <div style={{minWidth:"100%"}}>
-                      <ReviewPoint></ReviewPoint>
-                    </div>
-                      
-                  </Row>
-                </div>
-              }
+
+      return(
+          <div className="site-layout-content">
+              <Row justify="start" align="middle" style={{background:"white", minHeight:"300px", padding: "50px"}}>
+                <Col span={24}>
+                  <Title>My Submission Status</Title>
+                </Col>
+                
+                <Col span={24}>
+                  <Paragraph>
+                    You can view, edit (if they have not been approved), or delete submissions.
+                  </Paragraph>
+                </Col>
               
-                <Row justify="start" align="middle" style={{background:"white", minHeight:"300px", padding: "50px"}}>
-                <Title>My Submission Status</Title>
-                  <div style={{minWidth:"100%"}}>
-                    <Tabs defaultActiveKey="1">
-                      <TabPane tab="New Caves" key="1">
-                        <ReviewTable points={this.state.newPoints} action="Edit"></ReviewTable>
-                      </TabPane>
-                      <TabPane tab="Existing Caves" key="2">
-                        <ReviewTable points={this.state.existingPoints} action="Edit"></ReviewTable>
+                <div style={{minWidth:"100%"}}>
+                  <Tabs defaultActiveKey="1">
+                    <TabPane tab={"New Caves (" + (newPointsLength) + ")"} key="1">
+                      <ReviewTable points={this.state.newPoints} action="Edit"></ReviewTable>
+                    </TabPane>
+                    <TabPane tab={"Existing Caves (" + existingPointLength + ")"} key="2">
+                      <ReviewTable points={this.state.existingPoints} action="Edit"></ReviewTable>
 
-                      </TabPane>
-                    </Tabs>
-                  </div>
-                </Row>
-                <Row justify="center" align="middle" style={{background:"#fbfdfe", minHeight:"300px", minWidth:"100%", padding: "50px"}}>
+                    </TabPane>
+                  </Tabs>
+                </div>
+              </Row>
+              <Row justify="center" align="middle" style={{background:"#fbfdfe", minHeight:"300px", minWidth:"100%", padding: "50px"}}>
+                  
+                {this.state.deadLeadButton === "View" &&
+                  <div style={{minWidth: "100%"}}>
+                    <Row justify="space-between">
+                      <Col>
+                        <Title>My Dead Leads</Title>
+                      </Col>
+                      <Col>
+                        {this.leadButtons()}
+                      </Col>
+                    </Row>
                     
-                  {this.state.deadLeadButton === "View" &&
-                    <div style={{minWidth: "100%"}}>
-                      <Row justify="space-between">
-                        <Col>
-                          <Title>My Dead Leads</Title>
-                        </Col>
-                        <Col>
-                          {this.leadButtons()}
-                        </Col>
-                      </Row>
-                      
-                      <DeadLeads></DeadLeads>
-                    </div> 
-                  }
-                  {this.state.deadLeadButton === "Upload" &&
-                    <div style={{minWidth: "100%"}}>
-                      <Row justify="space-between">
-                        <Col>
-                        <Title style={{textAlign:"start"}}>Upload Dead Leads</Title>
-                        </Col> 
-                        <Col>
-                          {this.leadButtons()}
-                        </Col>
-                      </Row>
-                      <UploadLeads></UploadLeads>
-                    </div> 
-                  }                 
-                </Row>
+                    <DeadLeads></DeadLeads>
+                  </div> 
+                }
+                {this.state.deadLeadButton === "Upload" &&
+                  <div style={{minWidth: "100%"}}>
+                    <Row justify="space-between">
+                      <Col>
+                      <Title style={{textAlign:"start"}}>Upload Dead Leads</Title>
+                      </Col> 
+                      <Col>
+                        {this.leadButtons()}
+                      </Col>
+                    </Row>
+                    <UploadLeads></UploadLeads>
+                  </div> 
+                }                 
+              </Row>
 
-                <Row justify="center" align="middle" style={{background:"white", minHeight:"200px"}}>
+              <Row justify="center" align="middle" style={{background:"white", minHeight:"200px"}}>
+                <Space>
+                <div style={{background:"", flexBasis:"fit-content"}}>
+                <Title style={{textAlign:"center"}}>Download Files</Title>                    
                   <Space>
-                  <div style={{background:"", flexBasis:"fit-content"}}>
-                  <Title style={{textAlign:"center"}}>Download Files</Title>                    
-                    <Space>
-                    <DownloadCSVButton></DownloadCSVButton>
-                    <DownloadGPXButton></DownloadGPXButton>
-                    </Space>
-                    </div>
-
+                  <DownloadCSVButton></DownloadCSVButton>
+                  <DownloadGPXButton></DownloadGPXButton>
                   </Space>
-                </Row>
-            </div>
-        )
+                  </div>
+
+                </Space>
+              </Row>
+          </div>
+      )
     }
 }
 

@@ -20,6 +20,7 @@ import { LoginPage } from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { UploadLeads } from "./components/Karst Features/UploadLeads";
 import { DeadLeads } from "./pages/DeadLeads";
+import { ReviewPage } from "./pages/ReviewPage";
 
 
 function App() {
@@ -45,7 +46,7 @@ function App() {
                 <ProtectedRoute exact path="/points/" component= {CavePointTable} />
                 <ProtectedRoute exact path="/points/:id" component= {CaveInfo} />
                 <ProtectedRoute exact path="/add/points/" component= {AddCave} />
-                <ProtectedRoute exact path="/review/points/" component= {ReviewPoint} userType="Admin" />
+                <ProtectedRoute exact path="/review/points/" component= {ReviewPage} userType="Admin" />
                 <ProtectedRoute exact path="/review/points/:id" component= {ReviewCaveInfo} />
               </NavBar>
             </Switch>
