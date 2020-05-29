@@ -221,9 +221,6 @@ class UploadLeads extends Component<any, State>{
             <div className="site-layout-content" style={{width:"100%"}}>
                 <Row justify="center" style={{background:""}}>
                 <Col span={24}>
-                    <Title style={{textAlign:"start"}}>Upload Dead Leads</Title>
-                </Col>
-                <Col span={24}>
                     {this.state.data === null ?
                         <div>
                             <Row justify="start">

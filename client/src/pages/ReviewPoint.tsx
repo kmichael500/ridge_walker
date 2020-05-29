@@ -237,10 +237,10 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
                         title={"Are you sure delete " + record.name}
                         onConfirm={()=>{
                           deleteOneSubmittedPointByID(record._id).then(()=>{
-                            let data = JSON.parse(JSON.stringify(this.state.data));
-                            delete data[record.key]
+                            // let data = JSON.parse(JSON.stringify(this.state.data));
+                            const dataSource = [...this.state.data];
+                            this.setState({ data: dataSource.filter(item => item.key !== record.key) })
                             // console.log(data)
-                            this.setState({data});
                           })
                         }}
                         onCancel={()=>{
@@ -309,6 +309,7 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
         {!this.state.isLoading ?
           <Table
               columns={this.state.columns}
+
               size="middle"
               scroll={{ x: 10 }}
               expandable={{
@@ -412,18 +413,25 @@ class ReviewPoint extends Component<Props, State>{
         const existingPointLength = this.state.existingPoints === undefined ? 0 : this.state.existingPoints.filter((value)=>(value.status==="Pending")).length;
         return(
             <div className="site-layout-content">
-                <Card>
                 {/* <Space> */}
-                <Tabs defaultActiveKey="1">
-                    <TabPane tab={"New Caves (" + (newPointsLength) + ")"} key="1">
-                        {this.renderNewCaves()}
+                <Tabs
+                  defaultActiveKey="1"
+                  type="line"
+                >
+                        
+                    <TabPane
+                      tab={"New Caves (" + (newPointsLength) + ")"}
+                      key="1"
+                    >
+                      {this.renderNewCaves()}
+                      
+                       
                     </TabPane>
                     <TabPane tab={"Existing Caves (" + existingPointLength + ")"} key="2">
                         {this.renderExistingCaves()}
                     </TabPane>
                 </Tabs>
                 {/* </Space> */}
-                </Card>
                 
             </div>
         )
