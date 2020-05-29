@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 import { SubmittedPoint } from '../interfaces/submittedPointInterface'
-import { Feature } from '../interfaces/geoJsonInterface'
-import { PointsTable } from '../components/PointsTable'
 import { getAllSubmittedPoints, deleteOneSubmittedPointByID } from '../dataservice/submittedPoints'
-import { List, Card, Skeleton, Button, Tabs, Space, Input, Typography, message, Popconfirm, Tag } from 'antd'
+import { Button, Tabs, Space, Input, Typography, message, Popconfirm, Tag, Tooltip } from 'antd'
 import Highlighter from 'react-highlight-words';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, EditOutlined, ContainerOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Table } from 'antd'
 import { withRouter, Link } from 'react-router-dom';
-import { getOneUserByID } from '../dataservice/authentication'
 import {ColumnsType} from 'antd/lib/table'
 import { UserSlider } from "../components/userInfo/UserSlider";
 
@@ -230,7 +227,17 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
                           state:{
                             action:this.props.action
                           }
-                        }}>{this.props.action === "Review" ? "Review" : "Edit"}</Link>
+                        }}>
+                          {this.props.action === "Review" ?
+                            <Tooltip title="Review">
+                              <ContainerOutlined style={{fontSize:"20px", color:"green"}}/>
+                            </Tooltip>
+                            :
+                            <Tooltip title="Edit">
+                              <EditOutlined style={{fontSize:"20px"}}/>
+                            </Tooltip>
+                        }
+                      </Link>
                     {/* </Button> */}
                     {record.status !== "Approved" &&
                       <Popconfirm
@@ -248,7 +255,9 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
                         okText="Yes"
                         cancelText="No"
                       >
-                        <a href="#">Delete</a>
+                        <Tooltip title="Delete">
+                          <DeleteOutlined style={{fontSize:"20px", color:"red"}} />
+                        </Tooltip>
                       </Popconfirm>
                     }
                     
@@ -413,7 +422,6 @@ class ReviewPoint extends Component<Props, State>{
         const existingPointLength = this.state.existingPoints === undefined ? 0 : this.state.existingPoints.filter((value)=>(value.status==="Pending")).length;
         return(
             <div className="site-layout-content">
-                {/* <Space> */}
                 <Tabs
                   defaultActiveKey="1"
                   type="line"
@@ -430,9 +438,7 @@ class ReviewPoint extends Component<Props, State>{
                     <TabPane tab={"Existing Caves (" + existingPointLength + ")"} key="2">
                         {this.renderExistingCaves()}
                     </TabPane>
-                </Tabs>
-                {/* </Space> */}
-                
+                </Tabs>                
             </div>
         )
     }

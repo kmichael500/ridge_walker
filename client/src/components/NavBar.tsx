@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Layout, Menu, Breadcrumb, Affix } from 'antd';
-import { UserOutlined } from '@ant-design/icons'
+import { Layout, Menu, Breadcrumb, Affix, Space } from 'antd';
+import { UserOutlined, FormOutlined, EyeOutlined, ContainerOutlined, SettingOutlined, LogoutOutlined, DashboardOutlined } from '@ant-design/icons'
+import { BsMap } from 'react-icons/bs';
+
 import {ClickParam} from 'antd/lib/menu'
 import { withRouter } from 'react-router-dom';
 import SubMenu from 'antd/lib/menu/SubMenu';
@@ -45,14 +47,16 @@ class NavBar extends Component<any, any>{
                 // defaultSelectedKeys={['2']}
                 onClick={this.handleMenuClick}
                 >
-
+                    <Menu.Item key="/">Home</Menu.Item>
                     <Menu.Item key="/map">Map</Menu.Item>
-                    <Menu.SubMenu title="Points" key="/points" onTitleClick={this.handleMenuClick}>
-                        <Menu.Item key="/add/points">Add</Menu.Item>
-                        <Menu.Item key="/review/points">Review</Menu.Item>
+                    <Menu.SubMenu title="Points">
+                        <Menu.Item icon={<EyeOutlined/>} key="/points">View</Menu.Item>
+                        <Menu.Item icon={<FormOutlined/>} key="/add/points">Add</Menu.Item>
+                        {this.context.user.role ==="Admin" &&
+                            <Menu.Item icon={<ContainerOutlined/>}key="/review/points">Review</Menu.Item>
+                        }
                     </Menu.SubMenu>
-                    <Menu.Item key="/dashboard">Dashboard</Menu.Item>
-                    <Menu.Item key="/upload">Upload</Menu.Item>
+                    {/* <Menu.Item key="/upload">Upload</Menu.Item> */}
                     {this.loggedInSubMenu()}
                 </Menu>
             )
@@ -66,7 +70,7 @@ class NavBar extends Component<any, any>{
                 // defaultSelectedKeys={['2']}
                 onClick={this.handleMenuClick}
                 >
-
+                    
                     <Menu.Item key="/">Tennessee Cave Survey</Menu.Item>
                     
                     {this.loggedInSubMenu()}
@@ -78,8 +82,9 @@ class NavBar extends Component<any, any>{
         if (this.context.isAuthenticated){
             return(
                 <Menu.SubMenu icon={<UserOutlined />} style={{float: 'right'}} title={"Welcome, " + this.context.user.firstName + "!"}>
-                    <Menu.Item key="/settings">Settings</Menu.Item>
-                    <Menu.Item key="logout">Logout</Menu.Item>
+                    <Menu.Item icon ={<DashboardOutlined/>} key="/dashboard">Dashboard</Menu.Item>
+                    <Menu.Item icon={<SettingOutlined/>} key="/settings">Settings</Menu.Item>
+                    <Menu.Item icon={<LogoutOutlined/>} key="logout">Logout</Menu.Item>
                 </Menu.SubMenu>
             );
         }
@@ -93,7 +98,7 @@ class NavBar extends Component<any, any>{
     }
     render(){
         return(
-        <Layout className="layout" style={{height:"100vh"}}>
+        <Layout className="layout" style={{height:"100vh", background:"white"}}>
             <Affix>
             <Header>
                 <div className="logo" />
