@@ -4,7 +4,7 @@ import ReactDOMServer from 'react-dom/server';
 import L, { map, LayerGroup, latLng, Icon } from 'leaflet';
 import Control from 'react-leaflet-control';
 import { FullscreenOutlined } from '@ant-design/icons'
-import { Row } from 'antd'
+import { Row, Button, Typography, Divider } from 'antd'
 import { Map, TileLayer, Marker, Popup, WMSTileLayer, LayersControl, GeoJSON, CircleMarker} from 'react-leaflet';
 
 import { getAllMasterPoints } from '../dataservice/getPoints'
@@ -29,7 +29,9 @@ import { withRouter } from "react-router-dom";
 import { Feature } from "../interfaces/geoJsonInterface";
 import { LeadFeature } from "../interfaces/LeadPointInterface";
 import { UserSlider } from "./userInfo/UserSlider";
+import Search from "react-leaflet-search";
 
+const { Paragraph, Title } = Typography;
 // marker for adding points (right click)
 const MyMarker = props => {
 
@@ -45,6 +47,7 @@ const MyMarker = props => {
 interface State {
     currentPos: any,  // used for right clicking points
     center: any, // starting map loc
+    currentCenter?: any
     zoom: number,
     maxZoom: number,
     height: number,
@@ -81,6 +84,7 @@ class MapView extends Component<Props, State> {
       searchProvider: null,
       currentPos: null,  // used for right clicking points
       center: this.props.center, // starting map loc
+      currentCenter: this.props.center,
       zoom: this.props.zoom,
       maxZoom: 18,
       height: null,
@@ -205,8 +209,8 @@ class MapView extends Component<Props, State> {
   // icon shown on map
   pointToLayer(feature, latlng){
     const icon = L.icon({
-      iconUrl: 'https://api.iconify.design/mdi-map-marker.svg?height=25',
-      iconAnchor: [13,24]
+      iconUrl: 'https://api.iconify.design/mdi-map-marker.svg?height=40',
+      iconAnchor: [20.5,38]
       // popupAnchor: [30,10] // centers popup over point
       // shadowUrl: 'http://leafletjs.com/examples/custom-icons/leaf-shadow.png'
     })
@@ -218,8 +222,8 @@ class MapView extends Component<Props, State> {
   // icon shown on map
   leadPointToLayer(feature, latlng){
     const icon = L.icon({
-      iconUrl: 'https://api.iconify.design/mdi:map-marker-alert.svg?color=%23f5222d&height=25',
-      iconAnchor: [13,24]
+      iconUrl: 'https://api.iconify.design/mdi:map-marker-alert.svg?color=%23f5222d&height=40',
+      iconAnchor: [20.5,38]
 
       // popupAnchor: [15,0] // centers popup over point
       // shadowUrl: 'http://leafletjs.com/examples/custom-icons/leaf-shadow.png'
@@ -298,7 +302,6 @@ class MapView extends Component<Props, State> {
 
     getAllLeadPoints().then((requestedLeads)=>{
       const leadPoints = requestedLeads.map((leads)=>{return(leads.point)})
-      // console.log(leadPoints);
       this.setState({deadLeads: leadPoints, isLeadsLoading: false});
     })
 
@@ -325,22 +328,22 @@ class MapView extends Component<Props, State> {
           
           doubleClickZoom={true}
           oncontextmenu={this.handleRightClick} //event lister for right click
-          // onViewportChange={(vp)=>{
-          //   // window.scrollTo(0, 0);
-          //   this.setState({center: vp.center, zoom: vp.zoom})
+          onViewportChange={(vp)=>{
+            // window.scrollTo(0, 0);
+            // this.setState({currentCenter: vp.center, zoom: vp.zoom})
 
-          //   if(this.props.onCenterChange){
-          //     this.props.onCenterChange(vp.center);
-          //   }
+            // if(this.props.onCenterChange){
+            //   this.props.onCenterChange(vp.center);
+            // }
             
-          // }}
+          }}
         >
         
         {this.props.showFullScreen &&
         <Control position="topright">
             <Row style={{background:"white", padding: "5px", borderRadius:"5px", boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}} align="middle">
               <FullscreenOutlined style={{fontSize:"25px", color:"black"}}
-                onClick={ () => {this.props.history.push("/map/"+this.state.center[0]+"/"+this.state.center[1])} }
+                onClick={ () => {this.props.history.push("/map/"+this.state.currentCenter[0]+"/"+this.state.currentCenter[1])} }
               >
                 Full Screen
           </FullscreenOutlined>
@@ -374,11 +377,59 @@ class MapView extends Component<Props, State> {
         {!this.state.isLoading &&
         <ReactLeafletSearch
             position="topleft"
-            inputPlaceholder="Enter a place"
+            inputPlaceholder="Enter a cave name or place"
             // search={[]} // Setting this to [lat, lng] gives initial search input to the component and map flies to that coordinates, its like search from props not from user
             zoom={15} // Default value is 10
             showMarker={true}
             showPopup={true}
+            markerIcon= {
+              L.icon(
+                {
+                  iconUrl: 'https://api.iconify.design/mdi-map-marker.svg?height=40',
+                  iconAnchor: [20.5,38],
+                  popupAnchor: [0,-38]
+                }
+              )
+            }
+            popUp={(SearchInfo)=>{
+              const raw = SearchInfo.raw["raw"] as [any];
+              const info = SearchInfo.info as string;
+              
+              const pointIndex = raw.map((val)=>(val["display_name"].toString().split(" ")[0])).indexOf(info.split(" ")[0]);
+              const point = raw[pointIndex].point;
+              console.log(point);
+              const moreInfo = point !== undefined ?
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={()=>{
+                    this.setState({isFeatureClicked: true, clickedFeature: point})
+                  }}
+                >
+                  More Info
+                </Button>
+              :
+              <Paragraph>{info.split(",").slice(1).join(", ")}</Paragraph>;
+
+              const searchTitle = point !== undefined ?
+                  <h2>{info}</h2>
+                  :
+                  <h2>{info.split(",")[0]}</h2>;
+
+              
+              
+              return(
+                <Popup>
+                <div>
+                  {searchTitle}
+                  {moreInfo}
+                  <Divider></Divider>
+                  <p>{SearchInfo.latLng.lat + ", " + SearchInfo.latLng.lng}</p>
+                </div>
+              </Popup>
+              )
+            }}
+            
             openSearchOnLoad={false} // By default there's a search icon which opens the input when clicked. Setting this to true opens the search by default.
             closeResultsOnClick={true} // By default, the search results remain when you click on one, and the map flies to the location of the result. But you might want to save space on your map by closing the results when one is clicked. The results are shown again (without another search) when focus is returned to the search input.
             // providerOptions={{points: this.state.points}} // The BingMap and OpenStreetMap providers both accept bounding coordinates in [se,nw] format. Note that in the case of OpenStreetMap, this only weights the results and doesn't exclude things out of bounds.
@@ -429,14 +480,13 @@ class CustomOpenStreetMap {
     filteredPoints = filteredPoints.slice(0,10);
 
     response = filteredPoints.map((point)=>{
-      console.log(point)
       return({
-        display_name: point.properties.name,
+        display_name: point.properties.tcsnumber + " " + point.properties.name,
         lat: point.geometry.coordinates[1],
-        lon: point.geometry.coordinates[0]
+        lon: point.geometry.coordinates[0],
+        point: point
       })
     });
-    console.log("Points", response)
     response = [].concat(response, await fetch(this.url + query)
       .then(res => res.json()));
 
@@ -444,17 +494,16 @@ class CustomOpenStreetMap {
   }
 
   formatResponse(response) {
-    console.log(response);
     const resources = response;
     const count = response.length;
     const info = (count > 0) ? resources.map(e => {
-      console.log(e);
       return(
         {
           // bounds: e.boundingbox.map(bound => Number(bound)),
           latitude: e.lat,
           longitude: e.lon,
           name: e.display_name,
+          point: e["point"]
         }
       )
     }) : 'Not Found';
