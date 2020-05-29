@@ -700,11 +700,11 @@ class CaveInfo extends Component<Props, State>{
                         this.setState({loadingButtons:{rejectloading: true}})
                         const updateSubmission = {
                             status: "Rejected",
-                            message: "Rejected on " + new Date().toDateString() + "\nRejected by " + this.context.user._id + "\nReason for Rejection:\n"+rejectMessage
+                            message: "Rejected on " + new Date().toDateString() + "\nRejected by " + this.context.user.firstName + " " + this.context.user.lastName + "\nReason for Rejection:\n"+rejectMessage
                         } as SubmittedPoint;
                         updateOneSubmittedPointByID(this.state.submittedPoint._id, updateSubmission).then(()=>{
                             message.error(this.state.point.properties.tcsnumber + " has been rejected.")
-                            this.props.history.push("/review/points")
+                            this.props.history.goBack();
                         })
                     }}
                 >
@@ -724,11 +724,11 @@ class CaveInfo extends Component<Props, State>{
                         const updateSubmission = {
                             point: this.state.point,
                             status: "Approved",
-                            message: "Approved on " + new Date().toDateString() + "\nApproved by " + this.context.user._id,
+                            message: "Approved on " + new Date().toDateString() + "\nApproved by: " + this.context.user.firstName + " " + this.context.user.lastName,
                         } as SubmittedPoint;
                         updateOneSubmittedPointByID(this.state.submittedPoint._id, updateSubmission).then(()=>{
                             message.success(this.state.point.properties.tcsnumber + " has been approved.")
-                            this.props.history.push("/review/points")
+                            this.props.history.goBack();
                         })
                     }}
                     >

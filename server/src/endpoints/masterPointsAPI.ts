@@ -46,22 +46,22 @@ masterPointsAPI.post("/upload", upload.single("csv"), (req, res, next) => {
         var GeoJSON = require('geojson');
         geojson = GeoJSON.parse(jsonObj, {Point: ['latitude', 'longitude']});
 
-        // for (let i = 0; i<geojson.features.length; i++){
-        //     const newMasterPoint = new MasterPoint({
-        //         type: geojson.features[i].type,
-        //         properties: geojson.features[i].properties,
-        //         geometry: geojson.features[i].geometry
-        //     })
-        //     newMasterPoint.save((err) => {
-        //         if (err) {
-        //             console.log("\n `err`");
-        //             next(err)
-        //         }
-        //         else {
-        //             console.log(geojson.features[i].properties.tcsnumber + ' saved successfully!');
-        //         }
-        //     });
-        // }
+        for (let i = 0; i<geojson.features.length; i++){
+            const newMasterPoint = new MasterPoint({
+                type: geojson.features[i].type,
+                properties: geojson.features[i].properties,
+                geometry: geojson.features[i].geometry
+            })
+            newMasterPoint.save((err) => {
+                if (err) {
+                    console.log("\n `err`");
+                    next(err)
+                }
+                else {
+                    console.log(geojson.features[i].properties.tcsnumber + ' saved successfully!');
+                }
+            });
+        }
         res.send(geojson)
     })
 
