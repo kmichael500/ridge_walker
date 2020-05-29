@@ -236,7 +236,7 @@ class UploadLeads extends Component<any, State>{
                                     
                                     <Col >
                                         <Input
-                                            placeholder="Latitude Column"
+                                            placeholder="Latitude column"
                                             // defaultValue={this.state.latField}
                                             onChange={(e)=>{
                                                 this.setState({latField: e.target.value})
@@ -245,7 +245,7 @@ class UploadLeads extends Component<any, State>{
                                     </Col>
                                     <Col span={12}>
                                         <Input
-                                            placeholder="Longitude Column"
+                                            placeholder="Longitude column"
                                             // defaultValue={this.state.longField}
                                             onChange={(e)=>{
                                                 this.setState({longField: e.target.value})
@@ -261,7 +261,7 @@ class UploadLeads extends Component<any, State>{
                                     Please specify the names of the description column.
                             </Paragraph>
                             <Input
-                                placeholder="Description Field"
+                                placeholder="Description column"
                                 // defaultValue={this.state.descField}
                                 onChange={(e)=>{
                                     this.setState({descField: e.target.value})
