@@ -121,7 +121,7 @@ class CaveInfo extends Component<Props, State>{
         else{
             getSubmittedPoint(this.props.submittedPoint).then((requestedPoint)=>{
                 const newNarrative = requestedPoint.point.properties.narr;
-                requestedPoint.point.geometry.coordinates.reverse();
+                // requestedPoint.point.geometry.coordinates.reverse();
                 const pointCopy = JSON.parse(JSON.stringify(requestedPoint.point));
                 this.setState({point:requestedPoint.point, pointCopy,isLoading: false, newNarrative, submittedPoint: requestedPoint});
             })
