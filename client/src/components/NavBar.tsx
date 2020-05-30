@@ -3,11 +3,13 @@ import { Layout, Menu, Breadcrumb, Affix, Space } from 'antd';
 import { UserOutlined, FormOutlined, EyeOutlined, ContainerOutlined, SettingOutlined, LogoutOutlined, DashboardOutlined } from '@ant-design/icons'
 import { BsMap } from 'react-icons/bs';
 
+
 import {ClickParam} from 'antd/lib/menu'
 import { withRouter } from 'react-router-dom';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import { userContext } from '../context/userContext';
 import { logoutUser } from '../dataservice/authentication'
+import { Icon } from 'leaflet';
 
 
 
@@ -47,7 +49,14 @@ class NavBar extends Component<any, any>{
                 // defaultSelectedKeys={['2']}
                 onClick={this.handleMenuClick}
                 >
-                    <Menu.Item key="/">Home</Menu.Item>
+                    <Menu.Item
+                        key="/"
+                    >
+                        <Space size="large">
+                        <img  src={"logo.png"} height="30px"></img>
+                        Home
+                        </Space>
+                    </Menu.Item>
                     <Menu.Item key="/map">Map</Menu.Item>
                     <Menu.SubMenu title="Points">
                         <Menu.Item icon={<EyeOutlined/>} key="/points">View</Menu.Item>
@@ -71,7 +80,13 @@ class NavBar extends Component<any, any>{
                 onClick={this.handleMenuClick}
                 >
                     
-                    <Menu.Item key="/">Tennessee Cave Survey</Menu.Item>
+                    <Menu.Item key="/">
+                        <Space size="large">
+                            <img  src={"logo.png"} height="30px"></img>
+                            Tennessee Cave Survey
+                        </Space>
+                        
+                    </Menu.Item>
                     
                     {this.loggedInSubMenu()}
                 </Menu>
@@ -101,7 +116,6 @@ class NavBar extends Component<any, any>{
         <Layout className="layout" style={{height:"100vh", background:"white"}}>
             <Affix>
             <Header>
-                <div className="logo" />
                 {this.loggedInMenu()}
             </Header>
             </Affix>

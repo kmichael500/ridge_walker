@@ -167,7 +167,7 @@ class Dashboard extends Component<any, State>{
               <Row justify="center" align="middle" style={{background:"white", minHeight:"200px"}}>
                 <Space>
                 <div style={{background:"", flexBasis:"fit-content"}}>
-                <Title style={{textAlign:"center"}}>Download Files</Title>                    
+                <Title style={{textAlign:"center"}}>Download Points</Title>                    
                   <Space>
                   <DownloadCSVButton></DownloadCSVButton>
                   <DownloadGPXButton></DownloadGPXButton>

@@ -87,7 +87,7 @@ class Login extends Component<Props,State> {
         <Row justify="center" align="middle" style={{height:"100%", background:"white"}}>
         <div style={{width:"90%", borderRadius:"10px"}}>
         <Row justify="center">
-        <Title>Access Member Portal</Title>
+        <Title>Member Portal</Title>
         </Row>
         <Form name="horizontal_login" onFinish={this.handleSubmit} size="large">
             <Form.Item

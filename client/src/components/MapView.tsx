@@ -262,7 +262,7 @@ class MapView extends Component<Props, State> {
               {this.getGeoJSONComponent()}
           </MarkerClusterGroup>
         </LayersControl.Overlay>
-        <LayersControl.Overlay name="Leads">
+        <LayersControl.Overlay name="Dead Leads">
           <MarkerClusterGroup
             spiderfyOnMaxZoom={true}
           >
