@@ -4,11 +4,10 @@
 * Search by property (length, pit depth, county, etc)
 * View all information and any available maps on a specific cave.
 
-
 | Point Information | Point Table |
 |--|--|
 | <img width="300" src="https://i.imgur.com/WBpzp0j.png"/> | <img width="530" src="https://i.imgur.com/fepNNMb.png"/> |	
----
+
 **Dashboard**
 * View submissions created by the logged in user.
 * View or upload dead leads (karst features people have confirmed are not a cave).
@@ -18,7 +17,6 @@
 |--|
 
 
----
 **Map**
   * View all 10,000+ caves.
   * View dead leads (karst features people have confirmed are not a cave).
@@ -46,6 +44,7 @@
 * Add leads that have been checked and don't go anywhere.
 ## Technologies Used
 **Server:** Node, Express, Passport, MongoDB, and Typescript
+
 **Client:** React, Passport, Leaflet, and Typescript
 
 ## How to Run
@@ -100,5 +99,6 @@ To create the first admin user, modify the role property of the user document. C
 
 **Uploading data**
 
-In you web browser, navigate to `http://your_ip_address:3000/upload`
+In you web browser, navigate to `http://your_ip_address:3000/upload`.
+
 The screenshots here contain fake data, as the data that this project is meant for is proprietary. If you would like to test this out, fake data has been provided in a CSV file for you to upload.
