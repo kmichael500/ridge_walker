@@ -7,18 +7,21 @@
 
 | Point Information | Point Table |
 |--|--|
-| <img width="300" src="https://i.imgur.com/WBpzp0j.png"/> | <img width="500" src="https://i.imgur.com/fepNNMb.png"/> |	
+| <img width="300" src="https://i.imgur.com/WBpzp0j.png"/> | <img width="530" src="https://i.imgur.com/fepNNMb.png"/> |	
 ---
 **Dashboard**
 * View submissions created by the logged in user.
-* Upload leads that a user has confirmed are not a cave.
+* View or upload dead leads (karst features people have confirmed are not a cave).
 * Download all points as GPX or CSV.
 
-<img src="https://i.imgur.com/sg3cgFX.png" width="300"/>
+| <img src="https://i.imgur.com/sg3cgFX.png" width="300"/> |
+|--|
+
 
 ---
 **Map**
   * View all 10,000+ caves.
+  * View dead leads (karst features people have confirmed are not a cave).
   * Points are clustered if zoomed out to increase efficiency.
   * Get information on a point by clicking it.
   * Search cave locations or places.
@@ -26,9 +29,8 @@
 
 | Clustered Points | Search | Dead Leads |
 |--|--|--|
-| <img src="https://i.imgur.com/mWHJap4.jpg" width="300"/> | <img src="https://i.imgur.com/C0lbsp2.png" width="300"/> | <img src="https://i.imgur.com/X5zcHAc.png" width="300"/> |
----
-### User Roles
+| <img src="https://i.imgur.com/mWHJap4.jpg" width="320"/> | <img src="https://i.imgur.com/C0lbsp2.png" width="300"/> | <img src="https://i.imgur.com/X5zcHAc.png" width="320"/> |
+## User Roles
 **Admin**
 * Can accept, reject, or modify proposed changes to a cave location.
 * Can accept, reject, or modify new cave submissions.
@@ -37,6 +39,7 @@
 | Review | Approve/Reject Changes |
 |--|--|
 | <img src="https://i.imgur.com/Zim5lsN.png" width="500"/> | <img src="https://i.imgur.com/ZhKDpsU.png" width="300"/> |
+
 **Users**
 * Once approved, have access to all cave locations, maps, etc.
 * Can propose changes and add new caves to the database.
