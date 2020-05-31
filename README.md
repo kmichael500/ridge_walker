@@ -5,15 +5,21 @@
 * Displays all properties and any available maps.
 * View all information on a specific cave.
 
-<img src="https://i.imgur.com/WBpzp0j.png" width="300"/><img src="https://i.imgur.com/fepNNMb.png" width="300"/>
-	
+
+| Point Information | Point Table |
+|--|--|
+| <img width="300" src="https://i.imgur.com/WBpzp0j.png"/> | <img width="500" src="https://i.imgur.com/fepNNMb.png"/> |	
 ---
 **Admins**
 * Can accept, reject, or modify proposed changes to a cave location.
 * Can accept, reject, or modify new cave submissions.
 * Approve users who request a membership.
 
-<img src="https://i.imgur.com/Zim5lsN.png" width="300"/><img src="https://i.imgur.com/ZhKDpsU.png" width="300"/>
+| Review | Approve/Reject |
+|--|--|
+| <img src="https://i.imgur.com/Zim5lsN.png" width="500"/> | <img src="https://i.imgur.com/ZhKDpsU.png" width="300"/> |
+
+
 ---
 **Users**
 * Once approved, have access to all cave locations, maps, etc.
@@ -35,14 +41,11 @@
   * Search cave locations or places.
   * Use a Topo, 3DEP Elevation (Lidar), and OSM map layer.
 
-<img src="https://i.imgur.com/mWHJap4.jpg" width="300"/> 
-<img src="https://i.imgur.com/C0lbsp2.png" width="300"/>
-<img src="https://i.imgur.com/X5zcHAc.png" width="300"/>
-
-
+| Clustered Points | Search | Dead Leads |
+|--|--|--|
+| <img src="https://i.imgur.com/mWHJap4.jpg" width="300"/> | <img src="https://i.imgur.com/C0lbsp2.png" width="300"/> | <img src="https://i.imgur.com/X5zcHAc.png" width="300"/> |
 ## Technologies Used
 **Server:** Node, Express, Passport, MongoDB, and Typescript
-
 **Client:** React, Passport, Leaflet, and Typescript
 
 ## How to Run
@@ -95,7 +98,7 @@ export const mongoURI = "mongo_connection_string_here"
 In you web browser, navigate to `http://your_ip_address:3000/register`
 To create the first admin user, modify the role property of the user document. Change the role from `User` to `Admin`.
 
-***Uploading data**
+**Uploading data**
 
 In you web browser, navigate to `http://your_ip_address:3000/upload`
 The screenshots here contain fake data, as the data that this project is meant for is proprietary. If you would like to test this out, fake data has been provided in a CSV file for you to upload.
