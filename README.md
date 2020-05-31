@@ -99,6 +99,6 @@ To create the first admin user, modify the role property of the user document. C
 
 **Uploading data**
 
-In you web browser, navigate to `http://your_ip_address:3000/upload`.
+In you web browser, navigate to `http://your_ip_address:3000/upload`
 
 The screenshots here contain fake data, as the data that this project is meant for is proprietary. If you would like to test this out, fake data has been provided in a CSV file for you to upload.
