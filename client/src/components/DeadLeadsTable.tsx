@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { Feature } from '../pages/geoJsonInterface'
 
-import { Input, Button, Space, Typography } from 'antd';
+import { Input, Button, Space, Typography, Tag } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { Table } from 'antd'
 import { withRouter } from 'react-router-dom';
+import { LeadPointInterface } from "../interfaces/LeadPointInterface";
+import { UserSlider } from "./userInfo/UserSlider";
 
 const { Paragraph } = Typography;
 
 
 interface State {
-    points: Feature[],
+    points: LeadPointInterface[],
     data: any,
     columns: any,
     searchText,
@@ -21,10 +23,10 @@ interface State {
 }
 
 interface Props {
-    points: Feature[]
+    points: LeadPointInterface[]
 }
 
-class PointsTable extends Component<Props, State>{  
+class DeadLeadsTable extends Component<Props, State>{  
     searchInput: any
     constructor(props){
         super(props);
@@ -51,7 +53,7 @@ class PointsTable extends Component<Props, State>{
 
 
     selectRow = (record) => {
-        this.props.history.push("/points/"+record.tcsnumber)
+        // this.props.history.push("/points/"+record.tcsnumber)
 
 
         // const selectedRowKeys = [...this.state.selectedRowKeys];
@@ -132,93 +134,53 @@ class PointsTable extends Component<Props, State>{
         this.setState({ searchText: '' });
       };
 
-    processPoints(points: Feature[]){
+    processPoints(points: LeadPointInterface[]){
         let columns = [
             {
-              title: 'Name',
-              dataIndex: 'name',
-              fixed: "left",
-              // width: "200px",
-              ...this.getColumnSearchProps('name'),
+              title: 'Submitted By',
+              dataIndex: 'submitted_by',
+            //   width: "100px",
+              render: (text, row, index) => {
+                return <UserSlider userID={text}></UserSlider>;
+                },
             },
             {
-                title: 'ID',
-                dataIndex: 'tcsnumber',
-                ...this.getColumnSearchProps('tcsnumber'),
-              },
-            {
-                title: 'Gear',
-                dataIndex: 'gear',
-                ...this.getColumnSearchProps('gear'),
-            },
-              
-            {
-              title: 'Length',
-              dataIndex: 'length',
-            //   width: '12%',
-              sorter: {
-                compare: (a, b) =>  b.length - a.length,
+                title: 'Last Update',
+                dataIndex: 'updatedAt',
+                // width: "200px",
+                render: (value)=>{
+                    return(new Date(value).toDateString())
+                },
+                sorter: {
+                compare: (a, b) =>  new Date(b).getTime() - new Date(a).getTime(),
                 // multiple: 3,
-              },
-              defaultSortOrder: "ascend"
+                },
+                defaultSortOrder: "ascend"
             },
             {
-                title: 'Pit Depth',
-                dataIndex: 'pdep',
-              //   width: '12%',
-                sorter: {
-                  compare: (a, b) => b.pdep - a.pdep,
-                //   multiple: 4,
+                title: "Status",
+                dataIndex: "status",
+                // width: "100px",
+                render: (val, record)=>{
+                    return(
+                        <Tag color="volcano">{val}</Tag>
+                    )
                 }
-              },
-              {
-                title: 'Vertical Extent',
-                dataIndex: 'depth',
-              //   width: '12%',
-                sorter: {
-                  compare: (a, b) => b.depth - a.depth,
-                //   multiple: 4,
-                }
-              },
-              {
-                title: 'Owner',
-                dataIndex: 'ownership',
-              //   width: '12%',
-                ...this.getColumnSearchProps('ownership'),
-              },
-            {
-                title: 'Map Status',
-                dataIndex: 'map_status',
-                //   width: '30%',
-                ...this.getColumnSearchProps('map_status'),
-            },
-            {
-              title: 'County',
-              dataIndex: 'co_name',
-            //   width: '30%',
-              ...this.getColumnSearchProps('co_name'),
-            },
+            }
           ];
 
           // columns.length=2;
           let data = [];
           for (let i = 0; i<points.length; i++){
-            const narrative = points[i].properties.narr.split('\n').map((item, i) => {
+            const description = points[i].point.properties.description.split('\n').map((item, i) => {
                 return <Paragraph key={i}>{item}</Paragraph>;
             });
             let point = {
                 key: i,
-                name: points[i].properties.name,
-                tcsnumber: points[i].properties.tcsnumber,
-                gear: points[i].properties.gear,
-                length: points[i].properties.length,
-                pdep: points[i].properties.pdep,
-                depth: points[i].properties.depth,
-                map_status: points[i].properties.map_status,
-                co_name: points[i].properties.co_name,
-                ownership: points[i].properties.ownership,
-                Depth:  points[i].properties.depth,
-                description: narrative
+                submitted_by: points[i].point.properties.submitted_by,
+                updatedAt: points[i].updatedAt,
+                description,
+                status: points[i].point.properties.checked_status
             }
             data.push(point);
           }
@@ -236,7 +198,7 @@ class PointsTable extends Component<Props, State>{
       return (
           <Table
               columns={this.state.columns}
-              scroll={{ x: 1000 }}
+              scroll={{ x: 500 }}
               expandable={{
                   expandedRowRender: record => <p style={{ margin: 0 }}>{record.description}</p>,
                   rowExpandable: record => record.name !== 'Not Expandable',
@@ -255,5 +217,5 @@ class PointsTable extends Component<Props, State>{
     
 }
 
-const pointsTable = withRouter(PointsTable)
-export { pointsTable as PointsTable };
+const deadLeadsTable = withRouter(DeadLeadsTable)
+export { deadLeadsTable as DeadLeadsTable };

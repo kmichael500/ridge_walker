@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Feature, Points } from './geoJsonInterface'
+import { Feature, Points } from '../interfaces/geoJsonInterface'
 import { PointsTable } from '../components/PointsTable'
 import { getAllMasterPoints } from '../dataservice/getPoints'
+import { PageHeader, Card } from "antd";
 
 interface State {
     points: Feature[]

@@ -26,7 +26,6 @@ class PointInfoPopup extends React.Component<Props,any> {
 
 
   showModal = () => {
-    console.log("Clicked", this.props.point.properties.tcsnumber)
     this.setState({
       visible: true,
     });
@@ -69,6 +68,7 @@ class PointInfoPopup extends React.Component<Props,any> {
   }
 
   render() {
+
     return (
         <Modal
           width="80vw"

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { serverBaseURL } from '../config/urlConfig';
-import { Feature } from '../pages/geoJsonInterface'
+import { Feature } from '../interfaces/geoJsonInterface'
 
 const axiosInstance = axios.create({
     baseURL: serverBaseURL
@@ -12,8 +12,8 @@ const axiosInstance = axios.create({
  */
 async function getAllMasterPoints(): Promise<Feature[]> {
     try {
-        const getInterviewsResponse = await axiosInstance.get('/api/points/master');
-        return getInterviewsResponse.data as Feature[];
+        const masterPointResponse = await axiosInstance.get('/api/points/master');
+        return masterPointResponse.data as Feature[];
     } catch(error) {
         return error;
     } 

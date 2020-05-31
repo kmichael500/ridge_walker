@@ -8,26 +8,51 @@ import  { NavBar } from './components/NavBar'
 import { uploadPoints } from "./pages/uploadPoints"
 import { CaveInfo } from "./pages/CaveInfo";
 import { CavePointTable } from "./pages/CavePointTable";
+import { AddCave } from "./pages/AddCave";
+import { ReviewPoint } from "./pages/ReviewPoint";
+import { ReviewCaveInfo } from "./pages/reviewCaveInfo";
+import { UserContextProvider } from "./context/userContext";
+import { Dashboard} from './pages/Dashboard';
+import { HomePage } from './pages/HomePage'
+// Authentication
+import { Register } from "./pages/Register";
+import { LoginPage } from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { UploadLeads } from "./components/Karst Features/UploadLeads";
+import { DeadLeads } from "./pages/DeadLeads";
+import { ReviewPage } from "./pages/ReviewPage";
 
 
 function App() {
   return (
     <div className="App">
+      <UserContextProvider>
       <Router>
-          <div className="App">
-            {/* Protected Routes */}
-            
+          <div className="App">            
             <Switch>
-              {/* Non Protected Routes */}
               <NavBar>
-              <Route exact path="/upload" component={uploadPoints} />
-              <Route exact path="/map" component= {MapView} />
-              <Route exact path="/points/" component= {CavePointTable} />
-              <Route exact path="/points/:id" component= {CaveInfo} />
+                {/* Non Protected Routes */}
+                <Route exact path="/register" component= {Register} />
+                <Route exact path="/login" component= {LoginPage} />
+                <Route exact path="/" component={HomePage}/>
+
+
+                {/* Protected Routes */}
+                <ProtectedRoute exact path="/upload" component = {uploadPoints} userType="Admin"/>
+                <ProtectedRoute exact path="/upload/leads" component = {UploadLeads}/>
+                <ProtectedRoute exact path="/leads" component = {DeadLeads}/>
+                <ProtectedRoute exact path="/dashboard" component = {Dashboard} />
+                <ProtectedRoute exact path="/map/:lat?/:long?" component= {MapView} />
+                <ProtectedRoute exact path="/points/" component= {CavePointTable} />
+                <ProtectedRoute exact path="/points/:id" component= {CaveInfo} />
+                <ProtectedRoute exact path="/add/points/" component= {AddCave} />
+                <ProtectedRoute exact path="/review/points/" component= {ReviewPage} userType="Admin" />
+                <ProtectedRoute exact path="/review/points/:id" component= {ReviewCaveInfo} />
               </NavBar>
             </Switch>
           </div>
         </Router>
+        </UserContextProvider>
     </div>
   );
 }
