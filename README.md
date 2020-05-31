@@ -1,4 +1,3 @@
-
 ## Features
 **Cave Locations**
 * View all caves in the database in a table format.
@@ -6,8 +5,7 @@
 * Displays all properties and any available maps.
 * View all information on a specific cave.
 
-<img src="https://i.imgur.com/fepNNMb.png" width="300"/>
-<img src="https://i.imgur.com/WBpzp0j.png" width="300"/>
+<img src="https://i.imgur.com/WBpzp0j.png" width="300"/><img src="https://i.imgur.com/fepNNMb.png" width="300"/>
 	
 ---
 **Admins**
