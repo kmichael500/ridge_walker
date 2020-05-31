@@ -171,7 +171,7 @@ class HomePage extends Component<any, State>{
                     <Divider>
                         
                     </Divider>
-                    <p style={{fontSize:8}}>Copyright © 1998-2013 Tennessee Cave Survey, All Rights Reserved. All of the TCS information & data are proprietary including any TCS information contained on this web site. The TCS does not give out Tennessee cave locations. Duplication, distribution & use of any of any TCS information & data is by written permission only. Failure to request permission to use contents as stated herein is considered a violation of the U.S. Copyright Law.</p>
+                    <p style={{fontSize:8}}>Copyright © 1998-2020 Tennessee Cave Survey, All Rights Reserved. All of the TCS information & data are proprietary including any TCS information contained on this web site. The TCS does not give out Tennessee cave locations. Duplication, distribution & use of any of any TCS information & data is by written permission only. Failure to request permission to use contents as stated herein is considered a violation of the U.S. Copyright Law.</p>
                     </Footer>
 
             </div>
