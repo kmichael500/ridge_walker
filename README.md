@@ -38,7 +38,7 @@
 
 | Review | Approve/Reject Changes |
 |--|--|
-| <img src="https://i.imgur.com/Zim5lsN.png" width="500"/> | <img src="https://i.imgur.com/ZhKDpsU.png" width="300"/> |
+| <img src="https://i.imgur.com/Zim5lsN.png" width="530"/> | <img src="https://i.imgur.com/ZhKDpsU.png" width="300"/> |
 
 **Users**
 * Once approved, have access to all cave locations, maps, etc.
