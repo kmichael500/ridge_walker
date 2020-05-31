@@ -14,7 +14,7 @@
 * View or upload dead leads (karst features people have confirmed are not a cave).
 * Download all points as GPX or CSV.
 
-| <img src="https://i.imgur.com/sg3cgFX.png" width="300"/> |
+| <img src="https://i.imgur.com/sg3cgFX.png" width="500"/> |
 |--|
 
 
