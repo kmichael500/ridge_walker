@@ -1,35 +1,18 @@
 ## Features
-**Cave Locations**
+#### Cave Locations
 * View all caves in the database in a table format.
 * Search by property (length, pit depth, county, etc)
-* Displays all properties and any available maps.
-* View all information on a specific cave.
+* View all information and any available maps on a specific cave.
 
 
 | Point Information | Point Table |
 |--|--|
 | <img width="300" src="https://i.imgur.com/WBpzp0j.png"/> | <img width="500" src="https://i.imgur.com/fepNNMb.png"/> |	
 ---
-**Admins**
-* Can accept, reject, or modify proposed changes to a cave location.
-* Can accept, reject, or modify new cave submissions.
-* Approve users who request a membership.
-
-| Review | Approve/Reject |
-|--|--|
-| <img src="https://i.imgur.com/Zim5lsN.png" width="500"/> | <img src="https://i.imgur.com/ZhKDpsU.png" width="300"/> |
-
-
----
-**Users**
-* Once approved, have access to all cave locations, maps, etc.
-* Can propose changes and add new caves to the database.
-* Add leads that have been checked and don't go anywhere.
-* Add in cave leads
----
 **Dashboard**
-* Download all points as GPX or CSV.
+* View submissions created by the logged in user.
 * Upload leads that a user has confirmed are not a cave.
+* Download all points as GPX or CSV.
 
 <img src="https://i.imgur.com/sg3cgFX.png" width="300"/>
 
@@ -44,6 +27,20 @@
 | Clustered Points | Search | Dead Leads |
 |--|--|--|
 | <img src="https://i.imgur.com/mWHJap4.jpg" width="300"/> | <img src="https://i.imgur.com/C0lbsp2.png" width="300"/> | <img src="https://i.imgur.com/X5zcHAc.png" width="300"/> |
+---
+### User Roles
+**Admin**
+* Can accept, reject, or modify proposed changes to a cave location.
+* Can accept, reject, or modify new cave submissions.
+* Approve users who request a membership.
+
+| Review | Approve/Reject Changes |
+|--|--|
+| <img src="https://i.imgur.com/Zim5lsN.png" width="500"/> | <img src="https://i.imgur.com/ZhKDpsU.png" width="300"/> |
+**Users**
+* Once approved, have access to all cave locations, maps, etc.
+* Can propose changes and add new caves to the database.
+* Add leads that have been checked and don't go anywhere.
 ## Technologies Used
 **Server:** Node, Express, Passport, MongoDB, and Typescript
 **Client:** React, Passport, Leaflet, and Typescript
