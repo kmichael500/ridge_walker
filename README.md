@@ -3,10 +3,11 @@
 * View all caves in the database in a table format.
 * Search by property (length, pit depth, county, etc)
 * View all information and any available maps on a specific cave.
+* Add a new cave or make changes to an existing one.
 
-| Point Information | Point Table |
-|--|--|
-| <img width="300" src="https://i.imgur.com/WBpzp0j.png"/> | <img width="530" src="https://i.imgur.com/fepNNMb.png"/> |	
+| Point Information | Point Table | Add a Point |
+|--|--|--|
+| <img width="300" src="https://i.imgur.com/WBpzp0j.png"/> | <img width="530" src="https://i.imgur.com/fepNNMb.png"/> | <img width="440" src="https://i.imgur.com/crvbsVl.png"/> |
 
 **Dashboard**
 * View submissions created by the logged in user.
@@ -36,12 +37,16 @@
 
 | Review | Approve/Reject Changes |
 |--|--|
-| <img src="https://i.imgur.com/Zim5lsN.png" width="530"/> | <img src="https://i.imgur.com/ZhKDpsU.png" width="300"/> |
+| <img src="https://i.imgur.com/Zim5lsN.png" width="540"/> | <img src="https://i.imgur.com/ZhKDpsU.png" width="300"/> |
 
 **Users**
 * Once approved, have access to all cave locations, maps, etc.
 * Can propose changes and add new caves to the database.
 * Add leads that have been checked and don't go anywhere.
+
+## Home Page
+<img src="https://i.imgur.com/e2elXUs.jpg" width="530"/>
+
 ## Technologies Used
 **Server:** Node, Express, Passport, MongoDB, and Typescript
 
