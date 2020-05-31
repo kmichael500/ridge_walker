@@ -1,19 +1,16 @@
 
+
 ## Features
 **Cave Locations**
 * View all caves in the database in a table format.
 * Search by property (length, pit depth, county, etc)
-* Displays all properties and any available maps.
-* <img src="https://i.imgur.com/fepNNMb.png" width="300"/>
-* View all information on a specific cave.
-* <img src="https://i.imgur.com/WBpzp0j.png" width="300"/>
+* Displays all properties and any available maps.<img src="https://i.imgur.com/fepNNMb.png" width="300"/>
+* View all information on a specific cave.<img src="https://i.imgur.com/WBpzp0j.png" width="300"/>
 	
 ---
 **Admins**
 * Can accept, reject, or modify proposed changes to a cave location.
-* Can accept, reject, or modify new cave submissions.
-* <img src="https://i.imgur.com/Zim5lsN.png" width="300"/>
-* <img src="https://i.imgur.com/ZhKDpsU.png" width="300"/>
+* Can accept, reject, or modify new cave submissions.<img src="https://i.imgur.com/Zim5lsN.png" width="300"/><img src="https://i.imgur.com/ZhKDpsU.png" width="300"/>
 * Approve users who request a membership.
 ---
 **Users**
