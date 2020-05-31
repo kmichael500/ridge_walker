@@ -1,15 +1,13 @@
 import * as express from 'express';
 import * as multer from 'multer'
 import { MongooseDocument } from 'mongoose'
-import { Parser, transforms } from 'json2csv';
+import { Parser } from 'json2csv';
 
 
 import json2csv from 'json2csv'
 import {Request, Response, NextFunction} from 'express';
-import { Points, Feature, Geometry } from '../models/MasterPoint'
-import { LeadPoint, LeadPoints, LeadPointInterface } from '../models/LeadPoint'
-import { TextEncoder } from 'util';
-import { resolve } from 'dns';
+import { Points, Feature } from '../models/MasterPointInterface'
+import { LeadPoint, LeadPointInterface } from '../models/LeadPoint'
 
 // Initialize an express api and configure it parse requests as JSON
 const leadPointAPI = express();
@@ -24,7 +22,7 @@ var upload = multer({ storage:storage })
 // Endpoint to add all TCS points a submission by ID
 leadPointAPI.post("/upload", upload.single("csv"), (req, res, next) => {
     console.log()
-    const csv=require('csvtojson')
+    const csv = require('csvtojson')
     csv()
     .fromString(req.file.buffer.toString())
     .then((jsonObj: any)=>{
@@ -95,10 +93,6 @@ leadPointAPI.post("/", (req, res, next) => {
         console.log(error)
         next(error)
     });
-    
-
-    
-
 
 });
 

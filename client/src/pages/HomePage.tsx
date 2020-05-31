@@ -1,36 +1,15 @@
 import React, { Component } from "react";
-import { Feature } from '../interfaces/geoJsonInterface'
-import { tn_counties } from '../dataservice/countyList'
-import { Parallax, Background } from 'react-parallax'
-// import "./homepage.css"
+import { Parallax } from 'react-parallax'
+
 import {
-    Form,
-    Input,
     Button,
-    Radio,
-    Select,
-    Cascader,
-    DatePicker,
-    InputNumber,
-    TreeSelect,
-    Switch,
     Layout,
     Typography,
     Divider,
-    Card,
-    Space,
     Row,
-    message,
-    PageHeader,
-    Col
   } from 'antd';
-import Item from "antd/lib/list/Item";
-import { Store } from "antd/lib/form/interface";
-import { SubmittedPoint } from "../interfaces/submittedPointInterface";
-import { addSubmittedPoint } from "../dataservice/submittedPoints";
 
-const { Content } = Layout
-const { Paragraph, Title, Text } = Typography;
+const { Paragraph, Title } = Typography;
 
 interface State {
 
@@ -110,12 +89,6 @@ class HomePage extends Component<any, State>{
                     </div>
                     
                 </Parallax>
-        
-
-
-       
-
-
                 {/* <Parallax strength={500}>
                     <div style={{
                         height: "100%",
@@ -175,12 +148,6 @@ class HomePage extends Component<any, State>{
                     </Footer>
 
             </div>
-
-            
-            
-            
-
-            
             // <Row justify="space-between" align="middle">
             //     <Space direction="vertical" size="large">
             //     <Paragraph>

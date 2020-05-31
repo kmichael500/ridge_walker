@@ -6,37 +6,25 @@ import {
     Form,
     Input,
     Button,
-    Radio,
     Select,
     Cascader,
-    DatePicker,
     InputNumber,
-    TreeSelect,
-    Switch,
     Layout,
     Typography,
-    Divider,
     Card,
     Space,
     Row,
     message
   } from 'antd';
-import Item from "antd/lib/list/Item";
 import { Store } from "antd/lib/form/interface";
 import { SubmittedPoint } from "../interfaces/submittedPointInterface";
 import { addSubmittedPoint } from "../dataservice/submittedPoints";
 import { userContext } from "../context/userContext";
 
-const { Content } = Layout
-const { Paragraph, Title, Text } = Typography;
-
 interface State {
     autocompleteDisabled: boolean
     point: Feature,
 }
-
-
-
 
 class AddCave extends Component<any, State>{ 
     

@@ -1,7 +1,5 @@
 import * as mongoose from 'mongoose';
-import { FeatureType, Feature, Geometry, PropertyType, GeometryType } from './MasterPoint';
-
-
+import { FeatureType, Feature, Geometry, PropertyType, GeometryType } from './MasterPointInterface';
 
 export interface LeadPointInterface {
     point: LeadFeature,

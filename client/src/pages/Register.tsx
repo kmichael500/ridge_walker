@@ -10,23 +10,12 @@ import {
     Form,
     Input,
     Button,
-    Radio,
-    Select,
-    Cascader,
-    DatePicker,
     InputNumber,
-    TreeSelect,
-    Switch,
-    Layout,
-    Typography,
-    Divider,
     Card,
     Space,
     Row,
     message,
   } from 'antd';
-import Item from "antd/lib/list/Item";
-import { Store } from "antd/lib/form/interface";
 import { RegisterUserInterface } from "../interfaces/UserInterface";
 
 
@@ -60,8 +49,6 @@ class Register extends Component<Props,State> {
         this.handlePasswordRepeat = this.handlePasswordRepeat.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
-
 
     handleEmail(e: React.ChangeEvent<HTMLInputElement>){
         this.setState({email: e.target.value})

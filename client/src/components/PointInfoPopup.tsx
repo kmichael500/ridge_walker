@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Row, Space, Col, Typography } from 'antd';
 import { CaveInfo } from '../pages/CaveInfo'
-import { Feature } from '../pages/geoJsonInterface';
+import { Feature } from '../interfaces/geoJsonInterface'
 
 const { Title, Text } = Typography;
 
@@ -11,7 +11,6 @@ interface Props {
 }
 
 class PointInfoPopup extends React.Component<Props,any> {
-//   state = { visible: true };
 
   constructor(Props){
       super(Props);

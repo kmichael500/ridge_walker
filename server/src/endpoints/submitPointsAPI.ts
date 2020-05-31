@@ -4,6 +4,7 @@ import {Request, Response, NextFunction} from 'express';
 const submittedPointAPI = express();
 submittedPointAPI.use(express.json());
 
+// add a single submission to database
 submittedPointAPI.post("/", (req, res, next) => {
     
         const newSubmission = new SubmittedPoint({
@@ -38,7 +39,7 @@ submittedPointAPI.get('/', (req, res, next) => {
     })
 });
 
-// Endpoint to get a single point
+// Endpoint to get a single submitted point
 submittedPointAPI.get('/:id', (req, res, next) => {
     SubmittedPoint.findById(req.params.id, (err, submittedPoint) => {
         if (err) {
@@ -55,7 +56,7 @@ submittedPointAPI.get('/:id', (req, res, next) => {
       });
 });
 
-// Endpoint to update a single point
+// Endpoint to update a single submission
 submittedPointAPI.put('/:id', (req, res, next) => {
     SubmittedPoint.findByIdAndUpdate(req.params.id, req.body, (err, submittedPoint) => {
         if (err) {
@@ -69,7 +70,7 @@ submittedPointAPI.put('/:id', (req, res, next) => {
     });
 });
 
-// Endpoint to delete a single point
+// Endpoint to delete a single submission
 submittedPointAPI.delete('/:id', (req, res, next) => {
     SubmittedPoint.findByIdAndDelete(req.params.id, (err, submittedPoint) => {
         if (err) {

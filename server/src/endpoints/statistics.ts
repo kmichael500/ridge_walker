@@ -3,14 +3,11 @@ import * as multer from 'multer'
 import { MongooseDocument } from 'mongoose'
 import { Parser, transforms } from 'json2csv';
 
-import {cave_center} from './cave_center'
+import {county_center} from './county_center'
 
-
-import json2csv from 'json2csv'
 import {Request, Response, NextFunction} from 'express';
-import { Points, Feature, Geometry } from '../models/MasterPoint'
+import {  Feature } from '../models/MasterPointInterface'
 import { MasterPoint } from '../models/MasterPoints';
-import { TextEncoder } from 'util';
 
 // Initialize an express api and configure it parse requests as JSON
 const statisticsAPI = express();
@@ -73,17 +70,15 @@ statisticsAPI.get("/", (req, res, next)=>{
     }
     getStats();
     
-
-
 })
 
 statisticsAPI.get("/county", (req, res, next)=>{
     
     var GeoJSON = require('geojson');
     
-    var geojson = GeoJSON.parse(cave_center, {Point: ['longitude', 'latitude']});
+    var geojson = GeoJSON.parse(county_center, {Point: ['longitude', 'latitude']});
 
-    console.log(cave_center[0])
+    console.log(county_center[0])
     
     res.send(geojson);
 

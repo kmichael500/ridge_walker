@@ -1,15 +1,12 @@
-import React, { Component, Fragment } from 'react';
-import { Layout, Menu, Breadcrumb, Affix, Space } from 'antd';
+import React, { Component } from 'react';
+import { Layout, Menu, Affix, Space } from 'antd';
 import { UserOutlined, FormOutlined, EyeOutlined, ContainerOutlined, SettingOutlined, LogoutOutlined, DashboardOutlined } from '@ant-design/icons'
-import { BsMap } from 'react-icons/bs';
 
 
 import {ClickParam} from 'antd/lib/menu'
 import { withRouter } from 'react-router-dom';
-import SubMenu from 'antd/lib/menu/SubMenu';
 import { userContext } from '../context/userContext';
 import { logoutUser } from '../dataservice/authentication'
-import { Icon } from 'leaflet';
 
 
 

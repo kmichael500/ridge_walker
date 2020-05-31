@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { serverBaseURL } from '../config/urlConfig';
 import { Feature } from '../interfaces/geoJsonInterface'
 

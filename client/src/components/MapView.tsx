@@ -16,10 +16,6 @@ import { PointInfoPopup } from '../components/PointInfoPopup'
 import ReactLeafletSearch from "react-leaflet-search";
 import ContainerDimensions from 'react-container-dimensions'
 
-
-// tcs data in GeoJson format
-// import file from '../../assets/tcsv.js'
-
 // used to cluster points
 // import MarkerClusterGroup from 'react-leaflet-markercluster/dist/react-leaflet-markercluster';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
@@ -29,7 +25,6 @@ import { withRouter } from "react-router-dom";
 import { Feature } from "../interfaces/geoJsonInterface";
 import { LeadFeature } from "../interfaces/LeadPointInterface";
 import { UserSlider } from "./userInfo/UserSlider";
-import Search from "react-leaflet-search";
 
 const { Paragraph, Title } = Typography;
 // marker for adding points (right click)
@@ -61,7 +56,7 @@ interface State {
 }
 
 interface Props {
-  data?: Feature,
+  data?: Feature[],
   center?: number[],
   baseLayer?: number
   zoom?: number,

@@ -2,8 +2,6 @@ import axios, { AxiosResponse } from 'axios';
 import { serverBaseURL } from '../config/urlConfig';
 import { RegisterUserInterface, UserInterface } from '../interfaces/UserInterface'
 import qs from 'qs';
-import { useContext } from 'react';
-import { userContext } from '../context/userContext';
 import { SubmittedPoint } from '../interfaces/submittedPointInterface';
 
 const axiosInstance = axios.create({
@@ -17,8 +15,8 @@ const params = {
 
 /**
  * Register a user.
- * @param password - users password.
- * @param email - users email
+ * @param newUser - a user object.
+ * @returns Promise<RegisterUserInterface>
  */
 async function registerUser(newUser: RegisterUserInterface): Promise<RegisterUserInterface> {
 
@@ -48,6 +46,7 @@ async function registerUser(newUser: RegisterUserInterface): Promise<RegisterUse
  * Login a user.
  * @param password - users password.
  * @param email - users email
+ * @returns Promise<UserInterface>
  */
 async function loginUser(email: string, password: string): Promise<UserInterface> {
     return new Promise(async (resolve, reject) => {
@@ -75,8 +74,7 @@ async function loginUser(email: string, password: string): Promise<UserInterface
 
 /**
  * Check if a user is logged in.
- * @param password - users password.
- * @param email - users email
+ * @returns Promise<UserInterface>
  */
 async function getCurrentUserProfile(): Promise<UserInterface> {
     return new Promise(async (resolve, reject) => {
@@ -95,6 +93,10 @@ async function getCurrentUserProfile(): Promise<UserInterface> {
     })
 }
 
+/**
+ * Logout a user.
+ * @returns void
+ */
 function logoutUser(): void {
     localStorage.removeItem("JWT");
     params.secret_token = "";

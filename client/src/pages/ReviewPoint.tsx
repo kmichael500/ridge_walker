@@ -22,7 +22,6 @@ interface ColInterface {
   description: string
 }
 
-
 const { TabPane } = Tabs;
 
 interface ReviewTableState {

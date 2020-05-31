@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Feature } from '../pages/geoJsonInterface'
+import { Feature } from '../interfaces/geoJsonInterface'
 
 import { Input, Button, Space, Typography } from 'antd';
 import Highlighter from 'react-highlight-words';

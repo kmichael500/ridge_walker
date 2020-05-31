@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import { Document, Page, StyleSheet } from 'react-pdf/dist/entry.webpack';
+import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import { Card, Row, Col, Spin, Tabs, Typography, Button, Popover } from 'antd';
-import { getMapFileNames, getImageFileNames } from '../dataservice/getMaps'
-import { Icon } from 'leaflet';
+import { getImageFileNames } from '../dataservice/getMaps'
 import DisplayMap from './DisplayPDF';
-
-const { TabPane } = Tabs;
-const { Text } = Typography;
 
 
 const options = {
@@ -25,6 +21,7 @@ interface SmallMapState{
     loading: boolean
 }
 
+// show pdf like an image
 export class SmallMap extends Component<SmallMapProps, SmallMapState> {
     constructor(Props: SmallMapProps){
         super(Props);

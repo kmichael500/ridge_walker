@@ -1,19 +1,16 @@
 import React, { Component } from "react";
 import { Card, Descriptions, PageHeader, Space,  Col, Row, Typography, Divider, Layout, message, Button, Form, Input, Popconfirm } from 'antd'
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { getMasterPoint } from "../dataservice/getPoints";
 import { addSubmittedPoint, getSubmittedPoint, updateOneSubmittedPointByID } from '../dataservice/submittedPoints'
 import { SubmittedPoint } from '../interfaces/submittedPointInterface'
 import deepEqual from 'deep-equal'
 
 import { MapView } from "../components/MapView"
-import DisplayMap from "../components/DisplayPDF"
 import DisplayAllMaps from "../components/DisplayAllMaps";
 import { Feature } from "../interfaces/geoJsonInterface";
 import { userContext } from "../context/userContext";
 import { withRouter } from "react-router-dom";
 
-const { Content } = Layout
 const { Paragraph, Title, Text } = Typography;
 const { TextArea } = Input;
 
@@ -43,10 +40,6 @@ interface Props {
 
 
 const { Meta } = Card;
-
-
-
-
 
 class CaveInfo extends Component<Props, State>{ 
     static defaultProps ={

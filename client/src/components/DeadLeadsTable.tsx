@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { Feature } from '../pages/geoJsonInterface'
-
 import { Input, Button, Space, Typography, Tag } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';

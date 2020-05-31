@@ -8,22 +8,11 @@ import {
     Form,
     Input,
     Button,
-    Radio,
-    Select,
-    Cascader,
-    DatePicker,
-    InputNumber,
-    TreeSelect,
-    Switch,
     Typography,
-    Divider,
-    Card,
-    Space,
     Row,
-    Col,
     message,
   } from 'antd';
-const { Paragraph, Title, Text } = Typography;
+const { Title } = Typography;
 
 interface State{
     email: string,

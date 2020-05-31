@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Feature, Points } from '../interfaces/geoJsonInterface'
 import { DeadLeadsTable } from '../components/DeadLeadsTable'
 import { getAllLeadPoints } from '../dataservice/leadPoints'
-import { LeadFeature, LeadPointInterface } from "../interfaces/LeadPointInterface";
+import { LeadPointInterface } from "../interfaces/LeadPointInterface";
 
 interface State {
     points: LeadPointInterface[]

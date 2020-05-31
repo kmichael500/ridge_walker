@@ -1,13 +1,7 @@
 import * as express from 'express';
 import * as multer from 'multer'
-import { MongooseDocument } from 'mongoose'
-var csv2geojson = require('csv2geojson');
 import {Request, Response, NextFunction} from 'express';
 import * as fs from "fs"
-import { resolve } from 'dns';
-import { Points } from '../models/MasterPoint'
-import { MasterPoint } from '../models/MasterPoints';
-import * as path from 'path'
 
 import "pdf-image"
 
@@ -79,7 +73,7 @@ mapsAPI.get("/image/:mapName.png", (req, res, next)=>{
     }
 })
 
-// Get map file names
+// Get map file names for a single point
 mapsAPI.get("/:id/getAll", (req, res, next)=>{
     const searchString = req.params.id + '_*.pdf';
     glob(searchString, {cwd:"public/maps"}, function (err, files) {
@@ -101,7 +95,7 @@ mapsAPI.get("/:id/getAll", (req, res, next)=>{
     });
 })
 
-// Download a map
+// Download a map as pdf
 mapsAPI.get("/:id", (req, res, next)=>{
         try{
             var file = fs.createReadStream('./public/maps/' + req.params.id);

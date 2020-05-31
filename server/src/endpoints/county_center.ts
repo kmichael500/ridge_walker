@@ -1,4 +1,4 @@
-let cave_center = [
+let county_center = [
    {
        "County": "Anderson County",
        "latitude": "36.11673",
@@ -476,4 +476,4 @@ let cave_center = [
    }
 ]
 
-export { cave_center };
+export { county_center };

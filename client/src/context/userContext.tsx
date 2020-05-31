@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { RegisterUserInterface, UserInterface } from '../interfaces/UserInterface';
+import { UserInterface } from '../interfaces/UserInterface';
 import { getUserProfile } from '../dataservice/authentication';
-import { message } from 'antd';
 
 export interface UserContextInterface{
     user: UserInterface,

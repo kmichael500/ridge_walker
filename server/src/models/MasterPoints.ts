@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { FeatureType, Feature, Geometry, PropertyType, GeometryType } from './MasterPoint';
+import { FeatureType, Feature, Geometry, PropertyType, GeometryType } from './MasterPointInterface';
 
 // Create Schema
 const masterPointSchema = new mongoose.Schema<Feature>({

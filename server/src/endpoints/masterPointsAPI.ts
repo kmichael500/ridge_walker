@@ -1,14 +1,13 @@
 import * as express from 'express';
 import * as multer from 'multer'
 import { MongooseDocument } from 'mongoose'
-import { Parser, transforms } from 'json2csv';
+import { Parser } from 'json2csv';
 
 
 import json2csv from 'json2csv'
 import {Request, Response, NextFunction} from 'express';
-import { Points, Feature, Geometry } from '../models/MasterPoint'
+import { Points, Feature, Geometry } from '../models/MasterPointInterface'
 import { MasterPoint } from '../models/MasterPoints';
-import { TextEncoder } from 'util';
 
 // Initialize an express api and configure it parse requests as JSON
 const masterPointsAPI = express();
@@ -83,9 +82,8 @@ masterPointsAPI.get("/", (req, res, next)=>{
 
 })
 
-// get a single master point by tcsnumber
 
-// Endpoint to get a single submission by id
+// Endpoint to get a single submission by tcsnumber
 masterPointsAPI.get('/:id', (req, res, next) => {
     MasterPoint.find({'properties.tcsnumber':req.params.id}, (err, requestedPoint)=>{
         res.json(requestedPoint[0]);
@@ -143,7 +141,7 @@ masterPointsAPI.get("/download/gpx", (req, res, next)=>{
 
 })
 
-// get all master points as gpx
+// get all master points as csv
 masterPointsAPI.get("/download/csv", (req, res, next)=>{
     MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
         if (err) {

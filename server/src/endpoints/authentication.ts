@@ -2,7 +2,6 @@ import * as express from 'express'
 import * as passport from 'passport'
 import * as jwt from 'jsonwebtoken'
 import { UserModel } from '../models/User';
-import { isUndefined } from 'util';
 import { SubmittedPoint } from '../models/SubmittedPoint';
 
 const userAPI = express();

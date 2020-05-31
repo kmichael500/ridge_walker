@@ -1,48 +1,25 @@
 import React, { Component } from "react";
-import { tn_counties } from '../../dataservice/countyList'
 import { addLeadPoints } from '../../dataservice/leadPoints'
 import { CheckedStatusType, LeadType, LeadPointInterface, LeadPoints } from '../../interfaces/LeadPointInterface';
-
-import Highlighter from 'react-highlight-words';
-import { SearchOutlined } from '@ant-design/icons';
 import ContainerDimensions from 'react-container-dimensions';
-
+import { UploadCSV } from "../upload";
+import { KarstFeaturesTable } from "./KarstFeaturesTable";
+import { userContext, UserContextInterface } from "../../context/userContext";
 
 import {
-    Form,
     Input,
     Button,
-    Radio,
-    Select,
-    Cascader,
-    DatePicker,
-    InputNumber,
-    TreeSelect,
-    Switch,
-    Layout,
     Typography,
     Divider,
-    Card,
     Space,
     Row,
     message,
     Col,
-    Tabs,
-    Table,
-    Checkbox,
     Tag,
     Alert
   } from 'antd';
 
-import { UploadCSV } from "../upload";
-import { point } from "leaflet";
-import { KarstFeaturesTable } from "./KarstFeaturesTable";
-import { userContext, UserContextInterface } from "../../context/userContext";
-
-const { TextArea } = Input
-const { Content } = Layout
-const { Paragraph, Title, Text } = Typography;
-const { TabPane } = Tabs;
+const { Paragraph } = Typography;
 interface State {
     data: any,
     columns: any,
@@ -128,7 +105,7 @@ class UploadLeads extends Component<any, State>{
 
             }
             else if (points.features[index].properties[this.state.descField] !== undefined){
-                description = points.features[index].properties.desc;
+                description = points.features[index].properties["desc"];
             }
             
             return(
@@ -143,7 +120,6 @@ class UploadLeads extends Component<any, State>{
                 }
             )
         })
-        console.log(data);
         this.setState({data:data, columns})
     }
 
@@ -192,13 +168,10 @@ class UploadLeads extends Component<any, State>{
                 )
             }) as LeadPointInterface[]
             addLeadPoints(newSubmission).then((res)=>{
-                console.log("then")
                 message.success(res.data)
             }).catch((err)=>{
-                console.log("error")
                 message.error("Error!")
             }).then(()=>{
-                console.log("finally")
                 this.setState({
                     data: null,
                     columns: null,
@@ -215,8 +188,6 @@ class UploadLeads extends Component<any, State>{
 
 
     render(){
-        
-
         return(
             <div className="site-layout-content" style={{width:"100%"}}>
                 <Row justify="center" style={{background:""}}>

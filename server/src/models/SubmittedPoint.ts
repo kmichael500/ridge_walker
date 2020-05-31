@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import {MasterPoint} from './MasterPoints'
-import { Feature } from './MasterPoint';
+import { Feature } from './MasterPointInterface';
 
 // Create Schema
 const submittedPointSchema = new mongoose.Schema<Feature>({

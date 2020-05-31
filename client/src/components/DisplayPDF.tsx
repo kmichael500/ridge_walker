@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { Document, Page, StyleSheet } from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import { Modal, Button, Space } from 'antd';
-import { serverBaseURL } from '../config/urlConfig';
-
-
 
 const options = {
     cMapUrl: 'cmaps/',
@@ -19,7 +15,7 @@ interface Props{
 
 export default class DisplayMap extends Component<Props, any> {
 
-    static defaultProps:Props = {
+    static defaultProps: {
         onClick: ()=>{},
         file: "",
         
@@ -41,18 +37,11 @@ export default class DisplayMap extends Component<Props, any> {
 
     componentDidUpdate(nextProps: Props){
         if (this.props.visible !== nextProps.visible){
-            // this.setState({visible: this.props.visible});
             console.log("Visible", this.props.visible)
         }
 
     }
 
-    // modal stuff
-    // showModal = () => {
-    //     this.setState({
-    //         visible: true,
-    //     });
-    // };
 
     handleOk = e => {
         this.setState({
@@ -77,8 +66,7 @@ export default class DisplayMap extends Component<Props, any> {
 
 
     render() {
-    const { file, numPages } = this.state;
-    const { visible, loading } = this.state;
+    const { loading } = this.state;
     return (
     <Modal
         width="90vw"

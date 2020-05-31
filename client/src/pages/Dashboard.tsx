@@ -1,43 +1,23 @@
 import React, { Component } from "react";
-import { Feature } from '../interfaces/geoJsonInterface'
-import { tn_counties } from '../dataservice/countyList'
-import { PieChart, Pie, Sector } from 'recharts';
 import { UploadLeads } from '../components/Karst Features/UploadLeads'
 
 import {
-    Form,
-    Input,
     Button,
-    Radio,
-    Select,
-    Cascader,
-    DatePicker,
-    InputNumber,
-    TreeSelect,
-    Switch,
     Layout,
     Typography,
-    Divider,
-    Card,
     Space,
     Row,
-    message,
     Col,
     Tabs
   } from 'antd';
-import Item from "antd/lib/list/Item";
-import { Store } from "antd/lib/form/interface";
 import { SubmittedPoint } from "../interfaces/submittedPointInterface";
 import { getCurrentUserSubmissions } from '../dataservice/authentication'
-import { addSubmittedPoint, getAllSubmittedPoints } from "../dataservice/submittedPoints";
-import { getAllMasterPoints } from "../dataservice/getPoints";
 import { DownloadCSVButton, DownloadGPXButton } from "../components/downloadData/DownloadButtons";
 import { ReviewTable, ReviewPoint } from "./ReviewPoint";
 import { DeadLeads } from "./DeadLeads";
 import { userContext } from "../context/userContext";
 
-const { Content } = Layout
-const { Paragraph, Title, Text } = Typography;
+const { Paragraph, Title } = Typography;
 const { TabPane } = Tabs;
 interface State {
     submittedPoints: SubmittedPoint[]

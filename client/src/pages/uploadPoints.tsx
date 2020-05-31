@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { Points, Feature } from './geoJsonInterface'
-import { UploadOutlined } from '@ant-design/icons';
-import { MapView } from '../components/MapView'
+import { Points } from '../interfaces/geoJsonInterface'
 import { UploadCSV } from '../components/upload'
 
 import { Input, Button, Space } from 'antd';
