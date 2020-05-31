@@ -113,7 +113,6 @@ class CaveInfo extends Component<Props, State>{
                 tcsnumber = this.props.match.params.id;
             }
             getMasterPoint(tcsnumber).then((requestedPoint)=>{
-                requestedPoint.geometry.coordinates.reverse();
                 const pointCopy = JSON.parse(JSON.stringify(requestedPoint));
                 this.setState({point:requestedPoint, pointCopy,isLoading: false});
             })
@@ -121,7 +120,6 @@ class CaveInfo extends Component<Props, State>{
         else{
             getSubmittedPoint(this.props.submittedPoint).then((requestedPoint)=>{
                 const newNarrative = requestedPoint.point.properties.narr;
-                // requestedPoint.point.geometry.coordinates.reverse();
                 const pointCopy = JSON.parse(JSON.stringify(requestedPoint.point));
                 this.setState({point:requestedPoint.point, pointCopy,isLoading: false, newNarrative, submittedPoint: requestedPoint});
             })
@@ -166,41 +164,41 @@ class CaveInfo extends Component<Props, State>{
                 <Descriptions.Item
                     label="Coordinates"
                 >
-                        <Text
-                            editable={ this.state.proposedChanges && {
-                                onChange:((val)=>{
-                                    if (!isNaN(Number(val))){
-                                        const point = this.state.point;
-                                        point.geometry.coordinates[0] = Number(val);
-                                        this.setState({point});
-                                    }
-                                    else{
-                                        message.warn("Latitude must be a number");
-                                    }
-                                    
-                                })
-                            }}
-                            
-                            >{this.state.point.geometry.coordinates[0] + ""}
-                        </Text>
-                        {", "}
-                        <Text
-                            editable={ this.state.proposedChanges && {
-                                onChange:((val)=>{
-                                    if (!isNaN(Number(val))){
-                                        const point = this.state.point;
-                                        point.geometry.coordinates[1] = Number(val);
-                                        this.setState({point});
-                                    }
-                                    else{
-                                        message.warn("Longitude must be a number");
-                                    }
-                                    
-                                })
-                            }}
-                            
-                            >{this.state.point.geometry.coordinates[1] + ""}
-                        </Text>
+                    <Text
+                        editable={ this.state.proposedChanges && {
+                            onChange:((val)=>{
+                                if (!isNaN(Number(val))){
+                                    const point = this.state.point;
+                                    point.geometry.coordinates[1] = Number(val);
+                                    this.setState({point});
+                                }
+                                else{
+                                    message.warn("Latitude must be a number");
+                                }
+                                
+                            })
+                        }}
+                        
+                        >{this.state.point.geometry.coordinates[1] + ""}
+                    </Text>
+                    {","}
+                    <Text
+                        editable={ this.state.proposedChanges && {
+                            onChange:((val)=>{
+                                if (!isNaN(Number(val))){
+                                    const point = this.state.point;
+                                    point.geometry.coordinates[0] = Number(val);
+                                    this.setState({point});
+                                }
+                                else{
+                                    message.warn("Longitude must be a number");
+                                }
+                                
+                            })
+                        }}
+                        
+                        >{this.state.point.geometry.coordinates[0] + ""}
+                    </Text>
                 </Descriptions.Item>
                 <Descriptions.Item
                     label="Length"
@@ -829,7 +827,7 @@ class CaveInfo extends Component<Props, State>{
 
                         <div style={{height:"400px"}}>
                             <MapView
-                                center={this.state.point.geometry.coordinates}
+                                center={this.state.point.geometry.coordinates.slice().reverse()}
                                 zoom={15}
                                 showFullScreen={true}
                             />
