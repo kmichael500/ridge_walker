@@ -3,6 +3,7 @@ import {withRouter} from 'react-router-dom';
 import {userContext} from '../context/userContext';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import {loginUser} from '../dataservice/authentication';
+import {Helmet} from 'react-helmet';
 
 import {Form, Input, Button, Typography, Row, message} from 'antd';
 const {Title} = Typography;
@@ -63,62 +64,67 @@ class Login extends Component<Props, State> {
 
   render() {
     return (
-      <Row
-        justify="center"
-        align="middle"
-        style={{height: '100%', background: 'white'}}
-      >
-        <div style={{width: '90%', borderRadius: '10px'}}>
-          <Row justify="center">
-            <Title>Member Portal</Title>
-          </Row>
-          <Form
-            name="horizontal_login"
-            onFinish={this.handleSubmit}
-            size="large"
-          >
-            <Form.Item
-              name="email"
-              rules={[
-                {
-                  type: 'email',
-                  message: 'The input is not valid E-mail!',
-                },
-                {
-                  required: true,
-                  message: 'Please input your E-mail!',
-                },
-              ]}
+      <div>
+        <Helmet>
+          <title>Login</title> 
+        </Helmet>
+        <Row
+          justify="center"
+          align="middle"
+          style={{height: '100%', background: 'white'}}
+        >
+          <div style={{width: '90%', borderRadius: '10px'}}>
+            <Row justify="center">
+              <Title>Member Portal</Title>
+            </Row>
+            <Form
+              name="horizontal_login"
+              onFinish={this.handleSubmit}
+              size="large"
             >
-              <Input
-                size="large"
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Email"
-              />
-            </Form.Item>
-            <Form.Item
-              name="password"
-              rules={[{required: true, message: 'Please input your password!'}]}
-            >
-              <Input
-                prefix={<LockOutlined className="site-form-item-icon" />}
-                size="large"
-                type="password"
-                placeholder="Password"
-              />
-            </Form.Item>
-            <Form.Item shouldUpdate={true}>
-              {() => (
-                <Row justify="center">
-                  <Button size="large" type="primary" htmlType="submit">
-                    Log in
-                  </Button>
-                </Row>
-              )}
-            </Form.Item>
-          </Form>
-        </div>
-      </Row>
+              <Form.Item
+                name="email"
+                rules={[
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!',
+                  },
+                  {
+                    required: true,
+                    message: 'Please input your E-mail!',
+                  },
+                ]}
+              >
+                <Input
+                  size="large"
+                  prefix={<UserOutlined className="site-form-item-icon" />}
+                  placeholder="Email"
+                />
+              </Form.Item>
+              <Form.Item
+                name="password"
+                rules={[{required: true, message: 'Please input your password!'}]}
+              >
+                <Input
+                  prefix={<LockOutlined className="site-form-item-icon" />}
+                  size="large"
+                  type="password"
+                  placeholder="Password"
+                />
+              </Form.Item>
+              <Form.Item shouldUpdate={true}>
+                {() => (
+                  <Row justify="center">
+                    <Button size="large" type="primary" htmlType="submit">
+                      Log in
+                    </Button>
+                  </Row>
+                )}
+              </Form.Item>
+            </Form>
+          </div>
+        </Row>
+      </div>
     );
   }
 }

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {DeadLeadsTable} from '../components/DeadLeadsTable';
 import {getAllLeadPoints} from '../dataservice/leadPoints';
 import {LeadPointInterface} from '../interfaces/LeadPointInterface';
+import {Helmet} from 'react-helmet';
 
 interface State {
   points: LeadPointInterface[];
@@ -26,6 +27,9 @@ class DeadLeads extends Component<Props, State> {
   render() {
     return (
       <div className="site-layout-content">
+        <Helmet>
+          <title>Leads</title> 
+        </Helmet>
         <DeadLeadsTable points={this.state.points}></DeadLeadsTable>
       </div>
     );

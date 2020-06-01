@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {UploadLeads} from '../components/Karst Features/UploadLeads';
+import {Helmet} from 'react-helmet';
 
 import {Button, Typography, Space, Row, Col, Tabs} from 'antd';
 import {SubmittedPoint} from '../interfaces/submittedPointInterface';
@@ -92,6 +93,9 @@ class Dashboard extends Component<any, State> {
 
     return (
       <div className="site-layout-content">
+        <Helmet>
+          <title>Dashboard</title> 
+        </Helmet>
         <Row
           justify="start"
           align="middle"

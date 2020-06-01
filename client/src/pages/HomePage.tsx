@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Parallax} from 'react-parallax';
+import {Helmet} from 'react-helmet';
 
 import {Button, Layout, Typography, Divider, Row} from 'antd';
 
@@ -52,6 +53,9 @@ class HomePage extends Component<any, State> {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>Tennessee Cave Survey</title> 
+        </Helmet>
         {/* {this.renderCaveImage()} */}
 
         <Parallax strength={500} bgStyle={{backgroundColor: 'white'}}>

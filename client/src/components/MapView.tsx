@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOMServer from 'react-dom/server';
 import L from 'leaflet';
+import {Helmet} from 'react-helmet';
 // import { map, LayerGroup, latLng, Icon } from 'leaflet';
 import Control from 'react-leaflet-control';
 import {FullscreenOutlined} from '@ant-design/icons';
@@ -73,7 +74,6 @@ interface Props {
 class MapView extends Component<Props, State> {
   provider = null;
   static defaultProps = {
-    center: [35.85971, -86.361997],
     zoom: 7,
     showFullScreen: false,
   } as Props;
@@ -84,7 +84,7 @@ class MapView extends Component<Props, State> {
     this.state = {
       searchProvider: null,
       currentPos: null, // used for right clicking points
-      center: this.props.center, // starting map loc
+      center: this.props.center === undefined ? ([35.85971, -86.361997]) : (this.props.center), // starting map loc
       currentCenter: this.props.center,
       zoom: this.props.zoom,
       maxZoom: 18,
@@ -318,6 +318,11 @@ class MapView extends Component<Props, State> {
       <ContainerDimensions>
         {({width, height}) => (
           <div>
+            {this.props.center === undefined && (
+              <Helmet>
+                <title>Map</title>
+              </Helmet>
+            )}
             <Map
               style={{height: height}}
               center={this.state.center}

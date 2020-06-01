@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Helmet} from 'react-helmet';
 import {
   Card,
   Descriptions,
@@ -784,8 +785,12 @@ class CaveInfo extends Component<Props, State> {
   }
 
   render() {
+    const {tcsnumber, name} = this.state.point.properties;
     return (
       <div className="site-layout-content">
+        <Helmet>
+          <title>{tcsnumber + " " + name}</title> 
+        </Helmet>
         <Card
           bordered={false}
           loading={this.state.isLoading}
