@@ -1,15 +1,6 @@
 import React, {Component} from 'react';
 
-import {
-  Drawer,
-  Divider,
-  Col,
-  Row,
-  Typography,
-  Space,
-  Spin,
-  Button,
-} from 'antd';
+import {Drawer, Divider, Col, Row, Typography, Space, Spin, Button} from 'antd';
 import {getOneUserByID} from '../../dataservice/authentication';
 import {UserInterface} from '../../interfaces/UserInterface';
 
@@ -94,7 +85,7 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
         <>
           <Button type="link" onClick={this.showDrawer}>
             {this.state.user.firstName + ' ' + this.state.user.lastName}
-          </Button> 
+          </Button>
 
           <Drawer
             width={640}

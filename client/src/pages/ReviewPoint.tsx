@@ -394,7 +394,7 @@ class ReviewPoint extends Component<Props, State> {
         } else if (submission.pointType === 'Existing') {
           existingPoints.push(submission);
         }
-        return(null);
+        return null;
       });
 
       this.setState({

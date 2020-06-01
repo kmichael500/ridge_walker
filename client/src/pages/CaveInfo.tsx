@@ -134,9 +134,8 @@ class CaveInfo extends Component<Props, State> {
           submittedPoint: requestedPoint,
         });
       });
-
+    }
   }
-}
 
   renderDescription() {
     let narrative;
@@ -170,11 +169,10 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn('Latitude must be a number');
                     }
-
-                  }
-                } 
+                  },
+                }
               }
-            >  
+            >
               {this.state.point.geometry.coordinates[1] + ''}
             </Text>
             {','}
@@ -189,7 +187,7 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn('Longitude must be a number');
                     }
-                  }
+                  },
                 }
               }
             >
@@ -208,7 +206,7 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn('Length must be a number');
                     }
-                  }
+                  },
                 }
               }
             >
@@ -246,7 +244,7 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn('Vertical extent must be a number.');
                     }
-                  }
+                  },
                 }
               }
             >
@@ -284,7 +282,7 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn('PS must be a number.');
                     }
-                  }
+                  },
                 }
               }
             >
@@ -303,7 +301,7 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn("County can't be blank.");
                     }
-                  }
+                  },
                 }
               }
             >
@@ -341,7 +339,7 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn("Topo Indication can't be blank.");
                     }
-                  }
+                  },
                 }
               }
             >
@@ -360,7 +358,7 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn("Gear can't be blank.");
                     }
-                  }
+                  },
                 }
               }
             >
@@ -417,7 +415,7 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn("Map status can't be blank.");
                     }
-                  }
+                  },
                 }
               }
             >
@@ -436,7 +434,7 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn("Geology can't be blank.");
                     }
-                  }
+                  },
                 }
               }
             >
@@ -455,7 +453,7 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn("Geology age can't be blank.");
                     }
-                  }
+                  },
                 }
               }
             >
@@ -474,7 +472,7 @@ class CaveInfo extends Component<Props, State> {
                     } else {
                       message.warn("Physiographic Province can't be blank.");
                     }
-                  }
+                  },
                 }
               }
             >
@@ -503,8 +501,7 @@ class CaveInfo extends Component<Props, State> {
 
         {this.props.action === 'Review' && (
           <div>
-
-            {this.state.proposedChanges ?(
+            {this.state.proposedChanges ? (
               <TextArea
                 value={this.state.newNarrative}
                 autoSize={{minRows: 4}}
@@ -538,8 +535,6 @@ class CaveInfo extends Component<Props, State> {
             </Col>
           </Space>
           <div style={{marginLeft: 'auto'}}>{this.proposeChangesBar()}</div>
-
-
         </Row>
         <Row justify="start">
           <Text type="secondary">
@@ -598,8 +593,8 @@ class CaveInfo extends Component<Props, State> {
 
                 if (
                   !deepEqual(this.state.point, this.state.pointCopy) ||
-                  this.state.newNarrative !== ''){
-
+                  this.state.newNarrative !== ''
+                ) {
                   addSubmittedPoint(newSubmission).then(() => {
                     message.success(
                       'Your changes to ' +
@@ -622,7 +617,6 @@ class CaveInfo extends Component<Props, State> {
           </Space>
         );
       }
-
     }
 
     if (this.props.action === 'Review') {
@@ -645,8 +639,6 @@ class CaveInfo extends Component<Props, State> {
                   proposedChanges: !this.state.proposedChanges,
                 });
               }
-
-
             }}
           >
             {this.state.proposedChanges ? 'Revert' : 'Edit'}
@@ -661,7 +653,6 @@ class CaveInfo extends Component<Props, State> {
                   }}
                 ></TextArea>
               </div>
-
             }
             onConfirm={() => {
               console.log(rejectMessage);
@@ -783,7 +774,6 @@ class CaveInfo extends Component<Props, State> {
                 });
                 message.warn("You didn't make any changes.");
               }
-
             }}
           >
             {'Update'}
@@ -791,12 +781,10 @@ class CaveInfo extends Component<Props, State> {
         </Space>
       );
     }
-
-    }
+  }
 
   render() {
-
-    return(
+    return (
       <div className="site-layout-content">
         <Card
           bordered={false}

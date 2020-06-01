@@ -21,8 +21,7 @@ interface State {
   deadLeadButton: '' | 'View' | 'Upload';
 }
 class Dashboard extends Component<any, State> {
-
-    constructor(Props){
+  constructor(Props) {
     super(Props);
     this.state = {
       submittedPoints: undefined,
@@ -35,16 +34,16 @@ class Dashboard extends Component<any, State> {
 
   componentDidMount() {
     getCurrentUserSubmissions().then(requstedSubmissions => {
-      let newPoints = [];
-      let existingPoints = [];
+      const newPoints = [];
+      const existingPoints = [];
       requstedSubmissions.map(submission => {
         if (submission.pointType === 'New') {
           newPoints.push(submission);
         } else if (submission.pointType === 'Existing') {
           existingPoints.push(submission);
         }
-        return(null);
-        })
+        return null;
+      });
 
       this.setState({
         submittedPoints: requstedSubmissions,
@@ -88,7 +87,8 @@ class Dashboard extends Component<any, State> {
     const existingPointLength =
       this.state.existingPoints === undefined
         ? 0
-        : this.state.existingPoints.filter(value => value.status === 'Pending').length;
+        : this.state.existingPoints.filter(value => value.status === 'Pending')
+            .length;
 
     return (
       <div className="site-layout-content">

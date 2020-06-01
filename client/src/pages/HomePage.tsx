@@ -44,17 +44,14 @@ class HomePage extends Component<any, State> {
             <h1 style={{textAlign: 'center', color: 'white'}}>Survey</h1>
             <h1 style={{textAlign: 'center', color: 'white'}}>Mapping</h1>
           </div>
-
-            </Row>
-
-        </Parallax>
+        </Row>
+      </Parallax>
     );
   }
 
   render() {
     return (
       <div>
-
         {/* {this.renderCaveImage()} */}
 
         <Parallax strength={500} bgStyle={{backgroundColor: 'white'}}>
@@ -65,7 +62,6 @@ class HomePage extends Component<any, State> {
               paddingBottom: 50,
               paddingTop: 25,
               backgroundColor: 'white',
-
             }}
           >
             <Title style={{textAlign: 'center'}}>Tennessee Cave Survey</Title>
@@ -81,7 +77,6 @@ class HomePage extends Component<any, State> {
             <img width="100%" src={'cave_dist_2018.jpg'} alt="?"></img>
             <h5 style={{textAlign: 'center'}}>Caves of Tennessee 2018</h5>
           </div>
-
         </Parallax>
         {/* <Parallax strength={500}>
                     <div style={{
@@ -168,10 +163,13 @@ class HomePage extends Component<any, State> {
           </div>
         </Parallax>
 
-
-
-
-        <Footer style={{backgroundColor:'white', color: 'black', textAlign:'center'}}>
+        <Footer
+          style={{
+            backgroundColor: 'white',
+            color: 'black',
+            textAlign: 'center',
+          }}
+        >
           <Divider></Divider>
           <p style={{fontSize: 8}}>
             Copyright © 1998-2020 Tennessee Cave Survey, All Rights Reserved.

@@ -65,11 +65,7 @@ export class SmallMap extends Component<SmallMapProps, SmallMapState> {
         options={options}
         loading={<Spin></Spin>}
       >
-
-            {
-            Array.from(
-                new Array(numPages),
-                (el, index) => (
+        {Array.from(new Array(numPages), (el, index) => (
           <Page
             // height={200}
             width={500}
@@ -98,8 +94,7 @@ export default class DisplayAllMaps extends Component<
   DisplayAllMapsProps,
   DisplayAllMapsState
 > {
-
-    constructor(Props: DisplayAllMapsProps){
+  constructor(Props: DisplayAllMapsProps) {
     super(Props);
     this.state = {
       fileNames: [''],
@@ -118,9 +113,7 @@ export default class DisplayAllMaps extends Component<
     });
   }
 
-
-
-    renderMaps(){
+  renderMaps() {
     // const onClick = () =>{
     //     this.setState({fullScreenFile: ""}, ()=>{
     //     })
@@ -129,16 +122,15 @@ export default class DisplayAllMaps extends Component<
       <Row>
         {this.state.fileNames.map((file, index) => (
           <Col span={6}>
-
-              {this.state.fullScreenFile === file &&
-                <DisplayMap
+            {this.state.fullScreenFile === file && (
+              <DisplayMap
                 file={file}
                 visible={this.state.showFullScreen}
                 onClick={() => {
                   this.setState({showFullScreen: false});
                 }}
               ></DisplayMap>
-              }
+            )}
             <div
               onClick={() => {
                 this.setState({
@@ -147,15 +139,12 @@ export default class DisplayAllMaps extends Component<
                 });
               }}
             >
-            <Card hoverable bordered={false}>
-              <img src={file} alt="?" width="100%"></img>
-            </Card>
+              <Card hoverable bordered={false}>
+                <img src={file} alt="?" width="100%"></img>
+              </Card>
             </div>
             {/* </Space> */}
           </Col>
-
-
-
         ))}
       </Row>
     );
@@ -170,6 +159,5 @@ export default class DisplayAllMaps extends Component<
     //   slidesToScroll: 1,
     // };
     return <div>{this.renderMaps()}</div>;
-
-}
+  }
 }

@@ -25,8 +25,7 @@ interface State {
 }
 
 class AddCave extends Component<any, State> {
-
-    constructor(Props){
+  constructor(Props) {
     super(Props);
     this.state = {
       autocompleteDisabled: false,
@@ -62,9 +61,7 @@ class AddCave extends Component<any, State> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-
-
-    renderCoordinateForm(){
+  renderCoordinateForm() {
     return (
       <Input.Group compact>
         <Form.Item name="lat" label="Latitude">
@@ -119,7 +116,7 @@ class AddCave extends Component<any, State> {
   }
 
   render() {
-    let narrPlaceholderArr = [];
+    const narrPlaceholderArr = [];
     narrPlaceholderArr.push(
       '1. Photocopy portion of topographic map and mark cave location on it.'
     );
@@ -130,7 +127,6 @@ class AddCave extends Component<any, State> {
       '3. Complete narrative description of the cave including interesting scientific and historical information. Describe how the enterance appears in the field, dimmentions of enterance.'
     );
 
-
     let narrPlaceholder = '';
     for (let i = 0; i < narrPlaceholderArr.length; i++) {
       narrPlaceholder += narrPlaceholderArr[i];
@@ -139,8 +135,7 @@ class AddCave extends Component<any, State> {
       }
     }
 
-
-    return(
+    return (
       <div className="site-layout-content">
         <Card title="Add a New Cave">
           <Form
@@ -149,7 +144,6 @@ class AddCave extends Component<any, State> {
             layout="vertical"
             onFinish={this.handleSubmit}
             initialValues={{remember: true}}
-
           >
             <Form.Item label="Cave Name" name="name">
               <Input />
@@ -254,13 +248,11 @@ class AddCave extends Component<any, State> {
                       {
                         value: 'Private Property',
                         label: 'Private Property',
-
-                                    },
+                      },
                       {
                         value: 'Commercial',
                         label: 'Commercial',
-
-                                    },
+                      },
                       {
                         value: 'Locked/Gated',
                         label: 'Locked/Gated',

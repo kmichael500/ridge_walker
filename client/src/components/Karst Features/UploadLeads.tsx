@@ -57,7 +57,7 @@ class UploadLeads extends Component<any, State> {
   componentDidMount() {}
 
   handleOnUploaded(points: LeadPoints) {
-    let columns = [];
+    const columns = [];
     for (const key in points.features[0].properties) {
       if (key !== this.state.descField) {
         // don't add columns that are entirely blank
@@ -183,8 +183,7 @@ class UploadLeads extends Component<any, State> {
           descField: 'description',
         });
       });
-
-    }
+  }
 
   render() {
     return (

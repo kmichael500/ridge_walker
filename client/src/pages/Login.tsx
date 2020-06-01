@@ -54,8 +54,9 @@ class Login extends Component<Props, State> {
           }
 
           this.props.history.push(redirectPath);
-        })
-      }).catch(error => {
+        });
+      })
+      .catch(error => {
         message.error(error);
       });
   }
@@ -67,7 +68,7 @@ class Login extends Component<Props, State> {
         align="middle"
         style={{height: '100%', background: 'white'}}
       >
-        <div style={{width:'90%', borderRadius:'10px'}}>
+        <div style={{width: '90%', borderRadius: '10px'}}>
           <Row justify="center">
             <Title>Member Portal</Title>
           </Row>
@@ -78,8 +79,7 @@ class Login extends Component<Props, State> {
           >
             <Form.Item
               name="email"
-
-                rules={[
+              rules={[
                 {
                   type: 'email',
                   message: 'The input is not valid E-mail!',
