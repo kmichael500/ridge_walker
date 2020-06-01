@@ -58,7 +58,6 @@ class UserSlider extends Component<UserSliderProps, UserSliderState>{
 
   componentDidMount(){
     getOneUserByID(this.props.userID).then((user)=>{
-        console.log("User", user)
         let formattedPhoneNumber  = ""
         var match = user.phoneNumber.toString().match(/^(\d{3})(\d{3})(\d{4})$/)
         if (match) {

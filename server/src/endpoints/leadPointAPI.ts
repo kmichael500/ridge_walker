@@ -21,7 +21,6 @@ var upload = multer({ storage:storage })
 
 // Endpoint to add all TCS points a submission by ID
 leadPointAPI.post("/upload", upload.single("csv"), (req, res, next) => {
-    console.log()
     const csv = require('csvtojson')
     csv()
     .fromString(req.file.buffer.toString())

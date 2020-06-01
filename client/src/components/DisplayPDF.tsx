@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import { Modal, Button, Space } from 'antd';
 
-const options = {
-    cMapUrl: 'cmaps/',
-    cMapPacked: true,
-  };
+// const options = {
+//     cMapUrl: 'cmaps/',
+//     cMapPacked: true,
+//   };
 
 interface Props{
     file: string,
@@ -37,7 +37,7 @@ export default class DisplayMap extends Component<Props, any> {
 
     componentDidUpdate(nextProps: Props){
         if (this.props.visible !== nextProps.visible){
-            console.log("Visible", this.props.visible)
+
         }
 
     }
@@ -51,7 +51,6 @@ export default class DisplayMap extends Component<Props, any> {
     };
 
     handleCancel = e => {
-        console.log(this.state.downloadLink)
         this.setState({
             visible: false,
         });
@@ -59,7 +58,6 @@ export default class DisplayMap extends Component<Props, any> {
     };
 
     handleDownload = e => {
-        console.log("file",this.props.file)
 
     }
 
@@ -91,7 +89,7 @@ export default class DisplayMap extends Component<Props, any> {
         
         >
             
-        <img src={this.props.file} width="100%"></img>
+        <img src={this.props.file} alt="?" width="100%"></img>
         </Modal>
     );
     }

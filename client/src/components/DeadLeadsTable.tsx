@@ -14,8 +14,8 @@ interface State {
     points: LeadPointInterface[],
     data: any,
     columns: any,
-    searchText,
-    searchedColumn,
+    searchText: any,
+    searchedColumn: any,
     selectedRowKeys: any,
     isLoading: boolean
 }
@@ -26,7 +26,7 @@ interface Props {
 
 class DeadLeadsTable extends Component<Props, State>{  
     searchInput: any
-    constructor(props){
+    constructor(props: any){
         super(props);
         this.state = {
             points: this.props.points,
@@ -42,7 +42,7 @@ class DeadLeadsTable extends Component<Props, State>{
     }
 
     
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: any) {
       if (this.props.points !== prevProps.points) {
         this.processPoints(this.props.points);
         this.setState({isLoading: false})
@@ -50,7 +50,7 @@ class DeadLeadsTable extends Component<Props, State>{
     }
 
 
-    selectRow = (record) => {
+    selectRow = (record: any) => {
         // this.props.history.push("/points/"+record.tcsnumber)
 
 
@@ -63,13 +63,12 @@ class DeadLeadsTable extends Component<Props, State>{
 
         // this.setState({ selectedRowKeys });
       }
-      onSelectedRowKeysChange = (selectedRowKeys) => {
-        console.log(this.props.points[selectedRowKeys[0]]);
+      onSelectedRowKeysChange = (selectedRowKeys: any) => {
         this.setState({ selectedRowKeys });
       }
 
     // search 
-    getColumnSearchProps = dataIndex => ({
+    getColumnSearchProps = (dataIndex: React.ReactText) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
           <div style={{ padding: 8 }}>
             <Input
@@ -85,7 +84,7 @@ class DeadLeadsTable extends Component<Props, State>{
             <Space>
               <Button
                 type="primary"
-                onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+                onClick={() => this.handleSearch((selectedKeys), confirm, dataIndex)}
                 icon={<SearchOutlined />}
                 size="small"
                 style={{ width: 90 }}
@@ -188,11 +187,11 @@ class DeadLeadsTable extends Component<Props, State>{
     }
     
     render() {
-      const { selectedRowKeys } = this.state;
-      const rowSelection = {
-          selectedRowKeys,
-          onChange: this.onSelectedRowKeysChange,
-      };
+      // const { selectedRowKeys } = this.state;
+      // const rowSelection = {
+      //     selectedRowKeys,
+      //     onChange: this.onSelectedRowKeysChange,
+      // };
       return (
           <Table
               columns={this.state.columns}

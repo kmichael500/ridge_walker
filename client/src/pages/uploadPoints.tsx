@@ -47,7 +47,6 @@ class uploadPoints extends Component<Props, State>{
         this.setState({ selectedRowKeys });
       }
       onSelectedRowKeysChange = (selectedRowKeys) => {
-        console.log(this.state.points.features[selectedRowKeys[0]]);
         this.setState({ selectedRowKeys });
       }
 
@@ -181,7 +180,6 @@ class uploadPoints extends Component<Props, State>{
           ];
 
           let data = [];
-        //   console.log(points.features[0])
           for (let i = 0; i<points.features.length; i++){
             let point = {
                 key: i,

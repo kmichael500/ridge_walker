@@ -31,7 +31,6 @@ class PointInfoPopup extends React.Component<Props,any> {
   };
 
   handleOk = e => {
-    console.log(e);
     this.setState({
       visible: false,
     });
@@ -39,7 +38,6 @@ class PointInfoPopup extends React.Component<Props,any> {
   };
 
   handleCancel = e => {
-    console.log(e);
     this.setState({
       visible: false,
     });

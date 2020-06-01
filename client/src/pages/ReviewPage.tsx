@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 
 import {
-    Layout,
-    Typography,
     Card,
   } from 'antd';
 import { ReviewPoint } from "./ReviewPoint";

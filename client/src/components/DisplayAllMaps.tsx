@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Document, Page } from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
-import { Card, Row, Col, Spin, Tabs, Typography, Button, Popover } from 'antd';
+import { Card, Row, Col, Spin } from 'antd';
 import { getImageFileNames } from '../dataservice/getMaps'
 import DisplayMap from './DisplayPDF';
 
@@ -25,7 +25,6 @@ interface SmallMapState{
 export class SmallMap extends Component<SmallMapProps, SmallMapState> {
     constructor(Props: SmallMapProps){
         super(Props);
-
         this.state = {
             file: this.props.fileName,
             numPages: null,
@@ -40,7 +39,6 @@ export class SmallMap extends Component<SmallMapProps, SmallMapState> {
     componentWillUpdate(nextProps: SmallMapProps){
         if (this.props.fileName !== nextProps.fileName){
             this.setState({file: nextProps.fileName})
-            console.log(nextProps.fileName)
         }
     }
 
@@ -126,7 +124,6 @@ export default class DisplayAllMaps extends Component<DisplayAllMapsProps, Displ
     renderMaps(){
         // const onClick = () =>{
         //     this.setState({fullScreenFile: ""}, ()=>{
-        //         console.log(t)
         //     })
         // }
         return(
@@ -149,7 +146,7 @@ export default class DisplayAllMaps extends Component<DisplayAllMapsProps, Displ
                                 hoverable
                                 bordered={false}
                             >
-                                <img src={file} width="100%"></img>
+                                <img src={file} alt="?" width="100%"></img>
 
                             </Card>
                         </div>

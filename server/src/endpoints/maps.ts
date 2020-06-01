@@ -60,7 +60,6 @@ mapsAPI.get("/image/:mapName.png", (req, res, next)=>{
         pdfImage.setConvertExtension("png")
     
         pdfImage.convertPage(0).then(function (imagePath) {
-            console.log(imagePath)
             res.sendFile(imagePath, {root:"./"});
         }, function (err) {
         res.send(500);

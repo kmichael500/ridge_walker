@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { serverBaseURL } from '../config/urlConfig';
 import { RegisterUserInterface, UserInterface } from '../interfaces/UserInterface'
 import qs from 'qs';
@@ -34,7 +34,6 @@ async function registerUser(newUser: RegisterUserInterface): Promise<RegisterUse
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
                 }
             });
-            console.log(getRegisterResponse)
             resolve(getRegisterResponse.data as RegisterUserInterface);
         } catch(error) {
             reject(error.response.data.message);

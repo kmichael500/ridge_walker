@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { registerUser } from '../dataservice/authentication';
 import { userContext } from '../context/userContext'
 
-import { tn_counties } from '../dataservice/countyList'
+// import { tn_counties } from '../dataservice/countyList'
 
 import {
     Form,
@@ -62,7 +62,6 @@ class Register extends Component<Props,State> {
     }
 
     handleSubmit(value: any){
-        console.log(value);
         const newUser = {
             user: {
                 email: value.email,

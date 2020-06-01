@@ -2,14 +2,12 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 /* route imports */
-import { UploadCSV } from './components/upload'
 import { MapView } from "./components/MapView";
 import  { NavBar } from './components/NavBar'
 import { uploadPoints } from "./pages/uploadPoints"
 import { CaveInfo } from "./pages/CaveInfo";
 import { CavePointTable } from "./pages/CavePointTable";
 import { AddCave } from "./pages/AddCave";
-import { ReviewPoint } from "./pages/ReviewPoint";
 import { ReviewCaveInfo } from "./pages/reviewCaveInfo";
 import { UserContextProvider } from "./context/userContext";
 import { Dashboard} from './pages/Dashboard';

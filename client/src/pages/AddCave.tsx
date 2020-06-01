@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Feature, PropertyType } from '../interfaces/geoJsonInterface'
+import { Feature } from '../interfaces/geoJsonInterface'
 import { tn_counties } from '../dataservice/countyList'
 
 import {
@@ -9,8 +9,6 @@ import {
     Select,
     Cascader,
     InputNumber,
-    Layout,
-    Typography,
     Card,
     Space,
     Row,
@@ -80,7 +78,6 @@ class AddCave extends Component<any, State>{
     }
 
     handleSubmit(values: Store){
-        console.log(values)
         const newSubmmision = {
             submitted_by: this.context.user._id,
             status: "Pending",
@@ -120,7 +117,6 @@ class AddCave extends Component<any, State>{
             this.props.history.push("/dashboard");
         })
 
-        console.log(newSubmmision);
     }
 
     render(){

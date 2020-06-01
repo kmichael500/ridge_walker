@@ -64,7 +64,6 @@ class PointsTable extends Component<Props, State>{
         // this.setState({ selectedRowKeys });
       }
       onSelectedRowKeysChange = (selectedRowKeys) => {
-        console.log(this.props.points[selectedRowKeys[0]]);
         this.setState({ selectedRowKeys });
       }
 
@@ -228,11 +227,11 @@ class PointsTable extends Component<Props, State>{
     }
     
     render() {
-      const { selectedRowKeys } = this.state;
-      const rowSelection = {
-          selectedRowKeys,
-          onChange: this.onSelectedRowKeysChange,
-      };
+      // const { selectedRowKeys } = this.state;
+      // const rowSelection = {
+      //     selectedRowKeys,
+      //     onChange: this.onSelectedRowKeysChange,
+      // };
       return (
           <Table
               columns={this.state.columns}

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Points, Feature } from '../pages/geoJsonInterface'
-import { Upload, message, Button, Empty} from 'antd';
+import { Points } from '../interfaces/geoJsonInterface'
+import { Upload, message} from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { serverBaseURL } from '../config/urlConfig'
 const { Dragger } = Upload;
@@ -57,7 +57,6 @@ class UploadCSV extends Component<Props, State>{
             this.props.onUploaded(info.file.response);
         } else if (status === 'error') {
             message.error(`${info.file.response}`);
-            console.log(info)
         }
       };
     

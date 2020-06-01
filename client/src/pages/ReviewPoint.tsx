@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { SubmittedPoint } from '../interfaces/submittedPointInterface'
 import { getAllSubmittedPoints, deleteOneSubmittedPointByID } from '../dataservice/submittedPoints'
-import { Button, Tabs, Space, Input, Typography, message, Popconfirm, Tag, Tooltip } from 'antd'
+import { Button, Tabs, Space, Input, Typography, Popconfirm, Tag, Tooltip } from 'antd'
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined, EditOutlined, ContainerOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Table } from 'antd'
@@ -308,10 +308,10 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState>{
     
     render() {
       const { selectedRowKeys } = this.state;
-      const rowSelection = {
-          selectedRowKeys,
-          onChange: this.onSelectedRowKeysChange,
-      };
+      // const rowSelection = {
+      //     selectedRowKeys,
+      //     onChange: this.onSelectedRowKeysChange,
+      // };
       return (
         <div>
         {!this.state.isLoading ?

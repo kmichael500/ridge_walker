@@ -26,9 +26,7 @@ async function getAllSubmittedPoints(): Promise<SubmittedPoint[]> {
  */
 async function getSubmittedPoint(id: string): Promise<SubmittedPoint> {
     try {
-        console.log(id);
         const submittedPointResponse = await axiosInstance.get('/api/submit/point/'+id);
-        console.log(submittedPointResponse.data)
         return submittedPointResponse.data as SubmittedPoint;
     } catch(error) {
         return error;
@@ -44,7 +42,6 @@ async function getSubmittedPoint(id: string): Promise<SubmittedPoint> {
 async function addSubmittedPoint(point: SubmittedPoint): Promise<AxiosResponse> {
     try {
         const submittedPointResponse = await axiosInstance.post('/api/submit/point/', point);
-        console.log("Submitted", submittedPointResponse)
         return submittedPointResponse;
     } catch(error) {
         

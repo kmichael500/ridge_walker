@@ -654,14 +654,12 @@ class CaveInfo extends Component<Props, State>{
                     onClick={()=>{
                         if (this.state.proposedChanges){
                             const revertPoint = JSON.parse(JSON.stringify(this.state.pointCopy));
-                            console.log("revert", this.state.pointCopy)
                             this.setState({
                                 proposedChanges: !this.state.proposedChanges,
                                 point: revertPoint
                             });
                         }
                         else{
-                            console.log("edit", this.state.pointCopy)
                             this.setState({
                                 proposedChanges: !this.state.proposedChanges,
                             });
@@ -742,7 +740,6 @@ class CaveInfo extends Component<Props, State>{
                             });
                         }
                         else{
-                            console.log("edit", this.state.pointCopy)
                             this.setState({
                                 proposedChanges: !this.state.proposedChanges,
                             });

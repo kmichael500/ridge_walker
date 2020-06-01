@@ -11,7 +11,7 @@ import { logoutUser } from '../dataservice/authentication'
 
 
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 class NavBar extends Component<any, any>{
     constructor(props){
@@ -33,7 +33,7 @@ class NavBar extends Component<any, any>{
     }
 
     onFinish(vals){
-        console.log(vals);
+        
     }
 
     loggedInMenu(){
@@ -50,7 +50,7 @@ class NavBar extends Component<any, any>{
                         key="/"
                     >
                         <Space size="large">
-                        <img  src={"logo.png"} height="30px"></img>
+                        <img  src={"logo.png"} height="30px" alt="?"></img>
                         Home
                         </Space>
                     </Menu.Item>
@@ -79,7 +79,7 @@ class NavBar extends Component<any, any>{
                     
                     <Menu.Item key="/">
                         <Space size="large">
-                            <img  src={"logo.png"} height="30px"></img>
+                            <img  src={"logo.png"} alt="?" height="30px"></img>
                             Tennessee Cave Survey
                         </Space>
                         

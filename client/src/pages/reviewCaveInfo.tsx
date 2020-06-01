@@ -4,9 +4,6 @@ import { userContext } from '../context/userContext';
 
 class ReviewCaveInfo extends Component{
 
-    componentDidMount(){
-        console.log(this.props.location.state)
-    }
     render(){
         if (this.props.location === undefined){
             return(

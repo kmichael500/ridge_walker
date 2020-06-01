@@ -3,7 +3,6 @@ import { UploadLeads } from '../components/Karst Features/UploadLeads'
 
 import {
     Button,
-    Layout,
     Typography,
     Space,
     Row,
@@ -13,7 +12,7 @@ import {
 import { SubmittedPoint } from "../interfaces/submittedPointInterface";
 import { getCurrentUserSubmissions } from '../dataservice/authentication'
 import { DownloadCSVButton, DownloadGPXButton } from "../components/downloadData/DownloadButtons";
-import { ReviewTable, ReviewPoint } from "./ReviewPoint";
+import { ReviewTable } from "./ReviewPoint";
 import { DeadLeads } from "./DeadLeads";
 import { userContext } from "../context/userContext";
 

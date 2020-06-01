@@ -99,7 +99,6 @@ submittedPointAPI.use((err: Error, req: Request, res: Response, next: NextFuncti
     res.sendStatus(500)
     console.error("ERROR MESSAGE")
     console.error(err.message);
-    console.log();
 })
 
 export { submittedPointAPI };

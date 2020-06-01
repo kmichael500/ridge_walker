@@ -50,11 +50,9 @@ class Login extends Component<Props,State> {
 
     handleSubmit(value){
         loginUser(value.email, value.password).then((response)=>{
-            console.log(response)
             this.context.setUser(response);
             this.context.setAuthenticated(true, ()=>{
                 let redirectPath = "/map";
-                console.log(this.props.location)
                 try{
                     redirectPath = this.props.location.state.from;
                 }

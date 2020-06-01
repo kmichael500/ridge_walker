@@ -24,7 +24,6 @@ class CavePointTable extends Component<Props, State>{
 
     componentDidMount(){
         getAllMasterPoints().then((requstedPoints)=>{
-            // console.log(requstedPoints);
             this.setState({points: requstedPoints})
         })
     }

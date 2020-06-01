@@ -27,9 +27,7 @@ async function getAllLeadPoints(): Promise<LeadPointInterface[]> {
  */
 async function getLeadPoint(id: string): Promise<LeadPointInterface> {
     try {
-        console.log(id);
         const getLeadPointResponse = await axiosInstance.get('/api/submit/point/'+id);
-        console.log(getLeadPointResponse.data)
         return getLeadPointResponse.data as LeadPointInterface;
     } catch(error) {
         return error;
@@ -50,7 +48,6 @@ async function addLeadPoints(points: LeadPointInterface[]): Promise<AxiosRespons
             }).catch((res)=>{
                 reject(res)
             });
-            console.log("Submitted", leadPointResponse)
         } catch(error) {
             reject(error);
         } 
@@ -65,7 +62,6 @@ async function addLeadPoints(points: LeadPointInterface[]): Promise<AxiosRespons
 async function addLeadPoint(point: LeadPointInterface): Promise<AxiosResponse> {
     try {
         const leadPointResponse = await axiosInstance.post('/api/submit/point/', point);
-        console.log("Submitted", leadPointResponse)
         return leadPointResponse;
     } catch(error) {
         

@@ -84,7 +84,7 @@ class HomePage extends Component<any, State>{
                     >
                         <Title style={{textAlign: "center"}}>Tennessee Cave Survey</Title>
                         <Paragraph>The Tennessee Cave Survey (TCS) is an internal organization of the National Speleological Society (NSS). The TCS is committed to the discovery, exploration, survey and mapping of the caves of Tennessee and to systematically collect, organize, maintain, and disseminate cave location information, cave narrative files, bibliographic data, and cave maps. The TCS relies exclusively on the volunteer participation of its caver members for all its data.</Paragraph>
-                        <img width="100%" src={"cave_dist_2018.jpg"}></img>
+                        <img width="100%" src={"cave_dist_2018.jpg"} alt="?"></img>
                         <h5 style={{textAlign:"center"}}>Caves of Tennessee 2018</h5>
                     </div>
                     

@@ -73,7 +73,7 @@ userAPI.get('/profile', passport.authenticate('jwt', { session : false }), (req,
 
   UserModel.findById((<any>req).user._id, (err, currentUser) => {
     if (err) {
-        console.log("\ninterviewsAPI.get('/:id')  error");
+        console.log("\nUserAPI.get('/profile')  error");
         next(err)
     } else if (currentUser == null) {
         console.log("\nuserAPI.get('/profile')  error");

@@ -1,7 +1,8 @@
 
 import React, { Component } from "react";
 import ReactDOMServer from 'react-dom/server';
-import L, { map, LayerGroup, latLng, Icon } from 'leaflet';
+import L from 'leaflet';
+// import { map, LayerGroup, latLng, Icon } from 'leaflet';
 import Control from 'react-leaflet-control';
 import { FullscreenOutlined } from '@ant-design/icons'
 import { Row, Button, Typography, Divider } from 'antd'
@@ -26,7 +27,7 @@ import { Feature } from "../interfaces/geoJsonInterface";
 import { LeadFeature } from "../interfaces/LeadPointInterface";
 import { UserSlider } from "./userInfo/UserSlider";
 
-const { Paragraph, Title } = Typography;
+const { Paragraph } = Typography;
 // marker for adding points (right click)
 const MyMarker = props => {
 
@@ -172,10 +173,10 @@ class MapView extends Component<Props, State> {
       //   className: "popup-classname"
       // };
 
-      const onClick = ()=>{
-        // const that = this;
+      // const onClick = ()=>{
+      //   // const that = this;
         
-      }
+      // }
 
       layer.on({
         click: ()=>{
@@ -392,7 +393,6 @@ class MapView extends Component<Props, State> {
               
               const pointIndex = raw.map((val)=>(val["display_name"].toString().split(" ")[0])).indexOf(info.split(" ")[0]);
               const point = raw[pointIndex].point;
-              console.log(point);
               const moreInfo = point !== undefined ?
                 <Button
                   type="primary"

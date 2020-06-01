@@ -24,8 +24,6 @@ class DeadLeads extends Component<Props, State>{
 
     componentDidMount(){
         getAllLeadPoints().then((requstedLeads)=>{
-            // console.log(requstedPoints);
-            console.log(requstedLeads);
             this.setState({points: requstedLeads})
         })
     }
