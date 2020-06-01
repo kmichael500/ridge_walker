@@ -19,7 +19,7 @@
 
 
 **Map**
-  * View all 10,000+ caves.
+  * View all points on a map.
   * View dead leads (karst features people have confirmed are not a cave).
   * Points are clustered if zoomed out to increase efficiency.
   * Get information on a point by clicking it.
