@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Feature} from '../interfaces/geoJsonInterface';
 import {tn_counties} from '../dataservice/countyList';
+import {Helmet} from 'react-helmet';
 
 import {
   Form,
@@ -137,6 +138,9 @@ class AddCave extends Component<any, State> {
 
     return (
       <div className="site-layout-content">
+        <Helmet>
+          <title>Add Cave</title>
+        </Helmet>
         <Card title="Add a New Cave">
           <Form
             // labelCol={{ span: 8 }}

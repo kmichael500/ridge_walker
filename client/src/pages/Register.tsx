@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import {registerUser} from '../dataservice/authentication';
 import {userContext} from '../context/userContext';
+import {Helmet} from 'react-helmet';
 
 // import { tn_counties } from '../dataservice/countyList'
 
@@ -85,6 +86,9 @@ class Register extends Component<Props, State> {
   render() {
     return (
       <div className="site-layout-content">
+        <Helmet>
+          <title>Register</title>
+        </Helmet>
         {/* {JSON.stringify(this.context)} */}
         <Card title="Membership Application">
           <Form
