@@ -139,7 +139,7 @@ class AddCave extends Component<any, State> {
     return (
       <div className="site-layout-content">
         <Helmet>
-          <title>Add Cave</title> 
+          <title>Add Cave</title>
         </Helmet>
         <Card title="Add a New Cave">
           <Form

@@ -54,7 +54,7 @@ class HomePage extends Component<any, State> {
     return (
       <div>
         <Helmet>
-          <title>Tennessee Cave Survey</title> 
+          <title>Tennessee Cave Survey</title>
         </Helmet>
         {/* {this.renderCaveImage()} */}
 

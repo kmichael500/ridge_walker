@@ -28,7 +28,7 @@ class CavePointTable extends Component<Props, State> {
     return (
       <div className="site-layout-content">
         <Helmet>
-          <title>Points</title> 
+          <title>Points</title>
         </Helmet>
         <PointsTable points={this.state.points}></PointsTable>
       </div>

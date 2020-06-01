@@ -66,7 +66,7 @@ class Login extends Component<Props, State> {
     return (
       <div>
         <Helmet>
-          <title>Login</title> 
+          <title>Login</title>
         </Helmet>
         <Row
           justify="center"
@@ -103,7 +103,9 @@ class Login extends Component<Props, State> {
               </Form.Item>
               <Form.Item
                 name="password"
-                rules={[{required: true, message: 'Please input your password!'}]}
+                rules={[
+                  {required: true, message: 'Please input your password!'},
+                ]}
               >
                 <Input
                   prefix={<LockOutlined className="site-form-item-icon" />}

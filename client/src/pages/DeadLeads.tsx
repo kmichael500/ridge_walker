@@ -28,7 +28,7 @@ class DeadLeads extends Component<Props, State> {
     return (
       <div className="site-layout-content">
         <Helmet>
-          <title>Leads</title> 
+          <title>Leads</title>
         </Helmet>
         <DeadLeadsTable points={this.state.points}></DeadLeadsTable>
       </div>

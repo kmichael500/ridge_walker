@@ -84,7 +84,10 @@ class MapView extends Component<Props, State> {
     this.state = {
       searchProvider: null,
       currentPos: null, // used for right clicking points
-      center: this.props.center === undefined ? ([35.85971, -86.361997]) : (this.props.center), // starting map loc
+      center:
+        this.props.center === undefined
+          ? [35.85971, -86.361997]
+          : this.props.center, // starting map loc
       currentCenter: this.props.center,
       zoom: this.props.zoom,
       maxZoom: 18,

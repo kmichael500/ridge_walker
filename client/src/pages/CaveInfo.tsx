@@ -789,7 +789,7 @@ class CaveInfo extends Component<Props, State> {
     return (
       <div className="site-layout-content">
         <Helmet>
-          <title>{tcsnumber + " " + name}</title> 
+          <title>{tcsnumber + ' ' + name}</title>
         </Helmet>
         <Card
           bordered={false}

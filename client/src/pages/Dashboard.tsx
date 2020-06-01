@@ -94,7 +94,7 @@ class Dashboard extends Component<any, State> {
     return (
       <div className="site-layout-content">
         <Helmet>
-          <title>Dashboard</title> 
+          <title>Dashboard</title>
         </Helmet>
         <Row
           justify="start"
