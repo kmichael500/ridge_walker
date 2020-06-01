@@ -136,7 +136,7 @@ class MapView extends Component<Props, State> {
           onEachFeature={this.onEachFeature}
           pointToLayer={this.pointToLayer}
         />
-    );
+      );
     }
   }
   // renders geoJSON data
@@ -164,10 +164,9 @@ class MapView extends Component<Props, State> {
       className: 'popup-classname',
     };
     const popupContent = ReactDOMServer.renderToString(
-      <UserSlider userID={feature.properties.submitted_by}/>
+      <UserSlider userID={feature.properties.submitted_by} />
     );
     layer.bindPopup(popupContent, popupOptions);
-
   }
 
   // information to display for a point
@@ -280,7 +279,7 @@ class MapView extends Component<Props, State> {
     this.updateDimensions();
   }
   componentDidMount() {
-    window.addEventListener('resize', this.updateDimensions.bind(this))
+    window.addEventListener('resize', this.updateDimensions.bind(this));
     if (
       this.props.match !== undefined &&
       this.props.match.params.lat !== undefined &&
@@ -311,7 +310,7 @@ class MapView extends Component<Props, State> {
     });
   }
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateDimensions.bind(this))
+    window.removeEventListener('resize', this.updateDimensions.bind(this));
   }
 
   render() {
@@ -324,7 +323,6 @@ class MapView extends Component<Props, State> {
               center={this.state.center}
               zoom={this.state.zoom}
               maxZoom={this.state.maxZoom}
-
               doubleClickZoom={true}
               oncontextmenu={this.handleRightClick} //event lister for right click
               onViewportChange={vp => {
@@ -333,10 +331,8 @@ class MapView extends Component<Props, State> {
                 // if(this.props.onCenterChange){
                 //   this.props.onCenterChange(vp.center);
                 // }
-
               }}
             >
-
               {this.props.showFullScreen && (
                 <Control position="topright">
                   <Row
@@ -397,7 +393,9 @@ class MapView extends Component<Props, State> {
                     const raw = SearchInfo.raw['raw'] as [any];
                     const info = SearchInfo.info as string;
 
-                    const pointIndex = raw.map((val)=>(val['display_name'].toString().split(' ')[0])).indexOf(info.split(' ')[0]);
+                    const pointIndex = raw
+                      .map(val => val['display_name'].toString().split(' ')[0])
+                      .indexOf(info.split(' ')[0]);
                     const point = raw[pointIndex].point;
                     const moreInfo =
                       point !== undefined ? (
@@ -424,9 +422,8 @@ class MapView extends Component<Props, State> {
                         <h2>{info}</h2>
                       ) : (
                         <h2>{info.split(',')[0]}</h2>
-
-                      )
-                    return(
+                      );
+                    return (
                       <Popup>
                         <div>
                           {searchTitle}
