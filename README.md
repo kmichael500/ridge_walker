@@ -12,7 +12,7 @@
 **Dashboard**
 * View submissions created by the logged-in user.
 * View or upload dead leads (karst features people have confirmed are not a cave).
-* Download all points as GPX or CSV.
+* Download all points as GPX or CSV with all the latest information.
 
 <img src="https://i.imgur.com/sg3cgFX.png" width="500"/>
 
