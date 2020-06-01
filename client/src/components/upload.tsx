@@ -3,6 +3,7 @@ import {Points} from '../interfaces/geoJsonInterface';
 import {Upload, message} from 'antd';
 import {InboxOutlined} from '@ant-design/icons';
 import {serverBaseURL} from '../config/urlConfig';
+import { LeadPoints } from '../interfaces/LeadPointInterface';
 const {Dragger} = Upload;
 
 // const axiosInstance = axios.create({
@@ -39,7 +40,7 @@ interface State {
 }
 
 interface Props {
-  onUploaded: (point: Points) => void;
+  onUploaded: (point: (LeadPoints | Points)) => void;
   uploadPath: string;
   lat: string;
   long: string;
