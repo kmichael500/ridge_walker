@@ -162,13 +162,13 @@ export default class DisplayAllMaps extends Component<
   }
 
   render() {
-    const props = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-    };
+    // const props = {
+    //   dots: true,
+    //   infinite: true,
+    //   speed: 500,
+    //   slidesToShow: 1,
+    //   slidesToScroll: 1,
+    // };
     return <div>{this.renderMaps()}</div>;
 
 }

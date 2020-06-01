@@ -330,7 +330,7 @@ class reviewTable extends Component<ReviewTableProps, ReviewTableState> {
   }
 
   render() {
-    const {selectedRowKeys} = this.state;
+    // const {selectedRowKeys} = this.state;
     // const rowSelection = {
     //     selectedRowKeys,
     //     onChange: this.onSelectedRowKeysChange,
@@ -394,6 +394,7 @@ class ReviewPoint extends Component<Props, State> {
         } else if (submission.pointType === 'Existing') {
           existingPoints.push(submission);
         }
+        return(null);
       });
 
       this.setState({

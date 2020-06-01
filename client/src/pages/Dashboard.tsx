@@ -43,7 +43,7 @@ class Dashboard extends Component<any, State> {
         } else if (submission.pointType === 'Existing') {
           existingPoints.push(submission);
         }
-
+        return(null);
         })
 
       this.setState({

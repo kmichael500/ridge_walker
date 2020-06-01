@@ -1,6 +1,6 @@
 import React, {useContext, useState, useEffect, useRef} from 'react';
-import {Table, Input, Button, Popconfirm, Form} from 'antd';
-import ContainerDimensions from 'react-container-dimensions';
+import {Table, Input, Popconfirm, Form} from 'antd';
+import {DeleteOutlined} from '@ant-design/icons';
 
 const {TextArea} = Input;
 const EditableContext = React.createContext({} as any);
@@ -132,7 +132,7 @@ class KarstFeaturesTable extends React.Component<Props, State> {
                 title="Sure to delete?"
                 onConfirm={() => this.handleDelete(record.key)}
               >
-                <a>Delete</a>
+                <DeleteOutlined></DeleteOutlined>
               </Popconfirm>
             ) : null,
         },

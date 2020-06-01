@@ -139,21 +139,6 @@ class CaveInfo extends Component<Props, State> {
 }
 
   renderDescription() {
-    let data = [
-      {
-        title: 'TCS Number',
-        description: this.state.point.properties.tcsnumber,
-      },
-      {
-        title: 'Length',
-        description: this.state.point.properties.length,
-      },
-      {
-        title: 'Pit Depth',
-        description: this.state.point.properties.pdep,
-      },
-    ];
-
     let narrative;
     if (this.props.action === 'View') {
       narrative = this.state.point.properties.narr
@@ -745,7 +730,7 @@ class CaveInfo extends Component<Props, State> {
       );
     }
     if (this.props.action === 'Edit') {
-      let rejectMessage = '';
+      // let rejectMessage = '';
       return (
         <Space>
           <Button
@@ -764,8 +749,6 @@ class CaveInfo extends Component<Props, State> {
                   proposedChanges: !this.state.proposedChanges,
                 });
               }
-
-
             }}
           >
             {this.state.proposedChanges ? 'Revert' : 'Edit'}

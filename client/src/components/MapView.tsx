@@ -6,7 +6,7 @@ import L from 'leaflet';
 import Control from 'react-leaflet-control';
 import { FullscreenOutlined } from '@ant-design/icons'
 import { Row, Button, Typography, Divider } from 'antd'
-import { Map, TileLayer, Marker, Popup, WMSTileLayer, LayersControl, GeoJSON, CircleMarker} from 'react-leaflet';
+import { Map, TileLayer, Marker, Popup, WMSTileLayer, LayersControl, GeoJSON} from 'react-leaflet';
 
 import { getAllMasterPoints } from '../dataservice/getPoints'
 import { getAllLeadPoints } from '../dataservice/leadPoints'
@@ -279,13 +279,13 @@ class MapView extends Component<Props, State> {
   }
   componentDidMount() {
     window.addEventListener("resize", this.updateDimensions.bind(this))
-    if(this.props.match != undefined && this.props.match.params.lat !== undefined && this.props.match.params.long !== undefined){
+    if(this.props.match !== undefined && this.props.match.params.lat !== undefined && this.props.match.params.long !== undefined){
       this.setState({
         center: [this.props.match.params.lat, this.props.match.params.long],
         zoom:15
       })
     };
-    if (this.props.data == undefined){
+    if (this.props.data === undefined){
       getAllMasterPoints().then((requestedPoints)=>{
         this.setState({data: requestedPoints, isLoading: false})
         this.setState({searchProvider: new CustomOpenStreetMap(requestedPoints)})
@@ -448,7 +448,7 @@ class CustomOpenStreetMap {
 
   constructor(points: Feature[], options = { providerKey: null, searchBounds: [] } ) {
     this.points = points;
-    let { providerKey, searchBounds} = options;
+    // let { providerKey, searchBounds} = options;
     //Bounds are expected to be a nested array of [[sw_lat, sw_lng],[ne_lat, ne_lng]].
     // We convert them into a string of 'x1,y1,x2,y2' which is the opposite way around from lat/lng - it's lng/lat
     let boundsUrlComponent = "";
@@ -469,6 +469,9 @@ class CustomOpenStreetMap {
     let filteredPoints = this.points.filter((point)=>{
       if (point.properties.name.toLowerCase().match(query.toLowerCase())){
         return(point)
+      }
+      else{
+        return(null);
       }
     })
 

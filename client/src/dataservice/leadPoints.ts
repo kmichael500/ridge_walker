@@ -46,7 +46,7 @@ async function addLeadPoints(
 ): Promise<AxiosResponse> {
   return new Promise(async (resolve, reject) => {
     try {
-      const leadPointResponse = await axiosInstance
+      await axiosInstance
         .post('/api/points/leads', points)
         .then(res => {
           resolve(res);

@@ -2,20 +2,18 @@ import React, {Component} from 'react';
 
 import {
   Drawer,
-  List,
-  Avatar,
   Divider,
   Col,
   Row,
-  Tag,
   Typography,
   Space,
   Spin,
+  Button,
 } from 'antd';
 import {getOneUserByID} from '../../dataservice/authentication';
 import {UserInterface} from '../../interfaces/UserInterface';
 
-const {Paragraph, Title, Text} = Typography;
+const {Text} = Typography;
 
 const DescriptionItem = ({title, content}) => (
   <Row>
@@ -94,9 +92,9 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
     if (!this.state.loading) {
       return (
         <>
-          <a onClick={this.showDrawer}>
+          <Button type="link" onClick={this.showDrawer}>
             {this.state.user.firstName + ' ' + this.state.user.lastName}
-          </a>
+          </Button> 
 
           <Drawer
             width={640}
