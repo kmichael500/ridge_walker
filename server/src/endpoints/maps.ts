@@ -127,7 +127,6 @@ mapsAPI.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     res.sendStatus(500)
     console.error("ERROR MESSAGE")
     console.error(err.message);
-    console.log();
 })
 
 

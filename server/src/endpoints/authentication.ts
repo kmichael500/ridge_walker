@@ -121,7 +121,6 @@ userAPI.get('/:id', passport.authenticate('jwt', { session : false }), (req, res
 
   const role = (<any>req).user.role;
   const status = (<any>req).user.status;
-  console.log((<any>req).user._id)
   if (role === "Admin"){
     UserModel.findById(req.params.id, (err, currentUser) => {
       if (err) {
