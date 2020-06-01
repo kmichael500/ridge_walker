@@ -10,7 +10,7 @@
 | <img width="300" src="https://i.imgur.com/WBpzp0j.png"/> | <img width="530" src="https://i.imgur.com/fepNNMb.png"/> | <img width="440" src="https://i.imgur.com/crvbsVl.png"/> |
 
 **Dashboard**
-* View submissions created by the logged in user.
+* View submissions created by the logged-in user.
 * View or upload dead leads (karst features people have confirmed are not a cave).
 * Download all points as GPX or CSV.
 
@@ -99,7 +99,7 @@ export const mongoURI = "mongo_connection_string_here"
 
 **Registering a user**
 
-In you web browser, navigate to `http://your_ip_address:3000/register`
+In your web browser, navigate to `http://your_ip_address:3000/register`
 
 To create the first admin user, modify the role property of the user document. Change the role from `User` to `Admin`.
 
