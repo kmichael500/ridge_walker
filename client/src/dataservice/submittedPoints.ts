@@ -1,9 +1,9 @@
-import axios, { AxiosResponse } from 'axios';
-import { serverBaseURL } from '../config/urlConfig';
-import { SubmittedPoint } from '../interfaces/submittedPointInterface'
+import axios, {AxiosResponse} from 'axios';
+import {serverBaseURL} from '../config/urlConfig';
+import {SubmittedPoint} from '../interfaces/submittedPointInterface';
 
 const axiosInstance = axios.create({
-    baseURL: serverBaseURL
+  baseURL: serverBaseURL,
 });
 
 /**
@@ -11,12 +11,12 @@ const axiosInstance = axios.create({
  * @returns Promise<SubmittedPoint[]>
  */
 async function getAllSubmittedPoints(): Promise<SubmittedPoint[]> {
-    try {
-        const getInterviewsResponse = await axiosInstance.get('/api/submit/point');
-        return getInterviewsResponse.data as SubmittedPoint[];
-    } catch(error) {
-        return error;
-    } 
+  try {
+    const submittedPointResponse = await axiosInstance.get('/api/submit/point');
+    return submittedPointResponse.data as SubmittedPoint[];
+  } catch (error) {
+    return error;
+  }
 }
 
 /**
@@ -25,67 +25,76 @@ async function getAllSubmittedPoints(): Promise<SubmittedPoint[]> {
  * @param id - the mongo id of a point.
  */
 async function getSubmittedPoint(id: string): Promise<SubmittedPoint> {
-    try {
-        console.log(id);
-        const submittedPointResponse = await axiosInstance.get('/api/submit/point/'+id);
-        console.log(submittedPointResponse.data)
-        return submittedPointResponse.data as SubmittedPoint;
-    } catch(error) {
-        return error;
-    } 
+  try {
+    const submittedPointResponse = await axiosInstance.get(
+      '/api/submit/point/' + id
+    );
+    return submittedPointResponse.data as SubmittedPoint;
+  } catch (error) {
+    return error;
+  }
 }
 
-
 /**
- * Fetch single master point from the API.
+ * Add a single point to the database.
  * @returns Promise<SubmittedPoint>
  * @param point - the point for review.
  */
-async function addSubmittedPoint(point: SubmittedPoint): Promise<AxiosResponse> {
-    try {
-        const masterPointResponse = await axiosInstance.post('/api/submit/point/', point);
-        console.log("Submitted", masterPointResponse)
-        return masterPointResponse;
-    } catch(error) {
-        
-        return error;
-    } 
+async function addSubmittedPoint(
+  point: SubmittedPoint
+): Promise<AxiosResponse> {
+  try {
+    const submittedPointResponse = await axiosInstance.post(
+      '/api/submit/point/',
+      point
+    );
+    return submittedPointResponse;
+  } catch (error) {
+    return error;
+  }
 }
 
 /**
  * Delete a single submitted point by id
- * @returns void
+ * @returns Promise<AxiosResponse>
  * @param id - the id of the point for deletion.
  */
 async function deleteOneSubmittedPointByID(id: string): Promise<AxiosResponse> {
-    try {
-        const masterPointResponse = await axiosInstance.delete('/api/submit/point/' + id);
-        return masterPointResponse;
-    } catch(error) {
-        
-        return error;
-    } 
+  try {
+    const submittedPointResponse = await axiosInstance.delete(
+      '/api/submit/point/' + id
+    );
+    return submittedPointResponse;
+  } catch (error) {
+    return error;
+  }
 }
 
 /**
- * Delete a single submitted point by id
+ * Updates a single submitted point by id
  * @returns void
- * @param id - the id of the point for deletion.
+ * @param id - the id of the point to be updated.
+ * @param point - the updated point information.
  */
-async function updateOneSubmittedPointByID(id: string, point: SubmittedPoint): Promise<AxiosResponse> {
-    try {
-        const masterPointResponse = await axiosInstance.put('/api/submit/point/' + id, point);
-        return masterPointResponse;
-    } catch(error) {
-        
-        return error;
-    } 
+async function updateOneSubmittedPointByID(
+  id: string,
+  point: SubmittedPoint
+): Promise<AxiosResponse> {
+  try {
+    const submittedPointResponse = await axiosInstance.put(
+      '/api/submit/point/' + id,
+      point
+    );
+    return submittedPointResponse;
+  } catch (error) {
+    return error;
+  }
 }
 
 export {
-    getAllSubmittedPoints,
-    getSubmittedPoint,
-    addSubmittedPoint,
-    deleteOneSubmittedPointByID,
-    updateOneSubmittedPointByID
-}
+  getAllSubmittedPoints,
+  getSubmittedPoint,
+  addSubmittedPoint,
+  deleteOneSubmittedPointByID,
+  updateOneSubmittedPointByID,
+};

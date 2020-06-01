@@ -1,18 +1,12 @@
 import * as express from 'express';
-import * as multer from 'multer'
-import { MongooseDocument } from 'mongoose'
-var csv2geojson = require('csv2geojson');
+import * as multer from 'multer';
 import {Request, Response, NextFunction} from 'express';
-import * as fs from "fs"
-import { resolve } from 'dns';
-import { Points } from '../models/MasterPoint'
-import { MasterPoint } from '../models/MasterPoints';
-import * as path from 'path'
+import * as fs from 'fs';
 
-import "pdf-image"
+import 'pdf-image';
 
-import * as glob from 'glob'
-import { PDFImage } from 'pdf-image';
+import * as glob from 'glob';
+import {PDFImage} from 'pdf-image';
 
 // Initialize an express api and configure it parse requests as JSON
 const mapsAPI = express();
@@ -28,18 +22,18 @@ mapsAPI.use(express.json());
 
 //         // You could use the original name
 //         cb(null, file.originalname)
-        
+
 //     }
 // });
 
-var storage = multer.memoryStorage()
-var upload = multer({ storage: storage })
+const storage = multer.memoryStorage();
+var upload = multer({storage: storage});
 
-var upload = multer({ storage:storage })
+var upload = multer({storage: storage});
 // // View map in browser
 // mapsAPI.get("/:mapName", (req, res, next)=>{
 //     try{
-//         res.sendFile(req.params.mapName,{root: "./public/maps"})   
+//         res.sendFile(req.params.mapName,{root: "./public/maps"})
 //     }
 //     catch(error){
 //         res.sendStatus(404);
@@ -47,95 +41,82 @@ var upload = multer({ storage:storage })
 // })
 
 // Map as image
-mapsAPI.get("/image/:mapName.png", (req, res, next)=>{
-    try{
-        var pdfPath = "./public/maps/"+req.params.mapName+".pdf";
-        var pageNumber = 0;
-        
-        var pdfImage = new PDFImage(pdfPath, {
-            convertOptions: {
-                "-resize": "50%",
-                // "-density": "200",
-                "-background": "white",
-                "-alpha": "background -alpha off",
-              },
-              outputDirectory: "./public/maps/images/",
-            //   combinedImage: true
-            
-        });
-        pdfImage.setConvertExtension("png")
-    
-        pdfImage.convertPage(0).then(function (imagePath) {
-            console.log(imagePath)
-            res.sendFile(imagePath, {root:"./"});
-        }, function (err) {
+mapsAPI.get('/image/:mapName.png', (req, res, next) => {
+  try {
+    const pdfPath = './public/maps/' + req.params.mapName + '.pdf';
+    const pageNumber = 0;
+
+    const pdfImage = new PDFImage(pdfPath, {
+      convertOptions: {
+        '-resize': '50%',
+        // "-density": "200",
+        '-background': 'white',
+        '-alpha': 'background -alpha off',
+      },
+      outputDirectory: './public/maps/images/',
+      //   combinedImage: true
+    });
+    pdfImage.setConvertExtension('png');
+
+    pdfImage.convertPage(0).then(
+      imagePath => {
+        res.sendFile(imagePath, {root: './'});
+      },
+      err => {
         res.send(500);
-    });
+      }
+    );
+  } catch (error) {
+    res.sendStatus(404);
+  }
+});
 
-         
-    }
-    catch(error){
+// Get map file names for a single point
+mapsAPI.get('/:id/getAll', (req, res, next) => {
+  const searchString = req.params.id + '_*.pdf';
+  glob(searchString, {cwd: 'public/maps'}, (err, files) => {
+    console.log(files);
+    if (err) {
+      console.log(err);
+    } else {
+      try {
+        res.json(files);
+      } catch (error) {
         res.sendStatus(404);
+      }
     }
-})
+  });
+});
 
-// Get map file names
-mapsAPI.get("/:id/getAll", (req, res, next)=>{
-    const searchString = req.params.id + '_*.pdf';
-    glob(searchString, {cwd:"public/maps"}, function (err, files) {
-        console.log(files)
-        if (err) {
-     
-            console.log(err);
-     
-        } else {
-            try{
-                res.json(files)   
-            }
-            catch(error){
-                res.sendStatus(404);
-            }
-                    
-        }
-     
-    });
-})
-
-// Download a map
-mapsAPI.get("/:id", (req, res, next)=>{
-        try{
-            var file = fs.createReadStream('./public/maps/' + req.params.id);
-            var stat = fs.statSync('./public/maps/' + req.params.id);
-            res.setHeader('Content-Length', stat.size);
-            res.setHeader('Content-Type', 'application/pdf');
-            const fileName = 'attachment; ' + req.params.id
-            res.setHeader('Content-Disposition', fileName);
-            file.pipe(res); 
-        }
-        catch(error){
-            console.log("File not found")
-            console.log(req.params.id)
-            res.sendStatus(404)
-            next(error)
-        }
-    
-        
-})
+// Download a map as pdf
+mapsAPI.get('/:id', (req, res, next) => {
+  try {
+    const file = fs.createReadStream('./public/maps/' + req.params.id);
+    const stat = fs.statSync('./public/maps/' + req.params.id);
+    res.setHeader('Content-Length', stat.size);
+    res.setHeader('Content-Type', 'application/pdf');
+    const fileName = 'attachment; ' + req.params.id;
+    res.setHeader('Content-Disposition', fileName);
+    file.pipe(res);
+  } catch (error) {
+    console.log('File not found');
+    console.log(req.params.id);
+    res.sendStatus(404);
+    next(error);
+  }
+});
 
 //Catches every request to a route we have not defined elsewhere.
 mapsAPI.get('*', (req, res, next) => {
-    const err = new Error('Page Not Found');
-    next(err);
+  const err = new Error('Page Not Found');
+  next(err);
 });
-
 
 //General server error handler
 mapsAPI.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    res.sendStatus(500)
-    console.error("ERROR MESSAGE")
-    console.error(err.message);
-    console.log();
-})
+  res.sendStatus(500);
+  console.error('ERROR MESSAGE');
+  console.error(err.message);
+});
 
-
-export { mapsAPI };
+export {mapsAPI};

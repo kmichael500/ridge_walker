@@ -1,8 +1,8 @@
-const { override, fixBabelImports } = require('customize-cra');
+const {override, fixBabelImports} = require('customize-cra');
 
 module.exports = override(
-    fixBabelImports('antd', {
-        libraryDirectory: 'es',
-        style: 'css',
-    }),
+  fixBabelImports('antd', {
+    libraryDirectory: 'es',
+    style: 'css',
+  })
 );
