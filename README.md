@@ -14,8 +14,8 @@
 * View or upload dead leads (karst features people have confirmed are not a cave).
 * Download all points as GPX or CSV.
 
-| <img src="https://i.imgur.com/sg3cgFX.png" width="500"/> |
-|--|
+<img src="https://i.imgur.com/sg3cgFX.png" width="500"/>
+
 
 
 **Map**
@@ -100,6 +100,7 @@ export const mongoURI = "mongo_connection_string_here"
 **Registering a user**
 
 In you web browser, navigate to `http://your_ip_address:3000/register`
+
 To create the first admin user, modify the role property of the user document. Change the role from `User` to `Admin`.
 
 **Uploading data**
