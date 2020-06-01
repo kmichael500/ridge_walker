@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Table, Input, Button, Popconfirm, Form } from 'antd';
+import React, {useContext, useState, useEffect, useRef} from 'react';
+import {Table, Input, Button, Popconfirm, Form} from 'antd';
 import ContainerDimensions from 'react-container-dimensions';
 
-const { TextArea } = Input;
+const {TextArea} = Input;
 const EditableContext = React.createContext({} as any);
 
 interface Item {
@@ -16,7 +16,7 @@ interface EditableRowProps {
   index: number;
 }
 
-const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
+const EditableRow: React.FC<EditableRowProps> = ({index, ...props}) => {
   const [form] = Form.useForm();
   return (
     <Form form={form} component={false}>
@@ -57,7 +57,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
   const toggleEdit = () => {
     setEditing(!editing);
-    form.setFieldsValue({ [dataIndex]: record[dataIndex] });
+    form.setFieldsValue({[dataIndex]: record[dataIndex]});
   };
 
   const save = async e => {
@@ -65,7 +65,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       const values = await form.validateFields();
 
       toggleEdit();
-      handleSave({ ...record, ...values });
+      handleSave({...record, ...values});
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
@@ -76,7 +76,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   if (editable) {
     childNode = editing ? (
       <Form.Item
-        style={{ margin: 0 }}
+        style={{margin: 0}}
         name={dataIndex}
         rules={[
           {
@@ -85,10 +85,19 @@ const EditableCell: React.FC<EditableCellProps> = ({
           },
         ]}
       >
-        <TextArea ref={inputRef}  rows={5} onBlur={save} style={{width: "300px"}} />
+        <TextArea
+          ref={inputRef}
+          rows={5}
+          onBlur={save}
+          style={{width: '300px'}}
+        />
       </Form.Item>
     ) : (
-      <div className="editable-cell-value-wrap" style={{ paddingRight: 24 }} onClick={toggleEdit}>
+      <div
+        className="editable-cell-value-wrap"
+        style={{paddingRight: 24}}
+        onClick={toggleEdit}
+      >
         {children}
       </div>
     );
@@ -97,45 +106,50 @@ const EditableCell: React.FC<EditableCellProps> = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
-interface State{
-    columns: any
-    dataSource: any
+interface State {
+  columns: any;
+  dataSource: any;
 }
 
-interface Props{
-    onChange: (data: any)=>void,
-    columns: any
-    dataSource: any
+interface Props {
+  onChange: (data: any) => void;
+  columns: any;
+  dataSource: any;
 }
 
-class KarstFeaturesTable extends React.Component<Props,State> {
+class KarstFeaturesTable extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
       dataSource: this.props.dataSource,
       columns: [
-          {
-            title: 'operation',
-            dataIndex: 'operation',
-            render: (text, record) =>
-              this.state.dataSource.length >= 1 ? (
-                <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                  <a>Delete</a>
-                </Popconfirm>
-              ) : null,
-          },
-          ...this.props.columns,
-        ]
+        {
+          title: 'operation',
+          dataIndex: 'operation',
+          render: (text, record) =>
+            this.state.dataSource.length >= 1 ? (
+              <Popconfirm
+                title="Sure to delete?"
+                onConfirm={() => this.handleDelete(record.key)}
+              >
+                <a>Delete</a>
+              </Popconfirm>
+            ) : null,
+        },
+        ...this.props.columns,
+      ],
     };
   }
 
   handleDelete = key => {
     const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) }, ()=>{
-        this.props.onChange(this.state.dataSource)
-    });
+    this.setState(
+      {dataSource: dataSource.filter(item => item.key !== key)},
+      () => {
+        this.props.onChange(this.state.dataSource);
+      }
+    );
   };
-
 
   handleSave = row => {
     const newData = [...this.state.dataSource];
@@ -145,13 +159,13 @@ class KarstFeaturesTable extends React.Component<Props,State> {
       ...item,
       ...row,
     });
-    this.setState({ dataSource: newData }, ()=>{
-        this.props.onChange(this.state.dataSource)
+    this.setState({dataSource: newData}, () => {
+      this.props.onChange(this.state.dataSource);
     });
   };
 
   render() {
-    const { dataSource } = this.state;
+    const {dataSource} = this.state;
     const components = {
       body: {
         row: EditableRow,
@@ -176,18 +190,17 @@ class KarstFeaturesTable extends React.Component<Props,State> {
     return (
       <div>
         <Table
-            size="small"
-            components={components}
-            // rowClassName={() => 'editable-row'}
-            // scroll={{ x: '300px' }}
-            dataSource={dataSource}
-            style={{overflowX: "scroll"}}
-            columns={columns}
+          size="small"
+          components={components}
+          // rowClassName={() => 'editable-row'}
+          // scroll={{ x: '300px' }}
+          dataSource={dataSource}
+          style={{overflowX: 'scroll'}}
+          columns={columns}
         />
-          
       </div>
     );
   }
 }
 
-export { KarstFeaturesTable }
+export {KarstFeaturesTable};
