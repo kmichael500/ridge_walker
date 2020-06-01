@@ -48,7 +48,7 @@ class NavBar extends Component<any, any> {
         >
           <Menu.Item key="/">
             <Space size="large">
-              <img src={'logo.png'} height="30px" alt="?"></img>
+              <img src={'logo.png'} height="30px" alt=""></img>
               Home
             </Space>
           </Menu.Item>
@@ -81,7 +81,7 @@ class NavBar extends Component<any, any> {
         >
           <Menu.Item key="/">
             <Space size="large">
-              <img src={'logo.png'} alt="?" height="30px"></img>
+              <img src='logo.png' alt="" height="30px"></img>
               Tennessee Cave Survey
             </Space>
           </Menu.Item>
