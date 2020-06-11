@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Feature} from '../interfaces/geoJsonInterface';
 import {tn_counties} from '../dataservice/countyList';
 import {Helmet} from 'react-helmet';
+import { FormInstance } from 'antd/lib/form';
 
 import {
   Form,
@@ -26,6 +27,7 @@ interface State {
 }
 
 class AddCave extends Component<any, State> {
+  formRef = React.createRef<FormInstance>();
   constructor(Props) {
     super(Props);
     this.state = {
@@ -60,6 +62,7 @@ class AddCave extends Component<any, State> {
       } as Feature,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.doesCaveQualify = this.doesCaveQualify.bind(this);
   }
 
   renderCoordinateForm() {
@@ -116,6 +119,10 @@ class AddCave extends Component<any, State> {
     });
   }
 
+  doesCaveQualify(){
+    console.log("QUALIFY")
+  }
+
   render() {
     const narrPlaceholderArr = [];
     narrPlaceholderArr.push(
@@ -135,7 +142,6 @@ class AddCave extends Component<any, State> {
         narrPlaceholder += '\n';
       }
     }
-
     return (
       <div className="site-layout-content">
         <Helmet>
@@ -147,26 +153,156 @@ class AddCave extends Component<any, State> {
             // wrapperCol={{ span: 14 }}
             layout="vertical"
             onFinish={this.handleSubmit}
+            scrollToFirstError={true}
+            // onFinishFailed={(errorInfo)=>{
+            //   for (let i = 0; i<errorInfo.errorFields.length; i++){
+            //     message.error(errorInfo.errorFields[i].errors)
+            //   }
+            // }}
             initialValues={{remember: true}}
+            ref={this.formRef}
           >
-            <Form.Item label="Cave Name" name="name">
+            <Form.Item
+              label="Cave Name"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: 'Cave name required!',
+                  whitespace: true,
+                  type: "string"
+                },
+              ]}
+            >
               <Input />
             </Form.Item>
             <Row>
               <Space>
-                <Form.Item label="Length (ft)" name="length">
+                <Form.Item
+                  label="Length (ft)"
+                  name="length"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Length required!',
+                      whitespace: true,
+                      type:"number"
+                    },
+                    ({getFieldValue}) => {
+                    return {
+                      validator(rule, value){
+                        if (value < 50 && getFieldValue('pdepth') < 30 && getFieldValue('depth') < 40){
+                          return Promise.reject("The cave does not qualify!");
+                        }
+                        else{
+                          return Promise.resolve();
+                        }
+                      }
+                    }}
+                  ]}
+                >
+                  <InputNumber
+                  defaultValue={0}
+                  min={0}
+
+                  // forces check if cave qualifies
+                  onChange={()=>{
+                    this.formRef.current.validateFields(["pdepth", "length", "depth"])
+                  }}
+                  
+                  ></InputNumber>
+                </Form.Item>
+                <Form.Item
+                  label="Vertical Extent (ft)"
+                  name="depth"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vertical Extent required!',
+                      whitespace: true,
+                      type:"number"
+                    },
+                    ({getFieldValue}) => {
+                    return  {
+                      validator(rule, value){
+                        if (value < 40 && getFieldValue('length') < 50 && getFieldValue('pdepth') < 30){
+                          return Promise.reject("The cave does not qualify!");
+                        }
+                        else{
+                          return Promise.resolve();
+                        }
+                      }
+                    }}
+                  ]}
+                >
+                  <InputNumber
+                    defaultValue={0}
+                    min={0}
+                    // forces check if cave qualifies
+                    onChange={()=>{
+                    this.formRef.current.validateFields(["pdepth", "length", "depth"])
+                  }}
+                  ></InputNumber>
+                </Form.Item>
+                <Form.Item
+                  label="Pit Depth (ft)"
+                  name="pdepth"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Pit depth required!',
+                      whitespace: true,
+                      type:"number"
+                    },
+                    ({getFieldValue}) => {
+                      // this.formRef.current.validateFields(["length", "depth"])
+                      return {
+                      validator(rule, value){
+                        if (value < 30 && getFieldValue('length') < 50 && getFieldValue('depth') < 40){
+                          return Promise.reject("The cave does not qualify!");
+                        }
+                        else{
+                          return Promise.resolve();
+                        }
+                      }
+                    }}
+                  ]}
+                  validateTrigger="onChange"
+                >
+                  <InputNumber
+                    defaultValue={0}
+                    min={0}
+                    // forces check if cave qualifies
+                    onChange={()=>{
+                    this.formRef.current.validateFields(["pdepth", "length", "depth"])
+                  }}
+                  ></InputNumber>
+                </Form.Item>
+                <Form.Item
+                  label="Number of Pits"
+                  name="ps"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Number of pits required!',
+                      whitespace: true,
+                      type: "number"
+                    },
+                  ]}
+                >
                   <InputNumber defaultValue={0} min={0}></InputNumber>
                 </Form.Item>
-                <Form.Item label="Vertical Extent (ft)" name="depth">
-                  <InputNumber defaultValue={0} min={0}></InputNumber>
-                </Form.Item>
-                <Form.Item label="Pit Depth (ft)" name="pdepth">
-                  <InputNumber defaultValue={0} min={0}></InputNumber>
-                </Form.Item>
-                <Form.Item label="Number of Pits" name="ps">
-                  <InputNumber defaultValue={0} min={0}></InputNumber>
-                </Form.Item>
-                <Form.Item label="Elevation (ft)" name="elev">
+                <Form.Item
+                  label="Elevation (ft)"
+                  name="elev"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Elevation required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
                   <InputNumber defaultValue={0} min={0}></InputNumber>
                 </Form.Item>
               </Space>
@@ -177,6 +313,13 @@ class AddCave extends Component<any, State> {
                   label="County"
                   name="co_name"
                   style={{minWidth: '110px'}}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'County required!',
+                      whitespace: true,
+                    },
+                  ]}
                 >
                   <Select
                     showSearch
