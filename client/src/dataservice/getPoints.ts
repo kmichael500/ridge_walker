@@ -55,7 +55,6 @@ async function downloadMasterPoints(fileType: "csv" | "gpx"): Promise<void> {
       params
     });
     const url = window.URL.createObjectURL(new Blob([downloadResponse.data]));
-      console.log(downloadResponse.headers)
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', 'TCSDATA' + new Date().getFullYear() + "." + fileType); //or any other extension
