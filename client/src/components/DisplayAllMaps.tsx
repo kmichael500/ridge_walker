@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Document, Page} from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import {Card, Row, Col, Spin} from 'antd';
-import {getImageFileNames} from '../dataservice/getMaps';
+import {getImageFileNames, mapToBase64} from '../dataservice/getMaps';
 import DisplayMap from './DisplayPDF';
 
 const options = {
@@ -85,7 +85,7 @@ interface DisplayAllMapsProps {
 }
 
 interface DisplayAllMapsState {
-  fileNames: string[];
+  fileNames: {fileName: string; img: string}[];
   showFullScreen: boolean;
   fullScreenFile: string;
 }
@@ -97,7 +97,7 @@ export default class DisplayAllMaps extends Component<
   constructor(Props: DisplayAllMapsProps) {
     super(Props);
     this.state = {
-      fileNames: [''],
+      fileNames: [],
       showFullScreen: false,
       fullScreenFile: '',
     };
@@ -109,7 +109,17 @@ export default class DisplayAllMaps extends Component<
     // })
 
     getImageFileNames(this.props.tcsnumber).then(files => {
-      this.setState({fileNames: files});
+      const imgs = [];
+
+      async function base64() {
+        for (let i = 0; i < files.length; i++) {
+          const img = await mapToBase64(files[i]);
+          imgs.push({fileName: files[i], img});
+        }
+      }
+      base64().then(() => {
+        this.setState({fileNames: imgs});
+      });
     });
   }
 
@@ -122,7 +132,7 @@ export default class DisplayAllMaps extends Component<
       <Row>
         {this.state.fileNames.map((file, index) => (
           <Col span={6}>
-            {this.state.fullScreenFile === file && (
+            {this.state.fullScreenFile === file.img && (
               <DisplayMap
                 file={file}
                 visible={this.state.showFullScreen}
@@ -135,12 +145,16 @@ export default class DisplayAllMaps extends Component<
               onClick={() => {
                 this.setState({
                   showFullScreen: !this.state.showFullScreen,
-                  fullScreenFile: file,
+                  fullScreenFile: file.img,
                 });
               }}
             >
               <Card hoverable bordered={false}>
-                <img src={file} alt="?" width="100%"></img>
+                <img
+                  src={`data:image/jpeg;base64,${file.img}`}
+                  alt={''}
+                  width="100%"
+                ></img>
               </Card>
             </div>
             {/* </Space> */}

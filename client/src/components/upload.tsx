@@ -62,7 +62,11 @@ class UploadCSV extends Component<Props, State> {
   render() {
     const props = {
       name: 'csv',
-      action: serverBaseURL + this.props.uploadPath,
+      action:
+        serverBaseURL +
+        this.props.uploadPath +
+        '?secret_token=' +
+        localStorage.getItem('JWT'),
       onChange: this.handleChange,
       multiple: false,
     };
