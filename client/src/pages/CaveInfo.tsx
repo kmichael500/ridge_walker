@@ -271,7 +271,7 @@ class CaveInfo extends Component<Props, State> {
               {this.state.point.properties.elev + ''}
             </Text>
           </Descriptions.Item>
-          <Descriptions.Item label="Pits">
+          <Descriptions.Item label="Number of Pits">
             <Text
               editable={
                 this.state.proposedChanges && {
@@ -307,6 +307,25 @@ class CaveInfo extends Component<Props, State> {
               }
             >
               {this.state.point.properties.co_name + ''}
+            </Text>
+          </Descriptions.Item>
+          <Descriptions.Item label="Ownership">
+            <Text
+              editable={
+                this.state.proposedChanges && {
+                  onChange: val => {
+                    if (val.length !== 0) {
+                      const point = this.state.point;
+                      point.properties.ownership = val;
+                      this.setState({point});
+                    } else {
+                      message.warn("Ownership can't be blank.");
+                    }
+                  },
+                }
+              }
+            >
+              {this.state.point.properties.ownership + ''}
             </Text>
           </Descriptions.Item>
           <Descriptions.Item label="Topo">
