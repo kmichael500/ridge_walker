@@ -68,11 +68,58 @@ class AddCave extends Component<any, State> {
   renderCoordinateForm() {
     return (
       <Input.Group compact>
-        <Form.Item name="lat" label="Latitude">
-          <InputNumber></InputNumber>
+        <Form.Item
+          name="lat"
+          label="Latitude"
+          rules={[
+            {
+              required: true,
+              message: 'Lat required!',
+              whitespace: true,
+            },
+            ({getFieldValue}) => {
+              const regex = /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/g;
+              return {
+                validator(rule, value) {
+                  if (value.match(regex)){
+                    return Promise.resolve();
+                  }
+                  else{
+                    return Promise.reject("Wrong format!")
+                  }
+                },
+              };
+            },
+          ]}
+        >
+          <Input></Input>
         </Form.Item>
-        <Form.Item name="long" label="Longitude">
-          <InputNumber></InputNumber>
+        <Form.Item
+          name="long"
+          label="Longitude"
+          rules={[
+            {
+              required: true,
+              message: 'Long required!',
+              whitespace: true,
+              
+            },
+            ({getFieldValue}) => {
+              const regex = /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/g;
+              return {
+                validator(rule, value) {
+                  if (value.match(regex)){
+                    return Promise.resolve();
+                  }
+                  else{
+                    return Promise.reject("Wrong format!")
+                  }
+                },
+              };
+            },
+          ]}
+        >
+          <Input></Input>
         </Form.Item>
       </Input.Group>
     );
@@ -408,7 +455,7 @@ class AddCave extends Component<any, State> {
                     },
                   ]}
                 >
-                  <Input defaultValue="AN300" disabled />
+                  <Input />
                 </Form.Item>
               </Space>
             </Row>
