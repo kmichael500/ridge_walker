@@ -491,11 +491,13 @@ class AddCave extends Component<any, State> {
                   ]}
                 >
                   <Select placeholder="Please select">
+                    <Select.Option value="Normal Gear">Normal Gear</Select.Option>
                     <Select.Option value="Handline">Handline</Select.Option>
                     <Select.Option value="Wading">Wading</Select.Option>
                     <Select.Option value="Boat/Swimming">
                       Boat/Swimming
                     </Select.Option>
+                    <Select.Option value="Rappel/Prusik">Rappel/Prusik</Select.Option>
                   </Select>
                 </Form.Item>
                 <Form.Item
