@@ -103,15 +103,16 @@ class HomePage extends Component<any, State> {
             <div
               style={
                 {
-                  // background: "white",
-                  // padding: 20,
-                  // position: "absolute",
-                  // top: "50%",
-                  // left: "50%",
-                  // transform: "translate(-50%,-50%)"
+                  background: "",
+                  color:"white",
+                  padding: 20,
+                  position: "absolute",
+                  top: "5%",
+                  left: "50%",
+                  transform: "translate(-50%,-50%)"
                 }
               }
-            ></div>
+            >{"Photo by Chuck Sutherland (2019)"}</div>
           </div>
         </Parallax>
 
