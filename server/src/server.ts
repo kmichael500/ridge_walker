@@ -78,7 +78,7 @@ app.use('/api/stats', statisticsAPI);
 app.use('/api/points/master', passport.authenticate('jwt', { session : false }), masterPointsAPI);
 app.use('/api/points/leads', passport.authenticate('jwt', { session : false }), leadPointAPI);
 app.use('/api/maps', passport.authenticate('jwt', { session : false }), mapsAPI);
-app.use('/api/submit/point', submittedPointAPI);
+app.use('/api/submit/point', passport.authenticate('jwt', { session : false }), submittedPointAPI);
 
 app.use(Express.static(__dirname + '/public'));
 const port = process.env.PORT || 5000;
