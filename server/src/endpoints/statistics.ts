@@ -101,6 +101,16 @@ statisticsAPI.get('/county', (req, res, next) => {
   res.send(geojson);
 });
 
+// Endpoint to get a single submission by tcsnumber
+statisticsAPI.get('/newTCSNumber', (req, res, next) => {
+  MasterPoint.count(
+    {'properties.tcsnumber': {'$regex': "SM"}},
+    (err, requestedPoint) => {
+      res.json(requestedPoint);
+    }
+  );
+});
+
 //Catches every request to a route we have not defined elsewhere.
 statisticsAPI.get('*', (req, res, next) => {
   const err = new Error('Page Not Found');
