@@ -45,7 +45,7 @@
 * Add leads that have been checked and don't go anywhere.
 
 ## Home Page
-<img src="https://i.imgur.com/e2elXUs.jpg" width="530"/>
+<img src="https://i.imgur.com/yYtVHQV.jpg" width="530"/>
 
 ## Technologies Used
 **Server:** Node, Express, Passport, MongoDB, and Typescript
