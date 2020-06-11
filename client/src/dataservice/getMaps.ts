@@ -43,7 +43,6 @@ async function getImageFileNames(tcsNumber: string): Promise<string[]> {
       // response.data[i] = serverBaseURL + 'api/maps/image/' + response.data[i];
       response.data[i] = response.data[i].replace('.pdf', '.png');
     }
-    console.log(response.data)
     return response.data as string[];
   } catch (error) {
     return error;
@@ -61,11 +60,11 @@ async function mapToBase64(filePath: string): Promise<string> {
       serverBaseURL + 'api/maps/image/' + filePath,
       {
         responseType: 'arraybuffer',
-        params
+        params,
       }
     );
     const base64 = Buffer.from(response.data, 'binary').toString('base64');
-    return base64
+    return base64;
   } catch (error) {
     return error;
   }
@@ -78,17 +77,17 @@ async function mapToBase64(filePath: string): Promise<string> {
  */
 async function downloadMap(fileName: string): Promise<void> {
   try {
-    const downloadResponse = await axiosInstance.get('/api/maps/'+ fileName,{
+    const downloadResponse = await axiosInstance.get('/api/maps/' + fileName, {
       responseType: 'blob',
-      params
+      params,
     });
     const url = window.URL.createObjectURL(new Blob([downloadResponse.data]));
-      console.log(downloadResponse.headers)
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', fileName);
-      document.body.appendChild(link);
-      link.click();
+    console.log(downloadResponse.headers);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
   } catch (error) {
     return error;
   }

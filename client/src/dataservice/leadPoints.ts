@@ -18,7 +18,9 @@ const params = {
  */
 async function getAllLeadPoints(): Promise<LeadPointInterface[]> {
   try {
-    const getLeadPointResponse = await axiosInstance.get('/api/points/leads', {params});
+    const getLeadPointResponse = await axiosInstance.get('/api/points/leads', {
+      params,
+    });
     return getLeadPointResponse.data as LeadPointInterface[];
   } catch (error) {
     return error;

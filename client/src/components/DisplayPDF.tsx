@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import {Modal, Button, Space} from 'antd';
-import {downloadMap} from '../dataservice/getMaps'
+import {downloadMap} from '../dataservice/getMaps';
 
 // const options = {
 //     cMapUrl: 'cmaps/',
@@ -9,7 +9,7 @@ import {downloadMap} from '../dataservice/getMaps'
 //   };
 
 interface Props {
-  file: {fileName: string, img: string};
+  file: {fileName: string; img: string};
   onClick?: () => void;
   visible: boolean;
 }
@@ -70,9 +70,12 @@ export default class DisplayMap extends Component<Props, any> {
         onCancel={this.handleCancel}
         footer={
           <Space>
-            <Button key="Download" onClick={()=>{
-              downloadMap(this.state.downloadLink);
-            }}>
+            <Button
+              key="Download"
+              onClick={() => {
+                downloadMap(this.state.downloadLink);
+              }}
+            >
               Download
             </Button>
             <Button
@@ -86,7 +89,11 @@ export default class DisplayMap extends Component<Props, any> {
           </Space>
         }
       >
-        <img src={`data:image/jpeg;base64,${(this.props.file.img)}`} alt="?" width="100%"></img>
+        <img
+          src={`data:image/jpeg;base64,${this.props.file.img}`}
+          alt="?"
+          width="100%"
+        ></img>
       </Modal>
     );
   }

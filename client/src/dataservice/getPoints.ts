@@ -19,7 +19,9 @@ const params = {
  */
 async function getAllMasterPoints(): Promise<Feature[]> {
   try {
-    const masterPointResponse = await axiosInstance.get('/api/points/master',{params});
+    const masterPointResponse = await axiosInstance.get('/api/points/master', {
+      params,
+    });
     return masterPointResponse.data as Feature[];
   } catch (error) {
     return error;
@@ -48,18 +50,24 @@ async function getMasterPoint(tcsnumber: string): Promise<Feature> {
  * @returns Promise<void>
  * @param fileType - 'csv' or 'gpx'.
  */
-async function downloadMasterPoints(fileType: "csv" | "gpx"): Promise<void> {
+async function downloadMasterPoints(fileType: 'csv' | 'gpx'): Promise<void> {
   try {
-    const downloadResponse = await axiosInstance.get('/api/points/master/download/'+fileType,{
-      responseType: 'blob',
-      params
-    });
+    const downloadResponse = await axiosInstance.get(
+      '/api/points/master/download/' + fileType,
+      {
+        responseType: 'blob',
+        params,
+      }
+    );
     const url = window.URL.createObjectURL(new Blob([downloadResponse.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'TCSDATA' + new Date().getFullYear() + "." + fileType); //or any other extension
-      document.body.appendChild(link);
-      link.click();
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute(
+      'download',
+      'TCSDATA' + new Date().getFullYear() + '.' + fileType
+    ); //or any other extension
+    document.body.appendChild(link);
+    link.click();
   } catch (error) {
     return error;
   }

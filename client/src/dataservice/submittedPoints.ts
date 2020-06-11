@@ -17,7 +17,10 @@ const params = {
  */
 async function getAllSubmittedPoints(): Promise<SubmittedPoint[]> {
   try {
-    const submittedPointResponse = await axiosInstance.get('/api/submit/point', {params});
+    const submittedPointResponse = await axiosInstance.get(
+      '/api/submit/point',
+      {params}
+    );
     return submittedPointResponse.data as SubmittedPoint[];
   } catch (error) {
     return error;

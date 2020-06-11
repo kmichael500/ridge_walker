@@ -80,7 +80,9 @@ class HomePage extends Component<any, State> {
             </Paragraph>
             <img width="100%" src={'cave_dist_2018.jpg'} alt="?"></img>
             <h5 style={{textAlign: 'center'}}>Caves of Tennessee 2018</h5>
-            <h5 style={{textAlign: 'center', fontWeight:"lighter"}}>{"Chuck Sutherland <cjsuther21@gmail.com, 10/12/2018"}</h5>
+            <h5 style={{textAlign: 'center', fontWeight: 'lighter'}}>
+              {'Chuck Sutherland <cjsuther21@gmail.com, 10/12/2018'}
+            </h5>
           </div>
         </Parallax>
         {/* <Parallax strength={500}>
@@ -101,18 +103,18 @@ class HomePage extends Component<any, State> {
         >
           <div style={{height: 500}}>
             <div
-              style={
-                {
-                  background: "",
-                  color:"white",
-                  padding: 20,
-                  position: "absolute",
-                  top: "5%",
-                  left: "50%",
-                  transform: "translate(-50%,-50%)"
-                }
-              }
-            >{"Photo by Chuck Sutherland (2019)"}</div>
+              style={{
+                background: '',
+                color: 'white',
+                padding: 20,
+                position: 'absolute',
+                top: '5%',
+                left: '50%',
+                transform: 'translate(-50%,-50%)',
+              }}
+            >
+              {'Photo by Chuck Sutherland (2019)'}
+            </div>
           </div>
         </Parallax>
 

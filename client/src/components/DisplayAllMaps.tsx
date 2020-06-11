@@ -85,7 +85,7 @@ interface DisplayAllMapsProps {
 }
 
 interface DisplayAllMapsState {
-  fileNames: {fileName: string, img: string}[];
+  fileNames: {fileName: string; img: string}[];
   showFullScreen: boolean;
   fullScreenFile: string;
 }
@@ -111,16 +111,15 @@ export default class DisplayAllMaps extends Component<
     getImageFileNames(this.props.tcsnumber).then(files => {
       const imgs = [];
 
-      async function base64(){
-        for (let i = 0; i<files.length; i++){
+      async function base64() {
+        for (let i = 0; i < files.length; i++) {
           const img = await mapToBase64(files[i]);
           imgs.push({fileName: files[i], img});
         }
       }
-      base64().then(()=>{
+      base64().then(() => {
         this.setState({fileNames: imgs});
-      })
-      
+      });
     });
   }
 
@@ -151,7 +150,11 @@ export default class DisplayAllMaps extends Component<
               }}
             >
               <Card hoverable bordered={false}>
-                <img src={`data:image/jpeg;base64,${(file.img)}`} alt={""} width="100%"></img>
+                <img
+                  src={`data:image/jpeg;base64,${file.img}`}
+                  alt={''}
+                  width="100%"
+                ></img>
               </Card>
             </div>
             {/* </Space> */}
