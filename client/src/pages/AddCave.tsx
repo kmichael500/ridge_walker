@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Feature} from '../interfaces/geoJsonInterface';
 import {tn_counties} from '../dataservice/countyList';
 import {Helmet} from 'react-helmet';
-import { FormInstance } from 'antd/lib/form';
+import {FormInstance} from 'antd/lib/form';
 
 import {
   Form,
@@ -119,8 +119,8 @@ class AddCave extends Component<any, State> {
     });
   }
 
-  doesCaveQualify(){
-    console.log("QUALIFY")
+  doesCaveQualify() {
+    console.log('QUALIFY');
   }
 
   render() {
@@ -170,7 +170,7 @@ class AddCave extends Component<any, State> {
                   required: true,
                   message: 'Cave name required!',
                   whitespace: true,
-                  type: "string"
+                  type: 'string',
                 },
               ]}
             >
@@ -186,30 +186,36 @@ class AddCave extends Component<any, State> {
                       required: true,
                       message: 'Length required!',
                       whitespace: true,
-                      type:"number"
+                      type: 'number',
                     },
                     ({getFieldValue}) => {
-                    return {
-                      validator(rule, value){
-                        if (value < 50 && getFieldValue('pdepth') < 30 && getFieldValue('depth') < 40){
-                          return Promise.reject("The cave does not qualify!");
-                        }
-                        else{
-                          return Promise.resolve();
-                        }
-                      }
-                    }}
+                      return {
+                        validator(rule, value) {
+                          if (
+                            value < 50 &&
+                            getFieldValue('pdepth') < 30 &&
+                            getFieldValue('depth') < 40
+                          ) {
+                            return Promise.reject('The cave does not qualify!');
+                          } else {
+                            return Promise.resolve();
+                          }
+                        },
+                      };
+                    },
                   ]}
                 >
                   <InputNumber
-                  defaultValue={0}
-                  min={0}
-
-                  // forces check if cave qualifies
-                  onChange={()=>{
-                    this.formRef.current.validateFields(["pdepth", "length", "depth"])
-                  }}
-                  
+                    defaultValue={0}
+                    min={0}
+                    // forces check if cave qualifies
+                    onBlur={() => {
+                      this.formRef.current.validateFields([
+                        'pdepth',
+                        'length',
+                        'depth',
+                      ]);
+                    }}
                   ></InputNumber>
                 </Form.Item>
                 <Form.Item
@@ -220,28 +226,36 @@ class AddCave extends Component<any, State> {
                       required: true,
                       message: 'Vertical Extent required!',
                       whitespace: true,
-                      type:"number"
+                      type: 'number',
                     },
                     ({getFieldValue}) => {
-                    return  {
-                      validator(rule, value){
-                        if (value < 40 && getFieldValue('length') < 50 && getFieldValue('pdepth') < 30){
-                          return Promise.reject("The cave does not qualify!");
-                        }
-                        else{
-                          return Promise.resolve();
-                        }
-                      }
-                    }}
+                      return {
+                        validator(rule, value) {
+                          if (
+                            value < 40 &&
+                            getFieldValue('length') < 50 &&
+                            getFieldValue('pdepth') < 30
+                          ) {
+                            return Promise.reject('The cave does not qualify!');
+                          } else {
+                            return Promise.resolve();
+                          }
+                        },
+                      };
+                    },
                   ]}
                 >
                   <InputNumber
                     defaultValue={0}
                     min={0}
                     // forces check if cave qualifies
-                    onChange={()=>{
-                    this.formRef.current.validateFields(["pdepth", "length", "depth"])
-                  }}
+                    onBlur={() => {
+                      this.formRef.current.validateFields([
+                        'pdepth',
+                        'length',
+                        'depth',
+                      ]);
+                    }}
                   ></InputNumber>
                 </Form.Item>
                 <Form.Item
@@ -252,20 +266,24 @@ class AddCave extends Component<any, State> {
                       required: true,
                       message: 'Pit depth required!',
                       whitespace: true,
-                      type:"number"
+                      type: 'number',
                     },
                     ({getFieldValue}) => {
                       // this.formRef.current.validateFields(["length", "depth"])
                       return {
-                      validator(rule, value){
-                        if (value < 30 && getFieldValue('length') < 50 && getFieldValue('depth') < 40){
-                          return Promise.reject("The cave does not qualify!");
-                        }
-                        else{
-                          return Promise.resolve();
-                        }
-                      }
-                    }}
+                        validator(rule, value) {
+                          if (
+                            value < 30 &&
+                            getFieldValue('length') < 50 &&
+                            getFieldValue('depth') < 40
+                          ) {
+                            return Promise.reject('The cave does not qualify!');
+                          } else {
+                            return Promise.resolve();
+                          }
+                        },
+                      };
+                    },
                   ]}
                   validateTrigger="onChange"
                 >
@@ -273,9 +291,13 @@ class AddCave extends Component<any, State> {
                     defaultValue={0}
                     min={0}
                     // forces check if cave qualifies
-                    onChange={()=>{
-                    this.formRef.current.validateFields(["pdepth", "length", "depth"])
-                  }}
+                    onBlur={() => {
+                      this.formRef.current.validateFields([
+                        'pdepth',
+                        'length',
+                        'depth',
+                      ]);
+                    }}
                   ></InputNumber>
                 </Form.Item>
                 <Form.Item
@@ -286,7 +308,7 @@ class AddCave extends Component<any, State> {
                       required: true,
                       message: 'Number of pits required!',
                       whitespace: true,
-                      type: "number"
+                      type: 'number',
                     },
                   ]}
                 >
@@ -300,6 +322,7 @@ class AddCave extends Component<any, State> {
                       required: true,
                       message: 'Elevation required!',
                       whitespace: true,
+                      type:"number"
                     },
                   ]}
                 >
@@ -347,21 +370,63 @@ class AddCave extends Component<any, State> {
                     ))}
                   </Select>
                 </Form.Item>
-                <Form.Item label="Enterance Number" name="ent_num">
+                <Form.Item
+                  label="Enterance Number"
+                  name="ent_num"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Enterance number required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
                   <Input />
                 </Form.Item>
-                <Form.Item label="Number of Enterances" name="num_of_ent">
+                <Form.Item
+                  label="Number of Enterances"
+                  name="num_of_ent"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Number of enterances required!',
+                      whitespace: true,
+                      type: "number"
+                    },
+                  ]}
+                >
                   <Input />
                 </Form.Item>
-                <Form.Item label="TCS#" name="tcsnumber">
-                  <Input />
+                <Form.Item
+                  label="TCS#"
+                  name="tcsnumber"
+                  
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Enterance number required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
+                  <Input defaultValue="AN300" disabled />
                 </Form.Item>
               </Space>
             </Row>
             {this.renderCoordinateForm()}
             <Row>
               <Space>
-                <Form.Item label="Ownership" name="ownership">
+                <Form.Item
+                  label="Ownership"
+                  name="ownership"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Ownership number required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
                   <Cascader
                     options={[
                       {
@@ -415,7 +480,17 @@ class AddCave extends Component<any, State> {
                     ]}
                   />
                 </Form.Item>
-                <Form.Item label="Gear Needed" name="gear">
+                <Form.Item
+                  label="Gear Needed"
+                  name="gear"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Gear required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
                   <Select placeholder="Please select">
                     <Select.Option value="Handline">Handline</Select.Option>
                     <Select.Option value="Wading">Wading</Select.Option>
@@ -424,7 +499,17 @@ class AddCave extends Component<any, State> {
                     </Select.Option>
                   </Select>
                 </Form.Item>
-                <Form.Item label="Enterance Description" name="ent_description">
+                <Form.Item
+                  label="Enterance Description"
+                  name="ent_description"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Enterance description required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
                   <Cascader
                     options={[
                       {
@@ -474,7 +559,17 @@ class AddCave extends Component<any, State> {
                     ]}
                   />
                 </Form.Item>
-                <Form.Item label="Field Indication" name="field_indi">
+                <Form.Item
+                  label="Field Indication"
+                  name="field_indi"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Field indication required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
                   <Select placeholder="Please select">
                     <Select.Option value="Hillside">Hillside</Select.Option>
                     <Select.Option value="Sink">Sink</Select.Option>
@@ -500,7 +595,17 @@ class AddCave extends Component<any, State> {
             </Row>
             <Row>
               <Space>
-                <Form.Item label="Topo Indication" name="topo_indi">
+                <Form.Item
+                  label="Topo Indication"
+                  name="topo_indi"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Topo indication required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
                   <Select placeholder="Please select">
                     <Select.Option value="None">None</Select.Option>
                     <Select.Option value="Sink">Sink</Select.Option>
@@ -517,21 +622,71 @@ class AddCave extends Component<any, State> {
                     </Select.Option>
                   </Select>
                 </Form.Item>
-                <Form.Item label="Topo Name" name="topo_name">
+                <Form.Item
+                  label="Topo Name"
+                  name="topo_name"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Topo name required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
                   <Input></Input>
                 </Form.Item>
-                <Form.Item label="Geologic Formation" name="geology">
+                <Form.Item
+                  label="Geologic Formation"
+                  name="geology"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Geologic rormation required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
                   <Input></Input>
                 </Form.Item>
-                <Form.Item label="Geology Age" name="geo_age">
+                <Form.Item
+                  label="Geology Age"
+                  name="geo_age"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Geology age required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
                   <Input></Input>
                 </Form.Item>
-                <Form.Item label="Physiographic Province" name="phys_prov">
+                <Form.Item
+                  label="Physiographic Province"
+                  name="phys_prov"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Physiographic province required!',
+                      whitespace: true,
+                    },
+                  ]}
+                >
                   <Input></Input>
                 </Form.Item>
               </Space>
             </Row>
-            <Form.Item label="Map Status" name="map_status">
+            <Form.Item
+              label="Map Status"
+              name="map_status"
+              rules={[
+                {
+                  required: true,
+                  message: 'Map status required!',
+                  whitespace: true,
+                },
+              ]}
+            >
               <Select placeholder="Please select">
                 <Select.Option value="Mapped">Mapped</Select.Option>
                 <Select.Option value="Unmaped">Unmaped</Select.Option>
@@ -544,7 +699,17 @@ class AddCave extends Component<any, State> {
                 </Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item label="Narrative" name="narr">
+            <Form.Item
+              label="Narrative"
+              name="narr"
+              rules={[
+                {
+                  required: true,
+                  message: 'Narrative required!',
+                  whitespace: true,
+                },
+              ]}
+            >
               <Input.TextArea
                 style={{height: '300px'}}
                 placeholder={narrPlaceholder}
