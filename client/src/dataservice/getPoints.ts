@@ -34,7 +34,8 @@ async function getAllMasterPoints(): Promise<Feature[]> {
 async function getMasterPoint(tcsnumber: string): Promise<Feature> {
   try {
     const masterPointResponse = await axiosInstance.get(
-      '/api/points/master/' + tcsnumber
+      '/api/points/master/' + tcsnumber,
+      {params}
     );
     return masterPointResponse.data as Feature;
   } catch (error) {
