@@ -7,13 +7,18 @@ const axiosInstance = axios.create({
   baseURL: serverBaseURL,
 });
 
+// gets the secret token for API
+const params = {
+  secret_token: localStorage.getItem('JWT'),
+};
+
 /**
  * Fetch all lead points from the API.
  * @returns Promise<SubmittedPoint[]>
  */
 async function getAllLeadPoints(): Promise<LeadPointInterface[]> {
   try {
-    const getLeadPointResponse = await axiosInstance.get('/api/points/leads');
+    const getLeadPointResponse = await axiosInstance.get('/api/points/leads', {params});
     return getLeadPointResponse.data as LeadPointInterface[];
   } catch (error) {
     return error;
@@ -28,7 +33,8 @@ async function getAllLeadPoints(): Promise<LeadPointInterface[]> {
 async function getLeadPoint(id: string): Promise<LeadPointInterface> {
   try {
     const getLeadPointResponse = await axiosInstance.get(
-      '/api/submit/point/' + id
+      '/api/submit/point/' + id,
+      {params}
     );
     return getLeadPointResponse.data as LeadPointInterface;
   } catch (error) {
@@ -37,7 +43,7 @@ async function getLeadPoint(id: string): Promise<LeadPointInterface> {
 }
 
 /**
- * Add am array lead point to the database.
+ * Add an array lead point to the database.
  * @returns Promise<SubmittedPoint>
  * @param point - the point for review.
  */
@@ -47,7 +53,7 @@ async function addLeadPoints(
   return new Promise(async (resolve, reject) => {
     try {
       await axiosInstance
-        .post('/api/points/leads', points)
+        .post('/api/points/leads', points, {params})
         .then(res => {
           resolve(res);
         })
@@ -69,7 +75,8 @@ async function addLeadPoint(point: LeadPointInterface): Promise<AxiosResponse> {
   try {
     const leadPointResponse = await axiosInstance.post(
       '/api/submit/point/',
-      point
+      point,
+      {params}
     );
     return leadPointResponse;
   } catch (error) {
@@ -85,7 +92,8 @@ async function addLeadPoint(point: LeadPointInterface): Promise<AxiosResponse> {
 async function deleteOneLeadPointByID(id: string): Promise<AxiosResponse> {
   try {
     const leadPointResponse = await axiosInstance.delete(
-      '/api/submit/point/' + id
+      '/api/submit/point/' + id,
+      {params}
     );
     return leadPointResponse;
   } catch (error) {
@@ -105,7 +113,8 @@ async function updateOneLeadPointByID(
   try {
     const leadPointResponse = await axiosInstance.put(
       '/api/points/leads' + id,
-      point
+      point,
+      {params}
     );
     return leadPointResponse;
   } catch (error) {

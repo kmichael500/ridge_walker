@@ -76,7 +76,7 @@ import {leadPointAPI} from './endpoints/leadPointAPI';
 app.use('/api/user', userAPI);
 app.use('/api/stats', statisticsAPI);
 app.use('/api/points/master', passport.authenticate('jwt', { session : false }), masterPointsAPI);
-app.use('/api/points/leads', leadPointAPI);
+app.use('/api/points/leads', passport.authenticate('jwt', { session : false }), leadPointAPI);
 app.use('/api/maps', mapsAPI);
 app.use('/api/submit/point', submittedPointAPI);
 
