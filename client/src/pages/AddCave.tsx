@@ -81,11 +81,10 @@ class AddCave extends Component<any, State> {
               const regex = /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/g;
               return {
                 validator(rule, value) {
-                  if (value.match(regex)){
+                  if (value.match(regex)) {
                     return Promise.resolve();
-                  }
-                  else{
-                    return Promise.reject("Wrong format!")
+                  } else {
+                    return Promise.reject('Wrong format!');
                   }
                 },
               };
@@ -102,17 +101,15 @@ class AddCave extends Component<any, State> {
               required: true,
               message: 'Long required!',
               whitespace: true,
-              
             },
             ({getFieldValue}) => {
               const regex = /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/g;
               return {
                 validator(rule, value) {
-                  if (value.match(regex)){
+                  if (value.match(regex)) {
                     return Promise.resolve();
-                  }
-                  else{
-                    return Promise.reject("Wrong format!")
+                  } else {
+                    return Promise.reject('Wrong format!');
                   }
                 },
               };
@@ -368,7 +365,7 @@ class AddCave extends Component<any, State> {
                       required: true,
                       message: 'Elevation required!',
                       whitespace: true,
-                      type:"number"
+                      type: 'number',
                     },
                   ]}
                 >
@@ -427,7 +424,7 @@ class AddCave extends Component<any, State> {
                     },
                   ]}
                 >
-                  <Input defaultValue={1} min={1}/>
+                  <Input defaultValue={1} min={1} />
                 </Form.Item>
                 <Form.Item
                   label="Number of Enterances"
@@ -437,16 +434,15 @@ class AddCave extends Component<any, State> {
                       required: true,
                       message: 'Number of enterances required!',
                       whitespace: true,
-                      type: "number"
+                      type: 'number',
                     },
                   ]}
                 >
-                  <Input defaultValue={1} min={1}/>
+                  <Input defaultValue={1} min={1} />
                 </Form.Item>
                 <Form.Item
                   label="TCS#"
                   name="tcsnumber"
-                  
                   rules={[
                     {
                       required: true,
@@ -538,13 +534,17 @@ class AddCave extends Component<any, State> {
                   ]}
                 >
                   <Select placeholder="Please select">
-                    <Select.Option value="Normal Gear">Normal Gear</Select.Option>
+                    <Select.Option value="Normal Gear">
+                      Normal Gear
+                    </Select.Option>
                     <Select.Option value="Handline">Handline</Select.Option>
                     <Select.Option value="Wading">Wading</Select.Option>
                     <Select.Option value="Boat/Swimming">
                       Boat/Swimming
                     </Select.Option>
-                    <Select.Option value="Rappel/Prusik">Rappel/Prusik</Select.Option>
+                    <Select.Option value="Rappel/Prusik">
+                      Rappel/Prusik
+                    </Select.Option>
                   </Select>
                 </Form.Item>
                 <Form.Item
@@ -612,7 +612,7 @@ class AddCave extends Component<any, State> {
                           },
                           {
                             value: 'Very Wide Pit',
-                            label: 'Very Wide Pit'
+                            label: 'Very Wide Pit',
                           },
                           {
                             value: 'Chimney/Climb',
