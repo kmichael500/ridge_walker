@@ -269,7 +269,6 @@ class AddCave extends Component<any, State> {
                       type: 'number',
                     },
                     ({getFieldValue}) => {
-                      // this.formRef.current.validateFields(["length", "depth"])
                       return {
                         validator(rule, value) {
                           if (
@@ -354,7 +353,7 @@ class AddCave extends Component<any, State> {
                             'autocomplete',
                             'stopDamnAutocomplete'
                           );
-                          //you can put any value but NOT "off" or "false" because they DO NOT works
+                          //you can put any value but NOT "off" or "false" because they DO NOT work
                         });
                     }}
                     autoFocus={false}
@@ -381,7 +380,7 @@ class AddCave extends Component<any, State> {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input defaultValue={1} min={1}/>
                 </Form.Item>
                 <Form.Item
                   label="Number of Enterances"
@@ -395,7 +394,7 @@ class AddCave extends Component<any, State> {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input defaultValue={1} min={1}/>
                 </Form.Item>
                 <Form.Item
                   label="TCS#"
@@ -462,7 +461,7 @@ class AddCave extends Component<any, State> {
                         label: 'Private Property',
                       },
                       {
-                        value: 'Commercial',
+                        value: 'Commercial Cave',
                         label: 'Commercial',
                       },
                       {
