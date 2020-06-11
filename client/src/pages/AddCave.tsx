@@ -526,16 +526,28 @@ class AddCave extends Component<any, State> {
                             label: 'Walk In',
                           },
                           {
-                            value: 'Stoop or Duck',
-                            label: 'Stoop or Duck',
+                            value: 'Large, walk-in',
+                            label: 'Large, walk-in',
+                          },
+                          {
+                            value: 'Extremely Big',
+                            label: 'Extremely Big',
+                          },
+                          {
+                            value: 'Stoop',
+                            label: 'Stoop',
                           },
                           {
                             value: 'Crawl',
                             label: 'Crawl',
                           },
                           {
-                            value: 'Artificial',
-                            label: 'Artificial',
+                            value: 'Artificial Shaft',
+                            label: 'Artificial Shaft',
+                          },
+                          {
+                            value: 'Artificial Tunnel',
+                            label: 'Artificial Tunnel',
                           },
                         ],
                       },
@@ -544,8 +556,16 @@ class AddCave extends Component<any, State> {
                         label: 'Vertical',
                         children: [
                           {
-                            value: 'Bells Out',
-                            label: 'Bells Out',
+                            value: 'Pit Bells Out',
+                            label: 'Pit Bells Out',
+                          },
+                          {
+                            value: 'Pit',
+                            label: 'Pit',
+                          },
+                          {
+                            value: 'Very Wide Pit',
+                            label: 'Very Wide Pit'
                           },
                           {
                             value: 'Chimney/Climb',
