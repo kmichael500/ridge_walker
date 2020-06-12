@@ -21,12 +21,11 @@ const Search = Input;
 const Option = Select;
 
 interface State {
-  userList: UserInterface[];
-  searchData: UserInterface[];
   loading: boolean;
   searchParams: {
     name: string;
     email: string;
+    phoneNumber: string;
     status: ('Approved' | 'Pending' | 'Rejected' | any)[];
   };
 }
@@ -39,13 +38,12 @@ class AdvancedUserSearch extends Component<Props, State> {
   constructor(Props) {
     super(Props);
     this.state = {
-      userList: this.props.userList,
-      searchData: [],
       loading: true,
       searchParams: {
         name: '',
         status: ['Approved', 'Pending'],
-        email:"",
+        email: '',
+        phoneNumber: ''
       },
     };
     this.handleSearch = this.handleSearch.bind(this);
@@ -60,13 +58,21 @@ class AdvancedUserSearch extends Component<Props, State> {
       return name.includes(searchText);
     });
 
+    // phone number search
+    results = results.filter(user => {
+        const phoneNumber = user.phoneNumber.toString()
+        const searchText = this.state.searchParams.phoneNumber.toLowerCase().replace(/[^0-9]/g, '');
+        return phoneNumber.includes(searchText);
+    });
+      
+
     // email search
     results = results.filter(user => {
-        const searchText = this.state.searchParams.email.toLowerCase();
-        return user.email.includes(searchText);
-      });
+      const searchText = this.state.searchParams.email.toLowerCase();
+      return user.email.includes(searchText);
+    });
 
-      // status serach
+    // status serach
     // checks for multiple statues
     results = results.filter(user => {
       return (
@@ -82,16 +88,21 @@ class AdvancedUserSearch extends Component<Props, State> {
   }
 
   render() {
-      const colSpanProps = {xs:{span:24}, sm:{span:24}, md:{span:12}, lg:{span:12}};
+    const colSpanProps = {
+      xs: {span: 24},
+      sm: {span: 24},
+      md: {span: 12},
+      lg: {span: 8},
+      xl: {span: 6},
+    };
     return (
       <Card bordered={true} style={{background: 'fbfdfe'}}>
-        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+        <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
           <Col span={24}>
             <Title level={4}>Search</Title>
           </Col>
-          <Col
-            {...colSpanProps}
-          >
+          {/* Search by name */}
+          <Col {...colSpanProps}>
             <Row>
               <Col span={24}>Name</Col>
               <Col span={24}>
@@ -108,9 +119,8 @@ class AdvancedUserSearch extends Component<Props, State> {
               </Col>
             </Row>
           </Col>
-          <Col
-            {...colSpanProps}
-          >
+          {/* Search by email */}
+          <Col {...colSpanProps}>
             <Row>
               <Col span={24}>Email</Col>
               <Col span={24}>
@@ -127,7 +137,25 @@ class AdvancedUserSearch extends Component<Props, State> {
               </Col>
             </Row>
           </Col>
-
+            {/* Search by phone number */}
+          <Col {...colSpanProps}>
+            <Row>
+              <Col span={24}>Phone Number</Col>
+              <Col span={24}>
+                <Search
+                  placeholder="(123) 456-789"
+                  onChange={e => {
+                    const searchParams = {...this.state.searchParams};
+                    searchParams.phoneNumber = e.target.value;
+                    this.setState({searchParams}, () => {
+                      this.handleSearch();
+                    });
+                  }}
+                ></Search>
+              </Col>
+            </Row>
+          </Col>
+          {/* Search by status */}
           <Col {...colSpanProps}>
             <Row>
               Status
