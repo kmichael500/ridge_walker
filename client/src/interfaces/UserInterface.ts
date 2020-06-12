@@ -19,7 +19,6 @@ export interface UserInterface {
   nssNumber: number;
 }
 
-
 export type userRoleType = 'User' | 'Admin';
 
 const types: userRoleType[] = ['User', 'Admin'];

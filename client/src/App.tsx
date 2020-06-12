@@ -16,7 +16,7 @@ import {UploadLeads} from './components/Karst Features/UploadLeads';
 import {DeadLeads} from './pages/DeadLeads';
 /* admin routes */
 import {ReviewPage} from './pages/ReviewPage';
-import {ListUsers} from './components/userInfo/ListUsers'
+import {ListUsers} from './components/userInfo/ListUsers';
 // Authentication
 import {Register} from './pages/Register';
 import {LoginPage} from './pages/Login';
