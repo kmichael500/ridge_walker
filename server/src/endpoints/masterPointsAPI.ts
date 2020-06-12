@@ -113,7 +113,7 @@ masterPointsAPI.get('/:id', (req, res, next) => {
 });
 
 // get all master points as gpx
-masterPointsAPI.get('/download/gpx', (req, res, next) => {
+masterPointsAPI.get('/download/gpx', cache(30), (req, res, next) => {
   MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
     if (err) {
       console.log("\n Can't get master submissions");
@@ -164,7 +164,7 @@ masterPointsAPI.get('/download/gpx', (req, res, next) => {
 });
 
 // get all master points as csv
-masterPointsAPI.get('/download/csv', (req, res, next) => {
+masterPointsAPI.get('/download/csv', cache(30), (req, res, next) => {
   MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
     if (err) {
       console.log("\n Can't get master points");
