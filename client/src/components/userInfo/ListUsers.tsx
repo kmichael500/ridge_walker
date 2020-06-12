@@ -13,6 +13,8 @@ import {
   Tooltip,
   Button,
   Popconfirm,
+  Input,
+  Select,
 } from 'antd';
 import {
   CheckCircleOutlined,
@@ -21,6 +23,8 @@ import {
 } from '@ant-design/icons';
 
 const {Text, Title, Paragraph} = Typography;
+const {Search} = Input;
+const {Option} = Select;
 
 const UserToolbar = (user: UserInterface) => {
   const buttons = [];
@@ -153,6 +157,7 @@ const AddressDescription = ({title, address, city, state, zipCode}) => (
 
 interface State {
   userList: UserInterface[];
+  listData: UserInterface[];
   loading: boolean;
 }
 
@@ -163,12 +168,13 @@ class ListUsers extends Component<Props, State> {
     super(Props);
     this.state = {
       userList: [],
+      listData: [],
       loading: true,
     };
   }
   componentDidMount() {
     getAllUsers().then(requestedUsers => {
-      this.setState({userList: requestedUsers, loading: false});
+      this.setState({userList: requestedUsers, listData: requestedUsers, loading: false});
     });
   }
   render() {
@@ -178,6 +184,59 @@ class ListUsers extends Component<Props, State> {
           <title>Manage Users</title>
         </Helmet>
 
+        <Card>
+        <Row>
+            <Col span={12}>
+                <Search
+                    placeholder="Search by name"
+                    onChange={(e)=>{
+                        let results = [...this.state.userList]
+                        results = results.filter((user)=>{
+                            const name = (user.firstName + " " + user.lastName).toLowerCase();
+                            const searchText = e.target.value.toLowerCase();
+                            return (name.includes(searchText));
+                        })
+                        this.setState({listData: results});
+                    }}
+                >
+                </Search>
+            </Col>
+            <Col span={12}>
+                <Select
+                    mode="multiple"
+                    placeholder="Select Status"
+                    style={{ width: '35%' }}
+                    defaultValue={["Pending", "Approved", "Rejected"]}
+                    onChange={(statuses: string[])=>{
+                        let results = [...this.state.userList];
+                        
+                        // checks for multiple statues
+                        results = results.filter((user)=>{
+                            return (
+                                // checks if user has any of the selected statues
+                                statuses
+                                .map((status)=>{
+                                    return (user.status === status)
+                                })
+                                .reduce((a, b)=>(a || b), false) // combines true vals in array
+                                )
+                        })
+                        this.setState({listData: results});
+                    }}
+                    tokenSeparators={[',']}>
+                    <Option key="Approved" value="Approved" title="Approved">
+                        Approved
+                    </Option>
+                    <Option key="Pending" value="Pending" title="Pending">
+                        Pending
+                    </Option>
+                    <Option key="Rejected" value="Rejected" title="Rejected">
+                        Rejected
+                    </Option>
+                </Select>
+            </Col>
+        </Row>
+        </Card>
         <List
           grid={{
             gutter: 16,
@@ -188,7 +247,7 @@ class ListUsers extends Component<Props, State> {
             xl: 4,
             xxl: 4,
           }}
-          dataSource={this.state.userList}
+          dataSource={this.state.listData}
           renderItem={user => (
             <List.Item>
               <Card
