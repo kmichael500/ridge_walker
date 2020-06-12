@@ -15,6 +15,7 @@ const userAPI = express();
 //   });
 // });
 
+// Signs up user
 userAPI.post('/signup', async (req, res, next) => {
   passport.authenticate('signup', {session: false}, async (err, user) => {
     try {
@@ -34,6 +35,7 @@ userAPI.post('/signup', async (req, res, next) => {
   })(req, res, next);
 });
 
+// returns JWT for user (loggin in)
 userAPI.post('/login', async (req, res, next) => {
   passport.authenticate('login', async (err, user, info) => {
     try {
@@ -59,7 +61,6 @@ userAPI.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
-//Let's say the route below is very sensitive and we want only authorized users to have access
 
 //Displays information tailored according to the logged in user
 userAPI.get(
@@ -90,7 +91,7 @@ userAPI.get(
   }
 );
 
-//Displays information tailored according to the logged in user
+// Gets submissions of logged in user
 userAPI.get(
   '/submissions',
   passport.authenticate('jwt', {session: false}),
@@ -117,7 +118,7 @@ userAPI.get(
   }
 );
 
-//Displays information tailored according to the logged in user
+//Gets one user by ID
 userAPI.get(
   '/:id',
   passport.authenticate('jwt', {session: false}),
@@ -166,5 +167,18 @@ userAPI.get(
     // })
   }
 );
+
+//Gets all users by ID
+// get all master points
+userAPI.get('/', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+  UserModel.find((err: Error, requestedUsers) => {
+    if (err) {
+      console.log("\n Can't get all users");
+      next(err);
+    } else {
+      res.send(requestedUsers);
+    }
+  }).lean();
+});
 
 export {userAPI};
