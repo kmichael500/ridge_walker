@@ -63,16 +63,43 @@ masterPointsAPI.post('/upload', upload.single('csv'), (req, res, next) => {
     });
 });
 
-// get all master points
-masterPointsAPI.get('/', (req, res, next) => {
-  MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
-    if (err) {
-      console.log("\n Can't get master submissions");
-      next(err);
-    } else {
-      res.send(requestedPoints);
+var mcache = require('memory-cache');
+
+// cache based on duration and request url
+var cache = (duration: any) => {
+  return (req: any, res: any, next: any) => {
+    let matched = /[^?]*/g.exec(req.originalUrl);
+    let key = "";
+    if (matched !== null){
+      key = '_express_' + matched[0]
     }
-  }).lean();
+    console.log("key", key)
+    let cachedBody = mcache.get(key);
+    if (cachedBody) {
+      res.send(cachedBody);
+      return;
+    } else {
+      res.sendResponse = res.send;
+      res.send = (body: any) =>{
+        mcache.put(key, body, duration * 1000);
+        res.sendResponse(body);
+      }
+      next();
+    }
+  }
+}
+
+// get all master points
+// cache is updated every 30 seconds
+masterPointsAPI.get('/', cache(30), (req, res, next) => {
+    MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
+      if (err) {
+        console.log("\n Can't get master submissions");
+        next(err);
+      } else {
+        res.send(requestedPoints);
+      }
+    }).lean();  
 });
 
 // Endpoint to get a single submission by tcsnumber

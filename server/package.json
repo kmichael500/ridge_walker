@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/server.ts",
-    "dev": "ts-node-dev src/server.ts",
+    "dev": "ts-node-dev src/server.ts --max-old-space-size=4096",
     "test": "echo \"Error: no test specified\" && exit 1",
     "check": "gts check",
     "clean": "gts clean",
@@ -45,6 +45,7 @@
     "json2csv": "^5.0.1",
     "jsonwebtoken": "^8.5.1",
     "lokijs": "^1.5.8",
+    "memory-cache": "^0.2.0",
     "mongoose": "^5.9.11",
     "multer": "^1.4.2",
     "passport": "^0.4.1",
