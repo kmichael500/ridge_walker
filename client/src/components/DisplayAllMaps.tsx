@@ -160,6 +160,9 @@ export default class DisplayAllMaps extends Component<
             {/* </Space> */}
           </Col>
         ))}
+        {this.state.fileNames.length === 0 &&
+          <div>No maps available...</div>
+        }
       </Row>
     );
   }
