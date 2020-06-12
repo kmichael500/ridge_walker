@@ -15,13 +15,14 @@ import {
   Popconfirm,
   Input,
   Select,
+  Divider,
 } from 'antd';
 import {
   CheckCircleOutlined,
   DeleteOutlined,
   StopOutlined,
 } from '@ant-design/icons';
-import { AdvancedUserSearch } from './AdvancedUserSerach';
+import {AdvancedUserSearch} from './AdvancedUserSerach';
 
 const {Text, Title, Paragraph} = Typography;
 const {Search} = Input;
@@ -175,7 +176,11 @@ class ListUsers extends Component<Props, State> {
   }
   componentDidMount() {
     getAllUsers().then(requestedUsers => {
-      this.setState({userList: requestedUsers, listData: requestedUsers, loading: false});
+      this.setState({
+        userList: requestedUsers,
+        listData: requestedUsers,
+        loading: false,
+      });
     });
   }
   render() {
@@ -184,12 +189,14 @@ class ListUsers extends Component<Props, State> {
         <Helmet>
           <title>Manage Users</title>
         </Helmet>
-
         <Card>
-        <Row>
-            <AdvancedUserSearch userList={this.state.userList} onSearch={(results)=>{this.setState({listData:results})}}></AdvancedUserSearch>
-        </Row>
-        </Card>
+        <AdvancedUserSearch
+            userList={this.state.userList}
+            onSearch={results => {
+            this.setState({listData: results});
+            }}
+        ></AdvancedUserSearch>
+        <Divider></Divider>
         <List
           grid={{
             gutter: 16,
@@ -258,6 +265,7 @@ class ListUsers extends Component<Props, State> {
             </List.Item>
           )}
         />
+        </Card>
       </div>
     );
   }
