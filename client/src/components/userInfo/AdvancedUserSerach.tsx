@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
 import {getAllUsers} from '../../dataservice/authentication';
 import {
@@ -24,46 +24,64 @@ interface State {
     loading: boolean;
     searchParams: {
         name: string,
-        status: "Approved" | "Pending" | "Rejected"[],
+        status: ("Approved" | "Pending" | "Rejected" | any)[],
     };
 }
 interface Props {
     userList: UserInterface[];
+    onSearch: (results: UserInterface[]) => void
 }
 
 class AdvancedUserSearch extends Component<Props, State> {
     constructor(Props) {
       super(Props);
       this.state = {
-        userList: [],
+        userList: this.props.userList,
         searchData: [],
         loading: true,
         searchParams: {
             name: "",
-            status: []
+            status: ["Approved", "Pending"]
         }
       };
       this.handleSearch = this.handleSearch.bind(this);
     }
 
     handleSearch(){
+        // name search
+        let results = [...this.props.userList]
+        results = results.filter((user)=>{
+            const name = (user.firstName + " " + user.lastName).toLowerCase();
+            const searchText = this.state.searchParams.name.toLowerCase();
+            return (name.includes(searchText));
+        })
 
+        // checks for multiple statues
+        results = results.filter((user)=>{
+            return (
+                // checks if user has any of the selected statues
+                this.state.searchParams.status
+                .map((status)=>{
+                    return (user.status === status)
+                })
+                .reduce((a, b)=>(a || b), false) // combines true vals in array
+                )
+        })
+        this.props.onSearch(results);
     }
 
     render() {
       return (
-          <Row>
+          <Fragment>
               <Col span={12}>
                   <Search
                       placeholder="Search by name"
                       onChange={(e)=>{
-                          let results = [...this.state.userList]
-                          results = results.filter((user)=>{
-                              const name = (user.firstName + " " + user.lastName).toLowerCase();
-                              const searchText = e.target.value.toLowerCase();
-                              return (name.includes(searchText));
+                          const searchParams = {...this.state.searchParams};
+                          searchParams.name = e.target.value;
+                          this.setState({searchParams}, ()=>{
+                              this.handleSearch();
                           })
-                          this.setState({searchData: results});
                       }}
                   >
                   </Search>
@@ -72,23 +90,13 @@ class AdvancedUserSearch extends Component<Props, State> {
                   <Select
                       mode="multiple"
                       placeholder="Select Status"
-                      style={{ width: '35%' }}
-                      defaultValue={["Pending", "Approved", "Rejected"]}
+                      defaultValue={this.state.searchParams.status}
                       onChange={(statuses: string[])=>{
-                          let results = [...this.state.userList];
-                          
-                          // checks for multiple statues
-                          results = results.filter((user)=>{
-                              return (
-                                  // checks if user has any of the selected statues
-                                  statuses
-                                  .map((status)=>{
-                                      return (user.status === status)
-                                  })
-                                  .reduce((a, b)=>(a || b), false) // combines true vals in array
-                                  )
+                          const searchParams = {...this.state.searchParams};
+                          searchParams.status = statuses;
+                          this.setState({searchParams},()=>{
+                              this.handleSearch();
                           })
-                          this.setState({searchData: results});
                       }}
                       tokenSeparators={[',']}>
                       <Option key="Approved" value="Approved">
@@ -102,7 +110,7 @@ class AdvancedUserSearch extends Component<Props, State> {
                       </Option>
                   </Select>
               </Col>
-          </Row>
+            </Fragment>
       );
     }
   }

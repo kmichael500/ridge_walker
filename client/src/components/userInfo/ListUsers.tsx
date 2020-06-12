@@ -21,6 +21,7 @@ import {
   DeleteOutlined,
   StopOutlined,
 } from '@ant-design/icons';
+import { AdvancedUserSearch } from './AdvancedUserSerach';
 
 const {Text, Title, Paragraph} = Typography;
 const {Search} = Input;
@@ -186,55 +187,7 @@ class ListUsers extends Component<Props, State> {
 
         <Card>
         <Row>
-            <Col span={12}>
-                <Search
-                    placeholder="Search by name"
-                    onChange={(e)=>{
-                        let results = [...this.state.userList]
-                        results = results.filter((user)=>{
-                            const name = (user.firstName + " " + user.lastName).toLowerCase();
-                            const searchText = e.target.value.toLowerCase();
-                            return (name.includes(searchText));
-                        })
-                        this.setState({listData: results});
-                    }}
-                >
-                </Search>
-            </Col>
-            <Col span={12}>
-                <Select
-                    mode="multiple"
-                    placeholder="Select Status"
-                    style={{ width: '35%' }}
-                    defaultValue={["Pending", "Approved", "Rejected"]}
-                    onChange={(statuses: string[])=>{
-                        let results = [...this.state.userList];
-                        
-                        // checks for multiple statues
-                        results = results.filter((user)=>{
-                            return (
-                                // checks if user has any of the selected statues
-                                statuses
-                                .map((status)=>{
-                                    return (user.status === status)
-                                })
-                                .reduce((a, b)=>(a || b), false) // combines true vals in array
-                                )
-                        })
-                        this.setState({listData: results});
-                    }}
-                    tokenSeparators={[',']}>
-                    <Option key="Approved" value="Approved" title="Approved">
-                        Approved
-                    </Option>
-                    <Option key="Pending" value="Pending" title="Pending">
-                        Pending
-                    </Option>
-                    <Option key="Rejected" value="Rejected" title="Rejected">
-                        Rejected
-                    </Option>
-                </Select>
-            </Col>
+            <AdvancedUserSearch userList={this.state.userList} onSearch={(results)=>{this.setState({listData:results})}}></AdvancedUserSearch>
         </Row>
         </Card>
         <List
