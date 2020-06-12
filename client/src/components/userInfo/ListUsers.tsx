@@ -190,81 +190,83 @@ class ListUsers extends Component<Props, State> {
           <title>Manage Users</title>
         </Helmet>
         <Card>
-        <AdvancedUserSearch
+          <AdvancedUserSearch
             userList={this.state.userList}
             onSearch={results => {
-            this.setState({listData: results});
+              this.setState({listData: results});
             }}
-        ></AdvancedUserSearch>
-        <Divider></Divider>
-        <List
-          grid={{
-            gutter: 16,
-            xs: 1,
-            sm: 2,
-            md: 4,
-            lg: 4,
-            xl: 4,
-            xxl: 4,
-          }}
-          dataSource={this.state.listData}
-          renderItem={user => (
-            <List.Item>
-              <Card
-                title={
+          ></AdvancedUserSearch>
+          <Divider></Divider>
+          <List
+            grid={{
+              gutter: 16,
+              xs: 1,
+              sm: 2,
+              md: 4,
+              lg: 4,
+              xl: 4,
+              xxl: 4,
+            }}
+            dataSource={this.state.listData}
+            renderItem={user => (
+              <List.Item>
+                <Card
+                  title={
+                    <Row>
+                      <Col span={24}>
+                        {user.firstName + ' ' + user.lastName}
+                      </Col>
+                      <Col span={24}>
+                        <UserTag user={user}></UserTag>
+                      </Col>
+                    </Row>
+                  }
+                  actions={UserToolbar(user)}
+                  loading={this.state.loading}
+                >
                   <Row>
-                    <Col span={24}>{user.firstName + ' ' + user.lastName}</Col>
                     <Col span={24}>
-                      <UserTag user={user}></UserTag>
+                      <DescriptionItem
+                        title="Email"
+                        content={
+                          <a href={'mailto:' + user.email}>{user.email}</a>
+                        }
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <DescriptionItem
+                        title="Phone Number"
+                        content={
+                          <a href={'tel:' + user.phoneNumber}>
+                            {formatPhoneNumber(user.phoneNumber)}
+                          </a>
+                        }
+                      />
                     </Col>
                   </Row>
-                }
-                actions={UserToolbar(user)}
-                loading={this.state.loading}
-              >
-                <Row>
-                  <Col span={24}>
-                    <DescriptionItem
-                      title="Email"
-                      content={
-                        <a href={'mailto:' + user.email}>{user.email}</a>
-                      }
-                    />
-                  </Col>
-                  <Col span={24}>
-                    <DescriptionItem
-                      title="Phone Number"
-                      content={
-                        <a href={'tel:' + user.phoneNumber}>
-                          {formatPhoneNumber(user.phoneNumber)}
-                        </a>
-                      }
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={24}>
-                    <AddressDescription
-                      title="Address"
-                      address={user.address}
-                      city={user.city}
-                      state={user.state}
-                      zipCode={user.zipCode}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={24}>
-                    <DescriptionItem
-                      title="Status"
-                      content={<UserStatusTag user={user}></UserStatusTag>}
-                    ></DescriptionItem>
-                  </Col>
-                </Row>
-              </Card>
-            </List.Item>
-          )}
-        />
+                  <Row>
+                    <Col span={24}>
+                      <AddressDescription
+                        title="Address"
+                        address={user.address}
+                        city={user.city}
+                        state={user.state}
+                        zipCode={user.zipCode}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={24}>
+                      <DescriptionItem
+                        title="Status"
+                        content={<UserStatusTag user={user}></UserStatusTag>}
+                      ></DescriptionItem>
+                    </Col>
+                  </Row>
+                </Card>
+              </List.Item>
+            )}
+          />
         </Card>
       </div>
     );

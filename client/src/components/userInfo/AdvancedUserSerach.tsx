@@ -26,6 +26,7 @@ interface State {
   loading: boolean;
   searchParams: {
     name: string;
+    email: string;
     status: ('Approved' | 'Pending' | 'Rejected' | any)[];
   };
 }
@@ -44,6 +45,7 @@ class AdvancedUserSearch extends Component<Props, State> {
       searchParams: {
         name: '',
         status: ['Approved', 'Pending'],
+        email:"",
       },
     };
     this.handleSearch = this.handleSearch.bind(this);
@@ -58,6 +60,13 @@ class AdvancedUserSearch extends Component<Props, State> {
       return name.includes(searchText);
     });
 
+    // email search
+    results = results.filter(user => {
+        const searchText = this.state.searchParams.email.toLowerCase();
+        return user.email.includes(searchText);
+      });
+
+      // status serach
     // checks for multiple statues
     results = results.filter(user => {
       return (
@@ -73,62 +82,84 @@ class AdvancedUserSearch extends Component<Props, State> {
   }
 
   render() {
+      const colSpanProps = {xs:{span:24}, sm:{span:24}, md:{span:12}, lg:{span:12}};
     return (
-        <Card bordered={true} style={{background:"fbfdfe"}}>
-      <Row gutter={10}>
-        <Col span={24}><Title level={4}>Search</Title></Col>
-        <Col span={12}>
-        <Row>
-            <Col span={24}>
-            Name
-            </Col>
-            <Col span={24}>
-          <Search
-            placeholder="Search by name"
-            onChange={e => {
-              const searchParams = {...this.state.searchParams};
-              searchParams.name = e.target.value;
-              this.setState({searchParams}, () => {
-                this.handleSearch();
-              });
-            }}
-          ></Search>
+      <Card bordered={true} style={{background: 'fbfdfe'}}>
+        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+          <Col span={24}>
+            <Title level={4}>Search</Title>
           </Col>
-          </Row>
-        </Col>
-
-        <Col span={12}>
-            <Row>
-                Status
-                <Col span={24}>
-          <Select
-            mode="multiple"
-            placeholder="Select Status"
-            defaultValue={this.state.searchParams.status}
-            style={{width:"100%"}}
-            onChange={(statuses: string[]) => {
-              const searchParams = {...this.state.searchParams};
-              searchParams.status = statuses;
-              this.setState({searchParams}, () => {
-                this.handleSearch();
-              });
-            }}
-            tokenSeparators={[',']}
+          <Col
+            {...colSpanProps}
           >
-            <Option key="Approved" value="Approved">
-              Approved
-            </Option>
-            <Option key="Pending" value="Pending">
-              Pending
-            </Option>
-            <Option key="Rejected" value="Rejected">
-              Rejected
-            </Option>
-          </Select>
+            <Row>
+              <Col span={24}>Name</Col>
+              <Col span={24}>
+                <Search
+                  placeholder="Search by name"
+                  onChange={e => {
+                    const searchParams = {...this.state.searchParams};
+                    searchParams.name = e.target.value;
+                    this.setState({searchParams}, () => {
+                      this.handleSearch();
+                    });
+                  }}
+                ></Search>
+              </Col>
+            </Row>
           </Col>
-          </Row>
-        </Col>
-      </Row>
+          <Col
+            {...colSpanProps}
+          >
+            <Row>
+              <Col span={24}>Email</Col>
+              <Col span={24}>
+                <Search
+                  placeholder="Search by email"
+                  onChange={e => {
+                    const searchParams = {...this.state.searchParams};
+                    searchParams.email = e.target.value;
+                    this.setState({searchParams}, () => {
+                      this.handleSearch();
+                    });
+                  }}
+                ></Search>
+              </Col>
+            </Row>
+          </Col>
+
+          <Col {...colSpanProps}>
+            <Row>
+              Status
+              <Col span={24}>
+                <Select
+                  mode="multiple"
+                  placeholder="Select Status"
+                  defaultValue={this.state.searchParams.status}
+                  style={{width: '100%'}}
+                  onChange={(statuses: string[]) => {
+                    const searchParams = {...this.state.searchParams};
+                    searchParams.status = statuses;
+                    this.setState({searchParams}, () => {
+                      this.handleSearch();
+                    });
+                  }}
+                  tokenSeparators={[',']}
+                >
+                  <Option key="Approved" value="Approved">
+                    Approved
+                  </Option>
+                  <Option key="Pending" value="Pending">
+                    Pending
+                  </Option>
+                  <Option key="Rejected" value="Rejected">
+                    Rejected
+                  </Option>
+                </Select>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </Card>
     );
   }
