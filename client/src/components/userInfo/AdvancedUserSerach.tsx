@@ -27,6 +27,10 @@ interface State {
     email: string;
     phoneNumber: string;
     status: ('Approved' | 'Pending' | 'Rejected' | any)[];
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
   };
 }
 interface Props {
@@ -43,7 +47,11 @@ class AdvancedUserSearch extends Component<Props, State> {
         name: '',
         status: ['Approved', 'Pending'],
         email: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        street: '',
+        city: '',
+        state: '',
+        zipCode: '',
       },
     };
     this.handleSearch = this.handleSearch.bind(this);
@@ -60,11 +68,12 @@ class AdvancedUserSearch extends Component<Props, State> {
 
     // phone number search
     results = results.filter(user => {
-        const phoneNumber = user.phoneNumber.toString()
-        const searchText = this.state.searchParams.phoneNumber.toLowerCase().replace(/[^0-9]/g, '');
-        return phoneNumber.includes(searchText);
+      const phoneNumber = user.phoneNumber.toString();
+      const searchText = this.state.searchParams.phoneNumber
+        .toLowerCase()
+        .replace(/[^0-9]/g, '');
+      return phoneNumber.includes(searchText);
     });
-      
 
     // email search
     results = results.filter(user => {
@@ -84,6 +93,32 @@ class AdvancedUserSearch extends Component<Props, State> {
           .reduce((a, b) => a || b, false) // combines true vals in array
       );
     });
+
+    // street search
+    results = results.filter(user => {
+      const searchText = this.state.searchParams.street.toLowerCase();
+      return user.address.includes(searchText);
+    });
+
+    // City search
+    results = results.filter(user => {
+      const searchText = this.state.searchParams.city.toLowerCase();
+      console.log(this.state.searchParams.city, user.city);
+      return user.city.toLowerCase().includes(searchText);
+    });
+
+    // State search
+    results = results.filter(user => {
+      const searchText = this.state.searchParams.state.toLowerCase();
+      return user.state.toLowerCase().includes(searchText);
+    });
+
+    // Zip Code search
+    results = results.filter(user => {
+      const searchText = this.state.searchParams.zipCode.toLowerCase();
+      return user.zipCode.toString().includes(searchText);
+    });
+
     this.props.onSearch(results);
   }
 
@@ -99,7 +134,7 @@ class AdvancedUserSearch extends Component<Props, State> {
       <Card bordered={true} style={{background: 'fbfdfe'}}>
         <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
           <Col span={24}>
-            <Title level={4}>Search</Title>
+            <Title level={3}>Search</Title>
           </Col>
           {/* Search by name */}
           <Col {...colSpanProps}>
@@ -137,7 +172,7 @@ class AdvancedUserSearch extends Component<Props, State> {
               </Col>
             </Row>
           </Col>
-            {/* Search by phone number */}
+          {/* Search by phone number */}
           <Col {...colSpanProps}>
             <Row>
               <Col span={24}>Phone Number</Col>
@@ -184,6 +219,82 @@ class AdvancedUserSearch extends Component<Props, State> {
                     Rejected
                   </Option>
                 </Select>
+              </Col>
+            </Row>
+          </Col>
+          <Divider></Divider>
+          <Col span={24}>
+            <h4>Address</h4>
+          </Col>
+          {/* Search by Street */}
+          <Col {...colSpanProps}>
+            <Row>
+              <Col span={24}>Street</Col>
+              <Col span={24}>
+                <Search
+                  placeholder="123 Example Dr"
+                  onChange={e => {
+                    const searchParams = {...this.state.searchParams};
+                    searchParams.street = e.target.value;
+                    this.setState({searchParams}, () => {
+                      this.handleSearch();
+                    });
+                  }}
+                ></Search>
+              </Col>
+            </Row>
+          </Col>
+          {/* Search by City */}
+          <Col {...colSpanProps}>
+            <Row>
+              <Col span={24}>City</Col>
+              <Col span={24}>
+                <Search
+                  placeholder="Nashville"
+                  onChange={e => {
+                    const searchParams = {...this.state.searchParams};
+                    searchParams.city = e.target.value;
+                    this.setState({searchParams}, () => {
+                      this.handleSearch();
+                    });
+                  }}
+                ></Search>
+              </Col>
+            </Row>
+          </Col>
+          {/* Search by State */}
+          <Col {...colSpanProps}>
+            <Row>
+              <Col span={24}>State</Col>
+              <Col span={24}>
+                <Search
+                  placeholder="TN"
+                  onChange={e => {
+                    const searchParams = {...this.state.searchParams};
+                    searchParams.state = e.target.value;
+                    this.setState({searchParams}, () => {
+                      this.handleSearch();
+                    });
+                  }}
+                ></Search>
+              </Col>
+            </Row>
+          </Col>
+          {/* Search by Zip */}
+          <Col {...colSpanProps}>
+            <Row>
+              <Col span={24}>Zip Code</Col>
+              <Col span={24}>
+                <Search
+                  placeholder="12345"
+                  onChange={e => {
+                    const searchParams = {...this.state.searchParams};
+                    searchParams.zipCode = e.target.value;
+                    this.setState({searchParams}, () => {
+                      this.handleSearch();
+                    });
+                  }}
+                ></Search>
               </Col>
             </Row>
           </Col>

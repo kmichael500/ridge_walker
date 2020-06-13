@@ -16,6 +16,7 @@ import {
   Input,
   Select,
   Divider,
+  Pagination,
 } from 'antd';
 import {
   CheckCircleOutlined,
@@ -198,6 +199,14 @@ class ListUsers extends Component<Props, State> {
           ></AdvancedUserSearch>
           <Divider></Divider>
           <List
+            pagination={{
+                onChange: page => {
+                  console.log(page);
+                },
+                pageSize: 4,
+                position: "bottom"
+                
+              }}
             grid={{
               gutter: 16,
               xs: 1,
