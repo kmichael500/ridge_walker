@@ -1,6 +1,7 @@
 import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
-import {getAllUsers} from '../../dataservice/authentication';
+import {UserStatusTag} from './ListUsers'
+
 import {
   List,
   Card,
@@ -15,8 +16,10 @@ import {
   Input,
   Select,
   Divider,
+  Collapse,
 } from 'antd';
 const {Title} = Typography;
+const {Panel} = Collapse;
 const Search = Input;
 const Option = Select;
 
@@ -131,18 +134,16 @@ class AdvancedUserSearch extends Component<Props, State> {
       xl: {span: 6},
     };
     return (
-      <Card bordered={true} style={{background: 'fbfdfe'}}>
-        <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
-          <Col span={24}>
-            <Title level={3}>Search</Title>
-          </Col>
+      <Collapse defaultActiveKey={[1]}>
+        <Panel header="Advanced Search" key={1}>
+        <Row gutter={[10, {xs: 8, sm: 16, md: 24, lg: 32}]}>
           {/* Search by name */}
           <Col {...colSpanProps}>
             <Row>
               <Col span={24}>Name</Col>
               <Col span={24}>
                 <Search
-                  placeholder="Search by name"
+                  placeholder="Jane Doe"
                   onChange={e => {
                     const searchParams = {...this.state.searchParams};
                     searchParams.name = e.target.value;
@@ -160,7 +161,7 @@ class AdvancedUserSearch extends Component<Props, State> {
               <Col span={24}>Email</Col>
               <Col span={24}>
                 <Search
-                  placeholder="Search by email"
+                  placeholder="johndoe@example.com"
                   onChange={e => {
                     const searchParams = {...this.state.searchParams};
                     searchParams.email = e.target.value;
@@ -198,6 +199,12 @@ class AdvancedUserSearch extends Component<Props, State> {
                 <Select
                   mode="multiple"
                   placeholder="Select Status"
+                  tagRender={(props)=>{
+                      console.log(props.label.toString());
+                      return(
+                          <UserStatusTag status={props.label.toString()}></UserStatusTag>
+                      )
+                  }}
                   defaultValue={this.state.searchParams.status}
                   style={{width: '100%'}}
                   onChange={(statuses: string[]) => {
@@ -299,7 +306,8 @@ class AdvancedUserSearch extends Component<Props, State> {
             </Row>
           </Col>
         </Row>
-      </Card>
+        </Panel>
+    </Collapse>
     );
   }
 }

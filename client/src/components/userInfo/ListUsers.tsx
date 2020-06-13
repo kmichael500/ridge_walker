@@ -16,7 +16,6 @@ import {
   Input,
   Select,
   Divider,
-  Pagination,
 } from 'antd';
 import {
   CheckCircleOutlined,
@@ -25,9 +24,7 @@ import {
 } from '@ant-design/icons';
 import {AdvancedUserSearch} from './AdvancedUserSerach';
 
-const {Text, Title, Paragraph} = Typography;
-const {Search} = Input;
-const {Option} = Select;
+const {Paragraph} = Typography;
 
 const UserToolbar = (user: UserInterface) => {
   const buttons = [];
@@ -110,15 +107,19 @@ const formatPhoneNumber = (phoneNumber: number) => {
   }
 };
 
-const UserStatusTag: React.FunctionComponent<{user: UserInterface}> = props => {
-  if (props.user.status === 'Pending') {
-    return <Tag color="geekblue">{props.user.status}</Tag>;
-  } else if (props.user.status === 'Approved') {
-    return <Tag color="green">{props.user.status}</Tag>;
-  } else if (props.user.status === 'Rejected') {
-    return <Tag color="volcano">{props.user.status}</Tag>;
+interface UserStatusTagProps {
+    status: string;
+
+}
+export const UserStatusTag: React.FunctionComponent<UserStatusTagProps> = (props) => {
+  if (props.status === 'Pending') {
+    return <Tag color="geekblue">{props.status}</Tag>;
+  } else if (props.status === 'Approved') {
+    return <Tag color="green">{props.status}</Tag>;
+  } else if (props.status === 'Rejected') {
+    return <Tag color="volcano">{props.status}</Tag>;
   } else {
-    return null;
+    return <Tag>{props.status}</Tag>;
   }
 };
 
@@ -268,7 +269,7 @@ class ListUsers extends Component<Props, State> {
                     <Col span={24}>
                       <DescriptionItem
                         title="Status"
-                        content={<UserStatusTag user={user}></UserStatusTag>}
+                        content={<UserStatusTag status={user.status}></UserStatusTag>}
                       ></DescriptionItem>
                     </Col>
                   </Row>
