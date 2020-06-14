@@ -333,6 +333,24 @@ class ListUsers extends Component<Props, State> {
                   <Row>
                     <Col span={24}>
                       <DescriptionItem
+                        title="NSS Number"
+                        content={user.nssNumber}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <DescriptionItem
+                        title="Phone Number"
+                        content={
+                          <a href={'tel:' + user.phoneNumber}>
+                            {formatPhoneNumber(user.phoneNumber)}
+                          </a>
+                        }
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={24}>
+                      <DescriptionItem
                         title="Email"
                         content={
                           <a href={'mailto:' + user.email}>{user.email}</a>

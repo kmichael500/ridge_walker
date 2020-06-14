@@ -2,14 +2,7 @@ import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
 import {UserStatusTag, UserRoleTag} from './ListUsers';
 
-import {
-  Row,
-  Col,
-  Input,
-  Select,
-  Divider,
-  Collapse,
-} from 'antd';
+import {Row, Col, Input, Select, Divider, Collapse} from 'antd';
 const {Panel} = Collapse;
 const Search = Input;
 const Option = Select;
@@ -20,8 +13,9 @@ interface State {
     name: string;
     email: string;
     phoneNumber: string;
+    nssNumber: string;
     status: ('Approved' | 'Pending' | 'Rejected' | any)[];
-    role: ('Admin' | 'User' | any)[]
+    role: ('Admin' | 'User' | any)[];
     street: string;
     city: string;
     state: string;
@@ -44,6 +38,7 @@ class AdvancedUserSearch extends Component<Props, State> {
         role: ['Admin', 'User'],
         email: '',
         phoneNumber: '',
+        nssNumber: '',
         street: '',
         city: '',
         state: '',
@@ -69,6 +64,15 @@ class AdvancedUserSearch extends Component<Props, State> {
         .toLowerCase()
         .replace(/[^0-9]/g, '');
       return phoneNumber.includes(searchText);
+    });
+
+    // nss number search
+    results = results.filter(user => {
+      const nssNumber = user.nssNumber.toString();
+      const searchText = this.state.searchParams.nssNumber
+        .toLowerCase()
+        .replace(/[^0-9]/g, '');
+      return nssNumber.includes(searchText);
     });
 
     // email search
@@ -188,6 +192,24 @@ class AdvancedUserSearch extends Component<Props, State> {
                     onChange={e => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.phoneNumber = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by nss number */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>NSS Number</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="12345"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.nssNumber = e.target.value;
                       this.setState({searchParams}, () => {
                         this.handleSearch();
                       });
