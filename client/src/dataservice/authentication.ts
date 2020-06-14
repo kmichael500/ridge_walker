@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {serverBaseURL} from '../config/urlConfig';
 import {
   RegisterUserInterface,
@@ -148,14 +148,11 @@ async function updateOneUserByID(
  * @returns void
  * @param id - the id of the user to be deleted.
  */
-async function deleteOneUserByID(
-  id: string,
-): Promise<AxiosResponse> {
+async function deleteOneUserByID(id: string): Promise<AxiosResponse> {
   try {
-    const userResponse = await axiosInstance.delete(
-      '/api/user/' + id,
-      {params}
-    );
+    const userResponse = await axiosInstance.delete('/api/user/' + id, {
+      params,
+    });
     return userResponse;
   } catch (error) {
     return error;
@@ -169,7 +166,6 @@ async function deleteOneUserByID(
 async function getAllUsers(): Promise<UserInterface[]> {
   try {
     const userResponse = await axiosInstance.get('/api/user/', {params});
-    console.log(userResponse.data)
     return userResponse.data as UserInterface[];
   } catch (error) {
     return error;

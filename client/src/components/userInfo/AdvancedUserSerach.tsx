@@ -1,24 +1,16 @@
 import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
-import {UserStatusTag} from './ListUsers'
+import {UserStatusTag} from './ListUsers';
 
 import {
-  List,
-  Card,
   Row,
   Col,
   Typography,
-  Space,
-  Tag,
-  Tooltip,
-  Button,
-  Popconfirm,
   Input,
   Select,
   Divider,
   Collapse,
 } from 'antd';
-const {Title} = Typography;
 const {Panel} = Collapse;
 const Search = Input;
 const Option = Select;
@@ -135,177 +127,179 @@ class AdvancedUserSearch extends Component<Props, State> {
     return (
       <Collapse defaultActiveKey={[1]}>
         <Panel header="Advanced Search" key={1}>
-        <Row gutter={[10, {xs: 8, sm: 16, md: 24, lg: 32}]}>
-          {/* Search by name */}
-          <Col {...colSpanProps}>
-            <Row>
-              <Col span={24}>Name</Col>
-              <Col span={24}>
-                <Search
-                  placeholder="Jane Doe"
-                  onChange={e => {
-                    const searchParams = {...this.state.searchParams};
-                    searchParams.name = e.target.value;
-                    this.setState({searchParams}, () => {
-                      this.handleSearch();
-                    });
-                  }}
-                ></Search>
-              </Col>
-            </Row>
-          </Col>
-          {/* Search by email */}
-          <Col {...colSpanProps}>
-            <Row>
-              <Col span={24}>Email</Col>
-              <Col span={24}>
-                <Search
-                  placeholder="johndoe@example.com"
-                  onChange={e => {
-                    const searchParams = {...this.state.searchParams};
-                    searchParams.email = e.target.value;
-                    this.setState({searchParams}, () => {
-                      this.handleSearch();
-                    });
-                  }}
-                ></Search>
-              </Col>
-            </Row>
-          </Col>
-          {/* Search by phone number */}
-          <Col {...colSpanProps}>
-            <Row>
-              <Col span={24}>Phone Number</Col>
-              <Col span={24}>
-                <Search
-                  placeholder="(123) 456-789"
-                  onChange={e => {
-                    const searchParams = {...this.state.searchParams};
-                    searchParams.phoneNumber = e.target.value;
-                    this.setState({searchParams}, () => {
-                      this.handleSearch();
-                    });
-                  }}
-                ></Search>
-              </Col>
-            </Row>
-          </Col>
-          {/* Search by status */}
-          <Col {...colSpanProps}>
-            <Row>
-              Status
-              <Col span={24}>
-                <Select
-                  mode="multiple"
-                  placeholder="Select Status"
-                  tagRender={(props)=>{
-                      return(
-                          <UserStatusTag status={props.label.toString()}></UserStatusTag>
-                      )
-                  }}
-                  defaultValue={this.state.searchParams.status}
-                  style={{width: '100%'}}
-                  onChange={(statuses: string[]) => {
-                    const searchParams = {...this.state.searchParams};
-                    searchParams.status = statuses;
-                    this.setState({searchParams}, () => {
-                      this.handleSearch();
-                    });
-                  }}
-                  tokenSeparators={[',']}
-                >
-                  <Option key="Approved" value="Approved">
-                    Approved
-                  </Option>
-                  <Option key="Pending" value="Pending">
-                    Pending
-                  </Option>
-                  <Option key="Rejected" value="Rejected">
-                    Rejected
-                  </Option>
-                </Select>
-              </Col>
-            </Row>
-          </Col>
-          <Divider></Divider>
-          <Col span={24}>
-            <h4>Address</h4>
-          </Col>
-          {/* Search by Street */}
-          <Col {...colSpanProps}>
-            <Row>
-              <Col span={24}>Street</Col>
-              <Col span={24}>
-                <Search
-                  placeholder="123 Example Dr"
-                  onChange={e => {
-                    const searchParams = {...this.state.searchParams};
-                    searchParams.street = e.target.value;
-                    this.setState({searchParams}, () => {
-                      this.handleSearch();
-                    });
-                  }}
-                ></Search>
-              </Col>
-            </Row>
-          </Col>
-          {/* Search by City */}
-          <Col {...colSpanProps}>
-            <Row>
-              <Col span={24}>City</Col>
-              <Col span={24}>
-                <Search
-                  placeholder="Nashville"
-                  onChange={e => {
-                    const searchParams = {...this.state.searchParams};
-                    searchParams.city = e.target.value;
-                    this.setState({searchParams}, () => {
-                      this.handleSearch();
-                    });
-                  }}
-                ></Search>
-              </Col>
-            </Row>
-          </Col>
-          {/* Search by State */}
-          <Col {...colSpanProps}>
-            <Row>
-              <Col span={24}>State</Col>
-              <Col span={24}>
-                <Search
-                  placeholder="TN"
-                  onChange={e => {
-                    const searchParams = {...this.state.searchParams};
-                    searchParams.state = e.target.value;
-                    this.setState({searchParams}, () => {
-                      this.handleSearch();
-                    });
-                  }}
-                ></Search>
-              </Col>
-            </Row>
-          </Col>
-          {/* Search by Zip */}
-          <Col {...colSpanProps}>
-            <Row>
-              <Col span={24}>Zip Code</Col>
-              <Col span={24}>
-                <Search
-                  placeholder="12345"
-                  onChange={e => {
-                    const searchParams = {...this.state.searchParams};
-                    searchParams.zipCode = e.target.value;
-                    this.setState({searchParams}, () => {
-                      this.handleSearch();
-                    });
-                  }}
-                ></Search>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+          <Row gutter={[10, {xs: 8, sm: 16, md: 24, lg: 32}]}>
+            {/* Search by name */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Name</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="Jane Doe"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.name = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by email */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Email</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="johndoe@example.com"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.email = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by phone number */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Phone Number</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="(123) 456-789"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.phoneNumber = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by status */}
+            <Col {...colSpanProps}>
+              <Row>
+                Status
+                <Col span={24}>
+                  <Select
+                    mode="multiple"
+                    placeholder="Select Status"
+                    tagRender={props => {
+                      return (
+                        <UserStatusTag
+                          status={props.label.toString()}
+                        ></UserStatusTag>
+                      );
+                    }}
+                    defaultValue={this.state.searchParams.status}
+                    style={{width: '100%'}}
+                    onChange={(statuses: string[]) => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.status = statuses;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                    tokenSeparators={[',']}
+                  >
+                    <Option key="Approved" value="Approved">
+                      Approved
+                    </Option>
+                    <Option key="Pending" value="Pending">
+                      Pending
+                    </Option>
+                    <Option key="Rejected" value="Rejected">
+                      Rejected
+                    </Option>
+                  </Select>
+                </Col>
+              </Row>
+            </Col>
+            <Divider></Divider>
+            <Col span={24}>
+              <h4>Address</h4>
+            </Col>
+            {/* Search by Street */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Street</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="123 Example Dr"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.street = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by City */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>City</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="Nashville"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.city = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by State */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>State</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="TN"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.state = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by Zip */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Zip Code</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="12345"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.zipCode = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </Panel>
-    </Collapse>
+      </Collapse>
     );
   }
 }

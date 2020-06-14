@@ -1,6 +1,10 @@
 import React, {Component, useState} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
-import {getAllUsers, updateOneUserByID, deleteOneUserByID} from '../../dataservice/authentication';
+import {
+  getAllUsers,
+  updateOneUserByID,
+  deleteOneUserByID,
+} from '../../dataservice/authentication';
 import {Helmet} from 'react-helmet';
 import {
   List,
@@ -11,10 +15,7 @@ import {
   Space,
   Tag,
   Tooltip,
-  Button,
   Popconfirm,
-  Input,
-  Select,
   Divider,
   message,
 } from 'antd';
@@ -24,45 +25,45 @@ import {
   StopOutlined,
   PlusCircleOutlined,
   CloseCircleOutlined,
-  MinusCircleOutlined
+  MinusCircleOutlined,
 } from '@ant-design/icons';
 import {AdvancedUserSearch} from './AdvancedUserSerach';
 
 const {Paragraph} = Typography;
 
 const deleteUserFromSreen = (user: UserInterface, that: any) => {
-    const listData = [...that.state.listData] as UserInterface[];
-    let userIndex = listData.findIndex((u)=>(user._id === u._id));
-    listData.splice(userIndex, 1);
+  const listData = [...that.state.listData] as UserInterface[];
+  let userIndex = listData.findIndex(u => user._id === u._id);
+  listData.splice(userIndex, 1);
 
-    const userList = [...that.state.listData] as UserInterface[];
-    userIndex = userList.findIndex((u)=>(user._id === u._id));
-    userList.splice(userIndex, 1);
-    console.log(userList, userIndex)
-    that.setState({listData, userList})
-}
+  const userList = [...that.state.listData] as UserInterface[];
+  userIndex = userList.findIndex(u => user._id === u._id);
+  userList.splice(userIndex, 1);
+  that.setState({listData, userList});
+};
 
-const updateOneUserOnScreen = (user: UserInterface, that: Component<Props,State>) => {
-    const listData = [...that.state.listData] as UserInterface[];
-    const userIndex = listData.findIndex((u)=>(user._id === u._id));
-    listData[userIndex] = user;
-    that.setState({listData}, ()=>{
-        console.log(that.state)
-    })
-}
+const updateOneUserOnScreen = (
+  user: UserInterface,
+  that: Component<Props, State>
+) => {
+  const listData = [...that.state.listData] as UserInterface[];
+  const userIndex = listData.findIndex(u => user._id === u._id);
+  listData[userIndex] = user;
+  that.setState({listData});
+};
 
-let UserToolbar = (user: UserInterface, that: Component<Props,State>) => {
+const UserToolbar = (user: UserInterface, that: Component<Props, State>) => {
   const buttons = [];
   const approveButton = (
     <Tooltip title="Approve user!">
-        <CheckCircleOutlined
-        style={{color:"green"}}
-        onClick={()=>{
-            user.status = "Approved";
-            updateOneUserByID(user._id, user).then(()=>{
-                message.success(user.firstName + " has been approved!")
-                updateOneUserOnScreen(user, that);
-            });
+      <CheckCircleOutlined
+        style={{color: 'green'}}
+        onClick={() => {
+          user.status = 'Approved';
+          updateOneUserByID(user._id, user).then(() => {
+            message.success(user.firstName + ' has been approved!');
+            updateOneUserOnScreen(user, that);
+          });
         }}
       >
         Approve
@@ -78,15 +79,15 @@ let UserToolbar = (user: UserInterface, that: Component<Props,State>) => {
       }
       okText="Delete"
       okButtonProps={{danger: true}}
-      onConfirm={()=>{
-        deleteOneUserByID(user._id).then(()=>{
-            message.error(user.firstName + " has been rejected!")
-            deleteUserFromSreen(user, that);
+      onConfirm={() => {
+        deleteOneUserByID(user._id).then(() => {
+          message.error(user.firstName + ' has been rejected!');
+          deleteUserFromSreen(user, that);
         });
       }}
     >
       <Tooltip title="Delete user!">
-            <DeleteOutlined style={{color:"red"}}/>
+        <DeleteOutlined style={{color: 'red'}} />
       </Tooltip>
     </Popconfirm>
   );
@@ -103,16 +104,16 @@ let UserToolbar = (user: UserInterface, that: Component<Props,State>) => {
       }
       okText="Reject"
       okButtonProps={{danger: true}}
-      onConfirm={()=>{
-        deleteOneUserByID(user._id).then(()=>{
-            message.error(user.firstName + " has been rejected!")
-            deleteUserFromSreen(user, that);
+      onConfirm={() => {
+        deleteOneUserByID(user._id).then(() => {
+          message.error(user.firstName + ' has been rejected!');
+          deleteUserFromSreen(user, that);
         });
       }}
     >
-        <Tooltip title="Reject user!">
-            <CloseCircleOutlined style={{color:"red"}} />
-        </Tooltip>
+      <Tooltip title="Reject user!">
+        <CloseCircleOutlined style={{color: 'red'}} />
+      </Tooltip>
     </Popconfirm>
   );
   const pendingButton = (
@@ -122,66 +123,65 @@ let UserToolbar = (user: UserInterface, that: Component<Props,State>) => {
       }
       okText="Disable"
       okButtonProps={{danger: true}}
-      onConfirm={()=>{
-        user.status = "Pending";
-        updateOneUserByID(user._id, user).then(()=>{
-            message.warning(user.firstName + " has been disabled!")
-            updateOneUserOnScreen(user, that);
+      onConfirm={() => {
+        user.status = 'Pending';
+        updateOneUserByID(user._id, user).then(() => {
+          message.warning(user.firstName + ' has been disabled!');
+          updateOneUserOnScreen(user, that);
         });
-    }}
+      }}
     >
-        <Tooltip title="Disable Account">
-            <StopOutlined/>
-        </Tooltip>
+      <Tooltip title="Disable Account">
+        <StopOutlined />
+      </Tooltip>
     </Popconfirm>
   );
   const makeAdminButton = (
     <Popconfirm
-      title={
-        'Are you sure you want to make ' + user.firstName + " an admin?"
-      }
+      title={'Are you sure you want to make ' + user.firstName + ' an admin?'}
       okText="Make Admin"
-      onConfirm={()=>{
-        user.role = "Admin";
-        updateOneUserByID(user._id, user).then(()=>{
-            message.success(user.firstName + " is now an admin!")
-            updateOneUserOnScreen(user, that);
+      onConfirm={() => {
+        user.role = 'Admin';
+        updateOneUserByID(user._id, user).then(() => {
+          message.success(user.firstName + ' is now an admin!');
+          updateOneUserOnScreen(user, that);
         });
-    }}
+      }}
     >
-        <Tooltip title="Make admin!">
-            <PlusCircleOutlined style={{color:"green"}} />
-        </Tooltip>
+      <Tooltip title="Make admin!">
+        <PlusCircleOutlined style={{color: 'green'}} />
+      </Tooltip>
     </Popconfirm>
   );
 
   const makeUserButton = (
     <Popconfirm
       title={
-        'Are you sure you want revoke ' + user.firstName + "'s admin privileges?"
+        'Are you sure you want revoke ' +
+        user.firstName +
+        "'s admin privileges?"
       }
       okText="Make User"
-      onConfirm={()=>{
-        user.role = "User";
-        updateOneUserByID(user._id, user).then(()=>{
-            message.success(user.firstName + " is now a user!")
-            updateOneUserOnScreen(user, that);
+      onConfirm={() => {
+        user.role = 'User';
+        updateOneUserByID(user._id, user).then(() => {
+          message.success(user.firstName + ' is now a user!');
+          updateOneUserOnScreen(user, that);
         });
-    }}
+      }}
     >
-        <Tooltip title="Make user!">
-            <MinusCircleOutlined style={{color:"red"}} />
-        </Tooltip>
+      <Tooltip title="Make user!">
+        <MinusCircleOutlined style={{color: 'red'}} />
+      </Tooltip>
     </Popconfirm>
   );
   switch (user.status) {
     case 'Approved':
       buttons.push(pendingButton, deleteButton);
-      if (user.role === "User"){
-          buttons.push(makeAdminButton);
-      }
-      else if (user.role === "Admin"){
-          buttons.push(makeUserButton);
+      if (user.role === 'User') {
+        buttons.push(makeAdminButton);
+      } else if (user.role === 'Admin') {
+        buttons.push(makeUserButton);
       }
       break;
     case 'Pending':
@@ -208,10 +208,9 @@ const formatPhoneNumber = (phoneNumber: number) => {
 };
 
 interface UserStatusTagProps {
-    status: string;
-
+  status: string;
 }
-export const UserStatusTag: React.FunctionComponent<UserStatusTagProps> = (props) => {
+export const UserStatusTag: React.FunctionComponent<UserStatusTagProps> = props => {
   if (props.status === 'Pending') {
     return <Tag color="geekblue">{props.status}</Tag>;
   } else if (props.status === 'Approved') {
@@ -301,13 +300,10 @@ class ListUsers extends Component<Props, State> {
           <Divider></Divider>
           <List
             pagination={{
-                onChange: page => {
-
-                },
-                pageSize: 8,
-                position: "bottom"
-                
-              }}
+              onChange: page => {},
+              pageSize: 8,
+              position: 'bottom',
+            }}
             grid={{
               gutter: 16,
               xs: 1,
@@ -369,7 +365,9 @@ class ListUsers extends Component<Props, State> {
                     <Col span={24}>
                       <DescriptionItem
                         title="Status"
-                        content={<UserStatusTag status={user.status}></UserStatusTag>}
+                        content={
+                          <UserStatusTag status={user.status}></UserStatusTag>
+                        }
                       ></DescriptionItem>
                     </Col>
                   </Row>
