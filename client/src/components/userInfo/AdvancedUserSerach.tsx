@@ -1,11 +1,10 @@
 import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
-import {UserStatusTag} from './ListUsers';
+import {UserStatusTag, UserRoleTag} from './ListUsers';
 
 import {
   Row,
   Col,
-  Typography,
   Input,
   Select,
   Divider,
@@ -22,6 +21,7 @@ interface State {
     email: string;
     phoneNumber: string;
     status: ('Approved' | 'Pending' | 'Rejected' | any)[];
+    role: ('Admin' | 'User' | any)[]
     street: string;
     city: string;
     state: string;
@@ -41,6 +41,7 @@ class AdvancedUserSearch extends Component<Props, State> {
       searchParams: {
         name: '',
         status: ['Approved', 'Pending'],
+        role: ['Admin', 'User'],
         email: '',
         phoneNumber: '',
         street: '',
@@ -84,6 +85,19 @@ class AdvancedUserSearch extends Component<Props, State> {
         this.state.searchParams.status
           .map(status => {
             return user.status === status;
+          })
+          .reduce((a, b) => a || b, false) // combines true vals in array
+      );
+    });
+
+    // role serach
+    // checks for multiple roles
+    results = results.filter(user => {
+      return (
+        // checks if user has any of the selected statues
+        this.state.searchParams.role
+          .map(role => {
+            return user.role === role;
           })
           .reduce((a, b) => a || b, false) // combines true vals in array
       );
@@ -216,6 +230,42 @@ class AdvancedUserSearch extends Component<Props, State> {
                     </Option>
                     <Option key="Rejected" value="Rejected">
                       Rejected
+                    </Option>
+                  </Select>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by role */}
+            <Col {...colSpanProps}>
+              <Row>
+                Role
+                <Col span={24}>
+                  <Select
+                    mode="multiple"
+                    placeholder="Select Role"
+                    tagRender={props => {
+                      return (
+                        <UserRoleTag
+                          role={props.label.toString()}
+                        ></UserRoleTag>
+                      );
+                    }}
+                    defaultValue={this.state.searchParams.role}
+                    style={{width: '100%'}}
+                    onChange={(roles: string[]) => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.role = roles;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                    tokenSeparators={[',']}
+                  >
+                    <Option key="Admin" value="Admin">
+                      Admin
+                    </Option>
+                    <Option key="User" value="User">
+                      User
                     </Option>
                   </Select>
                 </Col>

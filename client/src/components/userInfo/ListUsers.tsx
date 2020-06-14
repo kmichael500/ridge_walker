@@ -222,11 +222,11 @@ export const UserStatusTag: React.FunctionComponent<UserStatusTagProps> = props 
   }
 };
 
-const UserTag: React.FunctionComponent<{user: UserInterface}> = props => {
-  if (props.user.role === 'Admin') {
-    return <Tag color="green">{props.user.role}</Tag>;
-  } else if (props.user.role === 'User') {
-    return <Tag color="default">{props.user.role}</Tag>;
+export const UserRoleTag: React.FunctionComponent<{role: string}> = props => {
+  if (props.role === 'Admin') {
+    return <Tag color="green">{props.role}</Tag>;
+  } else if (props.role === 'User') {
+    return <Tag color="default">{props.role}</Tag>;
   } else {
     return null;
   }
@@ -323,7 +323,7 @@ class ListUsers extends Component<Props, State> {
                         {user.firstName + ' ' + user.lastName}
                       </Col>
                       <Col span={24}>
-                        <UserTag user={user}></UserTag>
+                        <UserRoleTag role={user.role}></UserRoleTag>
                       </Col>
                     </Row>
                   }
