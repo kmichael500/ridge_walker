@@ -3,6 +3,7 @@ import * as passport from 'passport';
 import * as jwt from 'jsonwebtoken';
 import {UserModel} from '../models/User';
 import {SubmittedPoint} from '../models/SubmittedPoint';
+import {noPendingUsers} from '../auth/restrictFunctions';
 
 const userAPI = express();
 
@@ -94,6 +95,7 @@ userAPI.get(
 userAPI.get(
   '/submissions',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   (req, res, next) => {
     // const id = (<any>req).user._id;
 
@@ -121,6 +123,7 @@ userAPI.get(
 userAPI.get(
   '/:id',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   (req, res, next) => {
     const role = (<any>req).user.role;
     const status = (<any>req).user.status;
@@ -167,10 +170,10 @@ userAPI.get(
 );
 
 //Gets all users by ID
-// get all master points
 userAPI.get(
   '/',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   (req, res, next) => {
     UserModel.find((err: Error, requestedUsers) => {
       if (err) {
@@ -195,6 +198,7 @@ userAPI.put(
   '/:id',
   jsonParser,
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   (req, res, next) => {
     UserModel.findByIdAndUpdate(
       req.params.id,
@@ -216,6 +220,7 @@ userAPI.put(
 userAPI.delete(
   '/:id',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   (req, res, next) => {
     UserModel.findByIdAndDelete(req.params.id, (err, user) => {
       if (err) {
