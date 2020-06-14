@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {serverBaseURL} from '../config/urlConfig';
 import {
   RegisterUserInterface,
@@ -122,6 +122,57 @@ async function getOneUserByID(id: string): Promise<UserInterface> {
 }
 
 /**
+ * Updates a single user by id
+ * @returns void
+ * @param id - the id of the user to be updated.
+ * @param user - the updated user information.
+ */
+async function updateOneUserByID(
+  id: string,
+  updatedUser: UserInterface
+): Promise<AxiosResponse> {
+  try {
+    const userResponse = await axiosInstance.put(
+      '/api/user/' + id,
+      updatedUser,
+      {params}
+    );
+    return userResponse;
+  } catch (error) {
+    return error;
+  }
+}
+
+/**
+ * Deletes a single user by id
+ * @returns void
+ * @param id - the id of the user to be deleted.
+ */
+async function deleteOneUserByID(id: string): Promise<AxiosResponse> {
+  try {
+    const userResponse = await axiosInstance.delete('/api/user/' + id, {
+      params,
+    });
+    return userResponse;
+  } catch (error) {
+    return error;
+  }
+}
+
+/**
+ * Fetch all user from the API.
+ * @returns Promise<UserInterface[]>
+ */
+async function getAllUsers(): Promise<UserInterface[]> {
+  try {
+    const userResponse = await axiosInstance.get('/api/user/', {params});
+    return userResponse.data as UserInterface[];
+  } catch (error) {
+    return error;
+  }
+}
+
+/**
  * Fetch points that the current user submitted.
  * @returns Promise<SubmittedPoint[]>
  * @param id - the mongo id of the user.
@@ -142,6 +193,9 @@ export {
   loginUser,
   getCurrentUserProfile as getUserProfile,
   logoutUser,
+  deleteOneUserByID,
   getOneUserByID,
+  getAllUsers,
+  updateOneUserByID,
   getCurrentUserSubmissions,
 };

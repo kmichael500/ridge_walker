@@ -13,6 +13,7 @@ export interface UserInterface {
   address: string;
   city: string;
   state: string;
+  status?: 'Pending' | 'Approved' | 'Rejected';
   zipCode: number;
   phoneNumber: number;
   nssNumber: number;

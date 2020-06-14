@@ -12,13 +12,15 @@ import {ReviewCaveInfo} from './pages/reviewCaveInfo';
 import {UserContextProvider} from './context/userContext';
 import {Dashboard} from './pages/Dashboard';
 import {HomePage} from './pages/HomePage';
+import {UploadLeads} from './components/Karst Features/UploadLeads';
+import {DeadLeads} from './pages/DeadLeads';
+/* admin routes */
+import {ReviewPage} from './pages/ReviewPage';
+import {ListUsers} from './components/userInfo/ListUsers';
 // Authentication
 import {Register} from './pages/Register';
 import {LoginPage} from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
-import {UploadLeads} from './components/Karst Features/UploadLeads';
-import {DeadLeads} from './pages/DeadLeads';
-import {ReviewPage} from './pages/ReviewPage';
 
 function App() {
   return (
@@ -38,6 +40,12 @@ function App() {
                   exact
                   path="/upload"
                   component={uploadPoints}
+                  userType="Admin"
+                />
+                <ProtectedRoute
+                  exact
+                  path="/users"
+                  component={ListUsers}
                   userType="Admin"
                 />
                 <ProtectedRoute
