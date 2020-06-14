@@ -333,7 +333,7 @@ class ListUsers extends Component<Props, State> {
                   <Row>
                     <Col span={24}>
                       <DescriptionItem
-                        title="NSS Numbrer"
+                        title="NSS Number"
                         content={user.nssNumber}
                       />
                     </Col>
