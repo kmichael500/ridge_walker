@@ -7,6 +7,7 @@ import json2csv from 'json2csv';
 import {Request, Response, NextFunction} from 'express';
 import {Points, Feature, Geometry} from '../models/MasterPointInterface';
 import {MasterPoint} from '../models/MasterPoints';
+import {UserInterface} from '../models/User';
 
 // Initialize an express api and configure it parse requests as JSON
 const masterPointsAPI = express();
@@ -62,6 +63,25 @@ masterPointsAPI.post('/upload', upload.single('csv'), (req, res, next) => {
       res.send(geojson);
     });
 });
+
+// cache based on duration and request url
+const noPending = (userType: string) => {
+  return (req: any, res: any, next: any) => {
+    const userStatus = req.user.status;
+
+    // req.user;
+    if (userStatus != 'Approved') {
+      res.send(req.user);
+      return;
+    } else {
+      res.sendResponse = res.send;
+      res.send = (body: any) => {
+        res.sendResponse(body);
+      };
+      next();
+    }
+  };
+};
 
 // get all master points
 masterPointsAPI.get('/', (req, res, next) => {

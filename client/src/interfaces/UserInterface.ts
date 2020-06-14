@@ -13,12 +13,15 @@ export interface UserInterface {
   address: string;
   city: string;
   state: string;
-  status?: 'Pending' | 'Approved' | 'Rejected';
+  status?: userStatusType;
   zipCode: number;
   phoneNumber: number;
   nssNumber: number;
 }
 
 export type userRoleType = 'User' | 'Admin';
+export type userStatusType = 'Pending' | 'Approved' | 'Rejected';
+
+const userStatustypes: userStatusType[] = ['Approved', 'Pending', 'Rejected'];
 
 const types: userRoleType[] = ['User', 'Admin'];

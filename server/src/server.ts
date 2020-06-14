@@ -72,23 +72,33 @@ import {userInfoAPI} from './endpoints/userinformation';
 import {statisticsAPI} from './endpoints/statistics';
 import {leadPointAPI} from './endpoints/leadPointAPI';
 
+import {noPendingUsers} from './auth/restrictFunctions';
+
 // Routes
 app.use('/api/user', userAPI);
 app.use('/api/stats', statisticsAPI);
 app.use(
   '/api/points/master',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   masterPointsAPI
 );
 app.use(
   '/api/points/leads',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   leadPointAPI
 );
-app.use('/api/maps', passport.authenticate('jwt', {session: false}), mapsAPI);
+app.use(
+  '/api/maps',
+  passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
+  mapsAPI
+);
 app.use(
   '/api/submit/point',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   submittedPointAPI
 );
 
