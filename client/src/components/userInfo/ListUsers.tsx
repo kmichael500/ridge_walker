@@ -81,7 +81,7 @@ const UserToolbar = (user: UserInterface, that: Component<Props, State>) => {
       okButtonProps={{danger: true}}
       onConfirm={() => {
         deleteOneUserByID(user._id).then(() => {
-          message.error(user.firstName + ' has been rejected!');
+          message.error(user.firstName + ' account has been deleted!');
           deleteUserFromSreen(user, that);
         });
       }}
