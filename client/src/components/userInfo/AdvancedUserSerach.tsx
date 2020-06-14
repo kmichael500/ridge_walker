@@ -106,7 +106,6 @@ class AdvancedUserSearch extends Component<Props, State> {
     // City search
     results = results.filter(user => {
       const searchText = this.state.searchParams.city.toLowerCase();
-      console.log(this.state.searchParams.city, user.city);
       return user.city.toLowerCase().includes(searchText);
     });
 
@@ -200,7 +199,6 @@ class AdvancedUserSearch extends Component<Props, State> {
                   mode="multiple"
                   placeholder="Select Status"
                   tagRender={(props)=>{
-                      console.log(props.label.toString());
                       return(
                           <UserStatusTag status={props.label.toString()}></UserStatusTag>
                       )

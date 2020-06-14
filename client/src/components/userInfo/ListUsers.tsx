@@ -1,6 +1,6 @@
 import React, {Component, useState} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
-import {getAllUsers} from '../../dataservice/authentication';
+import {getAllUsers, updateOneUserByID, deleteOneUserByID} from '../../dataservice/authentication';
 import {Helmet} from 'react-helmet';
 import {
   List,
@@ -16,23 +16,57 @@ import {
   Input,
   Select,
   Divider,
+  message,
 } from 'antd';
 import {
   CheckCircleOutlined,
   DeleteOutlined,
   StopOutlined,
+  PlusCircleOutlined,
+  CloseCircleOutlined,
+  MinusCircleOutlined
 } from '@ant-design/icons';
 import {AdvancedUserSearch} from './AdvancedUserSerach';
 
 const {Paragraph} = Typography;
 
-const UserToolbar = (user: UserInterface) => {
+const deleteUserFromSreen = (user: UserInterface, that: any) => {
+    const listData = [...that.state.listData] as UserInterface[];
+    let userIndex = listData.findIndex((u)=>(user._id === u._id));
+    listData.splice(userIndex, 1);
+
+    const userList = [...that.state.listData] as UserInterface[];
+    userIndex = userList.findIndex((u)=>(user._id === u._id));
+    userList.splice(userIndex, 1);
+    console.log(userList, userIndex)
+    that.setState({listData, userList})
+}
+
+const updateOneUserOnScreen = (user: UserInterface, that: Component<Props,State>) => {
+    const listData = [...that.state.listData] as UserInterface[];
+    const userIndex = listData.findIndex((u)=>(user._id === u._id));
+    listData[userIndex] = user;
+    that.setState({listData}, ()=>{
+        console.log(that.state)
+    })
+}
+
+let UserToolbar = (user: UserInterface, that: Component<Props,State>) => {
   const buttons = [];
   const approveButton = (
     <Tooltip title="Approve user!">
-      <Button type="primary" icon={<CheckCircleOutlined />}>
+        <CheckCircleOutlined
+        style={{color:"green"}}
+        onClick={()=>{
+            user.status = "Approved";
+            updateOneUserByID(user._id, user).then(()=>{
+                message.success(user.firstName + " has been approved!")
+                updateOneUserOnScreen(user, that);
+            });
+        }}
+      >
         Approve
-      </Button>
+      </CheckCircleOutlined>
     </Tooltip>
   );
   const deleteButton = (
@@ -44,10 +78,16 @@ const UserToolbar = (user: UserInterface) => {
       }
       okText="Delete"
       okButtonProps={{danger: true}}
+      onConfirm={()=>{
+        deleteOneUserByID(user._id).then(()=>{
+            message.error(user.firstName + " has been rejected!")
+            deleteUserFromSreen(user, that);
+        });
+      }}
     >
-      <Button icon={<DeleteOutlined />} danger>
-        Delete
-      </Button>
+      <Tooltip title="Delete user!">
+            <DeleteOutlined style={{color:"red"}}/>
+      </Tooltip>
     </Popconfirm>
   );
   const rejectButton = (
@@ -63,10 +103,16 @@ const UserToolbar = (user: UserInterface) => {
       }
       okText="Reject"
       okButtonProps={{danger: true}}
+      onConfirm={()=>{
+        deleteOneUserByID(user._id).then(()=>{
+            message.error(user.firstName + " has been rejected!")
+            deleteUserFromSreen(user, that);
+        });
+      }}
     >
-      <Button icon={<DeleteOutlined />} danger>
-        Reject
-      </Button>
+        <Tooltip title="Reject user!">
+            <CloseCircleOutlined style={{color:"red"}} />
+        </Tooltip>
     </Popconfirm>
   );
   const pendingButton = (
@@ -76,13 +122,67 @@ const UserToolbar = (user: UserInterface) => {
       }
       okText="Disable"
       okButtonProps={{danger: true}}
+      onConfirm={()=>{
+        user.status = "Pending";
+        updateOneUserByID(user._id, user).then(()=>{
+            message.warning(user.firstName + " has been disabled!")
+            updateOneUserOnScreen(user, that);
+        });
+    }}
     >
-      <Button icon={<StopOutlined />}>Revoke</Button>
+        <Tooltip title="Disable Account">
+            <StopOutlined/>
+        </Tooltip>
+    </Popconfirm>
+  );
+  const makeAdminButton = (
+    <Popconfirm
+      title={
+        'Are you sure you want to make ' + user.firstName + " an admin?"
+      }
+      okText="Make Admin"
+      onConfirm={()=>{
+        user.role = "Admin";
+        updateOneUserByID(user._id, user).then(()=>{
+            message.success(user.firstName + " is now an admin!")
+            updateOneUserOnScreen(user, that);
+        });
+    }}
+    >
+        <Tooltip title="Make admin!">
+            <PlusCircleOutlined style={{color:"green"}} />
+        </Tooltip>
+    </Popconfirm>
+  );
+
+  const makeUserButton = (
+    <Popconfirm
+      title={
+        'Are you sure you want revoke ' + user.firstName + "'s admin privileges?"
+      }
+      okText="Make User"
+      onConfirm={()=>{
+        user.role = "User";
+        updateOneUserByID(user._id, user).then(()=>{
+            message.success(user.firstName + " is now a user!")
+            updateOneUserOnScreen(user, that);
+        });
+    }}
+    >
+        <Tooltip title="Make user!">
+            <MinusCircleOutlined style={{color:"red"}} />
+        </Tooltip>
     </Popconfirm>
   );
   switch (user.status) {
     case 'Approved':
       buttons.push(pendingButton, deleteButton);
+      if (user.role === "User"){
+          buttons.push(makeAdminButton);
+      }
+      else if (user.role === "Admin"){
+          buttons.push(makeUserButton);
+      }
       break;
     case 'Pending':
       buttons.push(approveButton, rejectButton);
@@ -202,9 +302,9 @@ class ListUsers extends Component<Props, State> {
           <List
             pagination={{
                 onChange: page => {
-                  console.log(page);
+
                 },
-                pageSize: 4,
+                pageSize: 8,
                 position: "bottom"
                 
               }}
@@ -212,10 +312,10 @@ class ListUsers extends Component<Props, State> {
               gutter: 16,
               xs: 1,
               sm: 2,
-              md: 4,
+              md: 3,
               lg: 4,
-              xl: 4,
-              xxl: 4,
+              xl: 5,
+              xxl: 6,
             }}
             dataSource={this.state.listData}
             renderItem={user => (
@@ -231,7 +331,7 @@ class ListUsers extends Component<Props, State> {
                       </Col>
                     </Row>
                   }
-                  actions={UserToolbar(user)}
+                  actions={UserToolbar(user, this)}
                   loading={this.state.loading}
                 >
                   <Row>

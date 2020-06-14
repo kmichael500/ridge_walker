@@ -49,7 +49,7 @@ userAPI.post('/login', async (req, res, next) => {
         //We don't want to store the sensitive information such as the
         //user password in the token so we pick only the email and id
         const body = JSON.parse(JSON.stringify(user));
-        body.password = 'undefined';
+        delete body.password;
         //Sign the JWT token and populate the payload with the user email and id
         const token = jwt.sign({user: body}, 'top_secret', {expiresIn: '1d'});
         //Send back the token to the user
@@ -78,7 +78,7 @@ userAPI.get(
         err = new Error('User does not exist');
         next(err);
       } else {
-        currentUser.password = 'undefined';
+        delete currentUser.password;
         res.json(currentUser);
       }
     });
@@ -135,7 +135,7 @@ userAPI.get(
           err = new Error('User does not exist');
           next(err);
         } else {
-          currentUser.password = 'undefined';
+          delete currentUser.password;
           res.json(currentUser);
         }
       });
@@ -150,7 +150,7 @@ userAPI.get(
           err = new Error('User does not exist');
           next(err);
         } else {
-          currentUser.password = 'undefined';
+          delete currentUser.password;
           res.json(currentUser);
         }
       });
@@ -176,9 +176,47 @@ userAPI.get('/', passport.authenticate('jwt', {session: false}), (req, res, next
       console.log("\n Can't get all users");
       next(err);
     } else {
-      res.send(requestedUsers);
+      res.send(
+        requestedUsers.map((user)=>
+          {
+            delete user.password;
+            return user;
+      }));
     }
   }).lean();
+});
+
+import * as bodyParser from 'body-parser';
+var jsonParser = bodyParser.json();
+// Endpoint to update a single user
+userAPI.put('/:id', jsonParser,  passport.authenticate('jwt', {session: false}), (req, res, next) => {
+  UserModel.findByIdAndUpdate(req.params.id, req.body, (err, requestedUser) => {
+      if (err) {
+          console.log("\nuserAPI.put('/:id')  error");
+          next(err)
+      }
+      else{
+        console.log(requestedUser)
+          res.sendStatus(200);
+      }
+      
+  });
+});
+
+// Endpoint to delete a user by id
+userAPI.delete('/:id', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+  UserModel.findByIdAndDelete(req.params.id, (err, user) => {
+    if (err) {
+      console.log("\nuserAPI.delete('/:id')  error");
+      next(err);
+    } else if (user == null) {
+      console.log("\nsubmittedPointAPI.delete('/:id')  error");
+      err = new Error('User for Id does not exist');
+      next(err);
+    } else {
+      res.send('Sucsess');
+    }
+  });
 });
 
 export {userAPI};
