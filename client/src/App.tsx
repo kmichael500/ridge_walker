@@ -49,7 +49,6 @@ function App() {
                   exact
                   path="/users"
                   component={ListUsers}
-                  userType="Admin"
                 />
                 <ProtectedRoute
                   exact

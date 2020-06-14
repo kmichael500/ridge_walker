@@ -16,6 +16,14 @@ export interface UserInterface extends mongoose.Document {
   zipCode: number;
   phoneNumber: number;
   nssNumber: number;
+  privateFields?: {
+    email: boolean,
+    address: boolean,
+    city: boolean,
+    state: boolean,
+    zipCode: boolean,
+    phoneNumber: boolean,    
+  }
   isValidPassword(password: string): Promise<boolean>;
 }
 // tslint:disable-next-line: variable-name
@@ -69,6 +77,37 @@ const UserSchema = new Schema({
     type: Number,
     required: true,
   },
+  privateFields: {
+    type: {
+      email:{
+        type: Boolean,
+      },
+      address: {
+        type: Boolean,
+      },
+      city: {
+        type: Boolean,
+      },
+      state: {
+        type: Boolean,
+      },
+      zipCode: {
+        type: Boolean,
+      },
+      phoneNumber: {
+        type: Boolean,
+      },    
+
+    },
+    default:{
+        email: false,
+        address: false,
+        city: false,
+        state: false,
+        zipCode: false,
+        phoneNumber: false,    
+    }
+  }
 });
 
 //This is called a pre-hook, before the user information is saved in the database

@@ -17,6 +17,14 @@ export interface UserInterface {
   zipCode: number;
   phoneNumber: number;
   nssNumber: number;
+  privateFields?: {
+    email: boolean,
+    address: boolean,
+    city: boolean,
+    state: boolean,
+    zipCode: boolean,
+    phoneNumber: boolean,    
+  }
 }
 
 export type userRoleType = 'User' | 'Admin';
