@@ -17,10 +17,12 @@ import {DeadLeads} from './pages/DeadLeads';
 /* admin routes */
 import {ReviewPage} from './pages/ReviewPage';
 import {ListUsers} from './components/userInfo/ListUsers';
-// Authentication
+/* Authentication */
 import {Register} from './pages/Register';
 import {LoginPage} from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+/* redirects */
+import {Unauthorized} from './components/redirects/unauthorized';
 
 function App() {
   return (
@@ -34,6 +36,7 @@ function App() {
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={LoginPage} />
                 <Route exact path="/" component={HomePage} />
+                <Route exact path="/unauthorized" component={Unauthorized} />
 
                 {/* Protected Routes */}
                 <ProtectedRoute

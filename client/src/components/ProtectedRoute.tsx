@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Redirect, Route, RouteProps} from 'react-router';
 import {userContext} from '../context/userContext';
-import {userRoleType} from '../interfaces/UserInterface';
+import {userRoleType, userStatusType} from '../interfaces/UserInterface';
 
 export interface ProtectedRouteProps extends RouteProps {
   isAllowed?: boolean;
@@ -15,6 +15,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = props => {
   const context = React.useContext(userContext);
   let isAllowed = props.isAllowed;
   if (props.userType === 'Admin' && context.user.role !== 'Admin') {
+    isAllowed = false;
+  }
+
+  if (context.user.status !== 'Approved') {
     isAllowed = false;
   }
 
@@ -48,7 +52,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = props => {
 ProtectedRoute.defaultProps = {
   isAllowed: true,
   userType: 'User',
-  restrictedPath: '/map',
+  restrictedPath: '/unauthorized',
   authenticationPath: '/login',
 };
 
