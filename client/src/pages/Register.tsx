@@ -4,6 +4,7 @@ import {registerUser} from '../dataservice/authentication';
 import {userContext} from '../context/userContext';
 import {Helmet} from 'react-helmet';
 import {us_states} from '../dataservice/StateList';
+import { AsYouType, parsePhoneNumberFromString } from 'libphonenumber-js'
 
 import {
   Form,
@@ -60,6 +61,7 @@ class Register extends Component<Props, State> {
   }
 
   handleSubmit(value: any) {
+    const phoneNumber = parsePhoneNumberFromString(value.phonenumber.toString(), "US");
     const newUser = {
       user: {
         email: value.email,
@@ -70,7 +72,7 @@ class Register extends Component<Props, State> {
         city: value.city,
         state: value.state,
         zipCode: Number(value.zipcode),
-        phoneNumber: Number(value.phonenumber),
+        phoneNumber: Number(phoneNumber.nationalNumber.toString()),
         nssNumber: Number(value.nssnumber),
       },
     } as RegisterUserInterface;
@@ -283,15 +285,46 @@ class Register extends Component<Props, State> {
                     <Form.Item
                       label="Phone Number"
                       name="phonenumber"
+                      
                       rules={[
                         {
                           required: true,
+                          type:"number",
                           message: 'Phone number required!',
                           whitespace: true,
                         },
+                        ({getFieldValue, setFieldsValue}) => ({
+                          validator(rule, value) {
+                            const phoneNumber = parsePhoneNumberFromString(value.toString(), "US");
+                            if (phoneNumber.isValid()) {
+                              return Promise.resolve();
+                            }
+                            else{
+                              setFieldsValue({"phonenumber":null})
+                              return Promise.reject(
+                                'Invalid phone number'
+                              );
+                            }
+                            
+                          },
+                        }),
+                        
+                        
                       ]}
                     >
-                      <Input></Input>
+                      <InputNumber
+                        style={{width:"100%"}}
+                        formatter={value => {
+                          const formattedNumber = new AsYouType("US");
+                          return formattedNumber.input(value.toString());
+                          
+                        }
+                        }
+                        parser={value => {
+                          const justDigits = value.replace(/[^0-9]/g, '').toString();
+                          return Number(justDigits);
+                        }}
+                      />
                     </Form.Item>
                   </Col>
                 </Row>
