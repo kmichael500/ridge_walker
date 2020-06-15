@@ -3,6 +3,13 @@ import * as passport from 'passport';
 import {Strategy as localStrategy} from 'passport-local';
 import {UserModel, UserInterface} from '../models/User';
 
+// first letter cappitilzed
+function toCammelCase(val: string){
+  return(
+    val[0].toUpperCase() + val.substr(1).toLowerCase()
+  )
+}
+
 //Create a passport middleware to handle user registration
 passport.use(
   'signup',
@@ -16,13 +23,13 @@ passport.use(
       try {
         //Save the information provided by the user to the the database
         const user = await UserModel.create({
-          email,
+          email: email.toLowerCase(),
           password,
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
+          firstName: toCammelCase(req.body.firstName),
+          lastName: toCammelCase(req.body.lastName),
           address: req.body.address,
-          city: req.body.city,
-          state: req.body.state,
+          city: toCammelCase(req.body.city),
+          state: req.body.state.toUpperCase(),
           zipCode: req.body.zipCode,
           phoneNumber: req.body.phoneNumber,
           nssNumber: req.body.nssNumber,
@@ -53,7 +60,7 @@ passport.use(
     async (email, password, done) => {
       try {
         //Find the user associated with the email provided by the user
-        const user = await UserModel.findOne({email});
+        const user = await UserModel.findOne({email: email.toLowerCase()});
         if (!user) {
           //If the user isn't found in the database, return a message
           return done(null, false, {message: 'User not found'});
