@@ -117,7 +117,7 @@ class Register extends Component<Props, State> {
                       rules={[
                         {
                           required: true,
-                          message: 'Please input your first name!',
+                          message: 'First name required!',
                           whitespace: true,
                         },
                       ]}
@@ -137,7 +137,7 @@ class Register extends Component<Props, State> {
                       rules={[
                         {
                           required: true,
-                          message: 'Please input your last name!',
+                          message: 'Last name required!',
                           whitespace: true,
                         },
                       ]}
@@ -158,7 +158,7 @@ class Register extends Component<Props, State> {
                         {
                           required: true,
                           type: 'number',
-                          message: 'Please input your NSS Number!',
+                          message: 'NSS number required!',
                           whitespace: true,
                         },
                       ]}
@@ -181,7 +181,7 @@ class Register extends Component<Props, State> {
                       rules={[
                         {
                           required: true,
-                          message: 'Please input your address!',
+                          message: 'Address required!',
                           whitespace: true,
                         },
                       ]}
@@ -201,7 +201,7 @@ class Register extends Component<Props, State> {
                       rules={[
                         {
                           required: true,
-                          message: 'Please input your city!',
+                          message: 'City required!',
                           whitespace: true,
                         },
                       ]}
@@ -286,7 +286,7 @@ class Register extends Component<Props, State> {
                       rules={[
                         {
                           required: true,
-                          message: 'Please input your phone number!',
+                          message: 'Phone number required!',
                           whitespace: true,
                         },
                       ]}
@@ -311,7 +311,7 @@ class Register extends Component<Props, State> {
                         },
                         {
                           required: true,
-                          message: 'Please input your E-mail!',
+                          message: 'E-Mail required!',
                         },
                       ]}
                     >
@@ -336,7 +336,7 @@ class Register extends Component<Props, State> {
                         },
                         {
                           required: true,
-                          message: 'Please input your E-mail!',
+                          message: 'Please confirm your E-mail!',
                         },
                         ({getFieldValue}) => ({
                           validator(rule, value) {
@@ -344,7 +344,7 @@ class Register extends Component<Props, State> {
                               return Promise.resolve();
                             }
                             return Promise.reject(
-                              'The two emails that you entered do not match!'
+                              'The two e-mails that you entered do not match!'
                             );
                           },
                         }),
@@ -365,7 +365,7 @@ class Register extends Component<Props, State> {
                       rules={[
                         {
                           required: true,
-                          message: 'Please input your password!',
+                          message: 'Password required!',
                         },
                       ]}
                       hasFeedback
