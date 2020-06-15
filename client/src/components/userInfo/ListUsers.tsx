@@ -278,9 +278,11 @@ class ListUsers extends Component<Props, State> {
   renderAddress(user: UserInterface) {
     const currentUser = this.context as UserContextInterface;
 
-    let allPrivate = user.privateFields.address && user.privateFields.city && user.privateFields.state && currentUser.user.role !== "Admin";
-
-
+    const allPrivate =
+      user.privateFields.address &&
+      user.privateFields.city &&
+      user.privateFields.state &&
+      currentUser.user.role !== 'Admin';
 
     const {address, city, state, zipCode, privateFields} = user;
     console.log('CURR', currentUser);
@@ -296,17 +298,18 @@ class ListUsers extends Component<Props, State> {
     }
     return (
       <div>
-        {!allPrivate &&
-        <Fragment>
-        <h4>Address</h4>
-        <Row>
-          <Col>
-            {(currentUser.user.role === 'Admin' || !privateFields.address) && <p>{address}</p>}
-            <p>{addressString}</p>
-          </Col>
-        </Row>
-        </Fragment>
-      }
+        {!allPrivate && (
+          <Fragment>
+            <h4>Address</h4>
+            <Row>
+              <Col>
+                {(currentUser.user.role === 'Admin' ||
+                  !privateFields.address) && <p>{address}</p>}
+                <p>{addressString}</p>
+              </Col>
+            </Row>
+          </Fragment>
+        )}
       </div>
     );
   }
@@ -366,7 +369,8 @@ class ListUsers extends Component<Props, State> {
                       />
                     </Col>
                   </Row>
-                  {(currentUser.user.role === 'Admin' || !user.privateFields.email) && (
+                  {(currentUser.user.role === 'Admin' ||
+                    !user.privateFields.email) && (
                     <Row>
                       <Col span={24}>
                         <DescriptionItem
@@ -378,7 +382,8 @@ class ListUsers extends Component<Props, State> {
                       </Col>
                     </Row>
                   )}
-                  {(currentUser.user.role === 'Admin' || !user.privateFields.email) && (
+                  {(currentUser.user.role === 'Admin' ||
+                    !user.privateFields.email) && (
                     <Row>
                       <Col span={24}>
                         <DescriptionItem
