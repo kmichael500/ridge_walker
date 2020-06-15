@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 
 import {registerUser} from '../dataservice/authentication';
 import {userContext} from '../context/userContext';
 import {Helmet} from 'react-helmet';
 import {us_states} from '../dataservice/StateList';
 import {AsYouType, parsePhoneNumberFromString} from 'libphonenumber-js';
+import {QuestionCircleOutlined} from '@ant-design/icons';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 
@@ -14,13 +15,16 @@ import {
   Button,
   InputNumber,
   Card,
-  Space,
+  Checkbox,
   Row,
   message,
   Col,
   Select,
+  Descriptions,
+  Tooltip,
 } from 'antd';
 import {RegisterUserInterface} from '../interfaces/UserInterface';
+import {Icon} from 'leaflet';
 
 interface State {
   email: string;
@@ -63,6 +67,40 @@ class Register extends Component<Props, State> {
   }
 
   handleSubmit(value: any) {
+    const privateFieldsArray = value.privateFields as string[];
+    const privateFields = {
+      email: false,
+      address: false,
+      city: false,
+      state: false,
+      zipCode: false,
+      phoneNumber: false,
+    };
+    for (let i = 0; i < privateFieldsArray.length; i++) {
+      switch (privateFieldsArray[i]) {
+        case 'email':
+          privateFields.email = true;
+          break;
+        case 'address':
+          privateFields.address = true;
+          break;
+        case 'city':
+          privateFields.city = true;
+          break;
+        case 'state':
+          privateFields.state = true;
+          break;
+        case 'zipCode':
+          privateFields.zipCode = true;
+          break;
+        case 'phoneNumber':
+          privateFields.phoneNumber = true;
+          break;
+        default:
+          break;
+      }
+    }
+
     const newUser = {
       user: {
         email: value.email,
@@ -75,16 +113,18 @@ class Register extends Component<Props, State> {
         zipCode: Number(value.zipcode),
         phoneNumber: value.phonenumber,
         nssNumber: Number(value.nssnumber),
+        privateFields,
       },
     } as RegisterUserInterface;
-    registerUser(newUser)
-      .then(response => {
-        this.props.history.push('/');
-        message.success('Your application is under review!');
-      })
-      .catch(error => {
-        message.error(error);
-      });
+    console.log(newUser);
+    // registerUser(newUser)
+    //   .then(response => {
+    //     this.props.history.push('/');
+    //     message.success('Your application is under review!');
+    //   })
+    //   .catch(error => {
+    //     message.error(error);
+    //   });
   }
 
   render() {
@@ -295,14 +335,21 @@ class Register extends Component<Props, State> {
                         },
                         ({getFieldValue, setFieldsValue}) => ({
                           validator(rule, value) {
-                            const phoneNumber = parsePhoneNumberFromString(
-                              value ? value : ''
-                            );
-                            if (phoneNumber.isValid()) {
-                              console.log(phoneNumber);
-                              return Promise.resolve();
+                            console.log('Not', value);
+                            // if (value !== undefined);
+                            const phoneNumber =
+                              value !== undefined
+                                ? parsePhoneNumberFromString(value)
+                                : false;
+                            if (phoneNumber) {
+                              if (phoneNumber.isValid()) {
+                                return Promise.resolve();
+                              } else {
+                                return Promise.reject('Invalid phone number');
+                              }
+                            } else {
+                              return Promise.reject('Invalid phone number');
                             }
-                            return Promise.reject('Invalid phone number');
                           },
                         }),
                       ]}
@@ -310,7 +357,7 @@ class Register extends Component<Props, State> {
                       <PhoneInput
                         defaultCountry="US"
                         value=""
-                        style={{borderRadius: '40px'}}
+                        // style={{borderRadius: '40px'}}
                         onChange={() => {}}
                       />
                     </Form.Item>
@@ -427,6 +474,38 @@ class Register extends Component<Props, State> {
                       ]}
                     >
                       <Input.Password />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Col>
+              {/*Private Fields*/}
+              <Col>
+                <Row>
+                  <Col span={24}>
+                    <Form.Item
+                      label={
+                        <span>
+                          Private Fields&nbsp;
+                          <Tooltip title="Hide some or all of your information from the user directory.">
+                            <QuestionCircleOutlined></QuestionCircleOutlined>
+                          </Tooltip>
+                        </span>
+                      }
+                      name="privateFields"
+                      initialValue={['address']}
+                      valuePropName={'checked'}
+                    >
+                      <Checkbox.Group
+                        options={[
+                          {label: 'Email', value: 'email'},
+                          {label: 'Phone Number', value: 'phoneNumber'},
+                          {label: 'Street', value: 'address'},
+                          {label: 'City', value: 'city'},
+                          {label: 'State', value: 'state'},
+                          {label: 'Zip Code', value: 'zipCode'},
+                        ]}
+                        defaultValue={['address']}
+                      />
                     </Form.Item>
                   </Col>
                 </Row>
