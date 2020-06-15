@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 
 import {Drawer, Divider, Col, Row, Typography, Space, Spin, Button} from 'antd';
 import {getOneUserByID} from '../../dataservice/authentication';
 import {UserInterface} from '../../interfaces/UserInterface';
 import {parsePhoneNumberFromString} from 'libphonenumber-js'
+import { userContext, UserContextInterface } from '../../context/userContext';
 
 const {Text} = Typography;
 
@@ -47,7 +48,9 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
     user: {
       firstName: '',
       lastName: '',
+      phoneNumber: '',
       nssNumber: null,
+      email: ''
     } as UserInterface,
     loading: true,
   };
@@ -55,7 +58,26 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
   componentDidMount() {
     getOneUserByID(this.props.userID).then(user => {
       this.setState({user, loading: false});
-    });
+    }).catch((error)=>{
+      this.setState({
+        user:{
+          firstName: "Not",
+          lastName: "Found",
+          nssNumber:-999,
+          password:"undefined",
+          phoneNumber: "Not Found",
+          email: "Not Found",
+          address: "Not Found",
+          city: "Not Found",
+          state: "Not Found",
+          zipCode: 0,
+          role: "User",
+          status: "Pending",
+          _id: "",
+        }, loading: false,
+
+      })
+    })
   }
 
   showDrawer = () => {
@@ -70,7 +92,47 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
     });
   };
 
+  renderAddress(user: UserInterface) {
+    const currentUser = this.context as UserContextInterface;
+
+    const allPrivate =
+      user.privateFields.address &&
+      user.privateFields.city &&
+      user.privateFields.state &&
+      currentUser.user.role !== 'Admin';
+
+    const {address, city, state, zipCode, privateFields} = user;
+    let addressString = '';
+    if (currentUser.user.role === 'Admin' || !privateFields.city) {
+      addressString += city;
+    }
+    if (currentUser.user.role === 'Admin' || !privateFields.state) {
+      addressString += ' ' + state;
+    }
+    if (currentUser.user.role === 'Admin' || !privateFields.zipCode) {
+      addressString += ' ' + zipCode;
+    }
+    return (
+      <div>
+        {!allPrivate && (
+          <Fragment>
+            <h4>Address</h4>
+            <Row>
+              <Col>
+                {(currentUser.user.role === 'Admin' ||
+                  !privateFields.address) && <p>{address}</p>}
+                <p>{addressString}</p>
+              </Col>
+            </Row>
+          </Fragment>
+        )}
+      </div>
+    );
+  }
+
   render() {
+    const currentUser = this.context as UserContextInterface;
+
     if (!this.state.loading) {
       return (
         <>
@@ -93,6 +155,7 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
                 </Text>
               </Col>
               <Divider />
+              {(currentUser.user.role === 'Admin' || !this.state.user.privateFields.email) && (
               <Col span={12}>
                 <DescriptionItem
                   title="Email"
@@ -102,27 +165,32 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
                     </a>
                   }
                 />
+              
               </Col>
+              )
+            }
+              {(currentUser.user.role === 'Admin' || !this.state.user.privateFields.phoneNumber) && (
               <Col span={12}>
                 <DescriptionItem
                   title="Phone Number"
                   content={
                     <a href={'tel:' + this.state.user.phoneNumber}>
-                      {parsePhoneNumberFromString(this.state.user.phoneNumber).formatNational()}
+                      {parsePhoneNumberFromString(this.state.user.phoneNumber) ? 
+                      parsePhoneNumberFromString(this.state.user.phoneNumber).formatNational()
+                      :(
+                        "Not Found"
+                      )
+                      }
                     </a>
                   }
                 />
+              
               </Col>
+              )}
             </Row>
             <Row>
               <Col span={12}>
-                <DescriptionState
-                  title="Address"
-                  address={this.state.user.address}
-                  city={this.state.user.city}
-                  state={this.state.user.state}
-                  zipCode={this.state.user.zipCode}
-                />
+                {this.renderAddress(this.state.user)}
               </Col>
             </Row>
           </Drawer>
@@ -133,5 +201,7 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
     }
   }
 }
+
+UserSlider.contextType = userContext;
 
 export {UserSlider};

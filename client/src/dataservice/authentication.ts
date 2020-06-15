@@ -117,7 +117,7 @@ async function getOneUserByID(id: string): Promise<UserInterface> {
     const userResponse = await axiosInstance.get('/api/user/' + id, {params});
     return userResponse.data as UserInterface;
   } catch (error) {
-    return error;
+    throw (error);
   }
 }
 
