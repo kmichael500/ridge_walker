@@ -45,11 +45,7 @@ function App() {
                   component={uploadPoints}
                   userType="Admin"
                 />
-                <ProtectedRoute
-                  exact
-                  path="/users"
-                  component={ListUsers}
-                />
+                <ProtectedRoute exact path="/users" component={ListUsers} />
                 <ProtectedRoute
                   exact
                   path="/upload/leads"

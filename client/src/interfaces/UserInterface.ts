@@ -18,13 +18,13 @@ export interface UserInterface {
   phoneNumber: number;
   nssNumber: number;
   privateFields?: {
-    email: boolean,
-    address: boolean,
-    city: boolean,
-    state: boolean,
-    zipCode: boolean,
-    phoneNumber: boolean,    
-  }
+    email: boolean;
+    address: boolean;
+    city: boolean;
+    state: boolean;
+    zipCode: boolean;
+    phoneNumber: boolean;
+  };
 }
 
 export type userRoleType = 'User' | 'Admin';

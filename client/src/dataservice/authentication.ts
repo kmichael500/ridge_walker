@@ -89,8 +89,8 @@ async function getCurrentUserProfile(): Promise<UserInterface> {
         reject('No JWT key');
       } else {
         const user = await axiosInstance.get('api/user/profile', {params});
-
-        resolve(user.data as UserInterface);
+        localStorage.setItem('JWT', user.data.token);
+        resolve(user.data.user as UserInterface);
       }
     } catch (error) {
       reject(error);

@@ -79,7 +79,9 @@ userAPI.get(
         next(err);
       } else {
         delete currentUser.password;
-        res.json(currentUser);
+
+        const token = jwt.sign({user: currentUser}, 'top_secret', {expiresIn: '1d'});
+        res.json({token, user: currentUser});
       }
     });
     //We'll just send back the user details and the token
@@ -180,12 +182,47 @@ userAPI.get(
         console.log("\n Can't get all users");
         next(err);
       } else {
-        res.send(
-          requestedUsers.map(user => {
-            delete user.password;
-            return user;
-          })
-        );
+        const role = (<any>req).user.role;
+        if (role === "User"){
+          res.send(
+            requestedUsers.map(user => {
+              if (user.privateFields?.address){
+                // user.address = "";
+                delete user.address;
+              }
+              if (user.privateFields?.city){
+                // user.city = "";
+                delete user.city;
+              }
+              if (user.privateFields?.email){
+                // user.email = "";
+                delete user.email;
+              }
+              if (user.privateFields?.phoneNumber){
+                // user.phoneNumber = 0;
+                delete user.phoneNumber;
+              }
+              if (user.privateFields?.state){
+                // user.state = "";
+                delete user.state;
+              }
+              if (user.privateFields?.zipCode){
+                // user.zipCode = 0;
+                delete user.zipCode;
+              }
+              delete user.password;
+              return user;
+            })
+          );
+        }
+        else if (role === "Admin"){
+          res.send(
+            requestedUsers.map((user)=>{
+              delete user.password;
+              return user;
+            })
+          )
+        }
       }
     }).lean();
   }

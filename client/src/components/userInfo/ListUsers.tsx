@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
 import {
   getAllUsers,
@@ -28,6 +28,7 @@ import {
   MinusCircleOutlined,
 } from '@ant-design/icons';
 import {AdvancedUserSearch} from './AdvancedUserSerach';
+import {userContext, UserContextInterface} from '../../context/userContext';
 
 const {Paragraph} = Typography;
 
@@ -244,18 +245,6 @@ const DescriptionItem = ({title, content}) => (
   </Row>
 );
 
-const AddressDescription = ({title, address, city, state, zipCode}) => (
-  <div>
-    <h4>{title + ''}</h4>
-    <Row>
-      <Col>
-        <p>{address}</p>
-        <p>{city + ', ' + state + ' ' + zipCode}</p>
-      </Col>
-    </Row>
-  </div>
-);
-
 // End helper functions
 
 interface State {
@@ -274,6 +263,7 @@ class ListUsers extends Component<Props, State> {
       listData: [],
       loading: true,
     };
+    this.renderAddress = this.renderAddress.bind(this);
   }
   componentDidMount() {
     getAllUsers().then(requestedUsers => {
@@ -284,7 +274,45 @@ class ListUsers extends Component<Props, State> {
       });
     });
   }
+
+  renderAddress(user: UserInterface) {
+    const currentUser = this.context as UserContextInterface;
+
+    let allPrivate = user.privateFields.address && user.privateFields.city && user.privateFields.state && currentUser.user.role !== "Admin";
+
+
+
+    const {address, city, state, zipCode, privateFields} = user;
+    console.log('CURR', currentUser);
+    let addressString = '';
+    if (currentUser.user.role === 'Admin' || !privateFields.city) {
+      addressString += city;
+    }
+    if (currentUser.user.role === 'Admin' || !privateFields.state) {
+      addressString += ' ' + state;
+    }
+    if (currentUser.user.role === 'Admin' || !privateFields.zipCode) {
+      addressString += ' ' + zipCode;
+    }
+    return (
+      <div>
+        {!allPrivate &&
+        <Fragment>
+        <h4>Address</h4>
+        <Row>
+          <Col>
+            {(currentUser.user.role === 'Admin' || !privateFields.address) && <p>{address}</p>}
+            <p>{addressString}</p>
+          </Col>
+        </Row>
+        </Fragment>
+      }
+      </div>
+    );
+  }
+
   render() {
+    const currentUser = this.context as UserContextInterface;
     return (
       <div>
         <Helmet>
@@ -337,47 +365,35 @@ class ListUsers extends Component<Props, State> {
                         content={user.nssNumber}
                       />
                     </Col>
-                    <Col span={24}>
-                      <DescriptionItem
-                        title="Phone Number"
-                        content={
-                          <a href={'tel:' + user.phoneNumber}>
-                            {formatPhoneNumber(user.phoneNumber)}
-                          </a>
-                        }
-                      />
-                    </Col>
                   </Row>
+                  {(currentUser.user.role === 'Admin' || !user.privateFields.email) && (
+                    <Row>
+                      <Col span={24}>
+                        <DescriptionItem
+                          title="Email"
+                          content={
+                            <a href={'mailto:' + user.email}>{user.email}</a>
+                          }
+                        />
+                      </Col>
+                    </Row>
+                  )}
+                  {(currentUser.user.role === 'Admin' || !user.privateFields.email) && (
+                    <Row>
+                      <Col span={24}>
+                        <DescriptionItem
+                          title="Phone Number"
+                          content={
+                            <a href={'tel:' + user.phoneNumber}>
+                              {formatPhoneNumber(user.phoneNumber)}
+                            </a>
+                          }
+                        />
+                      </Col>
+                    </Row>
+                  )}
                   <Row>
-                    <Col span={24}>
-                      <DescriptionItem
-                        title="Email"
-                        content={
-                          <a href={'mailto:' + user.email}>{user.email}</a>
-                        }
-                      />
-                    </Col>
-                    <Col span={24}>
-                      <DescriptionItem
-                        title="Phone Number"
-                        content={
-                          <a href={'tel:' + user.phoneNumber}>
-                            {formatPhoneNumber(user.phoneNumber)}
-                          </a>
-                        }
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col span={24}>
-                      <AddressDescription
-                        title="Address"
-                        address={user.address}
-                        city={user.city}
-                        state={user.state}
-                        zipCode={user.zipCode}
-                      />
-                    </Col>
+                    <Col span={24}>{this.renderAddress(user)}</Col>
                   </Row>
                   <Row>
                     <Col span={24}>
@@ -398,4 +414,7 @@ class ListUsers extends Component<Props, State> {
     );
   }
 }
+
+ListUsers.contextType = userContext;
+
 export {ListUsers};
