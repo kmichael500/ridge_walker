@@ -40,6 +40,7 @@ interface UserSliderState {
   visible: boolean;
   user: UserInterface;
   loading: boolean;
+  error: boolean;
 }
 
 class UserSlider extends Component<UserSliderProps, UserSliderState> {
@@ -53,6 +54,7 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
       email: '',
     } as UserInterface,
     loading: true,
+    error: false,
   };
 
   componentDidMount() {
@@ -78,6 +80,7 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
             _id: '',
           },
           loading: false,
+          error: true,
         });
       });
   }
@@ -135,7 +138,7 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
   render() {
     const currentUser = this.context as UserContextInterface;
 
-    if (!this.state.loading) {
+    if (!this.state.loading && !this.state.error) {
       return (
         <>
           <Button type="link" onClick={this.showDrawer}>
@@ -193,6 +196,12 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
             </Row>
           </Drawer>
         </>
+      );
+    } else if (this.state.error) {
+      return (
+        <Button type="link" style={{color: 'black'}}>
+          Not Found
+        </Button>
       );
     } else {
       return <Spin></Spin>;
