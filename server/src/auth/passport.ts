@@ -4,10 +4,8 @@ import {Strategy as localStrategy} from 'passport-local';
 import {UserModel, UserInterface} from '../models/User';
 
 // first letter cappitilzed
-function toCammelCase(val: string){
-  return(
-    val[0].toUpperCase() + val.substr(1).toLowerCase()
-  )
+function toCammelCase(val: string) {
+  return val[0].toUpperCase() + val.substr(1).toLowerCase();
 }
 
 //Create a passport middleware to handle user registration

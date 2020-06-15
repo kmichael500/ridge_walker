@@ -4,12 +4,9 @@ import {registerUser} from '../dataservice/authentication';
 import {userContext} from '../context/userContext';
 import {Helmet} from 'react-helmet';
 import {us_states} from '../dataservice/StateList';
-import { AsYouType, parsePhoneNumberFromString } from 'libphonenumber-js'
-import PhoneInput from 'react-phone-number-input'
-import 'react-phone-number-input/style.css'
-
-
-
+import {AsYouType, parsePhoneNumberFromString} from 'libphonenumber-js';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 
 import {
   Form,
@@ -289,37 +286,33 @@ class Register extends Component<Props, State> {
                     <Form.Item
                       label="Phone Number"
                       name="phonenumber"
-                      
                       rules={[
                         {
                           required: true,
-                          type:"string",
+                          type: 'string',
                           message: 'Phone number required!',
                           whitespace: true,
                         },
                         ({getFieldValue, setFieldsValue}) => ({
                           validator(rule, value) {
-                            const phoneNumber = parsePhoneNumberFromString(value ? value : "");
+                            const phoneNumber = parsePhoneNumberFromString(
+                              value ? value : ''
+                            );
                             if (phoneNumber.isValid()) {
-                              console.log(phoneNumber)
-                                return Promise.resolve();
-                              
+                              console.log(phoneNumber);
+                              return Promise.resolve();
                             }
-                              return Promise.reject(
-                                'Invalid phone number'
-                              );
+                            return Promise.reject('Invalid phone number');
                           },
                         }),
-                        
-                        
                       ]}
                     >
                       <PhoneInput
                         defaultCountry="US"
                         value=""
-                        style={{borderRadius:"40px"}}
-                        onChange={()=>{}}
-                        />
+                        style={{borderRadius: '40px'}}
+                        onChange={() => {}}
+                      />
                     </Form.Item>
                   </Col>
                 </Row>
@@ -368,7 +361,11 @@ class Register extends Component<Props, State> {
                         },
                         ({getFieldValue}) => ({
                           validator(rule, value) {
-                            if (!value || getFieldValue('email').toLowerCase() === value.toLowerCase()) {
+                            if (
+                              !value ||
+                              getFieldValue('email').toLowerCase() ===
+                                value.toLowerCase()
+                            ) {
                               return Promise.resolve();
                             }
                             return Promise.reject(

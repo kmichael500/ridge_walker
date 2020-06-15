@@ -1,6 +1,6 @@
 import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
-import { parsePhoneNumberFromString } from 'libphonenumber-js'
+import {parsePhoneNumberFromString} from 'libphonenumber-js';
 import {
   getAllUsers,
   updateOneUserByID,
@@ -200,7 +200,7 @@ const UserToolbar = (user: UserInterface, that: Component<Props, State>) => {
 
 const formatPhoneNumber = (phoneNumber: string) => {
   const phone = parsePhoneNumberFromString(phoneNumber);
-  console.log(phone)
+  console.log(phone);
   return phone.formatNational();
 };
 
