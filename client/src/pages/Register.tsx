@@ -116,15 +116,14 @@ class Register extends Component<Props, State> {
         privateFields,
       },
     } as RegisterUserInterface;
-    console.log(newUser);
-    // registerUser(newUser)
-    //   .then(response => {
-    //     this.props.history.push('/');
-    //     message.success('Your application is under review!');
-    //   })
-    //   .catch(error => {
-    //     message.error(error);
-    //   });
+    registerUser(newUser)
+      .then(response => {
+        this.props.history.push('/');
+        message.success('Your application is under review!');
+      })
+      .catch(error => {
+        message.error(error);
+      });
   }
 
   render() {
@@ -335,8 +334,6 @@ class Register extends Component<Props, State> {
                         },
                         ({getFieldValue, setFieldsValue}) => ({
                           validator(rule, value) {
-                            console.log('Not', value);
-                            // if (value !== undefined);
                             const phoneNumber =
                               value !== undefined
                                 ? parsePhoneNumberFromString(value)
