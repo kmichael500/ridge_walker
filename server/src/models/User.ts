@@ -14,7 +14,7 @@ export interface UserInterface extends mongoose.Document {
   city: string;
   state: string;
   zipCode: number;
-  phoneNumber: number;
+  phoneNumber: string;
   nssNumber: number;
   privateFields?: {
     email: boolean;
@@ -70,7 +70,7 @@ const UserSchema = new Schema({
     required: true,
   },
   phoneNumber: {
-    type: Number,
+    type: String,
     required: true,
   },
   nssNumber: {

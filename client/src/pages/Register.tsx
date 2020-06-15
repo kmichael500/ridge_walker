@@ -5,6 +5,11 @@ import {userContext} from '../context/userContext';
 import {Helmet} from 'react-helmet';
 import {us_states} from '../dataservice/StateList';
 import { AsYouType, parsePhoneNumberFromString } from 'libphonenumber-js'
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css'
+
+
+
 
 import {
   Form,
@@ -61,7 +66,6 @@ class Register extends Component<Props, State> {
   }
 
   handleSubmit(value: any) {
-    const phoneNumber = parsePhoneNumberFromString(value.phonenumber.toString(), "US");
     const newUser = {
       user: {
         email: value.email,
@@ -72,7 +76,7 @@ class Register extends Component<Props, State> {
         city: value.city,
         state: value.state,
         zipCode: Number(value.zipcode),
-        phoneNumber: Number(phoneNumber.nationalNumber.toString()),
+        phoneNumber: value.phonenumber,
         nssNumber: Number(value.nssnumber),
       },
     } as RegisterUserInterface;
@@ -289,42 +293,33 @@ class Register extends Component<Props, State> {
                       rules={[
                         {
                           required: true,
-                          type:"number",
+                          type:"string",
                           message: 'Phone number required!',
                           whitespace: true,
                         },
                         ({getFieldValue, setFieldsValue}) => ({
                           validator(rule, value) {
-                            const phoneNumber = parsePhoneNumberFromString(value.toString(), "US");
+                            const phoneNumber = parsePhoneNumberFromString(value ? value : "");
                             if (phoneNumber.isValid()) {
-                              return Promise.resolve();
+                              console.log(phoneNumber)
+                                return Promise.resolve();
+                              
                             }
-                            else{
-                              setFieldsValue({"phonenumber":null})
                               return Promise.reject(
                                 'Invalid phone number'
                               );
-                            }
-                            
                           },
                         }),
                         
                         
                       ]}
                     >
-                      <InputNumber
-                        style={{width:"100%"}}
-                        formatter={value => {
-                          const formattedNumber = new AsYouType("US");
-                          return formattedNumber.input(value.toString());
-                          
-                        }
-                        }
-                        parser={value => {
-                          const justDigits = value.replace(/[^0-9]/g, '').toString();
-                          return Number(justDigits);
-                        }}
-                      />
+                      <PhoneInput
+                        defaultCountry="US"
+                        value=""
+                        style={{borderRadius:"40px"}}
+                        onChange={()=>{}}
+                        />
                     </Form.Item>
                   </Col>
                 </Row>
@@ -373,7 +368,7 @@ class Register extends Component<Props, State> {
                         },
                         ({getFieldValue}) => ({
                           validator(rule, value) {
-                            if (!value || getFieldValue('email') === value) {
+                            if (!value || getFieldValue('email').toLowerCase() === value.toLowerCase()) {
                               return Promise.resolve();
                             }
                             return Promise.reject(

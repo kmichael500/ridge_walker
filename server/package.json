@@ -51,7 +51,6 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pdf-image": "^2.0.0",
-    "react-phone-number-input": "^3.0.23",
     "togpx": "^0.5.4",
     "ts-node-dev": "^1.0.0-pre.44"
   },

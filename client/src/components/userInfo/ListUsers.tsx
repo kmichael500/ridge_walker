@@ -1,5 +1,6 @@
 import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
+import { parsePhoneNumberFromString } from 'libphonenumber-js'
 import {
   getAllUsers,
   updateOneUserByID,
@@ -197,15 +198,10 @@ const UserToolbar = (user: UserInterface, that: Component<Props, State>) => {
   return buttons;
 };
 
-const formatPhoneNumber = (phoneNumber: number) => {
-  let formattedPhoneNumber = '';
-  const match = phoneNumber.toString().match(/^(\d{3})(\d{3})(\d{4})$/);
-  if (match) {
-    formattedPhoneNumber = '(' + match[1] + ') ' + match[2] + '-' + match[3];
-    return formattedPhoneNumber;
-  } else {
-    return 'Not found';
-  }
+const formatPhoneNumber = (phoneNumber: string) => {
+  const phone = parsePhoneNumberFromString(phoneNumber);
+  console.log(phone)
+  return phone.formatNational();
 };
 
 interface UserStatusTagProps {
@@ -285,7 +281,6 @@ class ListUsers extends Component<Props, State> {
       currentUser.user.role !== 'Admin';
 
     const {address, city, state, zipCode, privateFields} = user;
-    console.log('CURR', currentUser);
     let addressString = '';
     if (currentUser.user.role === 'Admin' || !privateFields.city) {
       addressString += city;

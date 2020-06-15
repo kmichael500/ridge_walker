@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {Drawer, Divider, Col, Row, Typography, Space, Spin, Button} from 'antd';
 import {getOneUserByID} from '../../dataservice/authentication';
 import {UserInterface} from '../../interfaces/UserInterface';
+import {parsePhoneNumberFromString} from 'libphonenumber-js'
 
 const {Text} = Typography;
 
@@ -38,7 +39,6 @@ interface UserSliderState {
   visible: boolean;
   user: UserInterface;
   loading: boolean;
-  formattedPhoneNumber: string;
 }
 
 class UserSlider extends Component<UserSliderProps, UserSliderState> {
@@ -50,20 +50,11 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
       nssNumber: null,
     } as UserInterface,
     loading: true,
-    formattedPhoneNumber: '',
   };
 
   componentDidMount() {
     getOneUserByID(this.props.userID).then(user => {
-      let formattedPhoneNumber = '';
-      const match = user.phoneNumber
-        .toString()
-        .match(/^(\d{3})(\d{3})(\d{4})$/);
-      if (match) {
-        formattedPhoneNumber =
-          '(' + match[1] + ') ' + match[2] + '-' + match[3];
-      }
-      this.setState({user, loading: false, formattedPhoneNumber});
+      this.setState({user, loading: false});
     });
   }
 
@@ -117,7 +108,7 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
                   title="Phone Number"
                   content={
                     <a href={'tel:' + this.state.user.phoneNumber}>
-                      {this.state.formattedPhoneNumber}
+                      {parsePhoneNumberFromString(this.state.user.phoneNumber).formatNational()}
                     </a>
                   }
                 />

@@ -25,10 +25,10 @@ passport.use(
         const user = await UserModel.create({
           email: email.toLowerCase(),
           password,
-          firstName: toCammelCase(req.body.firstName),
-          lastName: toCammelCase(req.body.lastName),
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
           address: req.body.address,
-          city: toCammelCase(req.body.city),
+          city: req.body.city,
           state: req.body.state.toUpperCase(),
           zipCode: req.body.zipCode,
           phoneNumber: req.body.phoneNumber,

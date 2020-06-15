@@ -18,7 +18,7 @@ submittedPointAPI.post('/', (req, res, next) => {
       next(err);
     } else {
       console.log('Saved submission successfully!');
-      res.send('Point under review.').status(400);
+      res.send('Point under review.');
     }
   });
 });

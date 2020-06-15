@@ -15,7 +15,7 @@ export interface UserInterface {
   state: string;
   status?: userStatusType;
   zipCode: number;
-  phoneNumber: number;
+  phoneNumber: string;
   nssNumber: number;
   privateFields?: {
     email: boolean;
