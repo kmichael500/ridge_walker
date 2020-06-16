@@ -101,5 +101,5 @@ const masterPointSchema = new mongoose.Schema<Feature>({
 });
 
 // tslint:disable-next-line:variable-name
-const MasterPoint = mongoose.model('masterPoint', masterPointSchema);
+const MasterPoint = mongoose.model<Feature>('masterPoint', masterPointSchema);
 export {MasterPoint};
