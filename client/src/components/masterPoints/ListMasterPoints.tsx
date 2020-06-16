@@ -14,6 +14,7 @@ import {
   Popconfirm,
   Divider,
   message,
+  Descriptions,
 } from 'antd';
 import {
   CheckCircleOutlined,
@@ -213,6 +214,7 @@ class listPoints extends Component<Props, State> {
     });
   }
 
+
   render() {
     const currentUser = this.context as UserContextInterface;
     return (
@@ -260,16 +262,29 @@ class listPoints extends Component<Props, State> {
                 //   actions={UserToolbar(point, this)}
                   loading={this.state.loading}
                 >
-                  <Row>
-                    <Col span={24}>
-                      <DescriptionItem
-                        title="Gear"
-                        content={point.properties.gear}
-                      />
-                    </Col>
-                  </Row>
+                  <Descriptions size="small" bordered
+                            column={{xxl: 1, xl: 2, lg: 2, md: 1, sm: 1, xs: 1}}
+                  >
+                <Descriptions.Item label="Length">{point.properties.length}</Descriptions.Item>
+                <Descriptions.Item label="Pit Depth">{point.properties.pdep}</Descriptions.Item>
+                <Descriptions.Item label="Vertical Extent">{point.properties.depth}</Descriptions.Item>
+                <Descriptions.Item label="Elevation">{point.properties.elev}</Descriptions.Item>
+                <Descriptions.Item label="Number of Pits">{point.properties.ps}</Descriptions.Item>
+                <Descriptions.Item label="County">{point.properties.co_name}</Descriptions.Item>
+                <Descriptions.Item label="Ownership">{point.properties.ownership}</Descriptions.Item>
+                <Descriptions.Item label="Topo">{point.properties.topo_name}</Descriptions.Item>
+                <Descriptions.Item label="Topo Indication">{point.properties.topo_indi}</Descriptions.Item>
+                <Descriptions.Item label="Gear">{point.properties.gear}</Descriptions.Item>
+                <Descriptions.Item label="Enterance Type">{point.properties.ent_type}</Descriptions.Item>
+                <Descriptions.Item label="Field Indication">{point.properties.field_indi}</Descriptions.Item>
+                <Descriptions.Item label="Map Status">{point.properties.map_status}</Descriptions.Item>
+                <Descriptions.Item label="Geology">{point.properties.geology}</Descriptions.Item>
+                <Descriptions.Item label="Geology Age">{point.properties.geo_age}</Descriptions.Item>
+                <Descriptions.Item label="Physiographic Province">{point.properties.phys_prov}</Descriptions.Item>
+
+
                   
-                    <Row>
+                    {/* <Row>
                       <Col span={24}>
                         <DescriptionItem
                           title="Length"
@@ -293,8 +308,10 @@ class listPoints extends Component<Props, State> {
                         content={point.properties.depth}
                       ></DescriptionItem>
                     </Col>
-                  </Row>
+                  </Row> */}
+                  </Descriptions>
                 </Card>
+                
               </List.Item>
             )}
           />
