@@ -31,6 +31,15 @@ passport.use(
           zipCode: req.body.zipCode,
           phoneNumber: req.body.phoneNumber,
           nssNumber: req.body.nssNumber,
+          privateFields: {
+            email: (req.body.privateEmail)=== 'true',
+            address: (req.body.privateAddress) === 'true',
+            city: (req.body.privateCity) === 'true',
+            state: (req.body.privateState) === 'true',
+            zipCode: (req.body.privateZipCode) === 'true',
+            phoneNumber: (req.body.privatePhoneNumber) === 'true',
+
+          },
         } as UserInterface);
         //Send the user information to the next middleware
         return done(null, user);

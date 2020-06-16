@@ -118,7 +118,7 @@ class Register extends Component<Props, State> {
     } as RegisterUserInterface;
     registerUser(newUser)
       .then(response => {
-        this.props.history.push('/');
+        // this.props.history.push('/');
         message.success('Your application is under review!');
       })
       .catch(error => {
@@ -354,7 +354,6 @@ class Register extends Component<Props, State> {
                       <PhoneInput
                         defaultCountry="US"
                         value=""
-                        // style={{borderRadius: '40px'}}
                         onChange={() => {}}
                       />
                     </Form.Item>

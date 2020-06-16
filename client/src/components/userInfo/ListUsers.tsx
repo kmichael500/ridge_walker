@@ -263,11 +263,13 @@ class ListUsers extends Component<Props, State> {
   }
   componentDidMount() {
     getAllUsers().then(requestedUsers => {
+      console.log(requestedUsers)
       this.setState({
         userList: requestedUsers,
         listData: requestedUsers,
         loading: false,
       });
+      console.log(requestedUsers)
     });
   }
 
@@ -364,8 +366,7 @@ class ListUsers extends Component<Props, State> {
                       />
                     </Col>
                   </Row>
-                  {(currentUser.user.role === 'Admin' ||
-                    !user.privateFields.email) && (
+                  {(currentUser.user.role === 'Admin' || !user.privateFields.email) && (
                     <Row>
                       <Col span={24}>
                         <DescriptionItem
@@ -378,7 +379,7 @@ class ListUsers extends Component<Props, State> {
                     </Row>
                   )}
                   {(currentUser.user.role === 'Admin' ||
-                    !user.privateFields.email) && (
+                    !user.privateFields.phoneNumber) && (
                     <Row>
                       <Col span={24}>
                         <DescriptionItem
