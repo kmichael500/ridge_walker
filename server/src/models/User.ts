@@ -14,8 +14,16 @@ export interface UserInterface extends mongoose.Document {
   city: string;
   state: string;
   zipCode: number;
-  phoneNumber: number;
+  phoneNumber: string;
   nssNumber: number;
+  privateFields?: {
+    email: boolean;
+    address: boolean;
+    city: boolean;
+    state: boolean;
+    zipCode: boolean;
+    phoneNumber: boolean;
+  };
   isValidPassword(password: string): Promise<boolean>;
 }
 // tslint:disable-next-line: variable-name
@@ -62,12 +70,42 @@ const UserSchema = new Schema({
     required: true,
   },
   phoneNumber: {
-    type: Number,
+    type: String,
     required: true,
   },
   nssNumber: {
     type: Number,
     required: true,
+  },
+  privateFields: {
+    type: {
+      email: {
+        type: Boolean,
+      },
+      address: {
+        type: Boolean,
+      },
+      city: {
+        type: Boolean,
+      },
+      state: {
+        type: Boolean,
+      },
+      zipCode: {
+        type: Boolean,
+      },
+      phoneNumber: {
+        type: Boolean,
+      },
+    },
+    default: {
+      email: false,
+      address: false,
+      city: false,
+      state: false,
+      zipCode: false,
+      phoneNumber: false,
+    },
   },
 });
 

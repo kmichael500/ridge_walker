@@ -33,7 +33,22 @@ async function registerUser(
           email: newUser.user.email,
           password: newUser.user.password,
         },
-        data: qs.stringify(newUser.user),
+        data: qs.stringify({
+          firstName: newUser.user.firstName,
+          lastName: newUser.user.lastName,
+          address: newUser.user.address,
+          city: newUser.user.city,
+          state: newUser.user.state,
+          zipCode: newUser.user.zipCode,
+          phoneNumber: newUser.user.phoneNumber,
+          nssNumber: newUser.user.nssNumber,
+          privateEmail: newUser.user.privateFields?.email,
+          privateAddress: newUser.user.privateFields?.address,
+          privateCity: newUser.user.privateFields?.city,
+          privateState: newUser.user.privateFields?.state,
+          privatezipCode: newUser.user.privateFields?.zipCode,
+          privatePhoneNumber: newUser.user.privateFields?.phoneNumber,
+        }),
         headers: {
           'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
         },
@@ -89,8 +104,8 @@ async function getCurrentUserProfile(): Promise<UserInterface> {
         reject('No JWT key');
       } else {
         const user = await axiosInstance.get('api/user/profile', {params});
-
-        resolve(user.data as UserInterface);
+        localStorage.setItem('JWT', user.data.token);
+        resolve(user.data.user as UserInterface);
       }
     } catch (error) {
       reject(error);
@@ -117,7 +132,7 @@ async function getOneUserByID(id: string): Promise<UserInterface> {
     const userResponse = await axiosInstance.get('/api/user/' + id, {params});
     return userResponse.data as UserInterface;
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 

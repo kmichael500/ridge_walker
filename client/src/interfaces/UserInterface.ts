@@ -15,8 +15,16 @@ export interface UserInterface {
   state: string;
   status?: userStatusType;
   zipCode: number;
-  phoneNumber: number;
+  phoneNumber: string;
   nssNumber: number;
+  privateFields?: {
+    email: boolean;
+    address: boolean;
+    city: boolean;
+    state: boolean;
+    zipCode: boolean;
+    phoneNumber: boolean;
+  };
 }
 
 export type userRoleType = 'User' | 'Admin';

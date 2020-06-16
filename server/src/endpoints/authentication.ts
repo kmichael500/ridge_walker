@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as passport from 'passport';
 import * as jwt from 'jsonwebtoken';
-import {UserModel} from '../models/User';
+import {UserModel, UserInterface} from '../models/User';
 import {SubmittedPoint} from '../models/SubmittedPoint';
 import {noPendingUsers} from '../auth/restrictFunctions';
 
@@ -79,7 +79,11 @@ userAPI.get(
         next(err);
       } else {
         delete currentUser.password;
-        res.json(currentUser);
+
+        const token = jwt.sign({user: currentUser}, 'top_secret', {
+          expiresIn: '1d',
+        });
+        res.json({token, user: currentUser});
       }
     });
     //We'll just send back the user details and the token
@@ -180,12 +184,46 @@ userAPI.get(
         console.log("\n Can't get all users");
         next(err);
       } else {
-        res.send(
-          requestedUsers.map(user => {
-            delete user.password;
-            return user;
-          })
-        );
+        const role = (<any>req).user.role;
+        if (role === 'User') {
+          res.send(
+            requestedUsers.map(user => {
+              if (user.privateFields?.address) {
+                // user.address = "";
+                delete user.address;
+              }
+              if (user.privateFields?.city) {
+                // user.city = "";
+                delete user.city;
+              }
+              if (user.privateFields?.email) {
+                // user.email = "";
+                delete user.email;
+              }
+              if (user.privateFields?.phoneNumber) {
+                // user.phoneNumber = 0;
+                delete user.phoneNumber;
+              }
+              if (user.privateFields?.state) {
+                // user.state = "";
+                delete user.state;
+              }
+              if (user.privateFields?.zipCode) {
+                // user.zipCode = 0;
+                delete user.zipCode;
+              }
+              delete user.password;
+              return user;
+            })
+          );
+        } else if (role === 'Admin') {
+          res.send(
+            requestedUsers.map(user => {
+              delete user.password;
+              return user;
+            })
+          );
+        }
       }
     }).lean();
   }
@@ -200,19 +238,24 @@ userAPI.put(
   passport.authenticate('jwt', {session: false}),
   noPendingUsers(),
   (req, res, next) => {
-    UserModel.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      (err, requestedUser) => {
-        if (err) {
-          console.log("\nuserAPI.put('/:id')  error");
-          next(err);
-        } else {
-          console.log(requestedUser);
-          res.sendStatus(200);
+    const currentUser = (<any>req).user as UserInterface;
+    if (currentUser.role !== 'Admin') {
+      req.body.role = 'User';
+    }
+    if (currentUser.role === 'Admin' || currentUser._id === req.body._id) {
+      UserModel.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        (err, requestedUser) => {
+          if (err) {
+            console.log("\nuserAPI.put('/:id')  error");
+            next(err);
+          } else {
+            res.sendStatus(200);
+          }
         }
-      }
-    );
+      );
+    }
   }
 );
 

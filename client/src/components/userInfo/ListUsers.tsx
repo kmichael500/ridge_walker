@@ -1,5 +1,6 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
+import {parsePhoneNumberFromString} from 'libphonenumber-js';
 import {
   getAllUsers,
   updateOneUserByID,
@@ -28,6 +29,7 @@ import {
   MinusCircleOutlined,
 } from '@ant-design/icons';
 import {AdvancedUserSearch} from './AdvancedUserSerach';
+import {userContext, UserContextInterface} from '../../context/userContext';
 
 const {Paragraph} = Typography;
 
@@ -81,7 +83,7 @@ const UserToolbar = (user: UserInterface, that: Component<Props, State>) => {
       okButtonProps={{danger: true}}
       onConfirm={() => {
         deleteOneUserByID(user._id).then(() => {
-          message.error(user.firstName + ' has been rejected!');
+          message.error(user.firstName + ' account has been deleted!');
           deleteUserFromSreen(user, that);
         });
       }}
@@ -196,15 +198,9 @@ const UserToolbar = (user: UserInterface, that: Component<Props, State>) => {
   return buttons;
 };
 
-const formatPhoneNumber = (phoneNumber: number) => {
-  let formattedPhoneNumber = '';
-  const match = phoneNumber.toString().match(/^(\d{3})(\d{3})(\d{4})$/);
-  if (match) {
-    formattedPhoneNumber = '(' + match[1] + ') ' + match[2] + '-' + match[3];
-    return formattedPhoneNumber;
-  } else {
-    return 'Not found';
-  }
+const formatPhoneNumber = (phoneNumber: string) => {
+  const phone = parsePhoneNumberFromString(phoneNumber);
+  return phone.formatNational();
 };
 
 interface UserStatusTagProps {
@@ -244,18 +240,6 @@ const DescriptionItem = ({title, content}) => (
   </Row>
 );
 
-const AddressDescription = ({title, address, city, state, zipCode}) => (
-  <div>
-    <h4>{title + ''}</h4>
-    <Row>
-      <Col>
-        <p>{address}</p>
-        <p>{city + ', ' + state + ' ' + zipCode}</p>
-      </Col>
-    </Row>
-  </div>
-);
-
 // End helper functions
 
 interface State {
@@ -274,6 +258,7 @@ class ListUsers extends Component<Props, State> {
       listData: [],
       loading: true,
     };
+    this.renderAddress = this.renderAddress.bind(this);
   }
   componentDidMount() {
     getAllUsers().then(requestedUsers => {
@@ -284,7 +269,47 @@ class ListUsers extends Component<Props, State> {
       });
     });
   }
+
+  renderAddress(user: UserInterface) {
+    const currentUser = this.context as UserContextInterface;
+
+    const allPrivate =
+      user.privateFields.address &&
+      user.privateFields.city &&
+      user.privateFields.state &&
+      currentUser.user.role !== 'Admin';
+
+    const {address, city, state, zipCode, privateFields} = user;
+    let addressString = '';
+    if (currentUser.user.role === 'Admin' || !privateFields.city) {
+      addressString += city;
+    }
+    if (currentUser.user.role === 'Admin' || !privateFields.state) {
+      addressString += ' ' + state;
+    }
+    if (currentUser.user.role === 'Admin' || !privateFields.zipCode) {
+      addressString += ' ' + zipCode;
+    }
+    return (
+      <div>
+        {!allPrivate && (
+          <Fragment>
+            <h4>Address</h4>
+            <Row>
+              <Col>
+                {(currentUser.user.role === 'Admin' ||
+                  !privateFields.address) && <p>{address}</p>}
+                <p>{addressString}</p>
+              </Col>
+            </Row>
+          </Fragment>
+        )}
+      </div>
+    );
+  }
+
   render() {
+    const currentUser = this.context as UserContextInterface;
     return (
       <div>
         <Helmet>
@@ -337,47 +362,37 @@ class ListUsers extends Component<Props, State> {
                         content={user.nssNumber}
                       />
                     </Col>
-                    <Col span={24}>
-                      <DescriptionItem
-                        title="Phone Number"
-                        content={
-                          <a href={'tel:' + user.phoneNumber}>
-                            {formatPhoneNumber(user.phoneNumber)}
-                          </a>
-                        }
-                      />
-                    </Col>
                   </Row>
+                  {(currentUser.user.role === 'Admin' ||
+                    !user.privateFields.email) && (
+                    <Row>
+                      <Col span={24}>
+                        <DescriptionItem
+                          title="Email"
+                          content={
+                            <a href={'mailto:' + user.email}>{user.email}</a>
+                          }
+                        />
+                      </Col>
+                    </Row>
+                  )}
+                  {(currentUser.user.role === 'Admin' ||
+                    !user.privateFields.phoneNumber) && (
+                    <Row>
+                      <Col span={24}>
+                        <DescriptionItem
+                          title="Phone Number"
+                          content={
+                            <a href={'tel:' + user.phoneNumber}>
+                              {formatPhoneNumber(user.phoneNumber)}
+                            </a>
+                          }
+                        />
+                      </Col>
+                    </Row>
+                  )}
                   <Row>
-                    <Col span={24}>
-                      <DescriptionItem
-                        title="Email"
-                        content={
-                          <a href={'mailto:' + user.email}>{user.email}</a>
-                        }
-                      />
-                    </Col>
-                    <Col span={24}>
-                      <DescriptionItem
-                        title="Phone Number"
-                        content={
-                          <a href={'tel:' + user.phoneNumber}>
-                            {formatPhoneNumber(user.phoneNumber)}
-                          </a>
-                        }
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col span={24}>
-                      <AddressDescription
-                        title="Address"
-                        address={user.address}
-                        city={user.city}
-                        state={user.state}
-                        zipCode={user.zipCode}
-                      />
-                    </Col>
+                    <Col span={24}>{this.renderAddress(user)}</Col>
                   </Row>
                   <Row>
                     <Col span={24}>
@@ -398,4 +413,7 @@ class ListUsers extends Component<Props, State> {
     );
   }
 }
+
+ListUsers.contextType = userContext;
+
 export {ListUsers};
