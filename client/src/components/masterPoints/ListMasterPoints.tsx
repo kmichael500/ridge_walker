@@ -1,6 +1,7 @@
 import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
 import {getAllMasterPoints} from '../../dataservice/getPoints';
+import {AdvancedPointsSearch} from './AdvancedPointsSearch'
 import {Helmet} from 'react-helmet';
 import {
   List,
@@ -264,12 +265,12 @@ class listPoints extends Component<Props, State> {
           <title>Points</title>
         </Helmet>
         <Card>
-          {/* <AdvancedUserSearch
-            userList={this.state.userList}
+          <AdvancedPointsSearch
+            pointList={this.state.pointsList}
             onSearch={results => {
               this.setState({listData: results});
             }}
-          ></AdvancedUserSearch> */}
+          ></AdvancedPointsSearch>
           <Divider></Divider>
           <List
             pagination={{
