@@ -14,6 +14,7 @@ import {Dashboard} from './pages/Dashboard';
 import {HomePage} from './pages/HomePage';
 import {UploadLeads} from './components/Karst Features/UploadLeads';
 import {DeadLeads} from './pages/DeadLeads';
+import {ListPoints, listPoints} from './components/masterPoints/ListMasterPoints'
 /* admin routes */
 import {ReviewPage} from './pages/ReviewPage';
 import {ListUsers} from './components/userInfo/ListUsers';
@@ -43,6 +44,12 @@ function App() {
                   exact
                   path="/upload"
                   component={uploadPoints}
+                  userType="Admin"
+                />
+                <ProtectedRoute
+                  exact
+                  path="/listPoints"
+                  component={listPoints}
                   userType="Admin"
                 />
                 <ProtectedRoute exact path="/users" component={ListUsers} />
