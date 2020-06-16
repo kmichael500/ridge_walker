@@ -33,7 +33,7 @@ async function registerUser(
           email: newUser.user.email,
           password: newUser.user.password,
         },
-        data:qs.stringify({
+        data: qs.stringify({
           firstName: newUser.user.firstName,
           lastName: newUser.user.lastName,
           address: newUser.user.address,

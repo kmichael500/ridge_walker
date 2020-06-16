@@ -200,7 +200,6 @@ const UserToolbar = (user: UserInterface, that: Component<Props, State>) => {
 
 const formatPhoneNumber = (phoneNumber: string) => {
   const phone = parsePhoneNumberFromString(phoneNumber);
-  console.log(phone);
   return phone.formatNational();
 };
 
@@ -263,13 +262,11 @@ class ListUsers extends Component<Props, State> {
   }
   componentDidMount() {
     getAllUsers().then(requestedUsers => {
-      console.log(requestedUsers)
       this.setState({
         userList: requestedUsers,
         listData: requestedUsers,
         loading: false,
       });
-      console.log(requestedUsers)
     });
   }
 
@@ -366,7 +363,8 @@ class ListUsers extends Component<Props, State> {
                       />
                     </Col>
                   </Row>
-                  {(currentUser.user.role === 'Admin' || !user.privateFields.email) && (
+                  {(currentUser.user.role === 'Admin' ||
+                    !user.privateFields.email) && (
                     <Row>
                       <Col span={24}>
                         <DescriptionItem
