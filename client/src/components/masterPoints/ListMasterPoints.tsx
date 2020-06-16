@@ -1,6 +1,6 @@
 import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
-import {getAllMasterPoints} from '../../dataservice/getPoints'
+import {getAllMasterPoints} from '../../dataservice/getPoints';
 import {Helmet} from 'react-helmet';
 import {
   List,
@@ -10,142 +10,20 @@ import {
   Typography,
   Space,
   Tag,
-  Tooltip,
-  Popconfirm,
   Divider,
-  message,
   Descriptions,
+  Collapse,
+  Button,
 } from 'antd';
 import {
-  CheckCircleOutlined,
-  DeleteOutlined,
-  StopOutlined,
-  PlusCircleOutlined,
-  CloseCircleOutlined,
-  MinusCircleOutlined,
+  EyeOutlined,
 } from '@ant-design/icons';
 // import {AdvancedUserSearch} from './AdvancedUserSerach';
 import {userContext, UserContextInterface} from '../../context/userContext';
-import { Feature } from '../../interfaces/geoJsonInterface';
+import {Feature} from '../../interfaces/geoJsonInterface';
 
-const {Paragraph} = Typography;
-
-
-const UserToolbar = (user: UserInterface, that: Component<Props, State>) => {
-  const buttons = [];
-  const approveButton = (
-    <Tooltip title="Approve user!">
-      <CheckCircleOutlined
-        style={{color: 'green'}}
-        
-      >
-        Approve
-      </CheckCircleOutlined>
-    </Tooltip>
-  );
-  const deleteButton = (
-    <Popconfirm
-      title={
-        'Are you sure you want to permanently delete ' +
-        user.firstName +
-        "'s account?"
-      }
-      okText="Delete"
-      okButtonProps={{danger: true}}
-      
-    >
-      <Tooltip title="Delete user!">
-        <DeleteOutlined style={{color: 'red'}} />
-      </Tooltip>
-    </Popconfirm>
-  );
-  const rejectButton = (
-    <Popconfirm
-      title={
-        <div>
-          <Paragraph>
-            Are you sure you want to reject {user.firstName}'s membership
-            request?
-          </Paragraph>
-          <Paragraph>This will delete their account.</Paragraph>
-        </div>
-      }
-      okText="Reject"
-      okButtonProps={{danger: true}}
-      onConfirm={() => {
-        
-      }}
-    >
-      <Tooltip title="Reject user!">
-        <CloseCircleOutlined style={{color: 'red'}} />
-      </Tooltip>
-    </Popconfirm>
-  );
-  const pendingButton = (
-    <Popconfirm
-      title={
-        'Are you sure you want to disable ' + user.firstName + "'s account?"
-      }
-      okText="Disable"
-      okButtonProps={{danger: true}}
-      onConfirm={() => {
-        user.status = 'Pending';
-        
-      }}
-    >
-      <Tooltip title="Disable Account">
-        <StopOutlined />
-      </Tooltip>
-    </Popconfirm>
-  );
-  const makeAdminButton = (
-    <Popconfirm
-      title={'Are you sure you want to make ' + user.firstName + ' an admin?'}
-      okText="Make Admin"
-      
-    >
-      <Tooltip title="Make admin!">
-        <PlusCircleOutlined style={{color: 'green'}} />
-      </Tooltip>
-    </Popconfirm>
-  );
-
-  const makeUserButton = (
-    <Popconfirm
-      title={
-        'Are you sure you want revoke ' +
-        user.firstName +
-        "'s admin privileges?"
-      }
-      okText="Make User"
-      
-    >
-      <Tooltip title="Make user!">
-        <MinusCircleOutlined style={{color: 'red'}} />
-      </Tooltip>
-    </Popconfirm>
-  );
-  switch (user.status) {
-    case 'Approved':
-      buttons.push(pendingButton, deleteButton);
-      if (user.role === 'User') {
-        buttons.push(makeAdminButton);
-      } else if (user.role === 'Admin') {
-        buttons.push(makeUserButton);
-      }
-      break;
-    case 'Pending':
-      buttons.push(approveButton, rejectButton);
-      break;
-    case 'Rejected':
-      buttons.push(approveButton, pendingButton);
-      break;
-    default:
-      break;
-  }
-  return buttons;
-};
-
+const {Paragraph, Title} = Typography;
+const {Panel} = Collapse;
 
 
 interface UserStatusTagProps {
@@ -190,6 +68,24 @@ const DescriptionItem = ({title, content}) => (
 interface State {
   pointsList: Feature[];
   listData: Feature[];
+  renderedFeatures: {
+    length: boolean;
+    pdep: boolean;
+    depth: boolean;
+    elev: boolean;
+    ps: boolean;
+    co_name: boolean;
+    ownership: boolean;
+    topo_name: boolean;
+    topo_indi: boolean;
+    gear: boolean;
+    ent_type: boolean;
+    field_indi: boolean;
+    map_status: boolean;
+    geology: boolean;
+    geo_age: boolean;
+    phys_prov: boolean;
+  };
   loading: boolean;
 }
 
@@ -202,7 +98,26 @@ class listPoints extends Component<Props, State> {
       pointsList: [],
       listData: [],
       loading: true,
+      renderedFeatures: {
+        length: true,
+        pdep: true,
+        depth: true,
+        elev: false,
+        ps: false,
+        co_name: true,
+        ownership: true,
+        topo_name: false,
+        topo_indi: false,
+        gear: true,
+        ent_type: false,
+        field_indi: false,
+        map_status: true,
+        geology: true,
+        geo_age: false,
+        phys_prov: false,
+      },
     };
+    this.renderDescription = this.renderDescription.bind(this);
   }
   componentDidMount() {
     getAllMasterPoints().then(requestedPoints => {
@@ -214,13 +129,139 @@ class listPoints extends Component<Props, State> {
     });
   }
 
+  renderDescription(point: Feature) {
+    const renderedItems = [];
+    for (const key in this.state.renderedFeatures) {
+      if (key === 'length' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Length">
+            {point.properties.length}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'pdep' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Pit Depth">
+            {point.properties.pdep}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'depth' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Vertical Extent">
+            {point.properties.depth}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'elev' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Elevation">
+            {point.properties.elev}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'ps' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Number of Pits">
+            {point.properties.ps}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'co_name' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="County">
+            {point.properties.co_name}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'ownership' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Ownership">
+            {point.properties.ownership}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'topo_name' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Topo">
+            {point.properties.topo_name}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'topo_indi' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Topo Indication">
+            {point.properties.topo_indi}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'gear' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Gear">
+            {point.properties.gear}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'ent_type' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Enterance Type">
+            {point.properties.ent_type}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'field_indi' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Field Indication">
+            {point.properties.field_indi}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'map_status' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Map Status">
+            {point.properties.map_status}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'geology' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Geology">
+            {point.properties.geology}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'geo_age' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Geology Age">
+            {point.properties.geo_age}
+          </Descriptions.Item>
+        );
+      }
+      if (key === 'phys_prov' && this.state.renderedFeatures[key]) {
+        renderedItems.push(
+          <Descriptions.Item label="Physiographic Province">
+            {point.properties.phys_prov}
+          </Descriptions.Item>
+        );
+      }
+      console.log(renderedItems);
+    }
+    return (
+      <Descriptions
+        size="small"
+        column={{xxl: 2, xl: 1, lg: 1, md: 2, sm: 3, xs: 2}}
+      >
+        {renderedItems}
+      </Descriptions>
+    );
+  }
 
   render() {
     const currentUser = this.context as UserContextInterface;
     return (
       <div>
         <Helmet>
-          <title>Manage Users</title>
+          <title>Points</title>
         </Helmet>
         <Card>
           {/* <AdvancedUserSearch
@@ -239,79 +280,37 @@ class listPoints extends Component<Props, State> {
             grid={{
               gutter: 16,
               xs: 1,
-              sm: 2,
-              md: 3,
-              lg: 4,
-              xl: 5,
-              xxl: 6,
+              sm: 1,
+              md: 2,
+              lg: 3,
+              xl: 4,
+              xxl: 5,
             }}
             dataSource={this.state.listData}
+            loading={this.state.loading}
             renderItem={point => (
               <List.Item>
                 <Card
                   title={
-                    <Row>
-                      <Col span={24}>
-                        {point.properties.name}
-                      </Col>
-                      <Col span={24}>
-                        <UserRoleTag role={point.properties.tcsnumber}></UserRoleTag>
-                      </Col>
-                    </Row>
+                    point.properties.name + ' ' + point.properties.tcsnumber
                   }
-                //   actions={UserToolbar(point, this)}
-                  loading={this.state.loading}
+                  key={point.properties.tcsnumber}
+                  actions={[
+                    <Button
+                      type="primary"
+                      icon={<EyeOutlined />}
+                      onClick={() => {
+                        this.props.history.push(
+                          '/points/' + point.properties.tcsnumber
+                        );
+                      }}
+                    >
+                      More Info
+                    </Button>,
+                  ]}
                 >
-                  <Descriptions size="small" bordered
-                            column={{xxl: 1, xl: 2, lg: 2, md: 1, sm: 1, xs: 1}}
-                  >
-                <Descriptions.Item label="Length">{point.properties.length}</Descriptions.Item>
-                <Descriptions.Item label="Pit Depth">{point.properties.pdep}</Descriptions.Item>
-                <Descriptions.Item label="Vertical Extent">{point.properties.depth}</Descriptions.Item>
-                <Descriptions.Item label="Elevation">{point.properties.elev}</Descriptions.Item>
-                <Descriptions.Item label="Number of Pits">{point.properties.ps}</Descriptions.Item>
-                <Descriptions.Item label="County">{point.properties.co_name}</Descriptions.Item>
-                <Descriptions.Item label="Ownership">{point.properties.ownership}</Descriptions.Item>
-                <Descriptions.Item label="Topo">{point.properties.topo_name}</Descriptions.Item>
-                <Descriptions.Item label="Topo Indication">{point.properties.topo_indi}</Descriptions.Item>
-                <Descriptions.Item label="Gear">{point.properties.gear}</Descriptions.Item>
-                <Descriptions.Item label="Enterance Type">{point.properties.ent_type}</Descriptions.Item>
-                <Descriptions.Item label="Field Indication">{point.properties.field_indi}</Descriptions.Item>
-                <Descriptions.Item label="Map Status">{point.properties.map_status}</Descriptions.Item>
-                <Descriptions.Item label="Geology">{point.properties.geology}</Descriptions.Item>
-                <Descriptions.Item label="Geology Age">{point.properties.geo_age}</Descriptions.Item>
-                <Descriptions.Item label="Physiographic Province">{point.properties.phys_prov}</Descriptions.Item>
-
-
-                  
-                    {/* <Row>
-                      <Col span={24}>
-                        <DescriptionItem
-                          title="Length"
-                          content={point.properties.length}
-                        />
-                      </Col>
-                    </Row>
-                  
-                    <Row>
-                      <Col span={24}>
-                        <DescriptionItem
-                          title="Pit Depth"
-                          content={point.properties.pdep}
-                        />
-                      </Col>
-                    </Row>
-                  <Row>
-                    <Col span={24}>
-                      <DescriptionItem
-                        title="Vertical Extent"
-                        content={point.properties.depth}
-                      ></DescriptionItem>
-                    </Col>
-                  </Row> */}
-                  </Descriptions>
+                  {this.renderDescription(point)}
                 </Card>
-                
               </List.Item>
             )}
           />
