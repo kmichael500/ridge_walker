@@ -85,12 +85,15 @@ const noPending = (userType: string) => {
 
 // get all master points
 masterPointsAPI.get('/', (req, res, next) => {
-  MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
+  MasterPoint.find((err: Error, requestedPoints) => {
     if (err) {
       console.log("\n Can't get master submissions");
       next(err);
     } else {
-      res.send(requestedPoints);
+      res.send(requestedPoints.map((point)=>{
+        point.properties.narr = "";
+        return point;
+      }));
     }
   }).lean();
 });
