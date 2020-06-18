@@ -35,8 +35,12 @@ interface State {
     lengthL: number | string;
     lengthR: number | string;
     lengthCmp: '<' | '<=';
-    pdep: number;
-    depth: number;
+    pdepL: number | string;
+    pdepR: number | string;
+    pdepCmp: '<' | '<=';
+    depthL: number | string;
+    depthR: number | string;
+    depthCmp: '<' | '<=';
     elev: number;
     ps: number;
     co_name: string[];
@@ -68,8 +72,12 @@ class AdvancedPointsSearch extends Component<Props, State> {
         lengthL: '',
         lengthR: '',
         lengthCmp: '<=',
-        pdep: null, //todo
-        depth: null, //tdo
+        pdepL: '',
+        pdepR: '',
+        pdepCmp: '<=',
+        depthL: '',
+        depthR: '',
+        depthCmp: '<=',
         elev: null, //todo
         ps: null, //todo
         co_name: [],
@@ -260,9 +268,71 @@ class AdvancedPointsSearch extends Component<Props, State> {
           cmpList.push(lengthR >= Number(point.properties.length));
         }
       }
-
       return cmpList.reduce((a, b) => a && b, true);
     });
+
+    // depth/vertical extent search
+    results = results.filter((point, index) => {
+        const depth = point.properties.depth;
+        const depthR = this.state.searchParams.depthR;
+        const depthL = this.state.searchParams.depthL;
+        const depthCmp = this.state.searchParams.depthCmp;
+  
+        const cmpList = [];
+  
+        if (typeof depthL === 'number') {
+          if (depthCmp === '<') {
+            cmpList.push(depthL < Number(point.properties.depth));
+          } else if (depthCmp === '<=') {
+            cmpList.push(depthL <= Number(point.properties.depth));
+          } else if (depthCmp === '>') {
+            cmpList.push(depthL > Number(point.properties.depth));
+          } else if (depthCmp === '>=') {
+            cmpList.push(depthL >= Number(point.properties.depth));
+          }
+        }
+        if (typeof depthR === 'number') {
+          if (depthCmp === '<') {
+            cmpList.push(depthR > Number(point.properties.depth));
+          }
+          if (depthCmp === '<=') {
+            cmpList.push(depthR >= Number(point.properties.depth));
+          }
+        }
+        return cmpList.reduce((a, b) => a && b, true);
+      });
+
+    // pdep search
+    results = results.filter((point, index) => {
+        const pdep = point.properties.pdep;
+        const pdepR = this.state.searchParams.pdepR;
+        const pdepL = this.state.searchParams.pdepL;
+        const pdepCmp = this.state.searchParams.pdepCmp;
+  
+        const cmpList = [];
+  
+        if (typeof pdepL === 'number') {
+          if (pdepCmp === '<') {
+            cmpList.push(pdepL < Number(point.properties.pdep));
+          } else if (pdepCmp === '<=') {
+            cmpList.push(pdepL <= Number(point.properties.pdep));
+          } else if (pdepCmp === '>') {
+            cmpList.push(pdepL > Number(point.properties.pdep));
+          } else if (pdepCmp === '>=') {
+            cmpList.push(pdepL >= Number(point.properties.pdep));
+          }
+        }
+        if (typeof pdepR === 'number') {
+          if (pdepCmp === '<') {
+            cmpList.push(pdepR > Number(point.properties.pdep));
+          }
+          if (pdepCmp === '<=') {
+            cmpList.push(pdepR >= Number(point.properties.pdep));
+          }
+        }
+        return cmpList.reduce((a, b) => a && b, true);
+      });
+
     this.props.onSearch(results);
   }
 
@@ -625,7 +695,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
             <Col {...colSpanProps}>
               <Row gutter={5}>
                 <Col span={24}>Length</Col>
-                <Col span={8}>
+                <Col span={7}>
                   <InputNumber
                     placeholder="100"
                     style={{width: '100%'}}
@@ -638,7 +708,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     }}
                   ></InputNumber>
                 </Col>
-                <Col span={8}>
+                <Col span={10}>
                   <Select
                     style={{width: '100%', textAlign: 'center'}}
                     defaultValue={this.state.searchParams.lengthCmp}
@@ -663,13 +733,127 @@ class AdvancedPointsSearch extends Component<Props, State> {
                   </Select>
                 </Col>
 
-                <Col span={8}>
+                <Col span={7}>
                   <InputNumber
                     placeholder="500"
                     style={{width: '100%'}}
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.lengthR = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></InputNumber>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by Depth/Vertical Extent */}
+            <Col {...colSpanProps}>
+              <Row gutter={5}>
+                <Col span={24}>Vertical Extent</Col>
+                <Col span={7}>
+                  <InputNumber
+                    placeholder="100"
+                    style={{width: '100%'}}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.depthL = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></InputNumber>
+                </Col>
+                <Col span={10}>
+                  <Select
+                    style={{width: '100%', textAlign: 'center'}}
+                    defaultValue={this.state.searchParams.depthCmp}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.depthCmp = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  >
+                    <Option style={{textAlign: 'center'}} value="<=">
+                      <Tooltip title="Vertical extent is greater than or equal to x and less or equal to y.">
+                        <div>{'x <= VE <= y'}</div>
+                      </Tooltip>
+                    </Option>
+                    <Option style={{textAlign: 'center'}} value="<">
+                      <Tooltip title="Vertical extent is greater than x and less than y.">
+                        <div>{'x < VE < y'}</div>
+                      </Tooltip>
+                    </Option>
+                  </Select>
+                </Col>
+
+                <Col span={7}>
+                  <InputNumber
+                    placeholder="500"
+                    style={{width: '100%'}}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.depthR = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></InputNumber>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by pdep */}
+            <Col {...colSpanProps}>
+              <Row gutter={5}>
+                <Col span={24}>Pit Depth</Col>
+                <Col span={7}>
+                  <InputNumber
+                    placeholder="100"
+                    style={{width: '100%'}}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.pdepL = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></InputNumber>
+                </Col>
+                <Col span={10}>
+                  <Select
+                    style={{width: '100%', textAlign: 'center'}}
+                    defaultValue={this.state.searchParams.pdepCmp}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.pdepCmp = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  >
+                    <Option style={{textAlign: 'center'}} value="<=">
+                      <Tooltip title="Pit depth is greater than or equal to x and less or equal to y.">
+                        <div>{'x <= VE <= y'}</div>
+                      </Tooltip>
+                    </Option>
+                    <Option style={{textAlign: 'center'}} value="<">
+                      <Tooltip title="Pit depth is greater than x and less than y.">
+                        <div>{'x < VE < y'}</div>
+                      </Tooltip>
+                    </Option>
+                  </Select>
+                </Col>
+
+                <Col span={7}>
+                  <InputNumber
+                    placeholder="500"
+                    style={{width: '100%'}}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.pdepR = val;
                       this.setState({searchParams}, () => {
                         this.handleSearch();
                       });
