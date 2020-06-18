@@ -1,7 +1,9 @@
 import React, {Component, useState, Fragment} from 'react';
 import {Feature} from '../../interfaces/geoJsonInterface';
 
-import {Row, Col, Input, Select, Collapse} from 'antd';
+import {tn_counties} from '../../dataservice/countyList'
+
+import {Row, Col, Input, Select, Collapse, Tag} from 'antd';
 const {Panel} = Collapse;
 const Search = Input;
 const Option = Select;
@@ -16,8 +18,8 @@ interface State {
     depth: number;
     elev: number;
     ps: number;
-    co_name: string;
-    ownership: string;
+    co_name: string[];
+    ownership: string; //todo
     topo_name: string;
     topo_indi: string;
     gear: string;
@@ -47,7 +49,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
         depth: null, //tdo
         elev: null, //todo
         ps: null, //todo
-        co_name: "",
+        co_name: [],
         ownership: "",
         topo_name: "",
         topo_indi: "", 
@@ -81,11 +83,20 @@ class AdvancedPointsSearch extends Component<Props, State> {
     });
 
     // county_name search
-    results = results.filter(point => {
-      const co_name = point.properties.co_name.toLowerCase();
-      const searchText = this.state.searchParams.co_name.toLowerCase();
-      return co_name.includes(searchText);
-    });
+    // checks for multiple counties
+    if (this.state.searchParams.co_name.length !== 0){
+        results = results.filter(point => {
+            return (
+              // checks if user has any of the selected statues
+              this.state.searchParams.co_name
+                .map(county => {
+                  return point.properties.co_name.toLowerCase() === county.toLowerCase();
+                })
+                .reduce((a, b) => a || b, false) // combines true vals in array
+            );
+          });
+    }
+    
 
     // ownership search
     results = results.filter(point => {
@@ -210,18 +221,37 @@ class AdvancedPointsSearch extends Component<Props, State> {
             {/* Search by co_name */}
             <Col {...colSpanProps}>
               <Row>
-                <Col span={24}>County</Col>
+                County
                 <Col span={24}>
-                  <Search
-                    placeholder="Rutherford"
-                    onChange={e => {
+                  <Select
+                    mode="multiple"
+                    placeholder="Select County"
+                    tagRender={props => {
+                      return (
+                        <Tag>
+                          {props.label.toString()}
+                        </Tag>
+                      );
+                    }}
+                    defaultValue={this.state.searchParams.co_name}
+                    style={{width: '100%'}}
+                    onChange={(counties: string[]) => {
                       const searchParams = {...this.state.searchParams};
-                      searchParams.co_name = e.target.value;
+                      searchParams.co_name = counties;
                       this.setState({searchParams}, () => {
                         this.handleSearch();
                       });
                     }}
-                  ></Search>
+                    tokenSeparators={[',']}
+                  >
+                      {tn_counties.map((county)=>{
+                          return(
+                              <Option key={county} value={county}>
+                                  {county}
+                              </Option>
+                          )
+                      })}
+                  </Select>
                 </Col>
               </Row>
             </Col>
