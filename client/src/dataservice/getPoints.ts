@@ -8,11 +8,6 @@ const axiosInstance = axios.create({
   baseURL: serverBaseURL,
 });
 
-// gets the secret token for API
-const params = {
-  secret_token: localStorage.getItem('JWT'),
-};
-
 /**
  * Fetch all master points from the API.
  * @returns Promise<Feature[]>
@@ -20,7 +15,7 @@ const params = {
 async function getAllMasterPoints(): Promise<Feature[]> {
   try {
     const masterPointResponse = await axiosInstance.get('/api/points/master', {
-      params,
+      params:{secret_token: localStorage.getItem('JWT')},
     });
     return masterPointResponse.data as Feature[];
   } catch (error) {
@@ -37,7 +32,7 @@ async function getMasterPoint(tcsnumber: string): Promise<Feature> {
   try {
     const masterPointResponse = await axiosInstance.get(
       '/api/points/master/' + tcsnumber,
-      {params}
+      {params:{secret_token: localStorage.getItem('JWT')}}
     );
     return masterPointResponse.data as Feature;
   } catch (error) {
@@ -56,7 +51,7 @@ async function downloadMasterPoints(fileType: 'csv' | 'gpx'): Promise<void> {
       '/api/points/master/download/' + fileType,
       {
         responseType: 'blob',
-        params,
+        params:{secret_token: localStorage.getItem('JWT')},
       }
     );
     const url = window.URL.createObjectURL(new Blob([downloadResponse.data]));

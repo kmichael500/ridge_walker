@@ -11,11 +11,6 @@ const axiosInstance = axios.create({
   baseURL: serverBaseURL,
 });
 
-// gets the secret token for API
-const params = {
-  secret_token: localStorage.getItem('JWT'),
-};
-
 /**
  * Register a user.
  * @param newUser - a user object.
@@ -85,7 +80,6 @@ async function loginUser(
       });
 
       localStorage.setItem('JWT', getLoginResponse.data.token);
-      params.secret_token = getLoginResponse.data.token;
       resolve(getLoginResponse.data.user as UserInterface);
     } catch (error) {
       reject(error.response.data.message);
@@ -103,7 +97,7 @@ async function getCurrentUserProfile(): Promise<UserInterface> {
       if (localStorage.getItem('JWT') === null) {
         reject('No JWT key');
       } else {
-        const user = await axiosInstance.get('api/user/profile', {params});
+        const user = await axiosInstance.get('api/user/profile', {params:{secret_token: localStorage.getItem('JWT')}});
         localStorage.setItem('JWT', user.data.token);
         resolve(user.data.user as UserInterface);
       }
@@ -119,7 +113,6 @@ async function getCurrentUserProfile(): Promise<UserInterface> {
  */
 function logoutUser(): void {
   localStorage.removeItem('JWT');
-  params.secret_token = '';
 }
 
 /**
@@ -129,7 +122,7 @@ function logoutUser(): void {
  */
 async function getOneUserByID(id: string): Promise<UserInterface> {
   try {
-    const userResponse = await axiosInstance.get('/api/user/' + id, {params});
+    const userResponse = await axiosInstance.get('/api/user/' + id, {params:{secret_token: localStorage.getItem('JWT')}});
     return userResponse.data as UserInterface;
   } catch (error) {
     throw error;
@@ -150,7 +143,7 @@ async function updateOneUserByID(
     const userResponse = await axiosInstance.put(
       '/api/user/' + id,
       updatedUser,
-      {params}
+      {params:{secret_token: localStorage.getItem('JWT')}}
     );
     return userResponse;
   } catch (error) {
@@ -166,7 +159,7 @@ async function updateOneUserByID(
 async function deleteOneUserByID(id: string): Promise<AxiosResponse> {
   try {
     const userResponse = await axiosInstance.delete('/api/user/' + id, {
-      params,
+      params:{secret_token: localStorage.getItem('JWT')},
     });
     return userResponse;
   } catch (error) {
@@ -180,7 +173,7 @@ async function deleteOneUserByID(id: string): Promise<AxiosResponse> {
  */
 async function getAllUsers(): Promise<UserInterface[]> {
   try {
-    const userResponse = await axiosInstance.get('/api/user/', {params});
+    const userResponse = await axiosInstance.get('/api/user/', {params:{secret_token: localStorage.getItem('JWT')}});
     return userResponse.data as UserInterface[];
   } catch (error) {
     return error;
@@ -195,7 +188,7 @@ async function getAllUsers(): Promise<UserInterface[]> {
 async function getCurrentUserSubmissions(): Promise<SubmittedPoint[]> {
   try {
     const userResponse = await axiosInstance.get('/api/user/submissions', {
-      params,
+      params:{secret_token: localStorage.getItem('JWT')},
     });
     return userResponse.data as SubmittedPoint[];
   } catch (error) {
