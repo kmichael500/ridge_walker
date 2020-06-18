@@ -11,7 +11,18 @@ import {
   map_statusFields,
 } from '../../dataservice/pointDropDownFields';
 
-import {Row, Col, Input, Select, Collapse, Tag} from 'antd';
+import {
+  Row,
+  Col,
+  Input,
+  Select,
+  Collapse,
+  Tag,
+  InputNumber,
+  Space,
+  Tooltip,
+} from 'antd';
+import {Gutter} from 'antd/lib/grid/row';
 const {Panel} = Collapse;
 const Search = Input;
 const Option = Select;
@@ -21,7 +32,9 @@ interface State {
   searchParams: {
     name: string;
     tcsnumber: string;
-    length: number;
+    lengthL: number | string;
+    lengthR: number | string;
+    lengthCmp: '<' | '<=';
     pdep: number;
     depth: number;
     elev: number;
@@ -52,7 +65,9 @@ class AdvancedPointsSearch extends Component<Props, State> {
       searchParams: {
         name: '',
         tcsnumber: '',
-        length: null, //todo
+        lengthL: '',
+        lengthR: '',
+        lengthCmp: '<=',
         pdep: null, //todo
         depth: null, //tdo
         elev: null, //todo
@@ -216,6 +231,38 @@ class AdvancedPointsSearch extends Component<Props, State> {
       const searchText = this.state.searchParams.phys_prov.toLowerCase();
       return phys_prov.includes(searchText);
     });
+
+    // length search
+    results = results.filter((point, index) => {
+      const length = point.properties.length;
+      const lengthR = this.state.searchParams.lengthR;
+      const lengthL = this.state.searchParams.lengthL;
+      const lengthCmp = this.state.searchParams.lengthCmp;
+
+      const cmpList = [];
+
+      if (typeof lengthL === 'number') {
+        if (lengthCmp === '<') {
+          cmpList.push(lengthL < Number(point.properties.length));
+        } else if (lengthCmp === '<=') {
+          cmpList.push(lengthL <= Number(point.properties.length));
+        } else if (lengthCmp === '>') {
+          cmpList.push(lengthL > Number(point.properties.length));
+        } else if (lengthCmp === '>=') {
+          cmpList.push(lengthL >= Number(point.properties.length));
+        }
+      }
+      if (typeof lengthR === 'number') {
+        if (lengthCmp === '<') {
+          cmpList.push(lengthR > Number(point.properties.length));
+        }
+        if (lengthCmp === '<=') {
+          cmpList.push(lengthR >= Number(point.properties.length));
+        }
+      }
+
+      return cmpList.reduce((a, b) => a && b, true);
+    });
     this.props.onSearch(results);
   }
 
@@ -227,10 +274,14 @@ class AdvancedPointsSearch extends Component<Props, State> {
       lg: {span: 8},
       xl: {span: 6},
     };
+    const rowProps = {
+      gutter: [10, {xs: 8, sm: 16, md: 24, lg: 32}] as Gutter,
+    };
+
     return (
       <Collapse defaultActiveKey={[1]}>
         <Panel header="Advanced Search" key={1}>
-          <Row gutter={[10, {xs: 8, sm: 16, md: 24, lg: 32}]}>
+          <Row {...rowProps}>
             {/* Search by name */}
             <Col {...colSpanProps}>
               <Row>
@@ -567,6 +618,63 @@ class AdvancedPointsSearch extends Component<Props, State> {
                       });
                     }}
                   ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by Length */}
+            <Col {...colSpanProps}>
+              <Row gutter={5}>
+                <Col span={24}>Length</Col>
+                <Col span={8}>
+                  <InputNumber
+                    placeholder="100"
+                    style={{width: '100%'}}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.lengthL = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></InputNumber>
+                </Col>
+                <Col span={8}>
+                  <Select
+                    style={{width: '100%', textAlign: 'center'}}
+                    defaultValue={this.state.searchParams.lengthCmp}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.lengthCmp = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  >
+                    <Option style={{textAlign: 'center'}} value="<=">
+                      <Tooltip title="Length is greater than or equal to x and less or equal to y.">
+                        <div>{'x <= L <= y'}</div>
+                      </Tooltip>
+                    </Option>
+                    <Option style={{textAlign: 'center'}} value="<">
+                      <Tooltip title="Length is greater than x and less than y.">
+                        <div>{'x < L < y'}</div>
+                      </Tooltip>
+                    </Option>
+                  </Select>
+                </Col>
+
+                <Col span={8}>
+                  <InputNumber
+                    placeholder="500"
+                    style={{width: '100%'}}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.lengthR = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></InputNumber>
                 </Col>
               </Row>
             </Col>
