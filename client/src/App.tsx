@@ -49,12 +49,6 @@ function App() {
                   component={uploadPoints}
                   userType="Admin"
                 />
-                <ProtectedRoute
-                  exact
-                  path="/listPoints"
-                  component={listPoints}
-                  userType="Admin"
-                />
                 <ProtectedRoute exact path="/users" component={ListUsers} />
                 <ProtectedRoute
                   exact
@@ -68,11 +62,7 @@ function App() {
                   path="/map/:lat?/:long?"
                   component={MapView}
                 />
-                <ProtectedRoute
-                  exact
-                  path="/points/"
-                  component={CavePointTable}
-                />
+                <ProtectedRoute exact path="/points" component={listPoints} />
                 <ProtectedRoute exact path="/points/:id" component={CaveInfo} />
                 <ProtectedRoute exact path="/add/points/" component={AddCave} />
                 <ProtectedRoute

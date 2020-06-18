@@ -4,7 +4,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import {Card, Row, Col, Spin} from 'antd';
 import {getImageFileNames, mapToBase64} from '../dataservice/getMaps';
 import DisplayMap from './DisplayPDF';
-import { Gutter } from 'antd/lib/grid/row';
+import {Gutter} from 'antd/lib/grid/row';
 
 const options = {
   cMapUrl: 'cmaps/',

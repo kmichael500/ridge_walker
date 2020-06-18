@@ -90,10 +90,12 @@ masterPointsAPI.get('/', (req, res, next) => {
       console.log("\n Can't get master submissions");
       next(err);
     } else {
-      res.send(requestedPoints.map((point)=>{
-        point.properties.narr = "";
-        return point;
-      }));
+      res.send(
+        requestedPoints.map(point => {
+          point.properties.narr = '';
+          return point;
+        })
+      );
     }
   }).lean();
 });

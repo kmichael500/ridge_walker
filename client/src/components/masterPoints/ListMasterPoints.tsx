@@ -1,16 +1,10 @@
 import React, {Component, useState, Fragment} from 'react';
-import {UserInterface} from '../../interfaces/UserInterface';
 import {getAllMasterPoints} from '../../dataservice/getPoints';
 import {AdvancedPointsSearch} from './AdvancedPointsSearch';
 import {Helmet} from 'react-helmet';
 import {
   List,
   Card,
-  Row,
-  Col,
-  Typography,
-  Space,
-  Tag,
   Divider,
   Descriptions,
   Collapse,
@@ -21,49 +15,8 @@ import {EyeOutlined} from '@ant-design/icons';
 // import {AdvancedUserSearch} from './AdvancedUserSerach';
 import {userContext, UserContextInterface} from '../../context/userContext';
 import {Feature} from '../../interfaces/geoJsonInterface';
-import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
-const {Paragraph, Title} = Typography;
 const {Panel} = Collapse;
-
-interface UserStatusTagProps {
-  status: string;
-}
-export const UserStatusTag: React.FunctionComponent<UserStatusTagProps> = props => {
-  if (props.status === 'Pending') {
-    return <Tag color="geekblue">{props.status}</Tag>;
-  } else if (props.status === 'Approved') {
-    return <Tag color="green">{props.status}</Tag>;
-  } else if (props.status === 'Rejected') {
-    return <Tag color="volcano">{props.status}</Tag>;
-  } else {
-    return <Tag>{props.status}</Tag>;
-  }
-};
-
-export const UserRoleTag: React.FunctionComponent<{role: string}> = props => {
-  if (props.role === 'Admin') {
-    return <Tag color="green">{props.role}</Tag>;
-  } else if (props.role === 'User') {
-    return <Tag color="default">{props.role}</Tag>;
-  } else {
-    return null;
-  }
-};
-
-// helper functinos
-const DescriptionItem = ({title, content}) => (
-  <Row>
-    <Space>
-      <Col>
-        <h4>{title + ''}</h4>
-        <Paragraph ellipsis={{rows: 2, expandable: true}}>{content}</Paragraph>
-      </Col>
-    </Space>
-  </Row>
-);
-
-// End helper functions
 
 interface State {
   pointsList: Feature[];
@@ -121,9 +74,9 @@ class listPoints extends Component<Props, State> {
   }
   componentDidMount() {
     getAllMasterPoints().then(requestedPoints => {
-        requestedPoints = requestedPoints.sort((a,b)=>(
-            b.properties.length - a.properties.length
-        ))
+      requestedPoints = requestedPoints.sort(
+        (a, b) => b.properties.length - a.properties.length
+      );
       this.setState({
         pointsList: requestedPoints,
         listData: requestedPoints,
@@ -258,12 +211,12 @@ class listPoints extends Component<Props, State> {
     );
   }
 
-  defaultRenderedItems(){
+  defaultRenderedItems() {
     const defaultItems = [] as string[];
-    for (const key in this.state.renderedFeatures){
-        if (this.state.renderedFeatures[key]){
-            defaultItems.push(key)
-        }
+    for (const key in this.state.renderedFeatures) {
+      if (this.state.renderedFeatures[key]) {
+        defaultItems.push(key);
+      }
     }
     return defaultItems;
   }
@@ -281,47 +234,47 @@ class listPoints extends Component<Props, State> {
             onSearchFinished={results => {
               this.setState({listData: results});
             }}
-            isLoading={loading =>{
-                this.setState({loading})
+            isLoading={loading => {
+              this.setState({loading});
             }}
           ></AdvancedPointsSearch>
           <Divider></Divider>
           <Collapse>
-          <Panel header="Properties to Display" key = {1}>
-          <Checkbox.Group
+            <Panel header="Properties to Display" key={1}>
+              <Checkbox.Group
                 options={[
-                    {label: 'Length', value: "length"},
-                    {label: 'Pit Depth', value: "pdep"},
-                    {label: 'Vertical Extent', value: "depth"},
-                    {label: 'Elevation', value: "elev"},
-                    {label: 'Number of Pits', value: "ps"},
-                    {label: 'County', value: "co_name"},
-                    {label: 'Ownership', value: "ownership"},
-                    {label: 'Topo', value: "topo_name"},
-                    {label: 'Topo Indication', value: "topo_indi"},
-                    {label: 'Gear', value: "gear"},
-                    {label: 'Enterance Type', value: "ent_type"},
-                    {label: 'Field Indication', value: "field_indi"},
-                    {label: 'Map Status', value: "map_status"},
-                    {label: 'Geology', value: "geology"},
-                    {label: 'Geology Age', value: "geo_age"},
-                    {label: 'Physiographic Province', value: "phys_prov"},
-
+                  {label: 'Length', value: 'length'},
+                  {label: 'Pit Depth', value: 'pdep'},
+                  {label: 'Vertical Extent', value: 'depth'},
+                  {label: 'Elevation', value: 'elev'},
+                  {label: 'Number of Pits', value: 'ps'},
+                  {label: 'County', value: 'co_name'},
+                  {label: 'Ownership', value: 'ownership'},
+                  {label: 'Topo', value: 'topo_name'},
+                  {label: 'Topo Indication', value: 'topo_indi'},
+                  {label: 'Gear', value: 'gear'},
+                  {label: 'Enterance Type', value: 'ent_type'},
+                  {label: 'Field Indication', value: 'field_indi'},
+                  {label: 'Map Status', value: 'map_status'},
+                  {label: 'Geology', value: 'geology'},
+                  {label: 'Geology Age', value: 'geo_age'},
+                  {label: 'Physiographic Province', value: 'phys_prov'},
                 ]}
-                onChange={(checkedValue)=>{
-                    const {renderedFeatures} = {...this.state}
-                    for (const key in renderedFeatures){
-                        if (checkedValue.filter((value)=>(value === key)).length !== 0){
-                            renderedFeatures[key] = true;
-                        }
-                        else{
-                            renderedFeatures[key] = false;
-                        }
+                onChange={checkedValue => {
+                  const {renderedFeatures} = {...this.state};
+                  for (const key in renderedFeatures) {
+                    if (
+                      checkedValue.filter(value => value === key).length !== 0
+                    ) {
+                      renderedFeatures[key] = true;
+                    } else {
+                      renderedFeatures[key] = false;
                     }
-                    this.setState({renderedFeatures});
+                  }
+                  this.setState({renderedFeatures});
                 }}
                 defaultValue={this.defaultRenderedItems()}
-            />
+              />
             </Panel>
           </Collapse>
           <Divider></Divider>
