@@ -15,11 +15,13 @@ import {
   Descriptions,
   Collapse,
   Button,
+  Checkbox,
 } from 'antd';
 import {EyeOutlined} from '@ant-design/icons';
 // import {AdvancedUserSearch} from './AdvancedUserSerach';
 import {userContext, UserContextInterface} from '../../context/userContext';
 import {Feature} from '../../interfaces/geoJsonInterface';
+import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 
 const {Paragraph, Title} = Typography;
 const {Panel} = Collapse;
@@ -100,17 +102,17 @@ class listPoints extends Component<Props, State> {
         length: true,
         pdep: true,
         depth: true,
-        elev: true,
-        ps: true,
+        elev: false,
+        ps: false,
         co_name: true,
         ownership: true,
         topo_name: false,
         topo_indi: false,
         gear: true,
-        ent_type: true,
-        field_indi: true,
+        ent_type: false,
+        field_indi: false,
         map_status: true,
-        geology: true,
+        geology: false,
         geo_age: false,
         phys_prov: false,
       },
@@ -256,6 +258,16 @@ class listPoints extends Component<Props, State> {
     );
   }
 
+  defaultRenderedItems(){
+    const defaultItems = [] as string[];
+    for (const key in this.state.renderedFeatures){
+        if (this.state.renderedFeatures[key]){
+            defaultItems.push(key)
+        }
+    }
+    return defaultItems;
+  }
+
   render() {
     const currentUser = this.context as UserContextInterface;
     return (
@@ -273,9 +285,45 @@ class listPoints extends Component<Props, State> {
                 this.setState({loading})
             }}
           ></AdvancedPointsSearch>
-          <Row>
-              Rendered Features
-          </Row>
+          <Divider></Divider>
+          <Collapse>
+          <Panel header="Properties to Display" key = {1}>
+          <Checkbox.Group
+                options={[
+                    {label: 'Length', value: "length"},
+                    {label: 'Pit Depth', value: "pdep"},
+                    {label: 'Vertical Extent', value: "depth"},
+                    {label: 'Elevation', value: "elev"},
+                    {label: 'Number of Pits', value: "ps"},
+                    {label: 'County', value: "co_name"},
+                    {label: 'Ownership', value: "ownership"},
+                    {label: 'Topo', value: "topo_name"},
+                    {label: 'Topo Indication', value: "topo_indi"},
+                    {label: 'Gear', value: "gear"},
+                    {label: 'Enterance Type', value: "ent_type"},
+                    {label: 'Field Indication', value: "field_indi"},
+                    {label: 'Map Status', value: "map_status"},
+                    {label: 'Geology', value: "geology"},
+                    {label: 'Geology Age', value: "geo_age"},
+                    {label: 'Physiographic Province', value: "phys_prov"},
+
+                ]}
+                onChange={(checkedValue)=>{
+                    const {renderedFeatures} = {...this.state}
+                    for (const key in renderedFeatures){
+                        if (checkedValue.filter((value)=>(value === key)).length !== 0){
+                            renderedFeatures[key] = true;
+                        }
+                        else{
+                            renderedFeatures[key] = false;
+                        }
+                    }
+                    this.setState({renderedFeatures});
+                }}
+                defaultValue={this.defaultRenderedItems()}
+            />
+            </Panel>
+          </Collapse>
           <Divider></Divider>
           <List
             pagination={{

@@ -532,7 +532,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
             {/* Search by ownership */}
             <Col {...colSpanProps}>
               <Row>
-                County
+                Ownership
                 <Col span={24}>
                   <Select
                     mode="multiple"
