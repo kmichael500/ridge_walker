@@ -757,7 +757,7 @@ class AddCave extends Component<any, State> {
             >
               <Select placeholder="Please select">
                 <Select.Option value="Mapped">Mapped</Select.Option>
-                <Select.Option value="Unmaped">Unmaped</Select.Option>
+                <Select.Option value="Unmapped">Unmapped</Select.Option>
                 <Select.Option value="Sketch">Sketch</Select.Option>
                 <Select.Option value={'Pace & Compass'}>
                   {'Pace & Compass'}

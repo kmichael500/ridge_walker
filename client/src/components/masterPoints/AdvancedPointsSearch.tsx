@@ -1,9 +1,15 @@
 import React, {Component, useState, Fragment} from 'react';
 import {Feature} from '../../interfaces/geoJsonInterface';
 
-import {tn_counties} from '../../dataservice/countyList'
-import {ownershipFields, topo_indiFields, gearFields} from '../../dataservice/pointDropDownFields'
-
+import {tn_counties} from '../../dataservice/countyList';
+import {
+  ownershipFields,
+  topo_indiFields,
+  gearFields,
+  ent_typeFields,
+  field_indiFields,
+  map_statusFields,
+} from '../../dataservice/pointDropDownFields';
 
 import {Row, Col, Input, Select, Collapse, Tag} from 'antd';
 const {Panel} = Collapse;
@@ -14,7 +20,7 @@ interface State {
   loading: boolean;
   searchParams: {
     name: string;
-    tcsnumber: string
+    tcsnumber: string;
     length: number;
     pdep: number;
     depth: number;
@@ -25,9 +31,9 @@ interface State {
     topo_name: string;
     topo_indi: string[];
     gear: string[];
-    ent_type: string; //todo
-    field_indi: string; //todo
-    map_status: string; //todo
+    ent_type: string[];
+    field_indi: string[];
+    map_status: string[];
     geology: string;
     geo_age: string;
     phys_prov: string;
@@ -44,8 +50,8 @@ class AdvancedPointsSearch extends Component<Props, State> {
     this.state = {
       loading: true,
       searchParams: {
-        name: "",
-        tcsnumber: "",
+        name: '',
+        tcsnumber: '',
         length: null, //todo
         pdep: null, //todo
         depth: null, //tdo
@@ -53,26 +59,25 @@ class AdvancedPointsSearch extends Component<Props, State> {
         ps: null, //todo
         co_name: [],
         ownership: [],
-        topo_name: "",
-        topo_indi: [], 
+        topo_name: '',
+        topo_indi: [],
         gear: [],
-        ent_type: "",
-        field_indi: "",
-        map_status: "",
-        geology: "",
-        geo_age: "",
-        phys_prov: "",
-      }
+        ent_type: [],
+        field_indi: [],
+        map_status: [],
+        geology: '',
+        geo_age: '',
+        phys_prov: '',
+      },
     };
     this.handleSearch = this.handleSearch.bind(this);
   }
 
   handleSearch() {
-    
     // name search
     let results = [...this.props.pointList];
     results = results.filter(point => {
-      const name = (point.properties.name.toLowerCase());
+      const name = point.properties.name.toLowerCase();
       const searchText = this.state.searchParams.name.toLowerCase();
       return name.includes(searchText);
     });
@@ -86,108 +91,130 @@ class AdvancedPointsSearch extends Component<Props, State> {
 
     // county_name search
     // checks for multiple counties
-    if (this.state.searchParams.co_name.length !== 0){
-        results = results.filter(point => {
+    if (this.state.searchParams.co_name.length !== 0) {
+      results = results.filter(point => {
+        return this.state.searchParams.co_name
+          .map(county => {
             return (
-              
-              this.state.searchParams.co_name
-                .map(county => {
-                  return point.properties.co_name.toLowerCase() === county.toLowerCase();
-                })
-                .reduce((a, b) => a || b, false) // combines true vals in array
+              point.properties.co_name.toLowerCase() === county.toLowerCase()
             );
-          });
+          })
+          .reduce((a, b) => a || b, false); // combines true vals in array
+      });
     }
 
     // ownership search
     // checks for multiple ownership
-    if (this.state.searchParams.ownership.length !== 0){
-        results = results.filter(point => {
+    if (this.state.searchParams.ownership.length !== 0) {
+      results = results.filter(point => {
+        return this.state.searchParams.ownership
+          .map(ownership => {
             return (
-              this.state.searchParams.ownership
-                .map(ownership => {
-                  return point.properties.ownership.toLowerCase() === ownership.toLowerCase();
-                })
-                .reduce((a, b) => a || b, false) // combines true vals in array
+              point.properties.ownership.toLowerCase() ===
+              ownership.toLowerCase()
             );
-          });
+          })
+          .reduce((a, b) => a || b, false); // combines true vals in array
+      });
     }
 
     // topo_name search
     results = results.filter(point => {
-        const topo_name = point.properties.topo_name.toLowerCase();
+      const topo_name = point.properties.topo_name.toLowerCase();
       const searchText = this.state.searchParams.topo_name.toLowerCase();
       return topo_name.includes(searchText);
     });
 
-      // topo_indi search
-    // checks for multiple ownership
-    if (this.state.searchParams.topo_indi.length !== 0){
-        results = results.filter(point => {
+    // topo_indi search
+    // checks for multiple topo_indi
+    if (this.state.searchParams.topo_indi.length !== 0) {
+      results = results.filter(point => {
+        return this.state.searchParams.topo_indi
+          .map(topo_indi => {
             return (
-              this.state.searchParams.topo_indi
-                .map(topo_indi => {
-                  return point.properties.topo_indi.toLowerCase() === topo_indi.toLowerCase();
-                })
-                .reduce((a, b) => a || b, false) // combines true vals in array
+              point.properties.topo_indi.toLowerCase() ===
+              topo_indi.toLowerCase()
             );
-          });
+          })
+          .reduce((a, b) => a || b, false); // combines true vals in array
+      });
     }
 
     // gear search
-    // checks for multiple ownership
-    if (this.state.searchParams.gear.length !== 0){
-        results = results.filter(point => {
-            return (
-              this.state.searchParams.gear
-                .map(gear => {
-                  return point.properties.gear.toLowerCase() === gear.toLowerCase();
-                })
-                .reduce((a, b) => a || b, false) // combines true vals in array
-            );
-          });
+    // checks for multiple gear
+    if (this.state.searchParams.gear.length !== 0) {
+      results = results.filter(point => {
+        return this.state.searchParams.gear
+          .map(gear => {
+            return point.properties.gear.toLowerCase() === gear.toLowerCase();
+          })
+          .reduce((a, b) => a || b, false); // combines true vals in array
+      });
     }
-    
+
     // ent_type search
-    results = results.filter(point => {
-        const ent_type = point.properties.ent_type.toLowerCase();
-        const searchText = this.state.searchParams.ent_type.toLowerCase();
-        return ent_type.includes(searchText);
-    });
+    // checks for multiple ent_type
+    if (this.state.searchParams.ent_type.length !== 0) {
+      results = results.filter(point => {
+        return this.state.searchParams.ent_type
+          .map(ent_type => {
+            return (
+              point.properties.ent_type.toLowerCase() === ent_type.toLowerCase()
+            );
+          })
+          .reduce((a, b) => a || b, false); // combines true vals in array
+      });
+    }
 
     // field_indi search
-    results = results.filter(point => {
-        const field_indi = point.properties.field_indi.toLowerCase();
-        const searchText = this.state.searchParams.field_indi.toLowerCase();
-        return field_indi.includes(searchText);
-    });
+    // checks for multiple field_indi
+    if (this.state.searchParams.field_indi.length !== 0) {
+      results = results.filter(point => {
+        return this.state.searchParams.field_indi
+          .map(field_indi => {
+            return (
+              point.properties.field_indi.toLowerCase() ===
+              field_indi.toLowerCase()
+            );
+          })
+          .reduce((a, b) => a || b, false); // combines true vals in array
+      });
+    }
 
     // map_status search
-    results = results.filter(point => {
-        const map_status = point.properties.map_status.toLowerCase();
-        const searchText = this.state.searchParams.map_status.toLowerCase();
-        return map_status.includes(searchText);
-    });
+    // checks for multiple map_status
+    if (this.state.searchParams.map_status.length !== 0) {
+      results = results.filter(point => {
+        return this.state.searchParams.map_status
+          .map(map_status => {
+            return (
+              point.properties.map_status.toLowerCase() ===
+              map_status.toLowerCase()
+            );
+          })
+          .reduce((a, b) => a || b, false); // combines true vals in array
+      });
+    }
 
     // geology search
     results = results.filter(point => {
-        const geology = point.properties.geology.toLowerCase();
-        const searchText = this.state.searchParams.geology.toLowerCase();
-        return geology.includes(searchText);
+      const geology = point.properties.geology.toLowerCase();
+      const searchText = this.state.searchParams.geology.toLowerCase();
+      return geology.includes(searchText);
     });
 
     // geo_age search
     results = results.filter(point => {
-        const geo_age = point.properties.geo_age.toLowerCase();
-        const searchText = this.state.searchParams.geo_age.toLowerCase();
-        return geo_age.includes(searchText);
+      const geo_age = point.properties.geo_age.toLowerCase();
+      const searchText = this.state.searchParams.geo_age.toLowerCase();
+      return geo_age.includes(searchText);
     });
 
     // phys_prov search
     results = results.filter(point => {
-        const phys_prov = point.properties.phys_prov.toLowerCase();
-        const searchText = this.state.searchParams.phys_prov.toLowerCase();
-        return phys_prov.includes(searchText);
+      const phys_prov = point.properties.phys_prov.toLowerCase();
+      const searchText = this.state.searchParams.phys_prov.toLowerCase();
+      return phys_prov.includes(searchText);
     });
     this.props.onSearch(results);
   }
@@ -249,11 +276,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     mode="multiple"
                     placeholder="Select"
                     tagRender={props => {
-                      return (
-                        <Tag>
-                          {props.label.toString()}
-                        </Tag>
-                      );
+                      return <Tag>{props.label.toString()}</Tag>;
                     }}
                     defaultValue={this.state.searchParams.co_name}
                     style={{width: '100%'}}
@@ -266,13 +289,13 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     }}
                     tokenSeparators={[',']}
                   >
-                      {tn_counties.map((county)=>{
-                          return(
-                              <Option key={county} value={county}>
-                                  {county}
-                              </Option>
-                          )
-                      })}
+                    {tn_counties.map(county => {
+                      return (
+                        <Option key={county} value={county}>
+                          {county}
+                        </Option>
+                      );
+                    })}
                   </Select>
                 </Col>
               </Row>
@@ -286,11 +309,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     mode="multiple"
                     placeholder="Select"
                     tagRender={props => {
-                      return (
-                        <Tag>
-                          {props.label.toString()}
-                        </Tag>
-                      );
+                      return <Tag>{props.label.toString()}</Tag>;
                     }}
                     defaultValue={this.state.searchParams.ownership}
                     style={{width: '100%'}}
@@ -303,13 +322,13 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     }}
                     tokenSeparators={[',']}
                   >
-                      {ownershipFields.map((ownership)=>{
-                          return(
-                              <Option key={ownership} value={ownership}>
-                                  {ownership}
-                              </Option>
-                          )
-                      })}
+                    {ownershipFields.map(ownership => {
+                      return (
+                        <Option key={ownership} value={ownership}>
+                          {ownership}
+                        </Option>
+                      );
+                    })}
                   </Select>
                 </Col>
               </Row>
@@ -341,11 +360,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     mode="multiple"
                     placeholder="Select"
                     tagRender={props => {
-                      return (
-                        <Tag>
-                          {props.label.toString()}
-                        </Tag>
-                      );
+                      return <Tag>{props.label.toString()}</Tag>;
                     }}
                     defaultValue={this.state.searchParams.ownership}
                     style={{width: '100%'}}
@@ -358,13 +373,13 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     }}
                     tokenSeparators={[',']}
                   >
-                      {topo_indiFields.map((topo_indi)=>{
-                          return(
-                              <Option key={topo_indi} value={topo_indi}>
-                                  {topo_indi}
-                              </Option>
-                          )
-                      })}
+                    {topo_indiFields.map(topo_indi => {
+                      return (
+                        <Option key={topo_indi} value={topo_indi}>
+                          {topo_indi}
+                        </Option>
+                      );
+                    })}
                   </Select>
                 </Col>
               </Row>
@@ -378,11 +393,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     mode="multiple"
                     placeholder="Select"
                     tagRender={props => {
-                      return (
-                        <Tag>
-                          {props.label.toString()}
-                        </Tag>
-                      );
+                      return <Tag>{props.label.toString()}</Tag>;
                     }}
                     defaultValue={this.state.searchParams.gear}
                     style={{width: '100%'}}
@@ -395,13 +406,13 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     }}
                     tokenSeparators={[',']}
                   >
-                      {gearFields.map((gear)=>{
-                          return(
-                              <Option key={gear} value={gear}>
-                                  {gear}
-                              </Option>
-                          )
-                      })}
+                    {gearFields.map(gear => {
+                      return (
+                        <Option key={gear} value={gear}>
+                          {gear}
+                        </Option>
+                      );
+                    })}
                   </Select>
                 </Col>
               </Row>
@@ -409,54 +420,99 @@ class AdvancedPointsSearch extends Component<Props, State> {
             {/* Search by ent_type */}
             <Col {...colSpanProps}>
               <Row>
-                <Col span={24}>Enterance Type</Col>
+                Enterance Type
                 <Col span={24}>
-                  <Search
-                    placeholder="Stoop"
-                    onChange={e => {
+                  <Select
+                    mode="multiple"
+                    placeholder="Select"
+                    tagRender={props => {
+                      return <Tag>{props.label.toString()}</Tag>;
+                    }}
+                    defaultValue={this.state.searchParams.ent_type}
+                    style={{width: '100%'}}
+                    onChange={(ent_type: string[]) => {
                       const searchParams = {...this.state.searchParams};
-                      searchParams.ent_type = e.target.value;
+                      searchParams.ent_type = ent_type;
                       this.setState({searchParams}, () => {
                         this.handleSearch();
                       });
                     }}
-                  ></Search>
+                    tokenSeparators={[',']}
+                  >
+                    {ent_typeFields.map(ent_type => {
+                      return (
+                        <Option key={ent_type} value={ent_type}>
+                          {ent_type}
+                        </Option>
+                      );
+                    })}
+                  </Select>
                 </Col>
               </Row>
             </Col>
             {/* Search by field_indi */}
             <Col {...colSpanProps}>
               <Row>
-                <Col span={24}>Field Indication</Col>
+                Field Indication
                 <Col span={24}>
-                  <Search
-                    placeholder="Hillside"
-                    onChange={e => {
+                  <Select
+                    mode="multiple"
+                    placeholder="Select"
+                    tagRender={props => {
+                      return <Tag>{props.label.toString()}</Tag>;
+                    }}
+                    defaultValue={this.state.searchParams.field_indi}
+                    style={{width: '100%'}}
+                    onChange={(field_indi: string[]) => {
                       const searchParams = {...this.state.searchParams};
-                      searchParams.field_indi = e.target.value;
+                      searchParams.field_indi = field_indi;
                       this.setState({searchParams}, () => {
                         this.handleSearch();
                       });
                     }}
-                  ></Search>
+                    tokenSeparators={[',']}
+                  >
+                    {field_indiFields.map(field_indi => {
+                      return (
+                        <Option key={field_indi} value={field_indi}>
+                          {field_indi}
+                        </Option>
+                      );
+                    })}
+                  </Select>
                 </Col>
               </Row>
             </Col>
             {/* Search by map_status */}
             <Col {...colSpanProps}>
               <Row>
-                <Col span={24}>Map Status</Col>
+                Map Status
                 <Col span={24}>
-                  <Search
-                    placeholder="Mapped"
-                    onChange={e => {
+                  <Select
+                    mode="multiple"
+                    placeholder="Select"
+                    tagRender={props => {
+                      return <Tag>{props.label.toString()}</Tag>;
+                    }}
+                    defaultValue={this.state.searchParams.map_status}
+                    style={{width: '100%'}}
+                    onChange={(map_status: string[]) => {
                       const searchParams = {...this.state.searchParams};
-                      searchParams.map_status = e.target.value;
+                      searchParams.map_status = map_status;
                       this.setState({searchParams}, () => {
                         this.handleSearch();
                       });
                     }}
-                  ></Search>
+                    tokenSeparators={[',']}
+                  >
+                    {map_statusFields.map(map_status => {
+                      return (
+                        <Option key={map_status} value={map_status}>
+                          {map_status}
+                        </Option>
+                      );
+                    })}
+                  </Select>
                 </Col>
               </Row>
             </Col>

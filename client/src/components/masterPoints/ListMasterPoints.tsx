@@ -1,7 +1,7 @@
 import React, {Component, useState, Fragment} from 'react';
 import {UserInterface} from '../../interfaces/UserInterface';
 import {getAllMasterPoints} from '../../dataservice/getPoints';
-import {AdvancedPointsSearch} from './AdvancedPointsSearch'
+import {AdvancedPointsSearch} from './AdvancedPointsSearch';
 import {Helmet} from 'react-helmet';
 import {
   List,
@@ -16,16 +16,13 @@ import {
   Collapse,
   Button,
 } from 'antd';
-import {
-  EyeOutlined,
-} from '@ant-design/icons';
+import {EyeOutlined} from '@ant-design/icons';
 // import {AdvancedUserSearch} from './AdvancedUserSerach';
 import {userContext, UserContextInterface} from '../../context/userContext';
 import {Feature} from '../../interfaces/geoJsonInterface';
 
 const {Paragraph, Title} = Typography;
 const {Panel} = Collapse;
-
 
 interface UserStatusTagProps {
   status: string;
@@ -108,10 +105,10 @@ class listPoints extends Component<Props, State> {
         co_name: true,
         ownership: true,
         topo_name: false,
-        topo_indi: true,
+        topo_indi: false,
         gear: true,
-        ent_type: false,
-        field_indi: false,
+        ent_type: true,
+        field_indi: true,
         map_status: true,
         geology: true,
         geo_age: false,
