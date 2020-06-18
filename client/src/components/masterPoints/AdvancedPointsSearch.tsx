@@ -50,7 +50,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
         co_name: "",
         ownership: "",
         topo_name: "",
-        topo_indi: "",
+        topo_indi: "", 
         gear: "",
         ent_type: "",
         field_indi: "",
@@ -64,6 +64,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
   }
 
   handleSearch() {
+    
     // name search
     let results = [...this.props.pointList];
     results = results.filter(point => {
@@ -93,6 +94,68 @@ class AdvancedPointsSearch extends Component<Props, State> {
       return ownership.includes(searchText);
     });
 
+    // topo_name search
+    results = results.filter(point => {
+        const topo_name = point.properties.topo_name.toLowerCase();
+      const searchText = this.state.searchParams.topo_name.toLowerCase();
+      return topo_name.includes(searchText);
+    });
+
+      // topo_indi search
+      results = results.filter(point => {
+        const topo_indi = point.properties.topo_indi.toLowerCase();
+        const searchText = this.state.searchParams.topo_indi.toLowerCase();
+        return topo_indi.includes(searchText);
+    });
+
+    // gear search
+    results = results.filter(point => {
+        const gear = point.properties.gear.toLowerCase();
+        const searchText = this.state.searchParams.gear.toLowerCase();
+        return gear.includes(searchText);
+    });
+    
+    // ent_type search
+    results = results.filter(point => {
+        const ent_type = point.properties.ent_type.toLowerCase();
+        const searchText = this.state.searchParams.ent_type.toLowerCase();
+        return ent_type.includes(searchText);
+    });
+
+    // field_indi search
+    results = results.filter(point => {
+        const field_indi = point.properties.field_indi.toLowerCase();
+        const searchText = this.state.searchParams.field_indi.toLowerCase();
+        return field_indi.includes(searchText);
+    });
+
+    // map_status search
+    results = results.filter(point => {
+        const map_status = point.properties.map_status.toLowerCase();
+        const searchText = this.state.searchParams.map_status.toLowerCase();
+        return map_status.includes(searchText);
+    });
+
+    // geology search
+    results = results.filter(point => {
+        const geology = point.properties.geology.toLowerCase();
+        const searchText = this.state.searchParams.geology.toLowerCase();
+        return geology.includes(searchText);
+    });
+
+    // geo_age search
+    results = results.filter(point => {
+        const geo_age = point.properties.geo_age.toLowerCase();
+        const searchText = this.state.searchParams.geo_age.toLowerCase();
+        return geo_age.includes(searchText);
+    });
+
+    // phys_prov search
+    results = results.filter(point => {
+        const phys_prov = point.properties.phys_prov.toLowerCase();
+        const searchText = this.state.searchParams.phys_prov.toLowerCase();
+        return phys_prov.includes(searchText);
+    });
     this.props.onSearch(results);
   }
 
@@ -162,7 +225,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 </Col>
               </Row>
             </Col>
-            {/* Search by nss number */}
+            {/* Search by ownership */}
             <Col {...colSpanProps}>
               <Row>
                 <Col span={24}>Ownership</Col>
@@ -172,6 +235,168 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={e => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.ownership = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by topo_name */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Topo</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="Lake City"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.topo_name = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by topo_indi */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Topo Indication</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="Marked As Cave"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.topo_indi = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by gear */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Gear</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="Normal Gear"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.gear = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by ent_type */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Enterance Type</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="Stoop"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.ent_type = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by field_indi */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Field Indication</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="Hillside"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.field_indi = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by map_status */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Map Status</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="Mapped"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.map_status = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by geology */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Geology</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="Copper Ridge Dolomite"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.geology = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by geo_age */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Geology Age</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="Cambrian"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.geo_age = e.target.value;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by Physiographic Province */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Physiographic Province</Col>
+                <Col span={24}>
+                  <Search
+                    placeholder="Valley and Ridge"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.phys_prov = e.target.value;
                       this.setState({searchParams}, () => {
                         this.handleSearch();
                       });

@@ -245,7 +245,6 @@ class listPoints extends Component<Props, State> {
           </Descriptions.Item>
         );
       }
-      console.log(renderedItems);
     }
     return (
       <Descriptions
