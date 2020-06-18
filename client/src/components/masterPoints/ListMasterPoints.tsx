@@ -119,6 +119,9 @@ class listPoints extends Component<Props, State> {
   }
   componentDidMount() {
     getAllMasterPoints().then(requestedPoints => {
+        requestedPoints = requestedPoints.sort((a,b)=>(
+            b.properties.length - a.properties.length
+        ))
       this.setState({
         pointsList: requestedPoints,
         listData: requestedPoints,
@@ -263,10 +266,16 @@ class listPoints extends Component<Props, State> {
         <Card>
           <AdvancedPointsSearch
             pointList={this.state.pointsList}
-            onSearch={results => {
+            onSearchFinished={results => {
               this.setState({listData: results});
             }}
+            isLoading={loading =>{
+                this.setState({loading})
+            }}
           ></AdvancedPointsSearch>
+          <Row>
+              Rendered Features
+          </Row>
           <Divider></Divider>
           <List
             pagination={{
