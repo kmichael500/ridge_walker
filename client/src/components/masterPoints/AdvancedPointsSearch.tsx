@@ -19,7 +19,6 @@ import {
   Collapse,
   Tag,
   InputNumber,
-  Space,
   Tooltip,
 } from 'antd';
 import {Gutter} from 'antd/lib/grid/row';
@@ -41,8 +40,12 @@ interface State {
     depthL: number | string;
     depthR: number | string;
     depthCmp: '<' | '<=';
-    elev: number;
-    ps: number;
+    elevL: number | string;
+    elevR: number | string;
+    elevCmp: '<' | '<=';
+    psL: number | string;
+    psR: number | string;
+    psCmp: '<' | '<=';
     co_name: string[];
     ownership: string[];
     topo_name: string;
@@ -78,8 +81,12 @@ class AdvancedPointsSearch extends Component<Props, State> {
         depthL: '',
         depthR: '',
         depthCmp: '<=',
-        elev: null, //todo
-        ps: null, //todo
+        elevL: '',
+        elevR: '',
+        elevCmp: '<=',
+        psL: '',
+        psR: '',
+        psCmp: '<=',
         co_name: [],
         ownership: [],
         topo_name: '',
@@ -272,66 +279,112 @@ class AdvancedPointsSearch extends Component<Props, State> {
     });
 
     // depth/vertical extent search
-    results = results.filter((point, index) => {
-        const depth = point.properties.depth;
-        const depthR = this.state.searchParams.depthR;
-        const depthL = this.state.searchParams.depthL;
-        const depthCmp = this.state.searchParams.depthCmp;
-  
-        const cmpList = [];
-  
-        if (typeof depthL === 'number') {
-          if (depthCmp === '<') {
-            cmpList.push(depthL < Number(point.properties.depth));
-          } else if (depthCmp === '<=') {
-            cmpList.push(depthL <= Number(point.properties.depth));
-          } else if (depthCmp === '>') {
-            cmpList.push(depthL > Number(point.properties.depth));
-          } else if (depthCmp === '>=') {
-            cmpList.push(depthL >= Number(point.properties.depth));
-          }
+    results = results.filter(point => {
+      const depth = point.properties.depth;
+      const depthR = this.state.searchParams.depthR;
+      const depthL = this.state.searchParams.depthL;
+      const depthCmp = this.state.searchParams.depthCmp;
+
+      const cmpList = [];
+
+      if (typeof depthL === 'number') {
+        if (depthCmp === '<') {
+          cmpList.push(depthL < Number(depth));
+        } else if (depthCmp === '<=') {
+          cmpList.push(depthL <= Number(depth));
         }
-        if (typeof depthR === 'number') {
-          if (depthCmp === '<') {
-            cmpList.push(depthR > Number(point.properties.depth));
-          }
-          if (depthCmp === '<=') {
-            cmpList.push(depthR >= Number(point.properties.depth));
-          }
+      }
+      if (typeof depthR === 'number') {
+        if (depthCmp === '<') {
+          cmpList.push(depthR > Number(depth));
         }
-        return cmpList.reduce((a, b) => a && b, true);
-      });
+        if (depthCmp === '<=') {
+          cmpList.push(depthR >= Number(depth));
+        }
+      }
+      return cmpList.reduce((a, b) => a && b, true);
+    });
 
     // pdep search
-    results = results.filter((point, index) => {
-        const pdep = point.properties.pdep;
-        const pdepR = this.state.searchParams.pdepR;
-        const pdepL = this.state.searchParams.pdepL;
-        const pdepCmp = this.state.searchParams.pdepCmp;
-  
-        const cmpList = [];
-  
-        if (typeof pdepL === 'number') {
-          if (pdepCmp === '<') {
-            cmpList.push(pdepL < Number(point.properties.pdep));
-          } else if (pdepCmp === '<=') {
-            cmpList.push(pdepL <= Number(point.properties.pdep));
-          } else if (pdepCmp === '>') {
-            cmpList.push(pdepL > Number(point.properties.pdep));
-          } else if (pdepCmp === '>=') {
-            cmpList.push(pdepL >= Number(point.properties.pdep));
-          }
+    results = results.filter(point => {
+      const pdep = point.properties.pdep;
+      const pdepR = this.state.searchParams.pdepR;
+      const pdepL = this.state.searchParams.pdepL;
+      const pdepCmp = this.state.searchParams.pdepCmp;
+
+      const cmpList = [];
+
+      if (typeof pdepL === 'number') {
+        if (pdepCmp === '<') {
+          cmpList.push(pdepL < Number(pdep));
+        } else if (pdepCmp === '<=') {
+          cmpList.push(pdepL <= Number(pdep));
         }
-        if (typeof pdepR === 'number') {
-          if (pdepCmp === '<') {
-            cmpList.push(pdepR > Number(point.properties.pdep));
-          }
-          if (pdepCmp === '<=') {
-            cmpList.push(pdepR >= Number(point.properties.pdep));
-          }
+      }
+      if (typeof pdepR === 'number') {
+        if (pdepCmp === '<') {
+          cmpList.push(pdepR > Number(pdep));
         }
-        return cmpList.reduce((a, b) => a && b, true);
-      });
+        if (pdepCmp === '<=') {
+          cmpList.push(pdepR >= Number(pdep));
+        }
+      }
+      return cmpList.reduce((a, b) => a && b, true);
+    });
+
+    // elev search
+    results = results.filter(point => {
+      const elev = point.properties.elev;
+      const elevL = this.state.searchParams.elevL;
+      const elevR = this.state.searchParams.elevR;
+      const elevCmp = this.state.searchParams.elevCmp;
+
+      const cmpList = [];
+
+      if (typeof elevL === 'number') {
+        if (elevCmp === '<') {
+          cmpList.push(elevL < Number(elev));
+        } else if (elevCmp === '<=') {
+          cmpList.push(elevL <= Number(elev));
+        }
+      }
+      if (typeof elevR === 'number') {
+        if (elevCmp === '<') {
+          cmpList.push(elevR > Number(elev));
+        }
+        if (elevCmp === '<=') {
+          cmpList.push(elevR >= Number(elev));
+        }
+      }
+      return cmpList.reduce((a, b) => a && b, true);
+    });
+
+    // ps search
+    results = results.filter(point => {
+      const ps = point.properties.ps;
+      const psL = this.state.searchParams.psL;
+      const psR = this.state.searchParams.psR;
+      const psCmp = this.state.searchParams.psCmp;
+
+      const cmpList = [];
+
+      if (typeof psL === 'number') {
+        if (psCmp === '<') {
+          cmpList.push(psL < Number(ps));
+        } else if (psCmp === '<=') {
+          cmpList.push(psL <= Number(ps));
+        }
+      }
+      if (typeof psR === 'number') {
+        if (psCmp === '<') {
+          cmpList.push(psR > Number(ps));
+        }
+        if (psCmp === '<=') {
+          cmpList.push(psR >= Number(ps));
+        }
+      }
+      return cmpList.reduce((a, b) => a && b, true);
+    });
 
     this.props.onSearch(results);
   }
@@ -854,6 +907,120 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.pdepR = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></InputNumber>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by elev */}
+            <Col {...colSpanProps}>
+              <Row gutter={5}>
+                <Col span={24}>Elevation</Col>
+                <Col span={7}>
+                  <InputNumber
+                    placeholder="100"
+                    style={{width: '100%'}}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.elevL = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></InputNumber>
+                </Col>
+                <Col span={10}>
+                  <Select
+                    style={{width: '100%', textAlign: 'center'}}
+                    defaultValue={this.state.searchParams.elevCmp}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.elevCmp = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  >
+                    <Option style={{textAlign: 'center'}} value="<=">
+                      <Tooltip title="Elevation is greater than or equal to x and less or equal to y.">
+                        <div>{'x <= E <= y'}</div>
+                      </Tooltip>
+                    </Option>
+                    <Option style={{textAlign: 'center'}} value="<">
+                      <Tooltip title="Elevation is greater than x and less than y.">
+                        <div>{'x < E < y'}</div>
+                      </Tooltip>
+                    </Option>
+                  </Select>
+                </Col>
+
+                <Col span={7}>
+                  <InputNumber
+                    placeholder="500"
+                    style={{width: '100%'}}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.elevR = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></InputNumber>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by ps */}
+            <Col {...colSpanProps}>
+              <Row gutter={5}>
+                <Col span={24}>Number of Pits</Col>
+                <Col span={7}>
+                  <InputNumber
+                    placeholder="100"
+                    style={{width: '100%'}}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.psL = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  ></InputNumber>
+                </Col>
+                <Col span={10}>
+                  <Select
+                    style={{width: '100%', textAlign: 'center'}}
+                    defaultValue={this.state.searchParams.psCmp}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.psCmp = val;
+                      this.setState({searchParams}, () => {
+                        this.handleSearch();
+                      });
+                    }}
+                  >
+                    <Option style={{textAlign: 'center'}} value="<=">
+                      <Tooltip title="Number of pits is greater than or equal to x and less or equal to y.">
+                        <div>{'x <= NP <= y'}</div>
+                      </Tooltip>
+                    </Option>
+                    <Option style={{textAlign: 'center'}} value="<">
+                      <Tooltip title="Number of pits is greater than x and less than y.">
+                        <div>{'x < NP < y'}</div>
+                      </Tooltip>
+                    </Option>
+                  </Select>
+                </Col>
+
+                <Col span={7}>
+                  <InputNumber
+                    placeholder="500"
+                    style={{width: '100%'}}
+                    onChange={val => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.psR = val;
                       this.setState({searchParams}, () => {
                         this.handleSearch();
                       });
