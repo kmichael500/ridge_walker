@@ -108,7 +108,7 @@ class listPoints extends Component<Props, State> {
         co_name: true,
         ownership: true,
         topo_name: false,
-        topo_indi: false,
+        topo_indi: true,
         gear: true,
         ent_type: false,
         field_indi: false,
