@@ -4,6 +4,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import {Card, Row, Col, Spin} from 'antd';
 import {getImageFileNames, mapToBase64} from '../dataservice/getMaps';
 import DisplayMap from './DisplayPDF';
+import {Gutter} from 'antd/lib/grid/row';
 
 const options = {
   cMapUrl: 'cmaps/',
@@ -128,10 +129,20 @@ export default class DisplayAllMaps extends Component<
     //     this.setState({fullScreenFile: ""}, ()=>{
     //     })
     // }
+    const rowProps = {
+      gutter: [10, {xs: 8, sm: 16, md: 24, lg: 32}] as Gutter,
+    };
+    const colSpanProps = {
+      xs: {span: 24},
+      sm: {span: 12},
+      md: {span: 8},
+      lg: {span: 6},
+      xl: {span: 6},
+    };
     return (
-      <Row>
+      <Row {...rowProps}>
         {this.state.fileNames.map((file, index) => (
-          <Col span={6}>
+          <Col {...colSpanProps}>
             {this.state.fullScreenFile === file.img && (
               <DisplayMap
                 file={file}

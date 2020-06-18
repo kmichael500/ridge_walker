@@ -472,8 +472,8 @@ class AddCave extends Component<any, State> {
                   <Cascader
                     options={[
                       {
-                        value: 'Goverment',
-                        label: 'Goverment',
+                        value: 'Government',
+                        label: 'Government',
                         children: [
                           {
                             value: 'Owned',
@@ -652,7 +652,7 @@ class AddCave extends Component<any, State> {
                     <Select.Option value="Level Ground">
                       Level Ground
                     </Select.Option>
-                    <Select.Option value="Quary">Quary</Select.Option>
+                    <Select.Option value="Quarry">Quarry</Select.Option>
                     <Select.Option value="Underwater">Underwater</Select.Option>
                     <Select.Option value="Wet-Weather Streambed">
                       Wet-Weather Streambed
@@ -684,7 +684,7 @@ class AddCave extends Component<any, State> {
                       Inflowing Stream
                     </Select.Option>
                     <Select.Option value="Spring">Spring</Select.Option>
-                    <Select.Option value="Quary">Quary</Select.Option>
+                    <Select.Option value="Quarry">Quarry</Select.Option>
                     <Select.Option value="Marked as Cave">
                       Marked as Cave
                     </Select.Option>
@@ -757,7 +757,7 @@ class AddCave extends Component<any, State> {
             >
               <Select placeholder="Please select">
                 <Select.Option value="Mapped">Mapped</Select.Option>
-                <Select.Option value="Unmaped">Unmaped</Select.Option>
+                <Select.Option value="Unmapped">Unmapped</Select.Option>
                 <Select.Option value="Sketch">Sketch</Select.Option>
                 <Select.Option value={'Pace & Compass'}>
                   {'Pace & Compass'}

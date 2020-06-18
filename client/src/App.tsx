@@ -14,6 +14,10 @@ import {Dashboard} from './pages/Dashboard';
 import {HomePage} from './pages/HomePage';
 import {UploadLeads} from './components/Karst Features/UploadLeads';
 import {DeadLeads} from './pages/DeadLeads';
+import {
+  ListPoints,
+  listPoints,
+} from './components/masterPoints/ListMasterPoints';
 /* admin routes */
 import {ReviewPage} from './pages/ReviewPage';
 import {ListUsers} from './components/userInfo/ListUsers';
@@ -58,11 +62,7 @@ function App() {
                   path="/map/:lat?/:long?"
                   component={MapView}
                 />
-                <ProtectedRoute
-                  exact
-                  path="/points/"
-                  component={CavePointTable}
-                />
+                <ProtectedRoute exact path="/points" component={listPoints} />
                 <ProtectedRoute exact path="/points/:id" component={CaveInfo} />
                 <ProtectedRoute exact path="/add/points/" component={AddCave} />
                 <ProtectedRoute
