@@ -48,8 +48,8 @@ mapsAPI.get('/image/:mapName.png', (req, res, next) => {
 
     const pdfImage = new PDFImage(pdfPath, {
       convertOptions: {
-        '-resize': '50%',
-        // "-density": "200",
+        // '-resize': '80%',
+        "-density": "200",
         '-background': 'white',
         '-alpha': 'background -alpha off',
       },
