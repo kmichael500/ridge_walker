@@ -1,13 +1,14 @@
 import * as express from 'express';
 import * as multer from 'multer';
-import {MongooseDocument} from 'mongoose';
+import {MongooseDocument, PaginateOptions} from 'mongoose';
+
 import {Parser} from 'json2csv';
+import {SearchParams, MasterPointPaginationReq} from '../interfaces/masterPointPagination';
 
 import json2csv from 'json2csv';
 import {Request, Response, NextFunction} from 'express';
 import {Points, Feature, Geometry} from '../models/MasterPointInterface';
 import {MasterPoint} from '../models/MasterPoints';
-import {UserInterface} from '../models/User';
 
 // Initialize an express api and configure it parse requests as JSON
 const masterPointsAPI = express();
@@ -41,9 +42,16 @@ masterPointsAPI.post('/upload', upload.single('csv'), (req, res, next) => {
       let geojson = {} as Points;
       console.log(jsonObj[0]);
       const GeoJSON = require('geojson');
-      geojson = GeoJSON.parse(jsonObj, {Point: ['latitude', 'longitude']});
+      geojson = GeoJSON.parse(jsonObj, {Point: ['latitude', 'longitude']}) as Points;
 
       for (let i = 0; i < geojson.features.length; i++) {
+        geojson.features[i].properties.length = Number(geojson.features[i].properties.length);
+        geojson.features[i].properties.depth = Number(geojson.features[i].properties.depth);
+        geojson.features[i].properties.pdep = Number(geojson.features[i].properties.pdep);
+        geojson.features[i].properties.ps = Number(geojson.features[i].properties.ps);
+        geojson.features[i].properties.elev = Number(geojson.features[i].properties.elev);
+
+
         const newMasterPoint = new MasterPoint({
           type: geojson.features[i].type,
           properties: geojson.features[i].properties,
@@ -83,21 +91,77 @@ const noPending = (userType: string) => {
   };
 };
 
-// get all master points
-masterPointsAPI.get('/', (req, res, next) => {
-  MasterPoint.find((err: Error, requestedPoints) => {
-    if (err) {
-      console.log("\n Can't get master submissions");
-      next(err);
-    } else {
-      res.send(
-        requestedPoints.map(point => {
-          point.properties.narr = '';
-          return point;
+// // get all master points
+// masterPointsAPI.get('/', (req, res, next) => {
+//   MasterPoint.find((err: Error, requestedPoints) => {
+//     if (err) {
+//       console.log("\n Can't get master submissions");
+//       next(err);
+//     } else {
+//       res.send(
+//         requestedPoints.map(point => {
+//           point.properties.narr = '';
+//           return point;
+//         })
+//       );
+//     }
+//   }).lean();
+// });
+
+// master points paginate
+masterPointsAPI.post('/', (req, res, next) => {
+  console.log(req.params);
+  const {searchParams, sortOrder, page, limit, pagination} = req.body as MasterPointPaginationReq;
+  console.log(searchParams, sortOrder)
+  // regex search
+  const name = new RegExp(searchParams.name);
+  const tcsnumber = new RegExp(searchParams.tcsnumber);
+  const co_name = new RegExp(searchParams.co_name.map((val)=>("^" + val + "$")).join('|'))
+  const ownership = new RegExp(searchParams.ownership.map((val)=>("^" + val + "$")).join('|'))
+
+  const query = {
+    "properties.name": { $regex: name, $options: "i" },
+    "properties.tcsnumber": { $regex: tcsnumber, $options: "i" },
+    "properties.co_name": { $regex: co_name, $options: "i" },
+    "properties.ownership": { $regex: ownership, $options: "i" },
+    // "properties.length":{$gte : 30000},
+    // "properties.length": {
+    //   $lte: 112,
+    //   $gte: 3000, 
+    // }
+    // "properties.length": {
+    //   $lt: 113,
+    //   $gt: 111, 
+    // }
+  };
+    
+  
+  const options = {
+    pagination,
+    page,
+    limit,
+    lean: true,
+    collation: {
+      locale: 'en'
+    },
+    sort:{
+      "properties.length": sortOrder
+    },
+  } as PaginateOptions;
+
+  MasterPoint.paginate(query, options, (err, requestedPoints)=>{
+      if (err) {
+        console.log("\n Can't get master submissions");
+        next(err);
+      } else {
+        requestedPoints.docs = requestedPoints.docs.map((point)=>{
+          point.properties.narr = "";
+          return point
         })
-      );
-    }
-  }).lean();
+        res.send(requestedPoints);
+      }
+  })
+
 });
 
 // Endpoint to get a single submission by tcsnumber

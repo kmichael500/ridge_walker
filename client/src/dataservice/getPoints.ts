@@ -1,8 +1,13 @@
 // API for master TCS Points
 
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import {serverBaseURL} from '../config/urlConfig';
 import {Feature} from '../interfaces/geoJsonInterface';
+import {
+  SearchParams,
+  MasterPointPaginationReq,
+  MasterPointPaginationRes,
+} from '../interfaces/MasterPointPagination';
 
 const axiosInstance = axios.create({
   baseURL: serverBaseURL,
@@ -13,11 +18,69 @@ const axiosInstance = axios.create({
  * @returns Promise<Feature[]>
  */
 async function getAllMasterPoints(): Promise<Feature[]> {
+  const reqParams = {
+    sortOrder: 'desc',
+    pagination: false,
+    page: 1,
+    limit: 10,
+    searchParams: {
+      name: '',
+      tcsnumber: '',
+      lengthL: '',
+      lengthR: '',
+      lengthCmp: '<=',
+      pdepL: '',
+      pdepR: '',
+      pdepCmp: '<=',
+      depthL: '',
+      depthR: '',
+      depthCmp: '<=',
+      elevL: '',
+      elevR: '',
+      elevCmp: '<=',
+      psL: '',
+      psR: '',
+      psCmp: '<=',
+      co_name: [],
+      ownership: [],
+      topo_name: '',
+      topo_indi: [],
+      gear: [],
+      ent_type: [],
+      field_indi: [],
+      map_status: [],
+      geology: '',
+      geo_age: '',
+      phys_prov: '',
+    },
+  } as MasterPointPaginationReq;
   try {
-    const masterPointResponse = await axiosInstance.get('/api/points/master', {
-      params:{secret_token: localStorage.getItem('JWT')},
-    });
-    return masterPointResponse.data as Feature[];
+    const masterPointResponse = (await axiosInstance.post(
+      '/api/points/master',
+      reqParams,
+      {
+        params: {secret_token: localStorage.getItem('JWT')},
+      }
+    )) as AxiosResponse<MasterPointPaginationRes>;
+    return masterPointResponse.data.docs as Feature[];
+  } catch (error) {
+    return error;
+  }
+}
+/**
+ * Get paginated master points and search.
+ * @returns Promise<MasterPointPaginationRes>
+ */
+async function getPaginatedMasterPoints(reqParams: MasterPointPaginationReq): Promise<MasterPointPaginationRes> {
+  try {
+    const masterPointResponse = (await axiosInstance.post(
+      '/api/points/master',
+      reqParams,
+      {
+        params: {secret_token: localStorage.getItem('JWT')},
+      }
+    )) as AxiosResponse<MasterPointPaginationRes>;
+    return masterPointResponse.data;
   } catch (error) {
     return error;
   }
@@ -32,7 +95,7 @@ async function getMasterPoint(tcsnumber: string): Promise<Feature> {
   try {
     const masterPointResponse = await axiosInstance.get(
       '/api/points/master/' + tcsnumber,
-      {params:{secret_token: localStorage.getItem('JWT')}}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return masterPointResponse.data as Feature;
   } catch (error) {
@@ -51,7 +114,7 @@ async function downloadMasterPoints(fileType: 'csv' | 'gpx'): Promise<void> {
       '/api/points/master/download/' + fileType,
       {
         responseType: 'blob',
-        params:{secret_token: localStorage.getItem('JWT')},
+        params: {secret_token: localStorage.getItem('JWT')},
       }
     );
     const url = window.URL.createObjectURL(new Blob([downloadResponse.data]));
@@ -68,4 +131,4 @@ async function downloadMasterPoints(fileType: 'csv' | 'gpx'): Promise<void> {
   }
 }
 
-export {getAllMasterPoints, getMasterPoint, downloadMasterPoints};
+export {getAllMasterPoints, getMasterPoint, downloadMasterPoints, getPaginatedMasterPoints};
