@@ -57,26 +57,27 @@ class listPoints extends Component<Props, State> {
       totalPoints: null,
       reqParams:{
         sortOrder: 'desc',
+        sortBy: "length",
         pagination: true,
         page: 1,
         limit: 8,
         searchParams: {
           name: '',
           tcsnumber: '',
-          lengthL: '',
-          lengthR: '',
+          lengthL: null,
+          lengthR: null,
           lengthCmp: '<=',
-          pdepL: '',
-          pdepR: '',
+          pdepL: null,
+          pdepR: null,
           pdepCmp: '<=',
-          depthL: '',
-          depthR: '',
+          depthL: null,
+          depthR: null,
           depthCmp: '<=',
-          elevL: '',
-          elevR: '',
+          elevL: null,
+          elevR: null,
           elevCmp: '<=',
-          psL: '',
-          psR: '',
+          psL: null,
+          psR: null,
           psCmp: '<=',
           co_name: [],
           ownership: [],
@@ -132,7 +133,7 @@ class listPoints extends Component<Props, State> {
         loading: false,
         pointsList: req.docs,
         listData: req.docs,
-        totalPoints: req.totalDocs
+        totalPoints: req.totalDocs,
       })
     })
   }
@@ -282,7 +283,6 @@ class listPoints extends Component<Props, State> {
         </Helmet>
         <Card>
           <AdvancedPointsSearch
-            pointList={this.state.pointsList}
             limit={this.state.reqParams.limit}
             onSearchFinished={reqParams => {
               this.setState({reqParams}, ()=>{
@@ -342,6 +342,7 @@ class listPoints extends Component<Props, State> {
                   this.updateResults();
                 });
               },
+              current: this.state.reqParams.page,
               pageSize: this.state.reqParams.limit,
               position: 'bottom',
               total: this.state.totalPoints

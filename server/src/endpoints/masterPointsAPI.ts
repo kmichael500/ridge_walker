@@ -110,25 +110,94 @@ const noPending = (userType: string) => {
 
 // master points paginate
 masterPointsAPI.post('/', (req, res, next) => {
-  console.log(req.params);
-  const {searchParams, sortOrder, page, limit, pagination} = req.body as MasterPointPaginationReq;
-  console.log(searchParams, sortOrder)
+  const {searchParams, sortOrder, page, limit, pagination, sortBy} = req.body as MasterPointPaginationReq;
+
+  let lengthRange = {};
+  let cmpKeys = ["lengthCmp", "pdepCmp", "depthCmp", "elevCmp", "psCmp"];
+  let leftKeys = ["lengthL", "pdepL", "depthL", "elevL", "psL"];
+  let rightKeys = ["lengthR", "pdepR", "depthR", "elevR", "psR"]
+
+  // number range
+  if (searchParams.lengthCmp === "<="){
+    if (searchParams.lengthL !== null && searchParams.lengthR !== null){
+      lengthRange = {
+        "properties.length": {
+          $lte: searchParams.lengthR,
+          $gte: searchParams.lengthL, 
+        }
+      }
+    }
+    else if (searchParams.lengthL !== null){
+      lengthRange = {
+        "properties.length": {
+          $gte: searchParams.lengthL, 
+        }
+      }
+    }
+    else if (searchParams.lengthR !== null){
+      lengthRange = {
+        "properties.length": {
+          $lte: searchParams.lengthR,
+        }
+      }
+    } 
+  }
+  else if (searchParams.lengthCmp === "<"){
+    if (searchParams.lengthL !== null && searchParams.lengthR !== null){
+      lengthRange = {
+        "properties.length": {
+          $lt: searchParams.lengthR,
+          $gt: searchParams.lengthL, 
+        }
+      }
+    }
+    else if (searchParams.lengthL !== null){
+      lengthRange = {
+        "properties.length": {
+          $gt: searchParams.lengthL, 
+        }
+      }
+    }
+    else if (searchParams.lengthR !== null){
+      lengthRange = {
+        "properties.length": {
+          $lt: searchParams.lengthR,
+        }
+      }
+    } 
+  }
+
   // regex search
   const name = new RegExp(searchParams.name);
   const tcsnumber = new RegExp(searchParams.tcsnumber);
   const co_name = new RegExp(searchParams.co_name.map((val)=>("^" + val + "$")).join('|'))
   const ownership = new RegExp(searchParams.ownership.map((val)=>("^" + val + "$")).join('|'))
+  const topo_name = new RegExp(searchParams.topo_name);
+  const topo_indi = new RegExp(searchParams.topo_indi.map((val)=>("^" + val + "$")).join('|'));
+  const gear = new RegExp(searchParams.gear.map((val)=>("^" + val + "$")).join('|'));
+  const ent_type = new RegExp(searchParams.ent_type.map((val)=>("^" + val + "$")).join('|'));
+  const field_indi = new RegExp(searchParams.field_indi.map((val)=>("^" + val + "$")).join('|'));
+  const map_status = new RegExp(searchParams.map_status.map((val)=>("^" + val + "$")).join('|'));
+  const geology = new RegExp(searchParams.geology);
+  const geo_age = new RegExp(searchParams.geo_age);
+  const phys_prov = new RegExp(searchParams.phys_prov);
 
   const query = {
     "properties.name": { $regex: name, $options: "i" },
     "properties.tcsnumber": { $regex: tcsnumber, $options: "i" },
     "properties.co_name": { $regex: co_name, $options: "i" },
     "properties.ownership": { $regex: ownership, $options: "i" },
-    // "properties.length":{$gte : 30000},
-    // "properties.length": {
-    //   $lte: 112,
-    //   $gte: 3000, 
-    // }
+    "properties.topo_name": { $regex: topo_name, $options: "i" },
+    "properties.topo_indi": { $regex: topo_indi, $options: "i" },
+    "properties.gear": { $regex: gear, $options: "i" },
+    "properties.ent_type": { $regex: ent_type, $options: "i" },
+    "properties.field_indi": { $regex: field_indi, $options: "i" },
+    "properties.map_status": { $regex: map_status, $options: "i" },
+    "properties.geology": { $regex: geology, $options: "i" },
+    "properties.geo_age": { $regex: geo_age, $options: "i" },
+    "properties.phys_prov": { $regex: phys_prov, $options: "i" },
+    ...lengthRange
+    // "properties.length":{$gte : searchParams.l},
     // "properties.length": {
     //   $lt: 113,
     //   $gt: 111, 
@@ -145,7 +214,7 @@ masterPointsAPI.post('/', (req, res, next) => {
       locale: 'en'
     },
     sort:{
-      "properties.length": sortOrder
+      ['properties.' + sortBy]: sortOrder
     },
   } as PaginateOptions;
 

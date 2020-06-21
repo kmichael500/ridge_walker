@@ -35,20 +35,20 @@ interface State {
   searchParams: {
     name: string;
     tcsnumber: string;
-    lengthL: number | string;
-    lengthR: number | string;
+    lengthL: number;
+    lengthR: number;
     lengthCmp: '<' | '<=';
-    pdepL: number | string;
-    pdepR: number | string;
+    pdepL: number;
+    pdepR: number;
     pdepCmp: '<' | '<=';
-    depthL: number | string;
-    depthR: number | string;
+    depthL: number;
+    depthR: number;
     depthCmp: '<' | '<=';
-    elevL: number | string;
-    elevR: number | string;
+    elevL: number;
+    elevR: number;
     elevCmp: '<' | '<=';
-    psL: number | string;
-    psR: number | string;
+    psL: number;
+    psR: number;
     psCmp: '<' | '<=';
     co_name: string[];
     ownership: string[];
@@ -63,10 +63,9 @@ interface State {
     phys_prov: string;
   };
   sortParams: 'length' | 'depth' | 'pdep' | 'elev';
-  sortDirection: 'Ascending' | 'Descending';
+  sortOrder: 'asc' | 'desc';
 }
 interface Props {
-  pointList: Feature[];
   onSearchFinished: (searchParams: MasterPointPaginationReq) => void;
   isLoading: (loading: boolean) => void;
   limit: number;
@@ -80,20 +79,20 @@ class AdvancedPointsSearch extends Component<Props, State> {
       searchParams: {
         name: '',
         tcsnumber: '',
-        lengthL: '',
-        lengthR: '',
+        lengthL: null,
+        lengthR: null,
         lengthCmp: '<=',
-        pdepL: '',
-        pdepR: '',
+        pdepL: null,
+        pdepR: null,
         pdepCmp: '<=',
-        depthL: '',
-        depthR: '',
+        depthL: null,
+        depthR: null,
         depthCmp: '<=',
-        elevL: '',
-        elevR: '',
+        elevL: null,
+        elevR: null,
         elevCmp: '<=',
-        psL: '',
-        psR: '',
+        psL: null,
+        psR: null,
         psCmp: '<=',
         co_name: [],
         ownership: [],
@@ -108,7 +107,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
         phys_prov: '',
       },
       sortParams: 'length',
-      sortDirection: 'Descending',
+      sortOrder: 'desc',
     };
     this.handleSearch = this.handleSearch.bind(this);
   }
@@ -118,7 +117,8 @@ class AdvancedPointsSearch extends Component<Props, State> {
     this.setState({loading: true});
     
     const reqParams = {
-      sortOrder: 'desc',
+      sortOrder: this.state.sortOrder,
+      sortBy: this.state.sortParams,
         pagination: true,
         page: 1,
         limit: this.props.limit,
@@ -771,9 +771,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     defaultValue={this.state.sortParams}
                     style={{width: '100%'}}
                     onChange={sortBy => {
-                      this.setState({sortParams: sortBy}, () => {
-                        this.handleSearch();
-                      });
+                      this.setState({sortParams: sortBy});
                     }}
                     tokenSeparators={[',']}
                   >
@@ -791,19 +789,17 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={12}>
                   <Select
                     // placeholder="Sort by"
-                    defaultValue={this.state.sortDirection}
+                    defaultValue={this.state.sortOrder}
                     style={{width: '100%'}}
                     onChange={sortBy => {
-                      this.setState({sortDirection: sortBy}, () => {
-                        this.handleSearch();
-                      });
+                      this.setState({sortOrder: sortBy});
                     }}
                     tokenSeparators={[',']}
                   >
-                    <Option key={'Descending'} value={'Descending'}>
+                    <Option key={'desc'} value={'desc'}>
                       Descending
                     </Option>
-                    <Option key={'Ascending'} value={'Ascending'}>
+                    <Option key={'asc'} value={'asc'}>
                       Ascending
                     </Option>
                   </Select>

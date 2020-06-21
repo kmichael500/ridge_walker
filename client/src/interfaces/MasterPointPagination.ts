@@ -18,6 +18,7 @@ export interface MasterPointPaginationRes {
 export interface MasterPointPaginationReq {
   searchParams: SearchParams;
   sortOrder: 'asc' | 'desc';
+  sortBy: 'length' | 'depth' | 'pdep' | 'elev';
   page: number;
   limit: number;
   pagination: boolean;
@@ -26,20 +27,20 @@ export interface MasterPointPaginationReq {
 export interface SearchParams {
   name: string;
   tcsnumber: string;
-  lengthL: number | string; //todo
-  lengthR: number | string; //todo
+  lengthL: number | null; //todo
+  lengthR: number | null; //todo
   lengthCmp: '<' | '<='; //todo
-  pdepL: number | string; //todo
-  pdepR: number | string; //todo
+  pdepL: number | null; //todo
+  pdepR: number | null; //todo
   pdepCmp: '<' | '<='; //todo
-  depthL: number | string; //todo
-  depthR: number | string; //todo
+  depthL: number | null; //todo
+  depthR: number | null; //todo
   depthCmp: '<' | '<='; //todo
-  elevL: number | string; //todo
-  elevR: number | string; //todo
+  elevL: number | null; //todo
+  elevR: number | null; //todo
   elevCmp: '<' | '<='; //todo
-  psL: number | string; //todo
-  psR: number | string; //todo
+  psL: number | null; //todo
+  psR: number | null; //todo
   psCmp: '<' | '<='; //todo
   co_name: string[];
   ownership: string[];
