@@ -829,7 +829,6 @@ class CaveInfo extends Component<Props, State> {
           )}
           <Meta description={this.renderDescription()}></Meta>
 
-          <Divider orientation="left">Maps</Divider>
           <DisplayAllMaps
             tcsnumber={this.state.point.properties.tcsnumber}
           ></DisplayAllMaps>
