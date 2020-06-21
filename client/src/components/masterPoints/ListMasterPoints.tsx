@@ -338,13 +338,15 @@ class listPoints extends Component<Props, State> {
           <Divider></Divider>
           <List
             pagination={{
-              onChange: page => {
+              onChange: (page, pageSize) => {
                 const reqParams = {...this.state.reqParams};
                 reqParams.page = page;
                 this.setState({reqParams, loading: true}, () => {
                   this.updateResults();
                 });
               },
+              showSizeChanger: false,
+              responsive:true,
               current: this.state.reqParams.page,
               pageSize: this.state.reqParams.limit,
               position: 'bottom',
