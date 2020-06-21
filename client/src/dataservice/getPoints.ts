@@ -72,7 +72,9 @@ async function getAllMasterPoints(): Promise<Feature[]> {
  * Get paginated master points and search.
  * @returns Promise<MasterPointPaginationRes>
  */
-async function getPaginatedMasterPoints(reqParams: MasterPointPaginationReq): Promise<MasterPointPaginationRes> {
+async function getPaginatedMasterPoints(
+  reqParams: MasterPointPaginationReq
+): Promise<MasterPointPaginationRes> {
   try {
     const masterPointResponse = (await axiosInstance.post(
       '/api/points/master',
@@ -132,4 +134,9 @@ async function downloadMasterPoints(fileType: 'csv' | 'gpx'): Promise<void> {
   }
 }
 
-export {getAllMasterPoints, getMasterPoint, downloadMasterPoints, getPaginatedMasterPoints};
+export {
+  getAllMasterPoints,
+  getMasterPoint,
+  downloadMasterPoints,
+  getPaginatedMasterPoints,
+};

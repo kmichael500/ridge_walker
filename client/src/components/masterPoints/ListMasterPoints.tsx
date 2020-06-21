@@ -1,5 +1,8 @@
 import React, {Component, useState, Fragment} from 'react';
-import {getAllMasterPoints, getPaginatedMasterPoints} from '../../dataservice/getPoints';
+import {
+  getAllMasterPoints,
+  getPaginatedMasterPoints,
+} from '../../dataservice/getPoints';
 import {AdvancedPointsSearch} from './AdvancedPointsSearch';
 import {Helmet} from 'react-helmet';
 import {
@@ -15,7 +18,7 @@ import {EyeOutlined} from '@ant-design/icons';
 // import {AdvancedUserSearch} from './AdvancedUserSerach';
 import {userContext, UserContextInterface} from '../../context/userContext';
 import {Feature} from '../../interfaces/geoJsonInterface';
-import { MasterPointPaginationReq } from '../../interfaces/MasterPointPagination';
+import {MasterPointPaginationReq} from '../../interfaces/MasterPointPagination';
 
 const {Panel} = Collapse;
 
@@ -55,9 +58,9 @@ class listPoints extends Component<Props, State> {
       listData: [],
       loading: true,
       totalPoints: null,
-      reqParams:{
+      reqParams: {
         sortOrder: 'desc',
-        sortBy: "length",
+        sortBy: 'length',
         pagination: true,
         page: 1,
         limit: 8,
@@ -121,21 +124,21 @@ class listPoints extends Component<Props, State> {
         pointsList: points,
         listData: points,
         loading: false,
-        totalPoints: req.totalDocs
+        totalPoints: req.totalDocs,
       });
     });
   }
 
   // must be called after state change to reqParams
-  updateResults(){
-    getPaginatedMasterPoints(this.state.reqParams).then((req)=>{
+  updateResults() {
+    getPaginatedMasterPoints(this.state.reqParams).then(req => {
       this.setState({
         loading: false,
         pointsList: req.docs,
         listData: req.docs,
         totalPoints: req.totalDocs,
-      })
-    })
+      });
+    });
   }
 
   renderDescription(point: Feature) {
@@ -285,9 +288,9 @@ class listPoints extends Component<Props, State> {
           <AdvancedPointsSearch
             limit={this.state.reqParams.limit}
             onSearchFinished={reqParams => {
-              this.setState({reqParams}, ()=>{
+              this.setState({reqParams}, () => {
                 this.updateResults();
-              })
+              });
             }}
             isLoading={loading => {
               this.setState({loading});
@@ -338,14 +341,14 @@ class listPoints extends Component<Props, State> {
               onChange: page => {
                 const reqParams = {...this.state.reqParams};
                 reqParams.page = page;
-                this.setState({reqParams, loading:true}, ()=>{
+                this.setState({reqParams, loading: true}, () => {
                   this.updateResults();
                 });
               },
               current: this.state.reqParams.page,
               pageSize: this.state.reqParams.limit,
               position: 'bottom',
-              total: this.state.totalPoints
+              total: this.state.totalPoints,
             }}
             grid={{
               gutter: 16,

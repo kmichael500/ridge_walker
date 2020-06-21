@@ -77,14 +77,10 @@ import {noPendingUsers} from './auth/restrictFunctions';
 // Routes
 app.use('/api/user', userAPI);
 app.use('/api/stats', statisticsAPI);
-// app.use(
-//   '/api/points/master',
-//   passport.authenticate('jwt', {session: false}),
-//   noPendingUsers(),
-//   masterPointsAPI
-// );
 app.use(
   '/api/points/master',
+  passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   masterPointsAPI
 );
 app.use(

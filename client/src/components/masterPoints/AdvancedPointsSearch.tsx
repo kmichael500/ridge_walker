@@ -25,14 +25,17 @@ import {
 
 import {SearchOutlined} from '@ant-design/icons';
 import {Gutter} from 'antd/lib/grid/row';
-import { MasterPointPaginationReq, SearchParams } from '../../interfaces/MasterPointPagination';
+import {
+  MasterPointPaginationReq,
+  SearchParams,
+} from '../../interfaces/MasterPointPagination';
 const {Panel} = Collapse;
 const Search = Input;
 const Option = Select;
 
 interface State {
   loading: boolean;
-  searchParams: SearchParams
+  searchParams: SearchParams;
   sortParams: 'length' | 'depth' | 'pdep' | 'elev';
   sortOrder: 'asc' | 'desc';
 }
@@ -86,15 +89,15 @@ class AdvancedPointsSearch extends Component<Props, State> {
   handleSearch() {
     this.props.isLoading(true);
     this.setState({loading: true});
-    
+
     const reqParams = {
       sortOrder: this.state.sortOrder,
       sortBy: this.state.sortParams,
-        pagination: true,
-        page: 1,
-        limit: this.props.limit,
-      searchParams: this.state.searchParams
-    } as MasterPointPaginationReq
+      pagination: true,
+      page: 1,
+      limit: this.props.limit,
+      searchParams: this.state.searchParams,
+    } as MasterPointPaginationReq;
     this.props.onSearchFinished(reqParams);
     this.props.isLoading(false);
     this.setState({loading: false});
