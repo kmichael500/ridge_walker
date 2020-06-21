@@ -14,7 +14,7 @@ async function getAllSubmittedPoints(): Promise<SubmittedPoint[]> {
   try {
     const submittedPointResponse = await axiosInstance.get(
       '/api/submit/point',
-      {params:{secret_token: localStorage.getItem('JWT')}}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return submittedPointResponse.data as SubmittedPoint[];
   } catch (error) {
@@ -31,7 +31,7 @@ async function getSubmittedPoint(id: string): Promise<SubmittedPoint> {
   try {
     const submittedPointResponse = await axiosInstance.get(
       '/api/submit/point/' + id,
-      {params:{secret_token: localStorage.getItem('JWT')}}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return submittedPointResponse.data as SubmittedPoint;
   } catch (error) {
@@ -51,7 +51,7 @@ async function addSubmittedPoint(
     const submittedPointResponse = await axiosInstance.post(
       '/api/submit/point/',
       point,
-      {params:{secret_token: localStorage.getItem('JWT')}}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return submittedPointResponse;
   } catch (error) {
@@ -68,7 +68,7 @@ async function deleteOneSubmittedPointByID(id: string): Promise<AxiosResponse> {
   try {
     const submittedPointResponse = await axiosInstance.delete(
       '/api/submit/point/' + id,
-      {params:{secret_token: localStorage.getItem('JWT')}}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return submittedPointResponse;
   } catch (error) {
@@ -90,7 +90,7 @@ async function updateOneSubmittedPointByID(
     const submittedPointResponse = await axiosInstance.put(
       '/api/submit/point/' + id,
       point,
-      {params:{secret_token: localStorage.getItem('JWT')}}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return submittedPointResponse;
   } catch (error) {

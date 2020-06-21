@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {Document, Page} from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
-import {Card, Row, Col, Spin} from 'antd';
+import {Card, Row, Col, Spin, Divider} from 'antd';
 import {getImageFileNames, mapToBase64} from '../dataservice/getMaps';
 import DisplayMap from './DisplayPDF';
 import {Gutter} from 'antd/lib/grid/row';
@@ -89,6 +89,7 @@ interface DisplayAllMapsState {
   fileNames: {fileName: string; img: string}[];
   showFullScreen: boolean;
   fullScreenFile: string;
+  loading: boolean
 }
 
 export default class DisplayAllMaps extends Component<
@@ -101,6 +102,7 @@ export default class DisplayAllMaps extends Component<
       fileNames: [],
       showFullScreen: false,
       fullScreenFile: '',
+      loading: true,
     };
     this.renderMaps = this.renderMaps.bind(this);
   }
@@ -119,7 +121,7 @@ export default class DisplayAllMaps extends Component<
         }
       }
       base64().then(() => {
-        this.setState({fileNames: imgs});
+        this.setState({fileNames: imgs, loading:false});
       });
     });
   }
@@ -140,6 +142,11 @@ export default class DisplayAllMaps extends Component<
       xl: {span: 6},
     };
     return (
+      <Fragment>
+      {this.state.fileNames.length > 0 &&
+        <Divider orientation="left">Maps</Divider>
+
+      }
       <Row {...rowProps}>
         {this.state.fileNames.map((file, index) => (
           <Col {...colSpanProps}>
@@ -160,7 +167,7 @@ export default class DisplayAllMaps extends Component<
                 });
               }}
             >
-              <Card hoverable bordered={false}>
+              <Card hoverable bordered={false} loading={this.state.loading}>
                 <img
                   src={`data:image/jpeg;base64,${file.img}`}
                   alt={''}
@@ -172,6 +179,7 @@ export default class DisplayAllMaps extends Component<
           </Col>
         ))}
       </Row>
+      </Fragment>
     );
   }
 
