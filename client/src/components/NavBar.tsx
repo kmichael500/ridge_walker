@@ -66,6 +66,7 @@ class NavBar extends Component<any, any> {
               </Menu.Item>
             )}
           </Menu.SubMenu>
+          <Menu.Item key="/users">User Directory</Menu.Item>
           {/* <Menu.Item key="/upload">Upload</Menu.Item> */}
           {this.loggedInSubMenu()}
         </Menu>
