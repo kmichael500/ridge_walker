@@ -18,7 +18,7 @@ export interface MasterPointPaginationRes {
 export interface MasterPointPaginationReq {
   searchParams: SearchParams;
   sortOrder: 'asc' | 'desc';
-  sortBy: 'length' | 'depth' | 'pdep' | 'elev';
+  sortBy: 'length' | 'depth' | 'pdep' | 'elev' | 'ps';
   page: number;
   limit: number;
   pagination: boolean;
@@ -27,30 +27,30 @@ export interface MasterPointPaginationReq {
 export interface SearchParams {
   name: string;
   tcsnumber: string;
-  lengthL: number | null; //todo
-  lengthR: number | null; //todo
-  lengthCmp: '<' | '<='; //todo
-  pdepL: number | null; //todo
-  pdepR: number | null; //todo
-  pdepCmp: '<' | '<='; //todo
-  depthL: number | null; //todo
-  depthR: number | null; //todo
-  depthCmp: '<' | '<='; //todo
-  elevL: number | null; //todo
-  elevR: number | null; //todo
-  elevCmp: '<' | '<='; //todo
-  psL: number | null; //todo
-  psR: number | null; //todo
-  psCmp: '<' | '<='; //todo
+  lengthL: number | null;
+  lengthR: number | null; 
+  lengthCmp: '<' | '<='; 
+  pdepL: number | null; 
+  pdepR: number | null; 
+  pdepCmp: '<' | '<='; 
+  depthL: number | null; 
+  depthR: number | null; 
+  depthCmp: '<' | '<='; 
+  elevL: number | null; 
+  elevR: number | null; 
+  elevCmp: '<' | '<='; 
+  psL: number | null; 
+  psR: number | null; 
+  psCmp: '<' | '<='; 
   co_name: string[];
   ownership: string[];
-  topo_name: string; //todo
-  topo_indi: string[]; //todo
-  gear: string[]; //todo
-  ent_type: string[]; //todo
-  field_indi: string[]; //todo
-  map_status: string[]; //todo
-  geology: string; //todo
-  geo_age: string; //todo
-  phys_prov: string; //todo
+  topo_name: string; 
+  topo_indi: string[]; 
+  gear: string[]; 
+  ent_type: string[]; 
+  field_indi: string[]; 
+  map_status: string[]; 
+  geology: string; 
+  geo_age: string; 
+  phys_prov: string; 
 }

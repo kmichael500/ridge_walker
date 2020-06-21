@@ -25,43 +25,14 @@ import {
 
 import {SearchOutlined} from '@ant-design/icons';
 import {Gutter} from 'antd/lib/grid/row';
-import { MasterPointPaginationReq } from '../../interfaces/MasterPointPagination';
+import { MasterPointPaginationReq, SearchParams } from '../../interfaces/MasterPointPagination';
 const {Panel} = Collapse;
 const Search = Input;
 const Option = Select;
 
 interface State {
   loading: boolean;
-  searchParams: {
-    name: string;
-    tcsnumber: string;
-    lengthL: number;
-    lengthR: number;
-    lengthCmp: '<' | '<=';
-    pdepL: number;
-    pdepR: number;
-    pdepCmp: '<' | '<=';
-    depthL: number;
-    depthR: number;
-    depthCmp: '<' | '<=';
-    elevL: number;
-    elevR: number;
-    elevCmp: '<' | '<=';
-    psL: number;
-    psR: number;
-    psCmp: '<' | '<=';
-    co_name: string[];
-    ownership: string[];
-    topo_name: string;
-    topo_indi: string[];
-    gear: string[];
-    ent_type: string[];
-    field_indi: string[];
-    map_status: string[];
-    geology: string;
-    geo_age: string;
-    phys_prov: string;
-  };
+  searchParams: SearchParams
   sortParams: 'length' | 'depth' | 'pdep' | 'elev';
   sortOrder: 'asc' | 'desc';
 }
@@ -620,12 +591,12 @@ class AdvancedPointsSearch extends Component<Props, State> {
                   >
                     <Option style={{textAlign: 'center'}} value="<=">
                       <Tooltip title="Pit depth is greater than or equal to x and less or equal to y.">
-                        <div>{'x <= VE <= y'}</div>
+                        <div>{'x <= PD <= y'}</div>
                       </Tooltip>
                     </Option>
                     <Option style={{textAlign: 'center'}} value="<">
                       <Tooltip title="Pit depth is greater than x and less than y.">
-                        <div>{'x < VE < y'}</div>
+                        <div>{'x < PD < y'}</div>
                       </Tooltip>
                     </Option>
                   </Select>
@@ -783,6 +754,12 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     </Option>
                     <Option key={'depth'} value={'depth'}>
                       Vertical Extent
+                    </Option>
+                    <Option key={'elev'} value={'elev'}>
+                      Elevation
+                    </Option>
+                    <Option key={'ps'} value={'ps'}>
+                      Number of Pits
                     </Option>
                   </Select>
                 </Col>

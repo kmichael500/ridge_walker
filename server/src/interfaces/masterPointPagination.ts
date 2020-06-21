@@ -18,7 +18,7 @@ export interface MasterPointPaginationRes {
 export interface MasterPointPaginationReq {
     searchParams: SearchParams;
     sortOrder: "asc" | "desc";
-    sortBy: 'length' | 'depth' | 'pdep' | 'elev';
+    sortBy: 'length' | 'depth' | 'pdep' | 'elev' | 'ps';
     page: number;
     limit: number;
     pagination:boolean;
@@ -29,19 +29,19 @@ export interface SearchParams {
     tcsnumber: string;
     lengthL: number | null;
     lengthR: number | null;
-    lengthCmp: '<' | '<='; //todo
-    pdepL: number | null; //todo
-    pdepR: number | null; //todo
-    pdepCmp: '<' | '<='; //todo
-    depthL: number | null; //todo
-    depthR: number | null; //todo
-    depthCmp: '<' | '<='; //todo
-    elevL: number | null; //todo
-    elevR: number | null; //todo
-    elevCmp: '<' | '<='; //todo
-    psL: number | null; //todo
-    psR: number | null; //todo
-    psCmp: '<' | '<='; //todo
+    lengthCmp: '<' | '<=';
+    pdepL: number | null;
+    pdepR: number | null;
+    pdepCmp: '<' | '<=';
+    depthL: number | null;
+    depthR: number | null;
+    depthCmp: '<' | '<=';
+    elevL: number | null;
+    elevR: number | null;
+    elevCmp: '<' | '<=';
+    psL: number | null;
+    psR: number | null;
+    psCmp: '<' | '<=';
     co_name: string[];
     ownership: string[];
     topo_name: string;

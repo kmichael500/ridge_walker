@@ -112,59 +112,73 @@ const noPending = (userType: string) => {
 masterPointsAPI.post('/', (req, res, next) => {
   const {searchParams, sortOrder, page, limit, pagination, sortBy} = req.body as MasterPointPaginationReq;
 
-  let lengthRange = {};
-  let cmpKeys = ["lengthCmp", "pdepCmp", "depthCmp", "elevCmp", "psCmp"];
-  let leftKeys = ["lengthL", "pdepL", "depthL", "elevL", "psL"];
-  let rightKeys = ["lengthR", "pdepR", "depthR", "elevR", "psR"]
-
-  // number range
-  if (searchParams.lengthCmp === "<="){
-    if (searchParams.lengthL !== null && searchParams.lengthR !== null){
-      lengthRange = {
-        "properties.length": {
-          $lte: searchParams.lengthR,
-          $gte: searchParams.lengthL, 
-        }
-      }
-    }
-    else if (searchParams.lengthL !== null){
-      lengthRange = {
-        "properties.length": {
-          $gte: searchParams.lengthL, 
-        }
-      }
-    }
-    else if (searchParams.lengthR !== null){
-      lengthRange = {
-        "properties.length": {
-          $lte: searchParams.lengthR,
-        }
-      }
-    } 
+  interface comparisonI {
+    cmp: "<=" | "<";
+    L: number | null;
+    R: number | null;
   }
-  else if (searchParams.lengthCmp === "<"){
-    if (searchParams.lengthL !== null && searchParams.lengthR !== null){
-      lengthRange = {
-        "properties.length": {
-          $lt: searchParams.lengthR,
-          $gt: searchParams.lengthL, 
+
+  type lefKeysI = "lengthL" | "pdepL" | "depthL" | "elevL" | "psL";
+  type rightKeysI = "lengthR" | "pdepR" | "depthR" | "elevR" |"psR";
+  type cmpKeysI = "lengthCmp" | "pdepCmp" | "depthCmp" | "elevCmp" | "psCmp";
+
+  let cmpIndex = ["length", "pdep", "depth", "elev", "ps"];
+  let cmpKeys = ["lengthCmp", "pdepCmp", "depthCmp", "elevCmp", "psCmp"] as cmpKeysI[];
+  let lefKeys = ["lengthL", "pdepL", "depthL", "elevL", "psL"] as lefKeysI[];
+  let rightKeys = ["lengthR", "pdepR", "depthR", "elevR", "psR"] as rightKeysI[];
+
+  
+
+  let comparison = {
+    cmp: "<=",
+    L: null,
+    R: null,
+  } as comparisonI;
+  let cmpValues = {} as any;
+  for (const key in cmpKeys){
+    comparison.cmp = searchParams[cmpKeys[key]];
+    comparison.L = searchParams[lefKeys[key]];
+    comparison.R = searchParams[rightKeys[key]];    
+
+    switch(comparison.cmp){
+      case "<=":
+        if (comparison.L !== null && comparison.R != null){
+          cmpValues["properties."+cmpIndex[key]] = {
+            $lte: comparison.R,
+            $gte: comparison.L,   
+          }
         }
-      }
+        else if (comparison.L !== null && comparison.R === null){
+          cmpValues["properties."+cmpIndex[key]] = {
+            $gte: comparison.L,  
+          }
+        }
+        else if (comparison.R !== null && comparison.L === null){
+          cmpValues["properties."+cmpIndex[key]] = {
+            $lte: comparison.R,
+          }
+        }
+        break;
+      case "<":
+        if (comparison.L !== null && comparison.R != null){
+          cmpValues["properties."+cmpIndex[key]] = {
+            $lt: comparison.R,
+            $gt: comparison.L,   
+          }
+        }
+        else if (comparison.L !== null && comparison.R === null){
+          cmpValues["properties."+cmpIndex[key]] = {
+            $gt: comparison.L,  
+          }
+        }
+        else if (comparison.R !== null && comparison.L === null){
+          cmpValues["properties."+cmpIndex[key]] = {
+            $lt: comparison.R,
+          }
+        }
+        break;
     }
-    else if (searchParams.lengthL !== null){
-      lengthRange = {
-        "properties.length": {
-          $gt: searchParams.lengthL, 
-        }
-      }
-    }
-    else if (searchParams.lengthR !== null){
-      lengthRange = {
-        "properties.length": {
-          $lt: searchParams.lengthR,
-        }
-      }
-    } 
+
   }
 
   // regex search
@@ -196,12 +210,7 @@ masterPointsAPI.post('/', (req, res, next) => {
     "properties.geology": { $regex: geology, $options: "i" },
     "properties.geo_age": { $regex: geo_age, $options: "i" },
     "properties.phys_prov": { $regex: phys_prov, $options: "i" },
-    ...lengthRange
-    // "properties.length":{$gte : searchParams.l},
-    // "properties.length": {
-    //   $lt: 113,
-    //   $gt: 111, 
-    // }
+    ...cmpValues
   };
     
   
