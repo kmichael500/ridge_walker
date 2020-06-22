@@ -93,6 +93,7 @@ class listPoints extends Component<Props, State> {
           geology: '',
           geo_age: '',
           phys_prov: '',
+          narr: '',
         },
       },
       renderedFeatures: {
@@ -346,7 +347,7 @@ class listPoints extends Component<Props, State> {
                 });
               },
               showSizeChanger: false,
-              responsive:true,
+              responsive: true,
               current: this.state.reqParams.page,
               pageSize: this.state.reqParams.limit,
               position: 'bottom',
