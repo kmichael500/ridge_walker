@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 
 import {ClickParam} from 'antd/lib/menu';
-import {withRouter} from 'react-router-dom';
+import {withRouter, Link} from 'react-router-dom';
 import {userContext} from '../context/userContext';
 import {logoutUser} from '../dataservice/authentication';
 
@@ -44,29 +44,45 @@ class NavBar extends Component<any, any> {
           theme="dark"
           mode="horizontal"
           // defaultSelectedKeys={['2']}
-          onClick={this.handleMenuClick}
+          // onClick={this.handleMenuClick}
         >
           <Menu.Item key="/">
-            <Space size="large">
-              <img src={'logo.png'} height="30px" alt=""></img>
-              Home
-            </Space>
+            <Link to="/">
+              <Space size="large">
+                <img src={'logo.png'} height="30px" alt=""></img>
+                Home
+              </Space>
+            </Link>
           </Menu.Item>
-          <Menu.Item key="/map">Map</Menu.Item>
+          <Menu.Item key="/map">
+            <Link to="/map">Map</Link>
+          </Menu.Item>
+
           <Menu.SubMenu title="Points">
-            <Menu.Item icon={<EyeOutlined />} key="/points">
-              View
+            <Menu.Item key="/points" title="View">
+              <Link to="/points">
+                <EyeOutlined />
+                View
+              </Link>
             </Menu.Item>
-            <Menu.Item icon={<FormOutlined />} key="/add/points">
-              Add
+            <Menu.Item key="/add/points">
+              <Link to="/add/points">
+                <FormOutlined />
+                Add
+              </Link>
             </Menu.Item>
             {this.context.user.role === 'Admin' && (
-              <Menu.Item icon={<ContainerOutlined />} key="/review/points">
-                Review
+              <Menu.Item key="/review/points">
+                <Link to="/review/points">
+                  <ContainerOutlined />
+                  Review
+                </Link>
               </Menu.Item>
             )}
           </Menu.SubMenu>
-          <Menu.Item key="/users">User Directory</Menu.Item>
+          <Menu.Item key="/users">
+            <Link to="/users">User Directory</Link>
+          </Menu.Item>
           {/* <Menu.Item key="/upload">Upload</Menu.Item> */}
           {this.loggedInSubMenu()}
         </Menu>
@@ -78,13 +94,15 @@ class NavBar extends Component<any, any> {
           theme="dark"
           mode="horizontal"
           // defaultSelectedKeys={['2']}
-          onClick={this.handleMenuClick}
+          // onClick={this.handleMenuClick}
         >
           <Menu.Item key="/">
-            <Space size="large">
-              <img src="logo.png" alt="" height="30px"></img>
-              Tennessee Cave Survey
-            </Space>
+            <Link to="/">
+              <Space size="large">
+                <img src="logo.png" alt="" height="30px"></img>
+                Tennessee Cave Survey
+              </Space>
+            </Link>
           </Menu.Item>
 
           {this.loggedInSubMenu()}
@@ -100,26 +118,43 @@ class NavBar extends Component<any, any> {
           style={{float: 'right'}}
           title={'Welcome, ' + this.context.user.firstName + '!'}
         >
-          <Menu.Item icon={<DashboardOutlined />} key="/dashboard">
-            Dashboard
+          <Menu.Item key="/dashboard">
+            <Link to="/dashboard">
+              <DashboardOutlined />
+              Dashboard
+            </Link>
           </Menu.Item>
-          <Menu.Item icon={<SettingOutlined />} key="/settings">
-            Settings
+          <Menu.Item key="/settings">
+            <Link to="/settings">
+              <SettingOutlined />
+              Settings
+            </Link>
           </Menu.Item>
-          <Menu.Item icon={<LogoutOutlined />} key="logout">
+          <Menu.Item
+            icon={<LogoutOutlined />}
+            key="logout"
+            onClick={() => {
+              logoutUser();
+              this.context.setAuthenticated(false);
+              this.props.history.push('/');
+            }}
+          >
             Logout
           </Menu.Item>
         </Menu.SubMenu>
       );
     } else {
       return (
-        <Menu.SubMenu
-          icon={<UserOutlined />}
+        <Menu.Item
           style={{float: 'right'}}
-          title="Login"
           key="/login"
-          onTitleClick={this.handleMenuClick}
-        ></Menu.SubMenu>
+          // onTitleClick={this.handleMenuClick}
+        >
+          <Link to="/login">
+            <UserOutlined />
+            Login
+          </Link>
+        </Menu.Item>
       );
     }
   }
