@@ -19,6 +19,7 @@ import {EyeOutlined} from '@ant-design/icons';
 import {userContext, UserContextInterface} from '../../context/userContext';
 import {Feature} from '../../interfaces/geoJsonInterface';
 import {MasterPointPaginationReq} from '../../interfaces/MasterPointPagination';
+import {Link} from 'react-router-dom';
 
 const {Panel} = Collapse;
 
@@ -372,17 +373,11 @@ class listPoints extends Component<Props, State> {
                   }
                   key={point.properties.tcsnumber}
                   actions={[
-                    <Button
-                      type="primary"
-                      icon={<EyeOutlined />}
-                      onClick={() => {
-                        this.props.history.push(
-                          '/points/' + point.properties.tcsnumber
-                        );
-                      }}
-                    >
-                      More Info
-                    </Button>,
+                    <Link to={'/points/' + point.properties.tcsnumber}>
+                      <Button type="primary" icon={<EyeOutlined />}>
+                        More Info
+                      </Button>
+                    </Link>,
                   ]}
                 >
                   {this.renderDescription(point)}
