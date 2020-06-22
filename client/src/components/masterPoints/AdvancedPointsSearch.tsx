@@ -79,6 +79,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
         geology: '',
         geo_age: '',
         phys_prov: '',
+        narr: '',
       },
       sortParams: 'length',
       sortOrder: 'desc',
@@ -450,6 +451,26 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 </Col>
               </Row>
             </Col>
+            {/* Search by narr */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>Narrative</Col>
+                <Col span={24}>
+                  <Search
+                    onPressEnter={() => {
+                      this.handleSearch();
+                    }}
+                    placeholder="not pushed"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.narr = e.target.value;
+                      this.setState({searchParams});
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+
             {/* Search by Length */}
             <Col {...colSpanProps}>
               <Row gutter={5}>

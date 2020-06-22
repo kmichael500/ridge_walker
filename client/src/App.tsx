@@ -15,7 +15,6 @@ import {HomePage} from './pages/HomePage';
 import {UploadLeads} from './components/Karst Features/UploadLeads';
 import {DeadLeads} from './pages/DeadLeads';
 import {
-  ListPoints,
   listPoints,
 } from './components/masterPoints/ListMasterPoints';
 /* admin routes */

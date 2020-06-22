@@ -218,7 +218,7 @@ masterPointsAPI.post('/', (req, res, next) => {
   const geology = new RegExp(searchParams.geology);
   const geo_age = new RegExp(searchParams.geo_age);
   const phys_prov = new RegExp(searchParams.phys_prov);
-
+  const narr = new RegExp(searchParams.narr);
   const query = {
     'properties.name': {$regex: name, $options: 'i'},
     'properties.tcsnumber': {$regex: tcsnumber, $options: 'i'},
@@ -233,6 +233,7 @@ masterPointsAPI.post('/', (req, res, next) => {
     'properties.geology': {$regex: geology, $options: 'i'},
     'properties.geo_age': {$regex: geo_age, $options: 'i'},
     'properties.phys_prov': {$regex: phys_prov, $options: 'i'},
+    'properties.narr': {$regex: narr, $options: 'i'},
     ...cmpValues,
   };
 

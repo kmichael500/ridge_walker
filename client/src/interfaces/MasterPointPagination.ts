@@ -53,4 +53,5 @@ export interface SearchParams {
   geology: string;
   geo_age: string;
   phys_prov: string;
+  narr: string;
 }

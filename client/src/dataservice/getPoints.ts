@@ -53,6 +53,7 @@ async function getAllMasterPoints(): Promise<Feature[]> {
       geology: '',
       geo_age: '',
       phys_prov: '',
+      narr: '',
     },
   } as MasterPointPaginationReq;
   try {

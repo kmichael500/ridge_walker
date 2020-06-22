@@ -89,7 +89,7 @@ interface DisplayAllMapsState {
   fileNames: {fileName: string; img: string}[];
   showFullScreen: boolean;
   fullScreenFile: string;
-  loading: boolean
+  loading: boolean;
 }
 
 export default class DisplayAllMaps extends Component<
@@ -121,7 +121,7 @@ export default class DisplayAllMaps extends Component<
         }
       }
       base64().then(() => {
-        this.setState({fileNames: imgs, loading:false});
+        this.setState({fileNames: imgs, loading: false});
       });
     });
   }
@@ -143,42 +143,41 @@ export default class DisplayAllMaps extends Component<
     };
     return (
       <Fragment>
-      {this.state.fileNames.length > 0 &&
-        <Divider orientation="left">Maps</Divider>
-
-      }
-      <Row {...rowProps}>
-        {this.state.fileNames.map((file, index) => (
-          <Col {...colSpanProps}>
-            {this.state.fullScreenFile === file.img && (
-              <DisplayMap
-                file={file}
-                visible={this.state.showFullScreen}
+        {this.state.fileNames.length > 0 && (
+          <Divider orientation="left">Maps</Divider>
+        )}
+        <Row {...rowProps}>
+          {this.state.fileNames.map((file, index) => (
+            <Col {...colSpanProps}>
+              {this.state.fullScreenFile === file.img && (
+                <DisplayMap
+                  file={file}
+                  visible={this.state.showFullScreen}
+                  onClick={() => {
+                    this.setState({showFullScreen: false});
+                  }}
+                ></DisplayMap>
+              )}
+              <div
                 onClick={() => {
-                  this.setState({showFullScreen: false});
+                  this.setState({
+                    showFullScreen: !this.state.showFullScreen,
+                    fullScreenFile: file.img,
+                  });
                 }}
-              ></DisplayMap>
-            )}
-            <div
-              onClick={() => {
-                this.setState({
-                  showFullScreen: !this.state.showFullScreen,
-                  fullScreenFile: file.img,
-                });
-              }}
-            >
-              <Card hoverable bordered={false} loading={this.state.loading}>
-                <img
-                  src={`data:image/jpeg;base64,${file.img}`}
-                  alt={''}
-                  width="100%"
-                ></img>
-              </Card>
-            </div>
-            {/* </Space> */}
-          </Col>
-        ))}
-      </Row>
+              >
+                <Card hoverable bordered={false} loading={this.state.loading}>
+                  <img
+                    src={`data:image/jpeg;base64,${file.img}`}
+                    alt={''}
+                    width="100%"
+                  ></img>
+                </Card>
+              </div>
+              {/* </Space> */}
+            </Col>
+          ))}
+        </Row>
       </Fragment>
     );
   }
