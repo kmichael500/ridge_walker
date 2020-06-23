@@ -84,7 +84,7 @@ mapsAPI.get('/:id/getAll', (req, res, next) => {
   if (process.env.ROOTFOLDER){
     rootFolder = process.env.ROOTFOLDER;
   }
-  glob(searchString, {cwd: "public/maps", root:rootFolder}, (err, files) => {
+  glob(searchString, {cwd: rootFolder + "/public/maps", root:rootFolder}, (err, files) => {
     console.log(files);
     if (err) {
       console.log(err);
