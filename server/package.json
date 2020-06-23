@@ -28,7 +28,6 @@
     "@types/json2csv": "^5.0.1",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/mongoose": "^5.7.14",
-    "@types/mongoose-paginate-v2": "^1.3.6",
     "@types/passport": "^1.0.3",
     "@types/passport-jwt": "^3.0.3",
     "@types/passport-local": "^1.0.33",
