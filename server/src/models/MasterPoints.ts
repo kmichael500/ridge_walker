@@ -1,4 +1,3 @@
-import * as mongoosePaginate from 'mongoose-paginate-v2';
 import {PaginateModel, Document, Schema, model} from 'mongoose';
 
 import {
@@ -8,6 +7,7 @@ import {
   PropertyType,
   GeometryType,
 } from './MasterPointInterface';
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 // Create Schema
 const masterPointSchema = new Schema({
@@ -101,6 +101,8 @@ const masterPointSchema = new Schema({
     required: true,
   },
 });
+
+masterPointSchema.index({"properties.narr":"text"});
 
 masterPointSchema.plugin(mongoosePaginate);
 

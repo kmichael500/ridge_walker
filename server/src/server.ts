@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import * as compression from 'compression';
 
 import {masterPointsAPI} from './endpoints/masterPointsAPI';
-import {mongoURI} from './config/keys';
+// import {mongoURI} from './config/keys';
 import {mapsAPI} from './endpoints/maps';
 import {submittedPointAPI} from './endpoints/submitPointsAPI';
 
@@ -26,8 +26,12 @@ The file looks like this:
 */
 
 // Connect to MongoDB
+let connectionString = "mongodb://localhost"; // for dev
+if (process.env.MONGOURI){
+  connectionString = process.env.MONGOURI
+}
 mongoose
-  .connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true})
+  .connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true})
   .then(() => console.log('MongoDB successfully connected'))
   .catch((err: Error) => console.log(err));
 
