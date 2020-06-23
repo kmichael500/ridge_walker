@@ -68,7 +68,7 @@ leadPointAPI.post('/', (req, res, next) => {
           ...point,
         });
 
-        newSubmission.save().catch(err => {
+        newSubmission.save().catch((err: any) => {
           reject(err);
         });
       });

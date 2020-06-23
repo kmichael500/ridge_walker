@@ -113,7 +113,7 @@ masterPointsAPI.post('/', (req, res, next) => {
     page,
     limit,
     pagination,
-    sortBy,
+    sortBy
   } = req.body as MasterPointPaginationReq;
 
   interface comparisonI {
@@ -218,7 +218,66 @@ masterPointsAPI.post('/', (req, res, next) => {
   const geology = new RegExp(searchParams.geology);
   const geo_age = new RegExp(searchParams.geo_age);
   const phys_prov = new RegExp(searchParams.phys_prov);
-  const narr = new RegExp(searchParams.narr);
+
+  // sort options
+  const isNarrSearch = searchParams.narr.match(/\S/); // has user searched by narrative
+  const isLengthSearch = searchParams.lengthL !== null || searchParams.lengthR !== null;
+  const isPDSearch = searchParams.pdepL !== null || searchParams.pdepR !== null;
+  const isDepthSearch = searchParams.depthL !== null || searchParams.depthR !== null;
+  const isElevSearch = searchParams.elevL !== null || searchParams.elevR !== null;
+  const isPSSearch = searchParams.psL !== null || searchParams.psR !== null;
+
+  let sortParams = {} as any;
+  switch(sortBy){
+    case 'relevance':
+      if (isNarrSearch){
+        sortParams = { score : { $meta : 'textScore' } };
+      }
+      else if (isLengthSearch){
+        sortParams = {
+          ['properties.' + "length"]: sortOrder,
+        }
+      }
+      else if (isPDSearch){
+        sortParams = {
+          ['properties.' + "pdep"]: sortOrder,
+        }
+      }
+      else if (isDepthSearch){
+        sortParams = {
+          ['properties.' + "depth"]: sortOrder,
+        }
+      }
+      else if (isElevSearch){
+        sortParams = {
+          ['properties.' + "elev"]: sortOrder,
+        }
+      }
+      else if (isPSSearch){
+        sortParams = {
+          ['properties.' + "ps"]: sortOrder,
+        }
+      }
+      else{
+        sortParams = {
+          ['properties.' + "length"]: sortOrder,
+        }
+      }
+      break;
+    default:
+      sortParams = {
+        ['properties.' + sortBy]: sortOrder,
+      }
+      break;
+  }
+
+  // narr search options
+  let narrSearchParams = {};
+  if (isNarrSearch){
+    narrSearchParams = {
+      $text: { $search : searchParams.narr},
+    }
+  }
   const query = {
     'properties.name': {$regex: name, $options: 'i'},
     'properties.tcsnumber': {$regex: tcsnumber, $options: 'i'},
@@ -233,7 +292,7 @@ masterPointsAPI.post('/', (req, res, next) => {
     'properties.geology': {$regex: geology, $options: 'i'},
     'properties.geo_age': {$regex: geo_age, $options: 'i'},
     'properties.phys_prov': {$regex: phys_prov, $options: 'i'},
-    'properties.narr': {$regex: narr, $options: 'i'},
+    ...narrSearchParams,
     ...cmpValues,
   };
 
@@ -241,15 +300,17 @@ masterPointsAPI.post('/', (req, res, next) => {
     pagination,
     page,
     limit,
+    projection:{score: {$meta: 'textScore'}},
+    orderBy: sortOrder,
     lean: true,
     collation: {
       locale: 'en',
     },
-    sort: {
-      ['properties.' + sortBy]: sortOrder,
-    },
+    sort: sortParams,
   } as PaginateOptions;
 
+
+  MasterPoint.find({field: "value"}, { score: { $meta: 'textScore' } })
   MasterPoint.paginate(query, options, (err, requestedPoints) => {
     if (err) {
       console.log("\n Can't get master submissions");

@@ -12,7 +12,7 @@ submittedPointAPI.post('/', (req, res, next) => {
     status: req.body.status,
     pointType: req.body.pointType,
   });
-  newSubmission.save(err => {
+  newSubmission.save((err: any) => {
     if (err) {
       console.log('\n `err`');
       next(err);

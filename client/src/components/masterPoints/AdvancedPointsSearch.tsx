@@ -1,5 +1,6 @@
-import React, {Component, useState, Fragment} from 'react';
-import {Feature} from '../../interfaces/geoJsonInterface';
+import React, {Component} from 'react';
+import {QuestionCircleOutlined} from '@ant-design/icons';
+
 
 import {tn_counties} from '../../dataservice/countyList';
 import {
@@ -21,6 +22,7 @@ import {
   InputNumber,
   Tooltip,
   Button,
+  Typography,
 } from 'antd';
 
 import {SearchOutlined} from '@ant-design/icons';
@@ -29,6 +31,8 @@ import {
   MasterPointPaginationReq,
   SearchParams,
 } from '../../interfaces/MasterPointPagination';
+
+const {Paragraph} = Typography;
 const {Panel} = Collapse;
 const Search = Input;
 const Option = Select;
@@ -36,8 +40,9 @@ const Option = Select;
 interface State {
   loading: boolean;
   searchParams: SearchParams;
-  sortParams: 'length' | 'depth' | 'pdep' | 'elev';
+  sortParams: 'length' | 'depth' | 'pdep' | 'elev' | 'relevance';
   sortOrder: 'asc' | 'desc';
+  narrRelevanceSearch: boolean;
 }
 interface Props {
   onSearchFinished: (searchParams: MasterPointPaginationReq) => void;
@@ -50,6 +55,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
     super(Props);
     this.state = {
       loading: false,
+      narrRelevanceSearch: false,
       searchParams: {
         name: '',
         tcsnumber: '',
@@ -81,7 +87,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
         phys_prov: '',
         narr: '',
       },
-      sortParams: 'length',
+      sortParams: 'relevance',
       sortOrder: 'desc',
     };
     this.handleSearch = this.handleSearch.bind(this);
@@ -134,6 +140,56 @@ class AdvancedPointsSearch extends Component<Props, State> {
                       const searchParams = {...this.state.searchParams};
                       searchParams.name = e.target.value;
                       this.setState({searchParams});
+                    }}
+                  ></Search>
+                </Col>
+              </Row>
+            </Col>
+            {/* Search by narr */}
+            <Col {...colSpanProps}>
+              <Row>
+                <Col span={24}>
+                <span>
+                  Narrative&nbsp;
+                  <Tooltip title={
+                    <div style={{width:"100%"}}>
+                      Advanced narrative search options.
+                    <table style={{textAlign:"center"}}>
+                      <tr>
+                        <th>Description</th>
+                        <th>Example</th>
+                      </tr>
+                      <tr style={{border:"solid 1px", textAlign:"center"}}>
+                        <td>Use quotes for an exact match.</td>
+                        <td>"flowstone"</td>
+                      </tr>
+                      <tr style={{border:"solid 1px", textAlign:"center"}}>
+                        <td>To exclude certain words, use a dash.</td>
+                        <td>-flowstone</td>
+                      </tr>
+                    </table>
+                  </div>
+                  }
+                  style={{backgroundColor:"white"}}
+                  >
+                    <QuestionCircleOutlined></QuestionCircleOutlined>
+                  </Tooltip>
+                </span>
+                </Col>
+                <Col span={24}>
+                  <Search
+                    onPressEnter={() => {
+                      this.handleSearch();
+                    }}
+                    placeholder="flowstone"
+                    onChange={e => {
+                      const searchParams = {...this.state.searchParams};
+                      searchParams.narr = e.target.value;
+                      let narrRelevanceSearch = false;
+                      if (e.target.value.match(/\S/)){
+                        narrRelevanceSearch = true;
+                      }
+                      this.setState({searchParams, narrRelevanceSearch});
                     }}
                   ></Search>
                 </Col>
@@ -451,26 +507,6 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 </Col>
               </Row>
             </Col>
-            {/* Search by narr */}
-            <Col {...colSpanProps}>
-              <Row>
-                <Col span={24}>Narrative</Col>
-                <Col span={24}>
-                  <Search
-                    onPressEnter={() => {
-                      this.handleSearch();
-                    }}
-                    placeholder="not pushed"
-                    onChange={e => {
-                      const searchParams = {...this.state.searchParams};
-                      searchParams.narr = e.target.value;
-                      this.setState({searchParams});
-                    }}
-                  ></Search>
-                </Col>
-              </Row>
-            </Col>
-
             {/* Search by Length */}
             <Col {...colSpanProps}>
               <Row gutter={5}>
@@ -770,6 +806,9 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     }}
                     tokenSeparators={[',']}
                   >
+                    <Option key={'relevance'} value={'relevance'}>
+                      Relevance
+                    </Option>
                     <Option key={'length'} value={'length'}>
                       Length
                     </Option>
@@ -787,6 +826,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     </Option>
                   </Select>
                 </Col>
+                {((this.state.sortParams !== "relevance" || !this.state.narrRelevanceSearch)) && (
                 <Col span={12}>
                   <Select
                     // placeholder="Sort by"
@@ -805,6 +845,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     </Option>
                   </Select>
                 </Col>
+                )}
               </Row>
             </Col>
             <Col span={24}>

@@ -61,7 +61,7 @@ class listPoints extends Component<Props, State> {
       totalPoints: null,
       reqParams: {
         sortOrder: 'desc',
-        sortBy: 'length',
+        sortBy: 'relevance',
         pagination: true,
         page: 1,
         limit: 8,

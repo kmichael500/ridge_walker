@@ -18,7 +18,7 @@ export interface MasterPointPaginationRes {
 export interface MasterPointPaginationReq {
   searchParams: SearchParams;
   sortOrder: 'asc' | 'desc';
-  sortBy: 'length' | 'depth' | 'pdep' | 'elev' | 'ps';
+  sortBy: 'length' | 'depth' | 'pdep' | 'elev' | 'ps' | 'relevance';
   page: number;
   limit: number;
   pagination: boolean;
