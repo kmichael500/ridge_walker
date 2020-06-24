@@ -144,11 +144,11 @@ class CaveInfo extends Component<Props, State> {
       narrative = this.state.point.properties.narr
         .split('\n')
         .map((item, i) => {
-          return <Paragraph key={i}>{item}</Paragraph>;
+          return <Paragraph style={{color:"black"}} key={i}>{item}</Paragraph>;
         });
     } else if (this.props.action === 'Review') {
       narrative = this.state.newNarrative.split('\n').map((item, i) => {
-        return <Paragraph key={i}>{item}</Paragraph>;
+        return <Paragraph style={{color:"black"}} key={i}>{item}</Paragraph>;
       });
     }
 
@@ -813,6 +813,7 @@ class CaveInfo extends Component<Props, State> {
         <Card
           bordered={false}
           loading={this.state.isLoading}
+          style={{padding:"20px", fontSize:"16px"}}
           actions={
             [
               // <SettingOutlined key="setting" />,
