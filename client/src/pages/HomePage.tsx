@@ -98,7 +98,7 @@ class HomePage extends Component<any, State> {
                 </Parallax> */}
 
         <Parallax
-          bgImage="http://www.subworks.com/tcs/images/tcs_CS_2019.jpg"
+          bgImage="/tcs_CS_2019.jpg"
           strength={500}
         >
           <div style={{height: 500}}>

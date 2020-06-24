@@ -86,6 +86,61 @@ masterPointsAPI.post('/upload', upload.single('csv'), (req, res, next) => {
     });
 });
 
+var mcache = require('memory-cache');
+
+// cache based on duration and request url
+var cache = (duration: any) => {
+  return (req: any, res: any, next: any) => {
+    let matched = /[^?]*/g.exec(req.originalUrl);
+    let key = "";
+    if (matched !== null){
+      key = '_express_' + matched[0]
+    }
+    console.log("key", key)
+    let cachedBody = mcache.get(key);
+    if (cachedBody) {
+      res.send(cachedBody);
+      return;
+    } else {
+      res.sendResponse = res.send;
+      res.send = (body: any) =>{
+        mcache.put(key, body, duration * 1000);
+        res.sendResponse(body);
+      }
+      next();
+    }
+  }
+}
+
+// // get all master points
+// // cache is updated every 30 seconds
+// masterPointsAPI.get('/', cache(30), (req, res, next) => {
+//     MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
+//       if (err) {
+//         console.log("\n Can't get master submissions");
+//         next(err);
+//       } else {
+//         res.send(requestedPoints);
+//       }
+//     }).lean();  
+// // cache based on duration and request url
+// const noPending = (userType: string) => {
+//   return (req: any, res: any, next: any) => {
+//     const userStatus = req.user.status;
+
+//     // req.user;
+//     if (userStatus != 'Approved') {
+//       res.send(req.user);
+//       return;
+//     } else {
+//       res.sendResponse = res.send;
+//       res.send = (body: any) => {
+//         res.sendResponse(body);
+//       };
+//       next();
+//     }
+//   };
+// };
 // cache based on duration and request url
 const noPending = (userType: string) => {
   return (req: any, res: any, next: any) => {
@@ -336,7 +391,7 @@ masterPointsAPI.get('/:id', (req, res, next) => {
 });
 
 // get all master points as gpx
-masterPointsAPI.get('/download/gpx', (req, res, next) => {
+masterPointsAPI.get('/download/gpx', cache(30), (req, res, next) => {
   MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
     if (err) {
       console.log("\n Can't get master submissions");
@@ -387,7 +442,7 @@ masterPointsAPI.get('/download/gpx', (req, res, next) => {
 });
 
 // get all master points as csv
-masterPointsAPI.get('/download/csv', (req, res, next) => {
+masterPointsAPI.get('/download/csv', cache(30), (req, res, next) => {
   MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
     if (err) {
       console.log("\n Can't get master points");
