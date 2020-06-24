@@ -64,6 +64,9 @@ mapsAPI.get('/image/:mapName.png', (req, res, next) => {
     if (rootFolder !== './'){
       rootFolder = '/'
     }
+    else{
+      rootFolder = '.'
+    }
     pdfImage.convertPage(0).then(
       imagePath => {
         console.log("imgpath", imagePath)
