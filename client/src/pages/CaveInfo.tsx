@@ -156,7 +156,7 @@ class CaveInfo extends Component<Props, State> {
       <div>
         <Descriptions
           bordered
-          column={{xxl: 1, xl: 3, lg: 2, md: 3, sm: 2, xs: 1}}
+          column={{xxl: 4, xl: 3, lg: 3, md: 2, sm: 1, xs: 1}}
         >
           <Descriptions.Item label="Coordinates">
             <Text
