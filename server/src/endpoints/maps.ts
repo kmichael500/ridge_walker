@@ -70,7 +70,8 @@ mapsAPI.get('/image/:mapName.png', (req, res, next) => {
         res.sendFile(imagePath, {root: rootFolder});
       },
       err => {
-        res.send(500);
+        console.log(err);
+        res.sendStatus(500);
       }
     );
   } catch (error) {
