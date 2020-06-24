@@ -1,0 +1,10 @@
+config:
+  target: 'http://localhost:5000'
+  phases:
+    - duration: 600
+      arrivalRate: 10
+scenarios:
+  - flow:
+    - get:
+        url: '/api/points/master?secret_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InJvbGUiOiJBZG1pbiIsInN0YXR1cyI6IlBlbmRpbmciLCJfaWQiOiI1ZWM1NmVmZGYzMjU0NzA1MjE5ZDY3MWIiLCJlbWFpbCI6Im1pY2hhZWxrZXR6bmVyQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoidW5kZWZpbmVkIiwiZmlyc3ROYW1lIjoiTWljaGFlbCIsImxhc3ROYW1lIjoiS2V0em5lciIsImFkZHJlc3MiOiIxMzUwIEhhemVsd29vZCBTdCIsImNpdHkiOiJNdXJmcmVlc2Jvcm8iLCJzdGF0ZSI6IlROIiwiemlwQ29kZSI6MTIzMzMzMzMsInBob25lTnVtYmVyIjo2MTU0NjEwNjIxLCJuc3NOdW1iZXIiOjEzODEyMywiX192IjowfSwiaWF0IjoxNTkxOTgxMjE4LCJleHAiOjE1OTIwNjc2MTh9.T6lZjmAkhw7Qzhb3RfLgswAN8dVLLI5x3oJKyHDepG0'
+        time: true

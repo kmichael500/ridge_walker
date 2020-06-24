@@ -1,9 +1,10 @@
+import * as mongoose from 'mongoose';
 export interface Points {
   type: string;
   features: Feature[];
 }
 
-export interface Feature {
+export interface Feature extends mongoose.Document {
   type: FeatureType;
   properties: PropertyType;
   geometry: Geometry;

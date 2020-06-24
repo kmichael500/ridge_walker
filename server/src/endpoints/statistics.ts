@@ -101,10 +101,10 @@ statisticsAPI.get('/county', (req, res, next) => {
   res.send(geojson);
 });
 
-// Endpoint to get a single submission by tcsnumber
+// get new TCS number
 statisticsAPI.get('/newTCSNumber', (req, res, next) => {
   MasterPoint.count(
-    {'properties.tcsnumber': {'$regex': "SM"}},
+    {'properties.tcsnumber': {$regex: 'SM'}},
     (err, requestedPoint) => {
       res.json(requestedPoint);
     }

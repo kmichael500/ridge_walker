@@ -1,8 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 
 import {Drawer, Divider, Col, Row, Typography, Space, Spin, Button} from 'antd';
 import {getOneUserByID} from '../../dataservice/authentication';
 import {UserInterface} from '../../interfaces/UserInterface';
+import {parsePhoneNumberFromString} from 'libphonenumber-js';
+import {userContext, UserContextInterface} from '../../context/userContext';
 
 const {Text} = Typography;
 
@@ -38,7 +40,7 @@ interface UserSliderState {
   visible: boolean;
   user: UserInterface;
   loading: boolean;
-  formattedPhoneNumber: string;
+  error: boolean;
 }
 
 class UserSlider extends Component<UserSliderProps, UserSliderState> {
@@ -47,24 +49,40 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
     user: {
       firstName: '',
       lastName: '',
+      phoneNumber: '',
       nssNumber: null,
+      email: '',
     } as UserInterface,
     loading: true,
-    formattedPhoneNumber: '',
+    error: false,
   };
 
   componentDidMount() {
-    getOneUserByID(this.props.userID).then(user => {
-      let formattedPhoneNumber = '';
-      const match = user.phoneNumber
-        .toString()
-        .match(/^(\d{3})(\d{3})(\d{4})$/);
-      if (match) {
-        formattedPhoneNumber =
-          '(' + match[1] + ') ' + match[2] + '-' + match[3];
-      }
-      this.setState({user, loading: false, formattedPhoneNumber});
-    });
+    getOneUserByID(this.props.userID)
+      .then(user => {
+        this.setState({user, loading: false});
+      })
+      .catch(error => {
+        this.setState({
+          user: {
+            firstName: 'Not',
+            lastName: 'Found',
+            nssNumber: -999,
+            password: 'undefined',
+            phoneNumber: 'Not Found',
+            email: 'Not Found',
+            address: 'Not Found',
+            city: 'Not Found',
+            state: 'Not Found',
+            zipCode: 0,
+            role: 'User',
+            status: 'Pending',
+            _id: '',
+          },
+          loading: false,
+          error: true,
+        });
+      });
   }
 
   showDrawer = () => {
@@ -79,8 +97,48 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
     });
   };
 
+  renderAddress(user: UserInterface) {
+    const currentUser = this.context as UserContextInterface;
+
+    const allPrivate =
+      user.privateFields.address &&
+      user.privateFields.city &&
+      user.privateFields.state &&
+      currentUser.user.role !== 'Admin';
+
+    const {address, city, state, zipCode, privateFields} = user;
+    let addressString = '';
+    if (currentUser.user.role === 'Admin' || !privateFields.city) {
+      addressString += city;
+    }
+    if (currentUser.user.role === 'Admin' || !privateFields.state) {
+      addressString += ' ' + state;
+    }
+    if (currentUser.user.role === 'Admin' || !privateFields.zipCode) {
+      addressString += ' ' + zipCode;
+    }
+    return (
+      <div>
+        {!allPrivate && (
+          <Fragment>
+            <h4>Address</h4>
+            <Row>
+              <Col>
+                {(currentUser.user.role === 'Admin' ||
+                  !privateFields.address) && <p>{address}</p>}
+                <p>{addressString}</p>
+              </Col>
+            </Row>
+          </Fragment>
+        )}
+      </div>
+    );
+  }
+
   render() {
-    if (!this.state.loading) {
+    const currentUser = this.context as UserContextInterface;
+
+    if (!this.state.loading && !this.state.error) {
       return (
         <>
           <Button type="link" onClick={this.showDrawer}>
@@ -102,45 +160,55 @@ class UserSlider extends Component<UserSliderProps, UserSliderState> {
                 </Text>
               </Col>
               <Divider />
-              <Col span={12}>
-                <DescriptionItem
-                  title="Email"
-                  content={
-                    <a href={'mailto:' + this.state.user.email}>
-                      {this.state.user.email}
-                    </a>
-                  }
-                />
-              </Col>
-              <Col span={12}>
-                <DescriptionItem
-                  title="Phone Number"
-                  content={
-                    <a href={'tel:' + this.state.user.phoneNumber}>
-                      {this.state.formattedPhoneNumber}
-                    </a>
-                  }
-                />
-              </Col>
+              {(currentUser.user.role === 'Admin' ||
+                !this.state.user.privateFields.email) && (
+                <Col span={12}>
+                  <DescriptionItem
+                    title="Email"
+                    content={
+                      <a href={'mailto:' + this.state.user.email}>
+                        {this.state.user.email}
+                      </a>
+                    }
+                  />
+                </Col>
+              )}
+              {(currentUser.user.role === 'Admin' ||
+                !this.state.user.privateFields.phoneNumber) && (
+                <Col span={12}>
+                  <DescriptionItem
+                    title="Phone Number"
+                    content={
+                      <a href={'tel:' + this.state.user.phoneNumber}>
+                        {parsePhoneNumberFromString(this.state.user.phoneNumber)
+                          ? parsePhoneNumberFromString(
+                              this.state.user.phoneNumber
+                            ).formatNational()
+                          : 'Not Found'}
+                      </a>
+                    }
+                  />
+                </Col>
+              )}
             </Row>
             <Row>
-              <Col span={12}>
-                <DescriptionState
-                  title="Address"
-                  address={this.state.user.address}
-                  city={this.state.user.city}
-                  state={this.state.user.state}
-                  zipCode={this.state.user.zipCode}
-                />
-              </Col>
+              <Col span={12}>{this.renderAddress(this.state.user)}</Col>
             </Row>
           </Drawer>
         </>
+      );
+    } else if (this.state.error) {
+      return (
+        <Button type="link" style={{color: 'black'}}>
+          Not Found
+        </Button>
       );
     } else {
       return <Spin></Spin>;
     }
   }
 }
+
+UserSlider.contextType = userContext;
 
 export {UserSlider};

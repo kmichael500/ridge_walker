@@ -5,11 +5,6 @@ const axiosInstance = axios.create({
   baseURL: serverBaseURL,
 });
 
-// gets the secret token for API
-const params = {
-  secret_token: localStorage.getItem('JWT'),
-};
-
 /**
  * Fetch all file paths for maps from the API.
  * @returns Promise<string[]>
@@ -18,7 +13,7 @@ async function getMapFileNames(tcsNumber: string): Promise<string[]> {
   try {
     const response = await axiosInstance.get(
       'api/maps/' + tcsNumber + '/getAll',
-      {params}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     for (let i = 0; i < response.data.length; i++) {
       response.data[i] = serverBaseURL + 'api/maps/' + response.data[i];
@@ -37,7 +32,7 @@ async function getImageFileNames(tcsNumber: string): Promise<string[]> {
   try {
     const response = await axiosInstance.get(
       'api/maps/' + tcsNumber + '/getAll',
-      {params}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     for (let i = 0; i < response.data.length; i++) {
       // response.data[i] = serverBaseURL + 'api/maps/image/' + response.data[i];
@@ -60,7 +55,7 @@ async function mapToBase64(filePath: string): Promise<string> {
       serverBaseURL + 'api/maps/image/' + filePath,
       {
         responseType: 'arraybuffer',
-        params,
+        params: {secret_token: localStorage.getItem('JWT')},
       }
     );
     const base64 = Buffer.from(response.data, 'binary').toString('base64');
@@ -79,7 +74,7 @@ async function downloadMap(fileName: string): Promise<void> {
   try {
     const downloadResponse = await axiosInstance.get('/api/maps/' + fileName, {
       responseType: 'blob',
-      params,
+      params: {secret_token: localStorage.getItem('JWT')},
     });
     const url = window.URL.createObjectURL(new Blob([downloadResponse.data]));
     console.log(downloadResponse.headers);

@@ -1,7 +1,12 @@
 import * as express from 'express';
 import * as multer from 'multer';
-import {MongooseDocument} from 'mongoose';
+import {MongooseDocument, PaginateOptions} from 'mongoose';
+
 import {Parser} from 'json2csv';
+import {
+  SearchParams,
+  MasterPointPaginationReq,
+} from '../interfaces/masterPointPagination';
 
 import json2csv from 'json2csv';
 import {Request, Response, NextFunction} from 'express';
@@ -40,9 +45,27 @@ masterPointsAPI.post('/upload', upload.single('csv'), (req, res, next) => {
       let geojson = {} as Points;
       console.log(jsonObj[0]);
       const GeoJSON = require('geojson');
-      geojson = GeoJSON.parse(jsonObj, {Point: ['latitude', 'longitude']});
+      geojson = GeoJSON.parse(jsonObj, {
+        Point: ['latitude', 'longitude'],
+      }) as Points;
 
       for (let i = 0; i < geojson.features.length; i++) {
+        geojson.features[i].properties.length = Number(
+          geojson.features[i].properties.length
+        );
+        geojson.features[i].properties.depth = Number(
+          geojson.features[i].properties.depth
+        );
+        geojson.features[i].properties.pdep = Number(
+          geojson.features[i].properties.pdep
+        );
+        geojson.features[i].properties.ps = Number(
+          geojson.features[i].properties.ps
+        );
+        geojson.features[i].properties.elev = Number(
+          geojson.features[i].properties.elev
+        );
+
         const newMasterPoint = new MasterPoint({
           type: geojson.features[i].type,
           properties: geojson.features[i].properties,
@@ -89,17 +112,254 @@ var cache = (duration: any) => {
   }
 }
 
-// get all master points
-// cache is updated every 30 seconds
-masterPointsAPI.get('/', cache(30), (req, res, next) => {
-    MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
-      if (err) {
-        console.log("\n Can't get master submissions");
-        next(err);
-      } else {
-        res.send(requestedPoints);
+// // get all master points
+// // cache is updated every 30 seconds
+// masterPointsAPI.get('/', cache(30), (req, res, next) => {
+//     MasterPoint.find((err: Error, requestedPoints: MongooseDocument) => {
+//       if (err) {
+//         console.log("\n Can't get master submissions");
+//         next(err);
+//       } else {
+//         res.send(requestedPoints);
+//       }
+//     }).lean();  
+// // cache based on duration and request url
+// const noPending = (userType: string) => {
+//   return (req: any, res: any, next: any) => {
+//     const userStatus = req.user.status;
+
+//     // req.user;
+//     if (userStatus != 'Approved') {
+//       res.send(req.user);
+//       return;
+//     } else {
+//       res.sendResponse = res.send;
+//       res.send = (body: any) => {
+//         res.sendResponse(body);
+//       };
+//       next();
+//     }
+//   };
+// };
+
+// master points paginate
+masterPointsAPI.post('/', (req, res, next) => {
+  const {
+    searchParams,
+    sortOrder,
+    page,
+    limit,
+    pagination,
+    sortBy
+  } = req.body as MasterPointPaginationReq;
+
+  interface comparisonI {
+    cmp: '<=' | '<';
+    L: number | null;
+    R: number | null;
+  }
+
+  type lefKeysI = 'lengthL' | 'pdepL' | 'depthL' | 'elevL' | 'psL';
+  type rightKeysI = 'lengthR' | 'pdepR' | 'depthR' | 'elevR' | 'psR';
+  type cmpKeysI = 'lengthCmp' | 'pdepCmp' | 'depthCmp' | 'elevCmp' | 'psCmp';
+
+  const cmpIndex = ['length', 'pdep', 'depth', 'elev', 'ps'];
+  const cmpKeys = [
+    'lengthCmp',
+    'pdepCmp',
+    'depthCmp',
+    'elevCmp',
+    'psCmp',
+  ] as cmpKeysI[];
+  const lefKeys = ['lengthL', 'pdepL', 'depthL', 'elevL', 'psL'] as lefKeysI[];
+  const rightKeys = [
+    'lengthR',
+    'pdepR',
+    'depthR',
+    'elevR',
+    'psR',
+  ] as rightKeysI[];
+
+  const comparison = {
+    cmp: '<=',
+    L: null,
+    R: null,
+  } as comparisonI;
+  const cmpValues = {} as any;
+  for (const key in cmpKeys) {
+    comparison.cmp = searchParams[cmpKeys[key]];
+    comparison.L = searchParams[lefKeys[key]];
+    comparison.R = searchParams[rightKeys[key]];
+
+    switch (comparison.cmp) {
+      case '<=':
+        if (comparison.L !== null && comparison.R != null) {
+          cmpValues['properties.' + cmpIndex[key]] = {
+            $lte: comparison.R,
+            $gte: comparison.L,
+          };
+        } else if (comparison.L !== null && comparison.R === null) {
+          cmpValues['properties.' + cmpIndex[key]] = {
+            $gte: comparison.L,
+          };
+        } else if (comparison.R !== null && comparison.L === null) {
+          cmpValues['properties.' + cmpIndex[key]] = {
+            $lte: comparison.R,
+          };
+        }
+        break;
+      case '<':
+        if (comparison.L !== null && comparison.R != null) {
+          cmpValues['properties.' + cmpIndex[key]] = {
+            $lt: comparison.R,
+            $gt: comparison.L,
+          };
+        } else if (comparison.L !== null && comparison.R === null) {
+          cmpValues['properties.' + cmpIndex[key]] = {
+            $gt: comparison.L,
+          };
+        } else if (comparison.R !== null && comparison.L === null) {
+          cmpValues['properties.' + cmpIndex[key]] = {
+            $lt: comparison.R,
+          };
+        }
+        break;
+    }
+  }
+
+  // regex search
+  const name = new RegExp(searchParams.name);
+  const tcsnumber = new RegExp(searchParams.tcsnumber);
+  const co_name = new RegExp(
+    searchParams.co_name.map(val => '^' + val + '$').join('|')
+  );
+  const ownership = new RegExp(
+    searchParams.ownership.map(val => '^' + val + '$').join('|')
+  );
+  const topo_name = new RegExp(searchParams.topo_name);
+  const topo_indi = new RegExp(
+    searchParams.topo_indi.map(val => '^' + val + '$').join('|')
+  );
+  const gear = new RegExp(
+    searchParams.gear.map(val => '^' + val + '$').join('|')
+  );
+  const ent_type = new RegExp(
+    searchParams.ent_type.map(val => '^' + val + '$').join('|')
+  );
+  const field_indi = new RegExp(
+    searchParams.field_indi.map(val => '^' + val + '$').join('|')
+  );
+  const map_status = new RegExp(
+    searchParams.map_status.map(val => '^' + val + '$').join('|')
+  );
+  const geology = new RegExp(searchParams.geology);
+  const geo_age = new RegExp(searchParams.geo_age);
+  const phys_prov = new RegExp(searchParams.phys_prov);
+
+  // sort options
+  const isNarrSearch = searchParams.narr.match(/\S/); // has user searched by narrative
+  const isLengthSearch = searchParams.lengthL !== null || searchParams.lengthR !== null;
+  const isPDSearch = searchParams.pdepL !== null || searchParams.pdepR !== null;
+  const isDepthSearch = searchParams.depthL !== null || searchParams.depthR !== null;
+  const isElevSearch = searchParams.elevL !== null || searchParams.elevR !== null;
+  const isPSSearch = searchParams.psL !== null || searchParams.psR !== null;
+
+  let sortParams = {} as any;
+  switch(sortBy){
+    case 'relevance':
+      if (isNarrSearch){
+        sortParams = { score : { $meta : 'textScore' } };
       }
-    }).lean();  
+      else if (isLengthSearch){
+        sortParams = {
+          ['properties.' + "length"]: sortOrder,
+        }
+      }
+      else if (isPDSearch){
+        sortParams = {
+          ['properties.' + "pdep"]: sortOrder,
+        }
+      }
+      else if (isDepthSearch){
+        sortParams = {
+          ['properties.' + "depth"]: sortOrder,
+        }
+      }
+      else if (isElevSearch){
+        sortParams = {
+          ['properties.' + "elev"]: sortOrder,
+        }
+      }
+      else if (isPSSearch){
+        sortParams = {
+          ['properties.' + "ps"]: sortOrder,
+        }
+      }
+      else{
+        sortParams = {
+          ['properties.' + "length"]: sortOrder,
+        }
+      }
+      break;
+    default:
+      sortParams = {
+        ['properties.' + sortBy]: sortOrder,
+      }
+      break;
+  }
+
+  // narr search options
+  let narrSearchParams = {};
+  if (isNarrSearch){
+    narrSearchParams = {
+      $text: { $search : searchParams.narr},
+    }
+  }
+  const query = {
+    'properties.name': {$regex: name, $options: 'i'},
+    'properties.tcsnumber': {$regex: tcsnumber, $options: 'i'},
+    'properties.co_name': {$regex: co_name, $options: 'i'},
+    'properties.ownership': {$regex: ownership, $options: 'i'},
+    'properties.topo_name': {$regex: topo_name, $options: 'i'},
+    'properties.topo_indi': {$regex: topo_indi, $options: 'i'},
+    'properties.gear': {$regex: gear, $options: 'i'},
+    'properties.ent_type': {$regex: ent_type, $options: 'i'},
+    'properties.field_indi': {$regex: field_indi, $options: 'i'},
+    'properties.map_status': {$regex: map_status, $options: 'i'},
+    'properties.geology': {$regex: geology, $options: 'i'},
+    'properties.geo_age': {$regex: geo_age, $options: 'i'},
+    'properties.phys_prov': {$regex: phys_prov, $options: 'i'},
+    ...narrSearchParams,
+    ...cmpValues,
+  };
+
+  const options = {
+    pagination,
+    page,
+    limit,
+    projection:{score: {$meta: 'textScore'}},
+    orderBy: sortOrder,
+    lean: true,
+    collation: {
+      locale: 'en',
+    },
+    sort: sortParams,
+  } as PaginateOptions;
+
+
+  MasterPoint.find({field: "value"}, { score: { $meta: 'textScore' } })
+  MasterPoint.paginate(query, options, (err, requestedPoints) => {
+    if (err) {
+      console.log("\n Can't get master submissions");
+      next(err);
+    } else {
+      requestedPoints.docs = requestedPoints.docs.map(point => {
+        point.properties.narr = '';
+        return point;
+      });
+      res.send(requestedPoints);
+    }
+  });
 });
 
 // Endpoint to get a single submission by tcsnumber

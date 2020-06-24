@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {Document, Page} from 'react-pdf/dist/entry.webpack';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
-import {Card, Row, Col, Spin} from 'antd';
+import {Card, Row, Col, Spin, Divider} from 'antd';
 import {getImageFileNames, mapToBase64} from '../dataservice/getMaps';
 import DisplayMap from './DisplayPDF';
+import {Gutter} from 'antd/lib/grid/row';
 
 const options = {
   cMapUrl: 'cmaps/',
@@ -88,6 +89,7 @@ interface DisplayAllMapsState {
   fileNames: {fileName: string; img: string}[];
   showFullScreen: boolean;
   fullScreenFile: string;
+  loading: boolean;
 }
 
 export default class DisplayAllMaps extends Component<
@@ -100,6 +102,7 @@ export default class DisplayAllMaps extends Component<
       fileNames: [],
       showFullScreen: false,
       fullScreenFile: '',
+      loading: true,
     };
     this.renderMaps = this.renderMaps.bind(this);
   }
@@ -118,7 +121,7 @@ export default class DisplayAllMaps extends Component<
         }
       }
       base64().then(() => {
-        this.setState({fileNames: imgs});
+        this.setState({fileNames: imgs, loading: false});
       });
     });
   }
@@ -128,42 +131,54 @@ export default class DisplayAllMaps extends Component<
     //     this.setState({fullScreenFile: ""}, ()=>{
     //     })
     // }
+    const rowProps = {
+      gutter: [10, {xs: 8, sm: 16, md: 24, lg: 32}] as Gutter,
+    };
+    const colSpanProps = {
+      xs: {span: 24},
+      sm: {span: 12},
+      md: {span: 8},
+      lg: {span: 6},
+      xl: {span: 6},
+    };
     return (
-      <Row>
-        {this.state.fileNames.map((file, index) => (
-          <Col span={6}>
-            {this.state.fullScreenFile === file.img && (
-              <DisplayMap
-                file={file}
-                visible={this.state.showFullScreen}
+      <Fragment>
+        {this.state.fileNames.length > 0 && (
+          <Divider orientation="left">Maps</Divider>
+        )}
+        <Row {...rowProps}>
+          {this.state.fileNames.map((file, index) => (
+            <Col {...colSpanProps}>
+              {this.state.fullScreenFile === file.img && (
+                <DisplayMap
+                  file={file}
+                  visible={this.state.showFullScreen}
+                  onClick={() => {
+                    this.setState({showFullScreen: false});
+                  }}
+                ></DisplayMap>
+              )}
+              <div
                 onClick={() => {
-                  this.setState({showFullScreen: false});
+                  this.setState({
+                    showFullScreen: !this.state.showFullScreen,
+                    fullScreenFile: file.img,
+                  });
                 }}
-              ></DisplayMap>
-            )}
-            <div
-              onClick={() => {
-                this.setState({
-                  showFullScreen: !this.state.showFullScreen,
-                  fullScreenFile: file.img,
-                });
-              }}
-            >
-              <Card hoverable bordered={false}>
-                <img
-                  src={`data:image/jpeg;base64,${file.img}`}
-                  alt={''}
-                  width="100%"
-                ></img>
-              </Card>
-            </div>
-            {/* </Space> */}
-          </Col>
-        ))}
-        {this.state.fileNames.length === 0 &&
-          <div>No maps available...</div>
-        }
-      </Row>
+              >
+                <Card hoverable bordered={false} loading={this.state.loading}>
+                  <img
+                    src={`data:image/jpeg;base64,${file.img}`}
+                    alt={''}
+                    width="100%"
+                  ></img>
+                </Card>
+              </div>
+              {/* </Space> */}
+            </Col>
+          ))}
+        </Row>
+      </Fragment>
     );
   }
 

@@ -1,8 +1,9 @@
 import * as express from 'express';
 import * as passport from 'passport';
 import * as jwt from 'jsonwebtoken';
-import {UserModel} from '../models/User';
+import {UserModel, UserInterface} from '../models/User';
 import {SubmittedPoint} from '../models/SubmittedPoint';
+import {noPendingUsers} from '../auth/restrictFunctions';
 
 const userAPI = express();
 
@@ -15,6 +16,7 @@ const userAPI = express();
 //   });
 // });
 
+// Signs up user
 userAPI.post('/signup', async (req, res, next) => {
   passport.authenticate('signup', {session: false}, async (err, user) => {
     try {
@@ -34,6 +36,7 @@ userAPI.post('/signup', async (req, res, next) => {
   })(req, res, next);
 });
 
+// returns JWT for user (loggin in)
 userAPI.post('/login', async (req, res, next) => {
   passport.authenticate('login', async (err, user, info) => {
     try {
@@ -47,7 +50,7 @@ userAPI.post('/login', async (req, res, next) => {
         //We don't want to store the sensitive information such as the
         //user password in the token so we pick only the email and id
         const body = JSON.parse(JSON.stringify(user));
-        body.password = 'undefined';
+        delete body.password;
         //Sign the JWT token and populate the payload with the user email and id
         const token = jwt.sign({user: body}, 'top_secret', {expiresIn: '1d'});
         //Send back the token to the user
@@ -58,8 +61,6 @@ userAPI.post('/login', async (req, res, next) => {
     }
   })(req, res, next);
 });
-
-//Let's say the route below is very sensitive and we want only authorized users to have access
 
 //Displays information tailored according to the logged in user
 userAPI.get(
@@ -77,8 +78,12 @@ userAPI.get(
         err = new Error('User does not exist');
         next(err);
       } else {
-        currentUser.password = 'undefined';
-        res.json(currentUser);
+        delete currentUser.password;
+
+        const token = jwt.sign({user: currentUser}, 'top_secret', {
+          expiresIn: '1d',
+        });
+        res.json({token, user: currentUser});
       }
     });
     //We'll just send back the user details and the token
@@ -90,10 +95,11 @@ userAPI.get(
   }
 );
 
-//Displays information tailored according to the logged in user
+// Gets submissions of logged in user
 userAPI.get(
   '/submissions',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   (req, res, next) => {
     // const id = (<any>req).user._id;
 
@@ -117,10 +123,11 @@ userAPI.get(
   }
 );
 
-//Displays information tailored according to the logged in user
+//Gets one user by ID
 userAPI.get(
   '/:id',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   (req, res, next) => {
     const role = (<any>req).user.role;
     const status = (<any>req).user.status;
@@ -134,12 +141,11 @@ userAPI.get(
           err = new Error('User does not exist');
           next(err);
         } else {
-          currentUser.password = 'undefined';
+          delete currentUser.password;
           res.json(currentUser);
         }
       });
     } else if (role === 'User' && status !== 'Pending') {
-      console.log('Requested User');
       UserModel.findById(req.params.id, (err, currentUser) => {
         if (err) {
           console.log("\nuserAPI.get('/:id')  error");
@@ -149,7 +155,7 @@ userAPI.get(
           err = new Error('User does not exist');
           next(err);
         } else {
-          currentUser.password = 'undefined';
+          delete currentUser.password;
           res.json(currentUser);
         }
       });
@@ -164,6 +170,113 @@ userAPI.get(
     //   user : req.user,
     //   token : req.query.secret_token
     // })
+  }
+);
+
+//Gets all users by ID
+userAPI.get(
+  '/',
+  passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
+  (req, res, next) => {
+    UserModel.find((err: Error, requestedUsers) => {
+      if (err) {
+        console.log("\n Can't get all users");
+        next(err);
+      } else {
+        const role = (<any>req).user.role;
+        if (role === 'User') {
+          res.send(
+            requestedUsers.map(user => {
+              if (user.privateFields?.address) {
+                // user.address = "";
+                delete user.address;
+              }
+              if (user.privateFields?.city) {
+                // user.city = "";
+                delete user.city;
+              }
+              if (user.privateFields?.email) {
+                // user.email = "";
+                delete user.email;
+              }
+              if (user.privateFields?.phoneNumber) {
+                // user.phoneNumber = 0;
+                delete user.phoneNumber;
+              }
+              if (user.privateFields?.state) {
+                // user.state = "";
+                delete user.state;
+              }
+              if (user.privateFields?.zipCode) {
+                // user.zipCode = 0;
+                delete user.zipCode;
+              }
+              delete user.password;
+              return user;
+            })
+          );
+        } else if (role === 'Admin') {
+          res.send(
+            requestedUsers.map(user => {
+              delete user.password;
+              return user;
+            })
+          );
+        }
+      }
+    }).lean();
+  }
+);
+
+import * as bodyParser from 'body-parser';
+const jsonParser = bodyParser.json();
+// Endpoint to update a single user
+userAPI.put(
+  '/:id',
+  jsonParser,
+  passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
+  (req, res, next) => {
+    const currentUser = (<any>req).user as UserInterface;
+    if (currentUser.role !== 'Admin') {
+      req.body.role = 'User';
+    }
+    if (currentUser.role === 'Admin' || currentUser._id === req.body._id) {
+      UserModel.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        (err, requestedUser) => {
+          if (err) {
+            console.log("\nuserAPI.put('/:id')  error");
+            next(err);
+          } else {
+            res.sendStatus(200);
+          }
+        }
+      );
+    }
+  }
+);
+
+// Endpoint to delete a user by id
+userAPI.delete(
+  '/:id',
+  passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
+  (req, res, next) => {
+    UserModel.findByIdAndDelete(req.params.id, (err, user) => {
+      if (err) {
+        console.log("\nuserAPI.delete('/:id')  error");
+        next(err);
+      } else if (user == null) {
+        console.log("\nsubmittedPointAPI.delete('/:id')  error");
+        err = new Error('User for Id does not exist');
+        next(err);
+      } else {
+        res.send('Sucsess');
+      }
+    });
   }
 );
 

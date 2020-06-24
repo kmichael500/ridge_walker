@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import * as compression from 'compression';
 
 import {masterPointsAPI} from './endpoints/masterPointsAPI';
-import {mongoURI} from './config/keys';
+// import {mongoURI} from './config/keys';
 import {mapsAPI} from './endpoints/maps';
 import {submittedPointAPI} from './endpoints/submitPointsAPI';
 
@@ -26,8 +26,12 @@ The file looks like this:
 */
 
 // Connect to MongoDB
+let connectionString = "mongodb://localhost"; // for dev
+if (process.env.MONGOURI){
+  connectionString = process.env.MONGOURI
+}
 mongoose
-  .connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true})
+  .connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true})
   .then(() => console.log('MongoDB successfully connected'))
   .catch((err: Error) => console.log(err));
 
@@ -72,23 +76,33 @@ import {userInfoAPI} from './endpoints/userinformation';
 import {statisticsAPI} from './endpoints/statistics';
 import {leadPointAPI} from './endpoints/leadPointAPI';
 
+import {noPendingUsers} from './auth/restrictFunctions';
+
 // Routes
 app.use('/api/user', userAPI);
 app.use('/api/stats', statisticsAPI);
 app.use(
   '/api/points/master',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   masterPointsAPI
 );
 app.use(
   '/api/points/leads',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   leadPointAPI
 );
-app.use('/api/maps', passport.authenticate('jwt', {session: false}), mapsAPI);
+app.use(
+  '/api/maps',
+  passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
+  mapsAPI
+);
 app.use(
   '/api/submit/point',
   passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   submittedPointAPI
 );
 

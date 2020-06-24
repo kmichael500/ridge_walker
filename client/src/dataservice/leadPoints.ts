@@ -7,11 +7,6 @@ const axiosInstance = axios.create({
   baseURL: serverBaseURL,
 });
 
-// gets the secret token for API
-const params = {
-  secret_token: localStorage.getItem('JWT'),
-};
-
 /**
  * Fetch all lead points from the API.
  * @returns Promise<SubmittedPoint[]>
@@ -19,7 +14,7 @@ const params = {
 async function getAllLeadPoints(): Promise<LeadPointInterface[]> {
   try {
     const getLeadPointResponse = await axiosInstance.get('/api/points/leads', {
-      params,
+      params: {secret_token: localStorage.getItem('JWT')},
     });
     return getLeadPointResponse.data as LeadPointInterface[];
   } catch (error) {
@@ -36,7 +31,7 @@ async function getLeadPoint(id: string): Promise<LeadPointInterface> {
   try {
     const getLeadPointResponse = await axiosInstance.get(
       '/api/submit/point/' + id,
-      {params}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return getLeadPointResponse.data as LeadPointInterface;
   } catch (error) {
@@ -55,7 +50,9 @@ async function addLeadPoints(
   return new Promise(async (resolve, reject) => {
     try {
       await axiosInstance
-        .post('/api/points/leads', points, {params})
+        .post('/api/points/leads', points, {
+          params: {secret_token: localStorage.getItem('JWT')},
+        })
         .then(res => {
           resolve(res);
         })
@@ -78,7 +75,7 @@ async function addLeadPoint(point: LeadPointInterface): Promise<AxiosResponse> {
     const leadPointResponse = await axiosInstance.post(
       '/api/submit/point/',
       point,
-      {params}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return leadPointResponse;
   } catch (error) {
@@ -95,7 +92,7 @@ async function deleteOneLeadPointByID(id: string): Promise<AxiosResponse> {
   try {
     const leadPointResponse = await axiosInstance.delete(
       '/api/submit/point/' + id,
-      {params}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return leadPointResponse;
   } catch (error) {
@@ -116,7 +113,7 @@ async function updateOneLeadPointByID(
     const leadPointResponse = await axiosInstance.put(
       '/api/points/leads' + id,
       point,
-      {params}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return leadPointResponse;
   } catch (error) {

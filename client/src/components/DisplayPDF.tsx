@@ -91,7 +91,7 @@ export default class DisplayMap extends Component<Props, any> {
       >
         <img
           src={`data:image/jpeg;base64,${this.props.file.img}`}
-          alt="?"
+          alt=""
           width="100%"
         ></img>
       </Modal>

@@ -13,11 +13,23 @@ export interface UserInterface {
   address: string;
   city: string;
   state: string;
+  status?: userStatusType;
   zipCode: number;
-  phoneNumber: number;
+  phoneNumber: string;
   nssNumber: number;
+  privateFields?: {
+    email: boolean;
+    address: boolean;
+    city: boolean;
+    state: boolean;
+    zipCode: boolean;
+    phoneNumber: boolean;
+  };
 }
 
 export type userRoleType = 'User' | 'Admin';
+export type userStatusType = 'Pending' | 'Approved' | 'Rejected';
+
+const userStatustypes: userStatusType[] = ['Approved', 'Pending', 'Rejected'];
 
 const types: userRoleType[] = ['User', 'Admin'];

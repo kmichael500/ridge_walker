@@ -1,4 +1,5 @@
-import * as mongoose from 'mongoose';
+import {PaginateModel, Document, Schema, model} from 'mongoose';
+
 import {
   FeatureType,
   Feature,
@@ -6,9 +7,10 @@ import {
   PropertyType,
   GeometryType,
 } from './MasterPointInterface';
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 // Create Schema
-const masterPointSchema = new mongoose.Schema<Feature>({
+const masterPointSchema = new Schema({
   type: {
     type: FeatureType,
     required: true,
@@ -100,6 +102,16 @@ const masterPointSchema = new mongoose.Schema<Feature>({
   },
 });
 
+masterPointSchema.index({"properties.narr":"text"});
+
+masterPointSchema.plugin(mongoosePaginate);
+
+type MasterPoint<T extends Document> = PaginateModel<T>;
+export const MasterPoint: MasterPoint<Feature> = model<Feature>(
+  'masterPoint',
+  masterPointSchema
+) as MasterPoint<Feature>;
+
 // tslint:disable-next-line:variable-name
-const MasterPoint = mongoose.model('masterPoint', masterPointSchema);
-export {MasterPoint};
+// const MasterPoint = mongoose.model<Feature>('masterPoint', masterPointSchema);
+// export {MasterPoint};

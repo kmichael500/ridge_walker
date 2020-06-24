@@ -12,13 +12,18 @@ import {ReviewCaveInfo} from './pages/reviewCaveInfo';
 import {UserContextProvider} from './context/userContext';
 import {Dashboard} from './pages/Dashboard';
 import {HomePage} from './pages/HomePage';
-// Authentication
+import {UploadLeads} from './components/Karst Features/UploadLeads';
+import {DeadLeads} from './pages/DeadLeads';
+import {listPoints} from './components/masterPoints/ListMasterPoints';
+/* admin routes */
+import {ReviewPage} from './pages/ReviewPage';
+import {ListUsers} from './components/userInfo/ListUsers';
+/* Authentication */
 import {Register} from './pages/Register';
 import {LoginPage} from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
-import {UploadLeads} from './components/Karst Features/UploadLeads';
-import {DeadLeads} from './pages/DeadLeads';
-import {ReviewPage} from './pages/ReviewPage';
+/* redirects */
+import {Unauthorized} from './components/redirects/unauthorized';
 
 function App() {
   return (
@@ -32,6 +37,7 @@ function App() {
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={LoginPage} />
                 <Route exact path="/" component={HomePage} />
+                <Route exact path="/unauthorized" component={Unauthorized} />
 
                 {/* Protected Routes */}
                 <ProtectedRoute
@@ -40,6 +46,7 @@ function App() {
                   component={uploadPoints}
                   userType="Admin"
                 />
+                <ProtectedRoute exact path="/users" component={ListUsers} />
                 <ProtectedRoute
                   exact
                   path="/upload/leads"
@@ -52,11 +59,7 @@ function App() {
                   path="/map/:lat?/:long?"
                   component={MapView}
                 />
-                <ProtectedRoute
-                  exact
-                  path="/points/"
-                  component={CavePointTable}
-                />
+                <ProtectedRoute exact path="/points" component={listPoints} />
                 <ProtectedRoute exact path="/points/:id" component={CaveInfo} />
                 <ProtectedRoute exact path="/add/points/" component={AddCave} />
                 <ProtectedRoute

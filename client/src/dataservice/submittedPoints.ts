@@ -6,11 +6,6 @@ const axiosInstance = axios.create({
   baseURL: serverBaseURL,
 });
 
-// gets the secret token for API
-const params = {
-  secret_token: localStorage.getItem('JWT'),
-};
-
 /**
  * Fetch all submitted points from the API.
  * @returns Promise<SubmittedPoint[]>
@@ -19,7 +14,7 @@ async function getAllSubmittedPoints(): Promise<SubmittedPoint[]> {
   try {
     const submittedPointResponse = await axiosInstance.get(
       '/api/submit/point',
-      {params}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return submittedPointResponse.data as SubmittedPoint[];
   } catch (error) {
@@ -36,7 +31,7 @@ async function getSubmittedPoint(id: string): Promise<SubmittedPoint> {
   try {
     const submittedPointResponse = await axiosInstance.get(
       '/api/submit/point/' + id,
-      {params}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return submittedPointResponse.data as SubmittedPoint;
   } catch (error) {
@@ -56,7 +51,7 @@ async function addSubmittedPoint(
     const submittedPointResponse = await axiosInstance.post(
       '/api/submit/point/',
       point,
-      {params}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return submittedPointResponse;
   } catch (error) {
@@ -73,7 +68,7 @@ async function deleteOneSubmittedPointByID(id: string): Promise<AxiosResponse> {
   try {
     const submittedPointResponse = await axiosInstance.delete(
       '/api/submit/point/' + id,
-      {params}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return submittedPointResponse;
   } catch (error) {
@@ -95,7 +90,7 @@ async function updateOneSubmittedPointByID(
     const submittedPointResponse = await axiosInstance.put(
       '/api/submit/point/' + id,
       point,
-      {params}
+      {params: {secret_token: localStorage.getItem('JWT')}}
     );
     return submittedPointResponse;
   } catch (error) {
