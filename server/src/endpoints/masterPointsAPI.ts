@@ -141,6 +141,24 @@ var cache = (duration: any) => {
 //     }
 //   };
 // };
+// cache based on duration and request url
+const noPending = (userType: string) => {
+  return (req: any, res: any, next: any) => {
+    const userStatus = req.user.status;
+
+    // req.user;
+    if (userStatus != 'Approved') {
+      res.send(req.user);
+      return;
+    } else {
+      res.sendResponse = res.send;
+      res.send = (body: any) => {
+        res.sendResponse(body);
+      };
+      next();
+    }
+  };
+};
 
 // master points paginate
 masterPointsAPI.post('/', (req, res, next) => {
