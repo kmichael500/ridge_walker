@@ -853,7 +853,7 @@ class CaveInfo extends Component<Props, State> {
           bordered={false}
           loading={this.state.isLoading}
           // style={{padding: '24px'}}
-          bodyStyle={{padding: 48}}
+          bodyStyle={{padding: "5%"}}
         >
           {this.props.renderTitle && (
             <div>
