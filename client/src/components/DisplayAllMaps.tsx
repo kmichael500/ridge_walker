@@ -137,15 +137,13 @@ export default class DisplayAllMaps extends Component<
     const colSpanProps = {
       xs: {span: 24},
       sm: {span: 12},
-      md: {span: 8},
-      lg: {span: 6},
-      xl: {span: 6},
+      md: {span: 12},
+      lg: {span: 24},
+      xl: {span: 24},
+      xxl: {span: 24},
     };
     return (
       <Fragment>
-        {this.state.fileNames.length > 0 && (
-          <Divider orientation="left">Maps</Divider>
-        )}
         <Row {...rowProps}>
           {this.state.fileNames.map((file, index) => (
             <Col {...colSpanProps}>
@@ -158,25 +156,32 @@ export default class DisplayAllMaps extends Component<
                   }}
                 ></DisplayMap>
               )}
-              <div
-                onClick={() => {
-                  this.setState({
-                    showFullScreen: !this.state.showFullScreen,
-                    fullScreenFile: file.img,
-                  });
-                }}
-              >
-                <Card hoverable bordered={false} loading={this.state.loading}>
-                  <img
-                    src={`data:image/jpeg;base64,${file.img}`}
-                    alt={''}
-                    width="100%"
-                  ></img>
+                <Card
+                  hoverable bordered={false}
+                  loading={this.state.loading}
+                  cover={
+                    <img
+                      src={`data:image/jpeg;base64,${file.img}`}
+                      alt={''}
+                      width="100%"
+                    ></img>
+                  }
+                  bodyStyle={{padding:"0px"}}
+                  onClick={() => {
+                    this.setState({
+                      showFullScreen: !this.state.showFullScreen,
+                      fullScreenFile: file.img,
+                    });
+                  }}
+                >
+                  
                 </Card>
-              </div>
               {/* </Space> */}
             </Col>
           ))}
+          {this.state.fileNames.length <= 0 &&
+          <div>No Maps Found...</div>
+          }
         </Row>
       </Fragment>
     );

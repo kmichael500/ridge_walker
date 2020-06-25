@@ -500,27 +500,39 @@ class CaveInfo extends Component<Props, State> {
             </Text>
           </Descriptions.Item>
         </Descriptions>
-        <Divider orientation="left">Narrative</Divider>
-
         {this.props.action === 'View' && (
           <div>
-            <Paragraph>{narrative}</Paragraph>
-            {this.state.proposedChanges && (
-              <TextArea
-                placeholder="Add to the narrative."
-                autoSize={{minRows: 4}}
-                onChange={newNarrative => {
-                  this.setState({newNarrative: newNarrative.target.value});
-                }}
-              >
-                {this.state.newNarrative}
-              </TextArea>
-            )}
+            <Row>
+              <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+                <Divider orientation="left">Narrative</Divider>
+                <Paragraph>{narrative}</Paragraph>
+                {this.state.proposedChanges && (
+                  <TextArea
+                    placeholder="Add to the narrative."
+                    autoSize={{minRows: 4}}
+                    onChange={newNarrative => {
+                      this.setState({newNarrative: newNarrative.target.value});
+                    }}
+                  >
+                    {this.state.newNarrative}
+                  </TextArea>
+                )}
+              </Col>
+              <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
+              <Col xs={22} sm={22} md={22} lg={6} xl={6}>
+                <Divider orientation="left">Maps</Divider>
+                <DisplayAllMaps tcsnumber={this.state.point.properties.tcsnumber}></DisplayAllMaps>
+              </Col>
+              <Col span={1}></Col>
+            </Row>
           </div>
         )}
 
         {this.props.action === 'Review' && (
           <div>
+            <Row>
+              <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+                <Divider orientation="left">Narrative</Divider>
             {this.state.proposedChanges ? (
               <TextArea
                 value={this.state.newNarrative}
@@ -534,6 +546,14 @@ class CaveInfo extends Component<Props, State> {
             ) : (
               <Paragraph>{narrative}</Paragraph>
             )}
+                          </Col>
+              <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
+              <Col xs={22} sm={22} md={22} lg={6} xl={6}>
+                <Divider orientation="left">Maps</Divider>
+                <DisplayAllMaps tcsnumber={this.state.point.properties.tcsnumber}></DisplayAllMaps>
+              </Col>
+              <Col span={1}></Col>
+            </Row>
           </div>
         )}
       </div>
@@ -814,13 +834,6 @@ class CaveInfo extends Component<Props, State> {
           bordered={false}
           loading={this.state.isLoading}
           style={{padding:"20px"}}
-          actions={
-            [
-              // <SettingOutlined key="setting" />,
-              // <EditOutlined key="edit" />,
-              // <EllipsisOutlined key="ellipsis" />,
-            ]
-          }
         >
           {this.props.renderTitle && (
             <div>
@@ -829,10 +842,6 @@ class CaveInfo extends Component<Props, State> {
             </div>
           )}
           <Meta description={this.renderDescription()}></Meta>
-
-          <DisplayAllMaps
-            tcsnumber={this.state.point.properties.tcsnumber}
-          ></DisplayAllMaps>
 
           {this.props.showMap && (
             <div>
