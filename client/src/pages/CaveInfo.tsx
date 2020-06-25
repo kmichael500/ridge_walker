@@ -172,10 +172,7 @@ class CaveInfo extends Component<Props, State> {
 
     return (
       <div>
-        <Descriptions
-          bordered
-          column={this.props.descriptionColProps}
-        >
+        <Descriptions bordered column={this.props.descriptionColProps}>
           <Descriptions.Item label="Coordinates">
             <Text
               editable={

@@ -309,7 +309,7 @@ class listPoints extends Component<Props, State> {
             >
               <div
                 style={{
-                  fontWeight:450
+                  fontWeight: 450,
                 }}
               >
                 Display
@@ -349,14 +349,13 @@ class listPoints extends Component<Props, State> {
                 defaultValue={this.defaultRenderedItems()}
               />
             </div>
-            {this.state.totalPoints===null ?(
+            {this.state.totalPoints === null ? (
               <Divider orientation="left">Loading...</Divider>
-            )
-              :
-              (
-                <Divider orientation="left">{this.state.totalPoints + " Results"}</Divider>
-              )
-            }
+            ) : (
+              <Divider orientation="left">
+                {this.state.totalPoints + ' Results'}
+              </Divider>
+            )}
             <List
               pagination={{
                 onChange: (page, pageSize) => {
