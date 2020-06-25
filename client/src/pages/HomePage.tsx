@@ -17,7 +17,6 @@ class HomePage extends Component<any, State> {
   }
 
   renderCaveImage() {
-    
     return (
       <Parallax
         strength={500}
@@ -53,14 +52,14 @@ class HomePage extends Component<any, State> {
 
   render() {
     const styleProps = {
-      style:{
-        paddingRight: "10%",
-        paddingLeft: "10%",
-        paddingBottom: "3%",
-        paddingTop: "3%",
+      style: {
+        paddingRight: '10%',
+        paddingLeft: '10%',
+        paddingBottom: '3%',
+        paddingTop: '3%',
         backgroundColor: 'white',
-      }
-    }
+      },
+    };
     return (
       <div>
         <Helmet>
@@ -69,9 +68,7 @@ class HomePage extends Component<any, State> {
         {/* {this.renderCaveImage()} */}
 
         <Parallax strength={500} bgStyle={{backgroundColor: 'white'}}>
-          <div
-            {...styleProps}
-          >
+          <div {...styleProps}>
             <Title style={{textAlign: 'center'}}>Tennessee Cave Survey</Title>
             <Paragraph>
               The Tennessee Cave Survey (TCS) is an internal organization of the
@@ -120,9 +117,7 @@ class HomePage extends Component<any, State> {
         </Parallax>
 
         <Parallax strength={500}>
-          <div
-            {...styleProps}
-          >
+          <div {...styleProps}>
             <Title style={{textAlign: 'center'}}>Become a Member</Title>
             <Paragraph>
               {' '}

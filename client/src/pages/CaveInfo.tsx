@@ -27,7 +27,7 @@ import DisplayAllMaps from '../components/DisplayAllMaps';
 import {Feature} from '../interfaces/geoJsonInterface';
 import {userContext} from '../context/userContext';
 import {withRouter} from 'react-router-dom';
-import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
+import {Breakpoint} from 'antd/lib/_util/responsiveObserve';
 
 const {Paragraph, Title, Text} = Typography;
 const {TextArea} = Input;
@@ -64,14 +64,14 @@ class CaveInfo extends Component<Props, State> {
     showMap: true,
     renderTitle: true,
     action: 'View',
-    descriptionColProps:{
+    descriptionColProps: {
       xxl: 5,
       xl: 4,
       lg: 3,
       md: 2,
       sm: 1,
-      xs: 1
-    }
+      xs: 1,
+    },
   } as Props;
 
   constructor(Props) {
@@ -172,10 +172,7 @@ class CaveInfo extends Component<Props, State> {
 
     return (
       <div>
-        <Descriptions
-          bordered
-          column={this.props.descriptionColProps}
-        >
+        <Descriptions bordered column={this.props.descriptionColProps}>
           <Descriptions.Item label="Coordinates">
             <Text
               editable={
@@ -856,7 +853,7 @@ class CaveInfo extends Component<Props, State> {
           bordered={false}
           loading={this.state.isLoading}
           // style={{padding: '24px'}}
-          bodyStyle={{padding:48}}
+          bodyStyle={{padding: 48}}
         >
           {this.props.renderTitle && (
             <div>
