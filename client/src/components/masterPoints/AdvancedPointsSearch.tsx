@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {QuestionCircleOutlined, SlidersOutlined} from '@ant-design/icons';
-import {GrSearchAdvanced} from 'react-icons/gr'
+import {GrSearchAdvanced} from 'react-icons/gr';
 
 import {tn_counties} from '../../dataservice/countyList';
 import {
@@ -153,38 +153,37 @@ class AdvancedPointsSearch extends Component<Props, State> {
     return (
       <div>
         <Row>
-          
-          <div style={{width:"65%"}}>
-          <Input.Search
-            // width="100%"
-            
-            size="large"
-            onPressEnter={() => {
-              this.handleSearch();
-            }}
-            onSearch={() => {
-              this.handleSearch();
-            }}
-            enterButton
-            placeholder="Search by name"
-            value={this.state.searchParams.name}
-            onChange={e => {
-              const searchParams = {...this.state.searchParams};
-              searchParams.name = e.target.value;
-              this.setState({searchParams});
-            }}
-          ></Input.Search>
+          <div style={{width: '65%'}}>
+            <Input.Search
+              // width="100%"
+
+              size="large"
+              onPressEnter={() => {
+                this.handleSearch();
+              }}
+              onSearch={() => {
+                this.handleSearch();
+              }}
+              enterButton
+              placeholder="Search by name"
+              value={this.state.searchParams.name}
+              onChange={e => {
+                const searchParams = {...this.state.searchParams};
+                searchParams.name = e.target.value;
+                this.setState({searchParams});
+              }}
+            ></Input.Search>
           </div>
-        <div style={{marginLeft:"auto"}}>
-          <Button
-              
-              style={{color:this.state.advancedColor}}
+          <div style={{marginLeft: 'auto'}}>
+            <Button
+              style={{color: this.state.advancedColor}}
               onClick={() => {
                 this.setState({visible: true});
               }}
-            >Advanced Search
-          </Button>
-        </div>
+            >
+              Advanced Search
+            </Button>
+          </div>
         </Row>
         <Drawer
           title="Advanced Search"
