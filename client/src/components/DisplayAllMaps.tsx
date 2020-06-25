@@ -178,14 +178,10 @@ export default class DisplayAllMaps extends Component<
               {/* </Space> */}
             </Col>
           ))}
-          {(this.state.fileNames.length <= 0 && !this.state.loading) && (
-           <div>No Maps Found...</div>
-          )
-          }
-          {this.state.loading &&
-            <div>Loading...</div>
-          }
-          
+          {this.state.fileNames.length <= 0 && !this.state.loading && (
+            <div>No Maps Found...</div>
+          )}
+          {this.state.loading && <div>Loading...</div>}
         </Row>
       </Fragment>
     );

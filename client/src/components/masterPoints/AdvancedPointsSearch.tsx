@@ -57,7 +57,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
     this.state = {
       loading: false,
       narrRelevanceSearch: false,
-      advancedColor: "",
+      advancedColor: '',
       searchParams: {
         name: '',
         tcsnumber: '',
@@ -111,33 +111,28 @@ class AdvancedPointsSearch extends Component<Props, State> {
     } as MasterPointPaginationReq;
     this.props.onSearchFinished(reqParams);
     this.props.isLoading(false);
-    this.setState({loading: false, visible:false});
+    this.setState({loading: false, visible: false});
   }
-  changeAdvancedButtonColor(val: any){
-    const color = "green";
-    const defaultColor = "";
-    if (Array.isArray(val)){
+  changeAdvancedButtonColor(val: any) {
+    const color = 'green';
+    const defaultColor = '';
+    if (Array.isArray(val)) {
       console.log(val);
-      if (val.length <= 0){
-        this.setState({advancedColor: defaultColor})
+      if (val.length <= 0) {
+        this.setState({advancedColor: defaultColor});
+      } else if (val.length > 0) {
+        this.setState({advancedColor: color});
       }
-      else if (val.length > 0){
-        this.setState({advancedColor:color});
+    } else if (typeof val === 'string') {
+      if (val.length <= 0) {
+        this.setState({advancedColor: defaultColor});
+      } else {
+        this.setState({advancedColor: color});
       }
-    }
-    else if (typeof(val) === 'string'){
-      if (val.length <= 0){
-        this.setState({advancedColor: defaultColor})
-      }
-      else{
-        this.setState({advancedColor:color});
-      }
-    }
-    else if (val === null){
-      this.setState({advancedColor: defaultColor})
-    }
-    else{
-      this.setState({advancedColor: color})
+    } else if (val === null) {
+      this.setState({advancedColor: defaultColor});
+    } else {
+      this.setState({advancedColor: color});
     }
   }
 
@@ -155,45 +150,47 @@ class AdvancedPointsSearch extends Component<Props, State> {
 
     return (
       <div>
-      <Input.Search
-        width="100%"
-        suffix={
-          <Tooltip title="Advanced Search">
-            <SlidersOutlined
-              style={{fontSize:25,color:this.state.advancedColor
-            }}
-              onClick={()=>{this.setState({visible:true})}}
-              onTouchStart={()=>{this.setState({visible:true})}}
-            >
-            </SlidersOutlined>
-          </Tooltip>
-        }
-        size="large"
-        onPressEnter={() => {
-          this.handleSearch();
-        }}
-        onSearch={()=>{
-          this.handleSearch();
-        }}
-        enterButton
-        placeholder="Search by name"
-        value={this.state.searchParams.name}
-        onChange={e => {
-          const searchParams = {...this.state.searchParams};
-          searchParams.name = e.target.value;
-          this.setState({searchParams});
-        }}
-      >
-        
-      </Input.Search>
-      <Drawer
-        title="Advanced Search"
-        placement="right"
-        closable={true}
-        width={"90%"}
-        onClose={()=>{this.setState({visible:false})}}
-        visible={this.state.visible}
-      >
+        <Input.Search
+          width="100%"
+          suffix={
+            <Tooltip title="Advanced Search">
+              <SlidersOutlined
+                style={{fontSize: 25, color: this.state.advancedColor}}
+                onClick={() => {
+                  this.setState({visible: true});
+                }}
+                onTouchStart={() => {
+                  this.setState({visible: true});
+                }}
+              ></SlidersOutlined>
+            </Tooltip>
+          }
+          size="large"
+          onPressEnter={() => {
+            this.handleSearch();
+          }}
+          onSearch={() => {
+            this.handleSearch();
+          }}
+          enterButton
+          placeholder="Search by name"
+          value={this.state.searchParams.name}
+          onChange={e => {
+            const searchParams = {...this.state.searchParams};
+            searchParams.name = e.target.value;
+            this.setState({searchParams});
+          }}
+        ></Input.Search>
+        <Drawer
+          title="Advanced Search"
+          placement="right"
+          closable={true}
+          width={'90%'}
+          onClose={() => {
+            this.setState({visible: false});
+          }}
+          visible={this.state.visible}
+        >
           <Row {...rowProps}>
             {/* Search by name */}
             <Col {...colSpanProps}>
@@ -965,7 +962,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
             </Col>
           </Row>
         </Drawer>
-        </div>
+      </div>
     );
   }
 }
