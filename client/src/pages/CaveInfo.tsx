@@ -27,6 +27,7 @@ import DisplayAllMaps from '../components/DisplayAllMaps';
 import {Feature} from '../interfaces/geoJsonInterface';
 import {userContext} from '../context/userContext';
 import {withRouter} from 'react-router-dom';
+import { Breakpoint } from 'antd/lib/_util/responsiveObserve';
 
 const {Paragraph, Title, Text} = Typography;
 const {TextArea} = Input;
@@ -53,6 +54,7 @@ interface Props {
   renderTitle?: boolean;
   submittedPoint?: string;
   action?: string;
+  descriptionColProps?: Partial<Record<Breakpoint, number>>;
 }
 
 const {Meta} = Card;
@@ -62,6 +64,14 @@ class CaveInfo extends Component<Props, State> {
     showMap: true,
     renderTitle: true,
     action: 'View',
+    descriptionColProps:{
+      xxl: 5,
+      xl: 4,
+      lg: 3,
+      md: 2,
+      sm: 1,
+      xs: 1
+    }
   } as Props;
 
   constructor(Props) {
@@ -164,7 +174,7 @@ class CaveInfo extends Component<Props, State> {
       <div>
         <Descriptions
           bordered
-          column={{xxl: 4, xl: 3, lg: 2, md: 3, sm: 2, xs: 1}}
+          column={this.props.descriptionColProps}
         >
           <Descriptions.Item label="Coordinates">
             <Text
@@ -845,7 +855,8 @@ class CaveInfo extends Component<Props, State> {
         <Card
           bordered={false}
           loading={this.state.isLoading}
-          style={{padding: '20px'}}
+          // style={{padding: '24px'}}
+          bodyStyle={{padding:48}}
         >
           {this.props.renderTitle && (
             <div>
