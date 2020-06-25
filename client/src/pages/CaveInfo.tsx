@@ -144,11 +144,19 @@ class CaveInfo extends Component<Props, State> {
       narrative = this.state.point.properties.narr
         .split('\n')
         .map((item, i) => {
-          return <Paragraph style={{color:"black"}} key={i}>{item}</Paragraph>;
+          return (
+            <Paragraph style={{color: 'black'}} key={i}>
+              {item}
+            </Paragraph>
+          );
         });
     } else if (this.props.action === 'Review') {
       narrative = this.state.newNarrative.split('\n').map((item, i) => {
-        return <Paragraph style={{color:"black"}} key={i}>{item}</Paragraph>;
+        return (
+          <Paragraph style={{color: 'black'}} key={i}>
+            {item}
+          </Paragraph>
+        );
       });
     }
 
@@ -521,7 +529,9 @@ class CaveInfo extends Component<Props, State> {
               <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
               <Col xs={22} sm={22} md={22} lg={6} xl={6}>
                 <Divider orientation="left">Maps</Divider>
-                <DisplayAllMaps tcsnumber={this.state.point.properties.tcsnumber}></DisplayAllMaps>
+                <DisplayAllMaps
+                  tcsnumber={this.state.point.properties.tcsnumber}
+                ></DisplayAllMaps>
               </Col>
               <Col span={1}></Col>
             </Row>
@@ -533,24 +543,26 @@ class CaveInfo extends Component<Props, State> {
             <Row>
               <Col xs={24} sm={24} md={24} lg={16} xl={16}>
                 <Divider orientation="left">Narrative</Divider>
-            {this.state.proposedChanges ? (
-              <TextArea
-                value={this.state.newNarrative}
-                autoSize={{minRows: 4}}
-                onChange={newNarrative => {
-                  this.setState({newNarrative: newNarrative.target.value});
-                }}
-              >
-                {this.state.newNarrative}
-              </TextArea>
-            ) : (
-              <Paragraph>{narrative}</Paragraph>
-            )}
-                          </Col>
+                {this.state.proposedChanges ? (
+                  <TextArea
+                    value={this.state.newNarrative}
+                    autoSize={{minRows: 4}}
+                    onChange={newNarrative => {
+                      this.setState({newNarrative: newNarrative.target.value});
+                    }}
+                  >
+                    {this.state.newNarrative}
+                  </TextArea>
+                ) : (
+                  <Paragraph>{narrative}</Paragraph>
+                )}
+              </Col>
               <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
               <Col xs={22} sm={22} md={22} lg={6} xl={6}>
                 <Divider orientation="left">Maps</Divider>
-                <DisplayAllMaps tcsnumber={this.state.point.properties.tcsnumber}></DisplayAllMaps>
+                <DisplayAllMaps
+                  tcsnumber={this.state.point.properties.tcsnumber}
+                ></DisplayAllMaps>
               </Col>
               <Col span={1}></Col>
             </Row>
@@ -833,7 +845,7 @@ class CaveInfo extends Component<Props, State> {
         <Card
           bordered={false}
           loading={this.state.isLoading}
-          style={{padding:"20px"}}
+          style={{padding: '20px'}}
         >
           {this.props.renderTitle && (
             <div>

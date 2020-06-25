@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {QuestionCircleOutlined} from '@ant-design/icons';
 
-
 import {tn_counties} from '../../dataservice/countyList';
 import {
   ownershipFields,
@@ -149,32 +148,37 @@ class AdvancedPointsSearch extends Component<Props, State> {
             <Col {...colSpanProps}>
               <Row>
                 <Col span={24}>
-                <span>
-                  Narrative&nbsp;
-                  <Tooltip title={
-                    <div style={{width:"100%"}}>
-                      Advanced narrative search options.
-                    <table style={{textAlign:"center"}}>
-                      <tr>
-                        <th>Description</th>
-                        <th>Example</th>
-                      </tr>
-                      <tr style={{border:"solid 1px", textAlign:"center"}}>
-                        <td>Use quotes for an exact match.</td>
-                        <td>"flowstone"</td>
-                      </tr>
-                      <tr style={{border:"solid 1px", textAlign:"center"}}>
-                        <td>To exclude certain words, use a dash.</td>
-                        <td>-flowstone</td>
-                      </tr>
-                    </table>
-                  </div>
-                  }
-                  style={{backgroundColor:"white"}}
-                  >
-                    <QuestionCircleOutlined></QuestionCircleOutlined>
-                  </Tooltip>
-                </span>
+                  <span>
+                    Narrative&nbsp;
+                    <Tooltip
+                      title={
+                        <div style={{width: '100%'}}>
+                          Advanced narrative search options.
+                          <table style={{textAlign: 'center'}}>
+                            <tr>
+                              <th>Description</th>
+                              <th>Example</th>
+                            </tr>
+                            <tr
+                              style={{border: 'solid 1px', textAlign: 'center'}}
+                            >
+                              <td>Use quotes for an exact match.</td>
+                              <td>"flowstone"</td>
+                            </tr>
+                            <tr
+                              style={{border: 'solid 1px', textAlign: 'center'}}
+                            >
+                              <td>To exclude certain words, use a dash.</td>
+                              <td>-flowstone</td>
+                            </tr>
+                          </table>
+                        </div>
+                      }
+                      style={{backgroundColor: 'white'}}
+                    >
+                      <QuestionCircleOutlined></QuestionCircleOutlined>
+                    </Tooltip>
+                  </span>
                 </Col>
                 <Col span={24}>
                   <Search
@@ -186,7 +190,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                       const searchParams = {...this.state.searchParams};
                       searchParams.narr = e.target.value;
                       let narrRelevanceSearch = false;
-                      if (e.target.value.match(/\S/)){
+                      if (e.target.value.match(/\S/)) {
                         narrRelevanceSearch = true;
                       }
                       this.setState({searchParams, narrRelevanceSearch});
@@ -826,25 +830,26 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     </Option>
                   </Select>
                 </Col>
-                {((this.state.sortParams !== "relevance" || !this.state.narrRelevanceSearch)) && (
-                <Col span={12}>
-                  <Select
-                    // placeholder="Sort by"
-                    defaultValue={this.state.sortOrder}
-                    style={{width: '100%'}}
-                    onChange={sortBy => {
-                      this.setState({sortOrder: sortBy});
-                    }}
-                    tokenSeparators={[',']}
-                  >
-                    <Option key={'desc'} value={'desc'}>
-                      Descending
-                    </Option>
-                    <Option key={'asc'} value={'asc'}>
-                      Ascending
-                    </Option>
-                  </Select>
-                </Col>
+                {(this.state.sortParams !== 'relevance' ||
+                  !this.state.narrRelevanceSearch) && (
+                  <Col span={12}>
+                    <Select
+                      // placeholder="Sort by"
+                      defaultValue={this.state.sortOrder}
+                      style={{width: '100%'}}
+                      onChange={sortBy => {
+                        this.setState({sortOrder: sortBy});
+                      }}
+                      tokenSeparators={[',']}
+                    >
+                      <Option key={'desc'} value={'desc'}>
+                        Descending
+                      </Option>
+                      <Option key={'asc'} value={'asc'}>
+                        Ascending
+                      </Option>
+                    </Select>
+                  </Col>
                 )}
               </Row>
             </Col>

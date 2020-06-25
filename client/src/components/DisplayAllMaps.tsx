@@ -156,32 +156,29 @@ export default class DisplayAllMaps extends Component<
                   }}
                 ></DisplayMap>
               )}
-                <Card
-                  hoverable bordered={false}
-                  loading={this.state.loading}
-                  cover={
-                    <img
-                      src={`data:image/jpeg;base64,${file.img}`}
-                      alt={''}
-                      width="100%"
-                    ></img>
-                  }
-                  bodyStyle={{padding:"0px"}}
-                  onClick={() => {
-                    this.setState({
-                      showFullScreen: !this.state.showFullScreen,
-                      fullScreenFile: file.img,
-                    });
-                  }}
-                >
-                  
-                </Card>
+              <Card
+                hoverable
+                bordered={false}
+                loading={this.state.loading}
+                cover={
+                  <img
+                    src={`data:image/jpeg;base64,${file.img}`}
+                    alt={''}
+                    width="100%"
+                  ></img>
+                }
+                bodyStyle={{padding: '0px'}}
+                onClick={() => {
+                  this.setState({
+                    showFullScreen: !this.state.showFullScreen,
+                    fullScreenFile: file.img,
+                  });
+                }}
+              ></Card>
               {/* </Space> */}
             </Col>
           ))}
-          {this.state.fileNames.length <= 0 &&
-          <div>No Maps Found...</div>
-          }
+          {this.state.fileNames.length <= 0 && <div>No Maps Found...</div>}
         </Row>
       </Fragment>
     );
