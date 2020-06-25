@@ -176,7 +176,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
           </div>
           <div style={{marginLeft: 'auto'}}>
             <Button
-              style={{color: this.state.advancedColor}}
+              style={{color: this.state.advancedColor, height:"100%"}}
               onClick={() => {
                 this.setState({visible: true});
               }}
