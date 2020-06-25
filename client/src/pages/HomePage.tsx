@@ -17,6 +17,7 @@ class HomePage extends Component<any, State> {
   }
 
   renderCaveImage() {
+    
     return (
       <Parallax
         strength={500}
@@ -51,6 +52,15 @@ class HomePage extends Component<any, State> {
   }
 
   render() {
+    const styleProps = {
+      style:{
+        paddingRight: "10%",
+        paddingLeft: "10%",
+        paddingBottom: "3%",
+        paddingTop: "3%",
+        backgroundColor: 'white',
+      }
+    }
     return (
       <div>
         <Helmet>
@@ -60,13 +70,7 @@ class HomePage extends Component<any, State> {
 
         <Parallax strength={500} bgStyle={{backgroundColor: 'white'}}>
           <div
-            style={{
-              paddingRight: 100,
-              paddingLeft: 100,
-              paddingBottom: 50,
-              paddingTop: 25,
-              backgroundColor: 'white',
-            }}
+            {...styleProps}
           >
             <Title style={{textAlign: 'center'}}>Tennessee Cave Survey</Title>
             <Paragraph>
@@ -117,14 +121,7 @@ class HomePage extends Component<any, State> {
 
         <Parallax strength={500}>
           <div
-            style={{
-              backgroundColor: 'white',
-              height: '100%',
-              paddingRight: 100,
-              paddingLeft: 100,
-              paddingBottom: 50,
-              paddingTop: 25,
-            }}
+            {...styleProps}
           >
             <Title style={{textAlign: 'center'}}>Become a Member</Title>
             <Paragraph>
