@@ -70,7 +70,7 @@ class PointInfoPopup extends React.Component<Props, any> {
     return (
       <Modal
         width="80vw"
-        bodyStyle={{height: '65vh', overflow: 'scroll'}}
+        bodyStyle={{height: '65vh', overflow: 'scroll', padding: '0px'}}
         centered
         visible={this.state.visible}
         onOk={this.handleOk}
@@ -83,6 +83,14 @@ class PointInfoPopup extends React.Component<Props, any> {
           id={this.props.point.properties.tcsnumber}
           showMap={false}
           renderTitle={false}
+          descriptionColProps={{
+            xxl: 4,
+            xl: 3,
+            lg: 2,
+            md: 1,
+            sm: 1,
+            xs: 1,
+          }}
         ></CaveInfo>
       </Modal>
     );

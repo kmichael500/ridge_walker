@@ -27,6 +27,7 @@ import DisplayAllMaps from '../components/DisplayAllMaps';
 import {Feature} from '../interfaces/geoJsonInterface';
 import {userContext} from '../context/userContext';
 import {withRouter} from 'react-router-dom';
+import {Breakpoint} from 'antd/lib/_util/responsiveObserve';
 
 const {Paragraph, Title, Text} = Typography;
 const {TextArea} = Input;
@@ -53,6 +54,7 @@ interface Props {
   renderTitle?: boolean;
   submittedPoint?: string;
   action?: string;
+  descriptionColProps?: Partial<Record<Breakpoint, number>>;
 }
 
 const {Meta} = Card;
@@ -62,6 +64,14 @@ class CaveInfo extends Component<Props, State> {
     showMap: true,
     renderTitle: true,
     action: 'View',
+    descriptionColProps: {
+      xxl: 5,
+      xl: 4,
+      lg: 3,
+      md: 2,
+      sm: 1,
+      xs: 1,
+    },
   } as Props;
 
   constructor(Props) {
@@ -144,20 +154,25 @@ class CaveInfo extends Component<Props, State> {
       narrative = this.state.point.properties.narr
         .split('\n')
         .map((item, i) => {
-          return <Paragraph key={i}>{item}</Paragraph>;
+          return (
+            <Paragraph style={{color: 'black'}} key={i}>
+              {item}
+            </Paragraph>
+          );
         });
     } else if (this.props.action === 'Review') {
       narrative = this.state.newNarrative.split('\n').map((item, i) => {
-        return <Paragraph key={i}>{item}</Paragraph>;
+        return (
+          <Paragraph style={{color: 'black'}} key={i}>
+            {item}
+          </Paragraph>
+        );
       });
     }
 
     return (
       <div>
-        <Descriptions
-          bordered
-          column={{xxl: 4, xl: 3, lg: 3, md: 2, sm: 1, xs: 1}}
-        >
+        <Descriptions bordered column={this.props.descriptionColProps}>
           <Descriptions.Item label="Coordinates">
             <Text
               editable={
@@ -500,40 +515,64 @@ class CaveInfo extends Component<Props, State> {
             </Text>
           </Descriptions.Item>
         </Descriptions>
-        <Divider orientation="left">Narrative</Divider>
-
         {this.props.action === 'View' && (
           <div>
-            <Paragraph>{narrative}</Paragraph>
-            {this.state.proposedChanges && (
-              <TextArea
-                placeholder="Add to the narrative."
-                autoSize={{minRows: 4}}
-                onChange={newNarrative => {
-                  this.setState({newNarrative: newNarrative.target.value});
-                }}
-              >
-                {this.state.newNarrative}
-              </TextArea>
-            )}
+            <Row>
+              <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+                <Divider orientation="left">Narrative</Divider>
+                <Paragraph>{narrative}</Paragraph>
+                {this.state.proposedChanges && (
+                  <TextArea
+                    placeholder="Add to the narrative."
+                    autoSize={{minRows: 4}}
+                    onChange={newNarrative => {
+                      this.setState({newNarrative: newNarrative.target.value});
+                    }}
+                  >
+                    {this.state.newNarrative}
+                  </TextArea>
+                )}
+              </Col>
+              <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
+              <Col xs={22} sm={22} md={22} lg={6} xl={6}>
+                <Divider orientation="left">Maps</Divider>
+                <DisplayAllMaps
+                  tcsnumber={this.state.point.properties.tcsnumber}
+                ></DisplayAllMaps>
+              </Col>
+              <Col span={1}></Col>
+            </Row>
           </div>
         )}
 
         {this.props.action === 'Review' && (
           <div>
-            {this.state.proposedChanges ? (
-              <TextArea
-                value={this.state.newNarrative}
-                autoSize={{minRows: 4}}
-                onChange={newNarrative => {
-                  this.setState({newNarrative: newNarrative.target.value});
-                }}
-              >
-                {this.state.newNarrative}
-              </TextArea>
-            ) : (
-              <Paragraph>{narrative}</Paragraph>
-            )}
+            <Row>
+              <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+                <Divider orientation="left">Narrative</Divider>
+                {this.state.proposedChanges ? (
+                  <TextArea
+                    value={this.state.newNarrative}
+                    autoSize={{minRows: 4}}
+                    onChange={newNarrative => {
+                      this.setState({newNarrative: newNarrative.target.value});
+                    }}
+                  >
+                    {this.state.newNarrative}
+                  </TextArea>
+                ) : (
+                  <Paragraph>{narrative}</Paragraph>
+                )}
+              </Col>
+              <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
+              <Col xs={22} sm={22} md={22} lg={6} xl={6}>
+                <Divider orientation="left">Maps</Divider>
+                <DisplayAllMaps
+                  tcsnumber={this.state.point.properties.tcsnumber}
+                ></DisplayAllMaps>
+              </Col>
+              <Col span={1}></Col>
+            </Row>
           </div>
         )}
       </div>
@@ -813,13 +852,8 @@ class CaveInfo extends Component<Props, State> {
         <Card
           bordered={false}
           loading={this.state.isLoading}
-          actions={
-            [
-              // <SettingOutlined key="setting" />,
-              // <EditOutlined key="edit" />,
-              // <EllipsisOutlined key="ellipsis" />,
-            ]
-          }
+          // style={{padding: '24px'}}
+          bodyStyle={{padding: 48}}
         >
           {this.props.renderTitle && (
             <div>
@@ -828,10 +862,6 @@ class CaveInfo extends Component<Props, State> {
             </div>
           )}
           <Meta description={this.renderDescription()}></Meta>
-
-          <DisplayAllMaps
-            tcsnumber={this.state.point.properties.tcsnumber}
-          ></DisplayAllMaps>
 
           {this.props.showMap && (
             <div>

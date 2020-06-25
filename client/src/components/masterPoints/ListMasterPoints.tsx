@@ -13,6 +13,7 @@ import {
   Collapse,
   Button,
   Checkbox,
+  Space,
 } from 'antd';
 import {EyeOutlined} from '@ant-design/icons';
 // import {AdvancedUserSearch} from './AdvancedUserSerach';
@@ -287,20 +288,26 @@ class listPoints extends Component<Props, State> {
           <title>Points</title>
         </Helmet>
         <Card>
-          <AdvancedPointsSearch
-            limit={this.state.reqParams.limit}
-            onSearchFinished={reqParams => {
-              this.setState({reqParams}, () => {
-                this.updateResults();
-              });
-            }}
-            isLoading={loading => {
-              this.setState({loading});
-            }}
-          ></AdvancedPointsSearch>
-          <Divider></Divider>
-          <Collapse>
-            <Panel header="Properties to Display" key={1}>
+          <Space direction="vertical">
+            <AdvancedPointsSearch
+              limit={this.state.reqParams.limit}
+              onSearchFinished={reqParams => {
+                this.setState({reqParams}, () => {
+                  this.updateResults();
+                });
+              }}
+              isLoading={loading => {
+                this.setState({loading});
+              }}
+            ></AdvancedPointsSearch>
+            <div
+              style={{
+                borderRadius: '2px',
+                padding: '10px',
+                border: '1px solid #d9d9d9',
+              }}
+            >
+              Display
               <Checkbox.Group
                 options={[
                   {label: 'Length', value: 'length'},
@@ -335,56 +342,56 @@ class listPoints extends Component<Props, State> {
                 }}
                 defaultValue={this.defaultRenderedItems()}
               />
-            </Panel>
-          </Collapse>
-          <Divider></Divider>
-          <List
-            pagination={{
-              onChange: (page, pageSize) => {
-                const reqParams = {...this.state.reqParams};
-                reqParams.page = page;
-                this.setState({reqParams, loading: true}, () => {
-                  this.updateResults();
-                });
-              },
-              showSizeChanger: false,
-              responsive: true,
-              current: this.state.reqParams.page,
-              pageSize: this.state.reqParams.limit,
-              position: 'bottom',
-              total: this.state.totalPoints,
-            }}
-            grid={{
-              gutter: 16,
-              xs: 1,
-              sm: 1,
-              md: 2,
-              lg: 3,
-              xl: 4,
-              xxl: 5,
-            }}
-            dataSource={this.state.listData}
-            loading={this.state.loading}
-            renderItem={point => (
-              <List.Item>
-                <Card
-                  title={
-                    point.properties.name + ' ' + point.properties.tcsnumber
-                  }
-                  key={point.properties.tcsnumber}
-                  actions={[
-                    <Link to={'/points/' + point.properties.tcsnumber}>
-                      <Button type="primary" icon={<EyeOutlined />}>
-                        More Info
-                      </Button>
-                    </Link>,
-                  ]}
-                >
-                  {this.renderDescription(point)}
-                </Card>
-              </List.Item>
-            )}
-          />
+            </div>
+
+            <List
+              pagination={{
+                onChange: (page, pageSize) => {
+                  const reqParams = {...this.state.reqParams};
+                  reqParams.page = page;
+                  this.setState({reqParams, loading: true}, () => {
+                    this.updateResults();
+                  });
+                },
+                showSizeChanger: false,
+                responsive: true,
+                current: this.state.reqParams.page,
+                pageSize: this.state.reqParams.limit,
+                position: 'bottom',
+                total: this.state.totalPoints,
+              }}
+              grid={{
+                gutter: 16,
+                xs: 1,
+                sm: 1,
+                md: 2,
+                lg: 3,
+                xl: 4,
+                xxl: 5,
+              }}
+              dataSource={this.state.listData}
+              loading={this.state.loading}
+              renderItem={point => (
+                <List.Item>
+                  <Card
+                    title={
+                      point.properties.name + ' ' + point.properties.tcsnumber
+                    }
+                    key={point.properties.tcsnumber}
+                    actions={[
+                      <Link to={'/points/' + point.properties.tcsnumber}>
+                        <Button type="primary" icon={<EyeOutlined />}>
+                          More Info
+                        </Button>
+                      </Link>,
+                    ]}
+                  >
+                    {this.renderDescription(point)}
+                  </Card>
+                </List.Item>
+              )}
+            />
+          </Space>
         </Card>
       </div>
     );
