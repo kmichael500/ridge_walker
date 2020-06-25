@@ -155,7 +155,7 @@ class CaveInfo extends Component<Props, State> {
         .split('\n')
         .map((item, i) => {
           return (
-            <Paragraph style={{color: 'black'}} key={i}>
+            <Paragraph style={{color: 'black', textAlign:"left"}} key={i}>
               {item}
             </Paragraph>
           );
@@ -163,7 +163,7 @@ class CaveInfo extends Component<Props, State> {
     } else if (this.props.action === 'Review') {
       narrative = this.state.newNarrative.split('\n').map((item, i) => {
         return (
-          <Paragraph style={{color: 'black'}} key={i}>
+          <Paragraph style={{color: 'black', textAlign:"justify"}} key={i}>
             {item}
           </Paragraph>
         );
@@ -525,6 +525,7 @@ class CaveInfo extends Component<Props, State> {
                   <TextArea
                     placeholder="Add to the narrative."
                     autoSize={{minRows: 4}}
+                    style={{textAlign:"justify" }}
                     onChange={newNarrative => {
                       this.setState({newNarrative: newNarrative.target.value});
                     }}
@@ -867,7 +868,7 @@ class CaveInfo extends Component<Props, State> {
             <div>
               <Divider orientation="left">Location</Divider>
 
-              <div style={{height: '400px'}}>
+              <div style={{height: '500px'}}>
                 <MapView
                   center={this.state.point.geometry.coordinates
                     .slice()

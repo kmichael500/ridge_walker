@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {QuestionCircleOutlined, SlidersOutlined} from '@ant-design/icons';
+import {GrSearchAdvanced} from 'react-icons/gr'
 
 import {tn_counties} from '../../dataservice/countyList';
 import {
@@ -23,6 +24,7 @@ import {
   Button,
   Typography,
   Drawer,
+  Space,
 } from 'antd';
 
 import {SearchOutlined} from '@ant-design/icons';
@@ -150,37 +152,40 @@ class AdvancedPointsSearch extends Component<Props, State> {
 
     return (
       <div>
-        <Input.Search
-          width="100%"
-          suffix={
-            <Tooltip title="Advanced Search">
-              <SlidersOutlined
-                style={{fontSize: 25, color: this.state.advancedColor}}
-                onClick={() => {
-                  this.setState({visible: true});
-                }}
-                onTouchStart={() => {
-                  this.setState({visible: true});
-                }}
-              ></SlidersOutlined>
-            </Tooltip>
-          }
-          size="large"
-          onPressEnter={() => {
-            this.handleSearch();
-          }}
-          onSearch={() => {
-            this.handleSearch();
-          }}
-          enterButton
-          placeholder="Search by name"
-          value={this.state.searchParams.name}
-          onChange={e => {
-            const searchParams = {...this.state.searchParams};
-            searchParams.name = e.target.value;
-            this.setState({searchParams});
-          }}
-        ></Input.Search>
+        <Row>
+          
+          <div style={{width:"65%"}}>
+          <Input.Search
+            // width="100%"
+            
+            size="large"
+            onPressEnter={() => {
+              this.handleSearch();
+            }}
+            onSearch={() => {
+              this.handleSearch();
+            }}
+            enterButton
+            placeholder="Search by name"
+            value={this.state.searchParams.name}
+            onChange={e => {
+              const searchParams = {...this.state.searchParams};
+              searchParams.name = e.target.value;
+              this.setState({searchParams});
+            }}
+          ></Input.Search>
+          </div>
+        <div style={{marginLeft:"auto"}}>
+          <Button
+              
+              style={{color:this.state.advancedColor}}
+              onClick={() => {
+                this.setState({visible: true});
+              }}
+            >Advanced Search
+          </Button>
+        </div>
+        </Row>
         <Drawer
           title="Advanced Search"
           placement="right"

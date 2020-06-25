@@ -343,6 +343,7 @@ class listPoints extends Component<Props, State> {
                 defaultValue={this.defaultRenderedItems()}
               />
             </div>
+            <Divider></Divider>
 
             <List
               pagination={{
