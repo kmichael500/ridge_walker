@@ -813,7 +813,7 @@ class CaveInfo extends Component<Props, State> {
         <Card
           bordered={false}
           loading={this.state.isLoading}
-          style={{padding:"20px", fontSize:"16px"}}
+          style={{padding:"20px"}}
           actions={
             [
               // <SettingOutlined key="setting" />,
