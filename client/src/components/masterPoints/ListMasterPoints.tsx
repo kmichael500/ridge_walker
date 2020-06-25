@@ -13,6 +13,7 @@ import {
   Collapse,
   Button,
   Checkbox,
+  Space,
 } from 'antd';
 import {EyeOutlined} from '@ant-design/icons';
 // import {AdvancedUserSearch} from './AdvancedUserSerach';
@@ -287,6 +288,7 @@ class listPoints extends Component<Props, State> {
           <title>Points</title>
         </Helmet>
         <Card>
+          <Space direction="vertical">
           <AdvancedPointsSearch
             limit={this.state.reqParams.limit}
             onSearchFinished={reqParams => {
@@ -298,46 +300,44 @@ class listPoints extends Component<Props, State> {
               this.setState({loading});
             }}
           ></AdvancedPointsSearch>
-          <Divider></Divider>
-          <Collapse>
-            <Panel header="Properties to Display" key={1}>
-              <Checkbox.Group
-                options={[
-                  {label: 'Length', value: 'length'},
-                  {label: 'Pit Depth', value: 'pdep'},
-                  {label: 'Vertical Extent', value: 'depth'},
-                  {label: 'Elevation', value: 'elev'},
-                  {label: 'Number of Pits', value: 'ps'},
-                  {label: 'County', value: 'co_name'},
-                  {label: 'Ownership', value: 'ownership'},
-                  {label: 'Topo', value: 'topo_name'},
-                  {label: 'Topo Indication', value: 'topo_indi'},
-                  {label: 'Gear', value: 'gear'},
-                  {label: 'Enterance Type', value: 'ent_type'},
-                  {label: 'Field Indication', value: 'field_indi'},
-                  {label: 'Map Status', value: 'map_status'},
-                  {label: 'Geology', value: 'geology'},
-                  {label: 'Geology Age', value: 'geo_age'},
-                  {label: 'Physiographic Province', value: 'phys_prov'},
-                ]}
-                onChange={checkedValue => {
-                  const {renderedFeatures} = {...this.state};
-                  for (const key in renderedFeatures) {
-                    if (
-                      checkedValue.filter(value => value === key).length !== 0
-                    ) {
-                      renderedFeatures[key] = true;
-                    } else {
-                      renderedFeatures[key] = false;
-                    }
-                  }
-                  this.setState({renderedFeatures});
-                }}
-                defaultValue={this.defaultRenderedItems()}
-              />
-            </Panel>
-          </Collapse>
-          <Divider></Divider>
+          <div style={{borderRadius:"2px", padding:"10px", border:"1px solid #d9d9d9"}}>
+            Display
+          <Checkbox.Group
+            options={[
+              {label: 'Length', value: 'length'},
+              {label: 'Pit Depth', value: 'pdep'},
+              {label: 'Vertical Extent', value: 'depth'},
+              {label: 'Elevation', value: 'elev'},
+              {label: 'Number of Pits', value: 'ps'},
+              {label: 'County', value: 'co_name'},
+              {label: 'Ownership', value: 'ownership'},
+              {label: 'Topo', value: 'topo_name'},
+              {label: 'Topo Indication', value: 'topo_indi'},
+              {label: 'Gear', value: 'gear'},
+              {label: 'Enterance Type', value: 'ent_type'},
+              {label: 'Field Indication', value: 'field_indi'},
+              {label: 'Map Status', value: 'map_status'},
+              {label: 'Geology', value: 'geology'},
+              {label: 'Geology Age', value: 'geo_age'},
+              {label: 'Physiographic Province', value: 'phys_prov'},
+            ]}
+            onChange={checkedValue => {
+              const {renderedFeatures} = {...this.state};
+              for (const key in renderedFeatures) {
+                if (
+                  checkedValue.filter(value => value === key).length !== 0
+                ) {
+                  renderedFeatures[key] = true;
+                } else {
+                  renderedFeatures[key] = false;
+                }
+              }
+              this.setState({renderedFeatures});
+            }}
+            defaultValue={this.defaultRenderedItems()}
+          />
+                    </div>
+
           <List
             pagination={{
               onChange: (page, pageSize) => {
@@ -385,6 +385,7 @@ class listPoints extends Component<Props, State> {
               </List.Item>
             )}
           />
+          </Space>
         </Card>
       </div>
     );

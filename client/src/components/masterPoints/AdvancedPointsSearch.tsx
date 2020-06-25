@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {QuestionCircleOutlined} from '@ant-design/icons';
+import {QuestionCircleOutlined, SlidersOutlined} from '@ant-design/icons';
 
 import {tn_counties} from '../../dataservice/countyList';
 import {
@@ -22,6 +22,7 @@ import {
   Tooltip,
   Button,
   Typography,
+  Drawer,
 } from 'antd';
 
 import {SearchOutlined} from '@ant-design/icons';
@@ -32,7 +33,6 @@ import {
 } from '../../interfaces/MasterPointPagination';
 
 const {Paragraph} = Typography;
-const {Panel} = Collapse;
 const Search = Input;
 const Option = Select;
 
@@ -42,6 +42,8 @@ interface State {
   sortParams: 'length' | 'depth' | 'pdep' | 'elev' | 'relevance';
   sortOrder: 'asc' | 'desc';
   narrRelevanceSearch: boolean;
+  visible: boolean;
+  advancedColor: string;
 }
 interface Props {
   onSearchFinished: (searchParams: MasterPointPaginationReq) => void;
@@ -55,6 +57,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
     this.state = {
       loading: false,
       narrRelevanceSearch: false,
+      advancedColor: "",
       searchParams: {
         name: '',
         tcsnumber: '',
@@ -88,8 +91,10 @@ class AdvancedPointsSearch extends Component<Props, State> {
       },
       sortParams: 'relevance',
       sortOrder: 'desc',
+      visible: false,
     };
     this.handleSearch = this.handleSearch.bind(this);
+    this.changeAdvancedButtonColor = this.changeAdvancedButtonColor.bind(this);
   }
 
   handleSearch() {
@@ -106,7 +111,34 @@ class AdvancedPointsSearch extends Component<Props, State> {
     } as MasterPointPaginationReq;
     this.props.onSearchFinished(reqParams);
     this.props.isLoading(false);
-    this.setState({loading: false});
+    this.setState({loading: false, visible:false});
+  }
+  changeAdvancedButtonColor(val: any){
+    const color = "green";
+    const defaultColor = "";
+    if (Array.isArray(val)){
+      console.log(val);
+      if (val.length <= 0){
+        this.setState({advancedColor: defaultColor})
+      }
+      else if (val.length > 0){
+        this.setState({advancedColor:color});
+      }
+    }
+    else if (typeof(val) === 'string'){
+      if (val.length <= 0){
+        this.setState({advancedColor: defaultColor})
+      }
+      else{
+        this.setState({advancedColor:color});
+      }
+    }
+    else if (val === null){
+      this.setState({advancedColor: defaultColor})
+    }
+    else{
+      this.setState({advancedColor: color})
+    }
   }
 
   render() {
@@ -122,8 +154,46 @@ class AdvancedPointsSearch extends Component<Props, State> {
     };
 
     return (
-      <Collapse defaultActiveKey={[1]}>
-        <Panel header="Advanced Search" key={1}>
+      <div>
+      <Input.Search
+        width="100%"
+        suffix={
+          <Tooltip title="Advanced Search">
+            <SlidersOutlined
+              style={{fontSize:25,color:this.state.advancedColor
+            }}
+              onClick={()=>{this.setState({visible:true})}}
+              onTouchStart={()=>{this.setState({visible:true})}}
+            >
+            </SlidersOutlined>
+          </Tooltip>
+        }
+        size="large"
+        onPressEnter={() => {
+          this.handleSearch();
+        }}
+        onSearch={()=>{
+          this.handleSearch();
+        }}
+        enterButton
+        placeholder="Search by name"
+        value={this.state.searchParams.name}
+        onChange={e => {
+          const searchParams = {...this.state.searchParams};
+          searchParams.name = e.target.value;
+          this.setState({searchParams});
+        }}
+      >
+        
+      </Input.Search>
+      <Drawer
+        title="Advanced Search"
+        placement="right"
+        closable={true}
+        width={"90%"}
+        onClose={()=>{this.setState({visible:false})}}
+        visible={this.state.visible}
+      >
           <Row {...rowProps}>
             {/* Search by name */}
             <Col {...colSpanProps}>
@@ -134,6 +204,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
+                    value={this.state.searchParams.name}
                     placeholder="Indian Grave Point"
                     onChange={e => {
                       const searchParams = {...this.state.searchParams};
@@ -193,6 +264,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                       if (e.target.value.match(/\S/)) {
                         narrRelevanceSearch = true;
                       }
+                      this.changeAdvancedButtonColor(e.target.value);
                       this.setState({searchParams, narrRelevanceSearch});
                     }}
                   ></Search>
@@ -212,6 +284,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={e => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.tcsnumber = e.target.value;
+                      this.changeAdvancedButtonColor(e.target.value);
                       this.setState({searchParams});
                     }}
                   ></Search>
@@ -234,6 +307,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={(counties: string[]) => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.co_name = counties;
+                      this.changeAdvancedButtonColor(counties);
                       this.setState({searchParams});
                     }}
                     tokenSeparators={[',']}
@@ -265,6 +339,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={(ownership: string[]) => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.ownership = ownership;
+                      this.changeAdvancedButtonColor(ownership);
                       this.setState({searchParams});
                     }}
                     tokenSeparators={[',']}
@@ -293,6 +368,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={e => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.topo_name = e.target.value;
+                      this.changeAdvancedButtonColor(e.target.value);
                       this.setState({searchParams});
                     }}
                   ></Search>
@@ -315,6 +391,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={(topo_indi: string[]) => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.topo_indi = topo_indi;
+                      this.changeAdvancedButtonColor(topo_indi);
                       this.setState({searchParams});
                     }}
                     tokenSeparators={[',']}
@@ -346,6 +423,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={(gear: string[]) => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.gear = gear;
+                      this.changeAdvancedButtonColor(gear);
                       this.setState({searchParams});
                     }}
                     tokenSeparators={[',']}
@@ -377,6 +455,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={(ent_type: string[]) => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.ent_type = ent_type;
+                      this.changeAdvancedButtonColor(ent_type);
                       this.setState({searchParams});
                     }}
                     tokenSeparators={[',']}
@@ -408,6 +487,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={(field_indi: string[]) => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.field_indi = field_indi;
+                      this.changeAdvancedButtonColor(field_indi);
                       this.setState({searchParams});
                     }}
                     tokenSeparators={[',']}
@@ -439,6 +519,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={(map_status: string[]) => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.map_status = map_status;
+                      this.changeAdvancedButtonColor(map_status);
                       this.setState({searchParams});
                     }}
                     tokenSeparators={[',']}
@@ -467,6 +548,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={e => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.geology = e.target.value;
+                      this.changeAdvancedButtonColor(e.target.value);
                       this.setState({searchParams});
                     }}
                   ></Search>
@@ -486,6 +568,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={e => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.geo_age = e.target.value;
+                      this.changeAdvancedButtonColor(e.target.value);
                       this.setState({searchParams});
                     }}
                   ></Search>
@@ -505,6 +588,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={e => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.phys_prov = e.target.value;
+                      this.changeAdvancedButtonColor(e.target.value);
                       this.setState({searchParams});
                     }}
                   ></Search>
@@ -525,6 +609,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.lengthL = val;
+                      this.changeAdvancedButtonColor(val);
                       this.setState({searchParams});
                     }}
                   ></InputNumber>
@@ -562,6 +647,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.lengthR = val;
+                      this.changeAdvancedButtonColor(val);
                       this.setState({searchParams});
                     }}
                   ></InputNumber>
@@ -582,6 +668,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.depthL = val;
+                      this.changeAdvancedButtonColor(val);
                       this.setState({searchParams});
                     }}
                   ></InputNumber>
@@ -619,6 +706,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.depthR = val;
+                      this.changeAdvancedButtonColor(val);
                       this.setState({searchParams});
                     }}
                   ></InputNumber>
@@ -639,6 +727,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.pdepL = val;
+                      this.changeAdvancedButtonColor(val);
                       this.setState({searchParams});
                     }}
                   ></InputNumber>
@@ -676,6 +765,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.pdepR = val;
+                      this.changeAdvancedButtonColor(val);
                       this.setState({searchParams});
                     }}
                   ></InputNumber>
@@ -696,6 +786,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.elevL = val;
+                      this.changeAdvancedButtonColor(val);
                       this.setState({searchParams});
                     }}
                   ></InputNumber>
@@ -733,6 +824,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.elevR = val;
+                      this.changeAdvancedButtonColor(val);
                       this.setState({searchParams});
                     }}
                   ></InputNumber>
@@ -753,6 +845,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.psL = val;
+                      this.changeAdvancedButtonColor(val);
                       this.setState({searchParams});
                     }}
                   ></InputNumber>
@@ -790,6 +883,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                     onChange={val => {
                       const searchParams = {...this.state.searchParams};
                       searchParams.psR = val;
+                      this.changeAdvancedButtonColor(val);
                       this.setState({searchParams});
                     }}
                   ></InputNumber>
@@ -870,8 +964,8 @@ class AdvancedPointsSearch extends Component<Props, State> {
               </Row>
             </Col>
           </Row>
-        </Panel>
-      </Collapse>
+        </Drawer>
+        </div>
     );
   }
 }
