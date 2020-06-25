@@ -307,7 +307,13 @@ class listPoints extends Component<Props, State> {
                 border: '1px solid #d9d9d9',
               }}
             >
-              Display
+              <div
+                style={{
+                  fontWeight: 450,
+                }}
+              >
+                Display
+              </div>
               <Checkbox.Group
                 options={[
                   {label: 'Length', value: 'length'},
@@ -343,7 +349,13 @@ class listPoints extends Component<Props, State> {
                 defaultValue={this.defaultRenderedItems()}
               />
             </div>
-
+            {this.state.totalPoints === null ? (
+              <Divider orientation="left">Loading...</Divider>
+            ) : (
+              <Divider orientation="left">
+                {this.state.totalPoints + ' Results'}
+              </Divider>
+            )}
             <List
               pagination={{
                 onChange: (page, pageSize) => {
