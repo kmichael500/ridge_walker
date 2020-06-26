@@ -459,81 +459,81 @@ class Settings extends Component<Props, State> {
                 </Col>
                 {/* Password */}
                 <Col span={24}>
-                <Button
-                  onClick={()=>{
-                    const showPassword = !this.state.showPassword;
-                    this.setState({showPassword})
-                  }}
-                >
-                  Change Password
-                </Button>
+                  <Button
+                    onClick={() => {
+                      const showPassword = !this.state.showPassword;
+                      this.setState({showPassword});
+                    }}
+                  >
+                    Change Password
+                  </Button>
                 </Col>
-              {this.state.showPassword && 
-                <Col span={24}>
-                  <Row>
-                    <Col span={24}>
-                      <Form.Item
-                        name="password"
-                        label={
-                          <span>
-                            New Password&nbsp;
-                            <Tooltip title="Only enter a value here if you want to change your password.">
-                              <QuestionCircleOutlined></QuestionCircleOutlined>
-                            </Tooltip>
-                          </span>
-                        }
-                        rules={[
-                          {
-                            required: false,
-                            message: 'Password required!',
-                          },
-                        ]}
-                        hasFeedback
-                      >
-                        <Input.Password />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Col>
-                }
-                {/* Confirm Password */}
-                {this.state.showPassword &&
-                <Col span={24}>
-                  <Row>
-                    <Col span={24}>
-                      <Form.Item
-                        name="confirm"
-                        label="Confirm Password"
-                        dependencies={['password']}
-                        hasFeedback
-                        rules={[
-                          {
-                            //   required: true,
-
-                            message: 'Please confirm your password!',
-                          },
-                          ({getFieldValue}) => ({
-                            validator(rule, value) {
-                              if (
-                                getFieldValue('password') === value ||
-                                getFieldValue('password') === undefined
-                              ) {
-                                return Promise.resolve();
-                              }
-                              return Promise.reject(
-                                'The two passwords that you entered do not match!'
-                              );
+                {this.state.showPassword && (
+                  <Col span={24}>
+                    <Row>
+                      <Col span={24}>
+                        <Form.Item
+                          name="password"
+                          label={
+                            <span>
+                              New Password&nbsp;
+                              <Tooltip title="Only enter a value here if you want to change your password.">
+                                <QuestionCircleOutlined></QuestionCircleOutlined>
+                              </Tooltip>
+                            </span>
+                          }
+                          rules={[
+                            {
+                              required: false,
+                              message: 'Password required!',
                             },
-                          }),
-                        ]}
-                      >
-                        <Input.Password />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Col>
-                }
-                
+                          ]}
+                          hasFeedback
+                        >
+                          <Input.Password />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Col>
+                )}
+                {/* Confirm Password */}
+                {this.state.showPassword && (
+                  <Col span={24}>
+                    <Row>
+                      <Col span={24}>
+                        <Form.Item
+                          name="confirm"
+                          label="Confirm Password"
+                          dependencies={['password']}
+                          hasFeedback
+                          rules={[
+                            {
+                              //   required: true,
+
+                              message: 'Please confirm your password!',
+                            },
+                            ({getFieldValue}) => ({
+                              validator(rule, value) {
+                                if (
+                                  getFieldValue('password') === value ||
+                                  getFieldValue('password') === undefined
+                                ) {
+                                  return Promise.resolve();
+                                }
+                                return Promise.reject(
+                                  'The two passwords that you entered do not match!'
+                                );
+                              },
+                            }),
+                          ]}
+                        >
+                          <Input.Password />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Col>
+                )}
+
                 {/*Private Fields*/}
                 <Col>
                   <Row>

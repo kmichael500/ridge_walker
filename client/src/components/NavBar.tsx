@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Layout, Menu, Affix, Space} from 'antd';
-import "../App.css"
+import '../App.css';
 import {
   UserOutlined,
   FormOutlined,
