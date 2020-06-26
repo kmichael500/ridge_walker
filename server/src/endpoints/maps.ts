@@ -66,10 +66,12 @@ mapsAPI.get('/image/:mapName.png', (req, res, next) => {
     }
     pdfImage.convertPage(0).then(
       imagePath => {
+        console.log("imgpath", imagePath)
         res.sendFile(imagePath, {root: rootFolder});
       },
       err => {
-        res.send(500);
+        console.log(err);
+        res.sendStatus(500);
       }
     );
   } catch (error) {
@@ -84,7 +86,8 @@ mapsAPI.get('/:id/getAll', (req, res, next) => {
   if (process.env.ROOTFOLDER){
     rootFolder = process.env.ROOTFOLDER;
   }
-  glob(searchString, {cwd: rootFolder + "/public/maps", root:rootFolder}, (err, files) => {
+  console.log(rootFolder + "public/maps");
+  glob(searchString, {cwd: rootFolder + "public/maps", root:rootFolder}, (err, files) => {
     console.log(files);
     if (err) {
       console.log(err);
