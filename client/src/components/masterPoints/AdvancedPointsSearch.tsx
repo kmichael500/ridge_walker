@@ -205,6 +205,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                       this.handleSearch();
                     }}
                     value={this.state.searchParams.name}
+                    size="large"
                     placeholder="Indian Grave Point"
                     onChange={e => {
                       const searchParams = {...this.state.searchParams};
@@ -253,6 +254,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 </Col>
                 <Col span={24}>
                   <Search
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -277,6 +279,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={24}>ID</Col>
                 <Col span={24}>
                   <Search
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -297,6 +300,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 County
                 <Col span={24}>
                   <Select
+                    size="large"
                     mode="multiple"
                     placeholder="Select"
                     tagRender={props => {
@@ -329,6 +333,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 Ownership
                 <Col span={24}>
                   <Select
+                    size="large"
                     mode="multiple"
                     placeholder="Select"
                     tagRender={props => {
@@ -361,6 +366,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={24}>Topo</Col>
                 <Col span={24}>
                   <Search
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -381,6 +387,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 Topo Indication
                 <Col span={24}>
                   <Select
+                    size="large"
                     mode="multiple"
                     placeholder="Select"
                     tagRender={props => {
@@ -413,6 +420,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 Gear
                 <Col span={24}>
                   <Select
+                    size="large"
                     mode="multiple"
                     placeholder="Select"
                     tagRender={props => {
@@ -445,6 +453,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 Enterance Type
                 <Col span={24}>
                   <Select
+                    size="large"
                     mode="multiple"
                     placeholder="Select"
                     tagRender={props => {
@@ -477,6 +486,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 Field Indication
                 <Col span={24}>
                   <Select
+                    size="large"
                     mode="multiple"
                     placeholder="Select"
                     tagRender={props => {
@@ -509,6 +519,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 Map Status
                 <Col span={24}>
                   <Select
+                    size="large"
                     mode="multiple"
                     placeholder="Select"
                     tagRender={props => {
@@ -541,6 +552,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={24}>Geology</Col>
                 <Col span={24}>
                   <Search
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -561,6 +573,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={24}>Geology Age</Col>
                 <Col span={24}>
                   <Search
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -581,6 +594,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={24}>Physiographic Province</Col>
                 <Col span={24}>
                   <Search
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -601,6 +615,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={24}>Length</Col>
                 <Col span={7}>
                   <InputNumber
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -616,6 +631,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 </Col>
                 <Col span={10}>
                   <Select
+                    size="large"
                     style={{width: '100%', textAlign: 'center'}}
                     defaultValue={this.state.searchParams.lengthCmp}
                     onChange={val => {
@@ -639,6 +655,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
 
                 <Col span={7}>
                   <InputNumber
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -660,6 +677,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={24}>Vertical Extent</Col>
                 <Col span={7}>
                   <InputNumber
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -675,6 +693,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 </Col>
                 <Col span={10}>
                   <Select
+                    size="large"
                     style={{width: '100%', textAlign: 'center'}}
                     defaultValue={this.state.searchParams.depthCmp}
                     onChange={val => {
@@ -698,6 +717,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
 
                 <Col span={7}>
                   <InputNumber
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -719,6 +739,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={24}>Pit Depth</Col>
                 <Col span={7}>
                   <InputNumber
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -734,6 +755,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 </Col>
                 <Col span={10}>
                   <Select
+                    size="large"
                     style={{width: '100%', textAlign: 'center'}}
                     defaultValue={this.state.searchParams.pdepCmp}
                     onChange={val => {
@@ -757,6 +779,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
 
                 <Col span={7}>
                   <InputNumber
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -778,6 +801,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={24}>Elevation</Col>
                 <Col span={7}>
                   <InputNumber
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -793,6 +817,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 </Col>
                 <Col span={10}>
                   <Select
+                    size="large"
                     style={{width: '100%', textAlign: 'center'}}
                     defaultValue={this.state.searchParams.elevCmp}
                     onChange={val => {
@@ -816,6 +841,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
 
                 <Col span={7}>
                   <InputNumber
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -837,6 +863,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={24}>Number of Pits</Col>
                 <Col span={7}>
                   <InputNumber
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -852,6 +879,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 </Col>
                 <Col span={10}>
                   <Select
+                    size="large"
                     style={{width: '100%', textAlign: 'center'}}
                     defaultValue={this.state.searchParams.psCmp}
                     onChange={val => {
@@ -875,6 +903,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
 
                 <Col span={7}>
                   <InputNumber
+                    size="large"
                     onPressEnter={() => {
                       this.handleSearch();
                     }}
@@ -896,6 +925,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                 <Col span={24}>Sort</Col>
                 <Col span={12}>
                   <Select
+                    size="large"
                     placeholder="Sort by"
                     defaultValue={this.state.sortParams}
                     style={{width: '100%'}}
@@ -928,6 +958,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
                   !this.state.narrRelevanceSearch) && (
                   <Col span={12}>
                     <Select
+                      size="large"
                       // placeholder="Sort by"
                       defaultValue={this.state.sortOrder}
                       style={{width: '100%'}}
@@ -951,6 +982,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
               <Row gutter={5}>
                 <Col span={24}>
                   <Button
+                    size="large"
                     type="primary"
                     icon={<SearchOutlined />}
                     loading={this.state.loading}
