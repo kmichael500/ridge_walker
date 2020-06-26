@@ -6,7 +6,7 @@ export interface RegisterUserInterface {
 export interface UserInterface {
   _id: string;
   email: string;
-  password: string;
+  password?: string;
   role: userRoleType;
   firstName: string;
   lastName: string;
