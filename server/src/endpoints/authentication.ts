@@ -239,7 +239,6 @@ userAPI.put(
   noPendingUsers(),
   (req, res, next) => {
     const currentUser = (<any>req).user as UserInterface;
-    console.log(currentUser, req.body)
     if (currentUser.role !== 'Admin') {
       req.body.role = 'User';
     }

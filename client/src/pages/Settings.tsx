@@ -68,7 +68,6 @@ class Settings extends Component<Props, State> {
   componentDidMount() {
     getOneUserByID(this.context.user._id).then(user => {
       this.setState({user, loading: false});
-      console.log(user);
     });
   }
 
@@ -135,7 +134,6 @@ class Settings extends Component<Props, State> {
     if (value.password !== undefined) {
       newUser.password = value.password;
     }
-    console.log(newUser);
     updateOneUserByID(this.context.user._id, newUser)
       .then(response => {
         getUserProfile().then(user => {
