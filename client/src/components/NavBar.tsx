@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Layout, Menu, Affix, Space} from 'antd';
+import "../App.css"
 import {
   UserOutlined,
   FormOutlined,
@@ -162,7 +163,7 @@ class NavBar extends Component<any, any> {
     return (
       <Layout className="layout" style={{height: '100vh', background: 'white'}}>
         <Affix>
-          <Header>{this.loggedInMenu()}</Header>
+          <Header className="NoPrint">{this.loggedInMenu()}</Header>
         </Affix>
         <Content>
           {/* <div className="site-layout-content"> */}

@@ -610,6 +610,7 @@ class CaveInfo extends Component<Props, State> {
       if (!this.state.proposedChanges) {
         return (
           <Button
+            className="NoPrint"
             type="primary"
             onClick={() => {
               this.setState({proposedChanges: !this.state.proposedChanges});
@@ -852,9 +853,8 @@ class CaveInfo extends Component<Props, State> {
         <Card
           bordered={false}
           loading={this.state.isLoading}
-          // style={{padding: '24px'}}
-          bodyStyle={{padding: '5%'}}
         >
+          <div className="noPrintMargins">
           {this.props.renderTitle && (
             <div>
               {this.renderTitle()}
@@ -878,6 +878,7 @@ class CaveInfo extends Component<Props, State> {
               </div>
             </div>
           )}
+          </div>
         </Card>
       </div>
     );

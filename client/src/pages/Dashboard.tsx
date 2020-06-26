@@ -90,7 +90,7 @@ class Dashboard extends Component<any, State> {
         ? 0
         : this.state.existingPoints.filter(value => value.status === 'Pending')
             .length;
-
+    const padding = "6%";
     return (
       <div className="site-layout-content">
         <Helmet>
@@ -99,7 +99,7 @@ class Dashboard extends Component<any, State> {
         <Row
           justify="start"
           align="middle"
-          style={{background: 'white', minHeight: '300px', padding: '50px'}}
+          style={{background: 'white', minHeight: '300px', padding}}
         >
           <Col span={24}>
             <Title>My Submission Status</Title>
@@ -139,7 +139,7 @@ class Dashboard extends Component<any, State> {
             background: '#fbfdfe',
             minHeight: '300px',
             minWidth: '100%',
-            padding: '50px',
+            padding,
           }}
         >
           {this.state.deadLeadButton === 'View' && (
