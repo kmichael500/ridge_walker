@@ -135,16 +135,16 @@ export default class DisplayAllMaps extends Component<
       gutter: [10, {xs: 8, sm: 16, md: 24, lg: 32}] as Gutter,
     };
     const colSpanProps = {
-      xs: {span: 24},
-      sm: {span: 12},
-      md: {span: 12},
-      lg: {span: 24},
-      xl: {span: 24},
-      xxl: {span: 24},
+      xs: {span: 22},
+      sm: {span: 10},
+      md: {span: 10},
+      lg: {span: 22},
+      xl: {span: 22},
+      xxl: {span: 22},
     };
     return (
       <Fragment>
-        <Row {...rowProps}>
+        <Row {...rowProps} justify="center">
           {this.state.fileNames.map((file, index) => (
             <Col {...colSpanProps}>
               {this.state.fullScreenFile === file.img && (

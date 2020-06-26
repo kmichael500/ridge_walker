@@ -534,8 +534,8 @@ class CaveInfo extends Component<Props, State> {
                   </TextArea>
                 )}
               </Col>
-              <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col>
-              <Col xs={22} sm={22} md={22} lg={6} xl={6}>
+              {/* <Col xs={1} sm={1} md={1} lg={1} xl={1}></Col> */}
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <Divider orientation="left">Maps</Divider>
                 <DisplayAllMaps
                   tcsnumber={this.state.point.properties.tcsnumber}
