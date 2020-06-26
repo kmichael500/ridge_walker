@@ -40,6 +40,7 @@ interface State {
   error_msg: string;
   user: UserInterface;
   loading: boolean;
+  showPassword: boolean;
 }
 
 interface Props {
@@ -57,6 +58,7 @@ class Settings extends Component<Props, State> {
       error_msg: '',
       user: {} as UserInterface,
       loading: true,
+      showPassword: false,
     };
 
     this.handleEmail = this.handleEmail.bind(this);
@@ -457,6 +459,17 @@ class Settings extends Component<Props, State> {
                 </Col>
                 {/* Password */}
                 <Col span={24}>
+                <Button
+                  onClick={()=>{
+                    const showPassword = !this.state.showPassword;
+                    this.setState({showPassword})
+                  }}
+                >
+                  Change Password
+                </Button>
+                </Col>
+              {this.state.showPassword && 
+                <Col span={24}>
                   <Row>
                     <Col span={24}>
                       <Form.Item
@@ -482,7 +495,9 @@ class Settings extends Component<Props, State> {
                     </Col>
                   </Row>
                 </Col>
+                }
                 {/* Confirm Password */}
+                {this.state.showPassword &&
                 <Col span={24}>
                   <Row>
                     <Col span={24}>
@@ -517,6 +532,8 @@ class Settings extends Component<Props, State> {
                     </Col>
                   </Row>
                 </Col>
+                }
+                
                 {/*Private Fields*/}
                 <Col>
                   <Row>
