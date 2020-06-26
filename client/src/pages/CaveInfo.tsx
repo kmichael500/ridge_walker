@@ -715,7 +715,6 @@ class CaveInfo extends Component<Props, State> {
               </div>
             }
             onConfirm={() => {
-              console.log(rejectMessage);
               this.setState({loadingButtons: {rejectloading: true}});
               const updateSubmission = {
                 status: 'Rejected',

@@ -144,7 +144,7 @@ userAPI.get(
           delete currentUser.password;
           res.json(currentUser);
         }
-      });
+      }).lean();
     } else if (role === 'User' && status !== 'Pending') {
       UserModel.findById(req.params.id, (err, currentUser) => {
         if (err) {
@@ -158,7 +158,7 @@ userAPI.get(
           delete currentUser.password;
           res.json(currentUser);
         }
-      });
+      }).lean();
     } else {
       console.log("\nuserAPI.get('/:id') error");
       const err = new Error('Unauthorized');
@@ -242,7 +242,7 @@ userAPI.put(
     if (currentUser.role !== 'Admin') {
       req.body.role = 'User';
     }
-    if (currentUser.role === 'Admin' || currentUser._id === req.body._id) {
+    if (currentUser.role === 'Admin' || currentUser._id === req.params.id) {
       UserModel.findByIdAndUpdate(
         req.params.id,
         req.body,
@@ -250,11 +250,28 @@ userAPI.put(
           if (err) {
             console.log("\nuserAPI.put('/:id')  error");
             next(err);
-          } else {
-            res.sendStatus(200);
+          } else if (requestedUser) {
+            //change password
+            if (req.body.password){
+              requestedUser.password = req.body.password;
+            }
+            // use save to trigger password change (if applicable)
+            requestedUser.save((err, user)=>{
+              if (err){
+                console.log("\nuserAPI.put('/:id')  save error");
+                next(err);
+              }
+              else{
+                res.sendStatus(200);
+              }
+            })
+
           }
         }
       );
+    } else{
+      const err = new Error('Unauthorized');
+
     }
   }
 );

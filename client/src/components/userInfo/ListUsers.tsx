@@ -352,7 +352,11 @@ class ListUsers extends Component<Props, State> {
                       </Col>
                     </Row>
                   }
-                  actions={UserToolbar(user, this)}
+                  actions={
+                    this.context.user.role === 'Admin'
+                      ? UserToolbar(user, this)
+                      : null
+                  }
                   loading={this.state.loading}
                 >
                   <Row>

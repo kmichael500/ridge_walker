@@ -77,7 +77,6 @@ async function downloadMap(fileName: string): Promise<void> {
       params: {secret_token: localStorage.getItem('JWT')},
     });
     const url = window.URL.createObjectURL(new Blob([downloadResponse.data]));
-    console.log(downloadResponse.headers);
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', fileName);

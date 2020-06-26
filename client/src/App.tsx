@@ -20,6 +20,7 @@ import {ReviewPage} from './pages/ReviewPage';
 import {ListUsers} from './components/userInfo/ListUsers';
 /* Authentication */
 import {Register} from './pages/Register';
+import {Settings} from './pages/Settings';
 import {LoginPage} from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 /* redirects */
@@ -54,6 +55,7 @@ function App() {
                 />
                 <ProtectedRoute exact path="/leads" component={DeadLeads} />
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+                <ProtectedRoute exact path="/settings" component={Settings} />
                 <ProtectedRoute
                   exact
                   path="/map/:lat?/:long?"

@@ -119,7 +119,6 @@ class AdvancedPointsSearch extends Component<Props, State> {
     const color = 'green';
     const defaultColor = '';
     if (Array.isArray(val)) {
-      console.log(val);
       if (val.length <= 0) {
         this.setState({advancedColor: defaultColor});
       } else if (val.length > 0) {
