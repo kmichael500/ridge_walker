@@ -1,8 +1,31 @@
-.App {
+/* .App {
   text-align: center;
+} */
+
+/* .NoPrint{
+  display: none;
+} */
+.noPrintMargins{
+  /* padding: 0px !important; */
+  margin-top:3%;
+  margin-left:5%;
+  margin-right:5%;
+}
+@media print{
+  .NoPrint{
+    display: none;
+  }
+  button{
+    display:none
+  }
+  .noPrintMargins{
+    /* padding: 0px !important; */
+    margin: -5mm;
+  }
 }
 
-.App-logo {
+
+/* .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -35,4 +58,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
