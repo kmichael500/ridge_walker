@@ -850,34 +850,31 @@ class CaveInfo extends Component<Props, State> {
         <Helmet>
           <title>{tcsnumber + ' ' + name}</title>
         </Helmet>
-        <Card
-          bordered={false}
-          loading={this.state.isLoading}
-        >
+        <Card bordered={false} loading={this.state.isLoading}>
           <div className="noPrintMargins">
-          {this.props.renderTitle && (
-            <div>
-              {this.renderTitle()}
-              <Divider orientation="left"></Divider>
-            </div>
-          )}
-          <Meta description={this.renderDescription()}></Meta>
-
-          {this.props.showMap && (
-            <div>
-              <Divider orientation="left">Location</Divider>
-
-              <div style={{height: '500px'}}>
-                <MapView
-                  center={this.state.point.geometry.coordinates
-                    .slice()
-                    .reverse()}
-                  zoom={15}
-                  showFullScreen={true}
-                />
+            {this.props.renderTitle && (
+              <div>
+                {this.renderTitle()}
+                <Divider orientation="left"></Divider>
               </div>
-            </div>
-          )}
+            )}
+            <Meta description={this.renderDescription()}></Meta>
+
+            {this.props.showMap && (
+              <div>
+                <Divider orientation="left">Location</Divider>
+
+                <div style={{height: '500px'}}>
+                  <MapView
+                    center={this.state.point.geometry.coordinates
+                      .slice()
+                      .reverse()}
+                    zoom={15}
+                    showFullScreen={true}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </Card>
       </div>

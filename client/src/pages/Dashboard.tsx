@@ -90,7 +90,7 @@ class Dashboard extends Component<any, State> {
         ? 0
         : this.state.existingPoints.filter(value => value.status === 'Pending')
             .length;
-    const padding = "6%";
+    const padding = '6%';
     return (
       <div className="site-layout-content">
         <Helmet>
