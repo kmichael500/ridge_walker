@@ -152,7 +152,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
     return (
       <div>
         <Row>
-          <div style={{width: '65%'}}>
+          <div style={{width: '60%'}}>
             <Input.Search
               // width="100%"
 
