@@ -14,6 +14,7 @@
 | <img width="500" src="https://i.imgur.com/QlhAFMy.png"/> | <img width="640" src="https://i.imgur.com/dsExdqS.png"/>|
 
 
+
 **Dashboard**
 * View submissions created by the logged-in user.
 * View or upload dead leads (karst features people have confirmed are not a cave).
@@ -34,6 +35,20 @@
 | Clustered Points | Search | Dead Leads |
 |--|--|--|
 | <img src="https://i.imgur.com/mWHJap4.jpg" width="320"/> | <img src="https://i.imgur.com/C0lbsp2.png" width="300"/> | <img src="https://i.imgur.com/X5zcHAc.png" width="320"/> |
+
+
+
+**User Directory**
+  * View all registered users.
+  * Make certain fields private (address, phone number, etc).
+  * Search all users.
+
+| User Directory | User Settings |
+|--|--|
+| <img src="https://i.imgur.com/0H8UAQZ.png" width="500"/> | <img src="https://i.imgur.com/D3hWuAS.png" width="630"/> | 
+
+
+
 ## User Roles
 **Admin**
 * Can accept, reject, or modify proposed changes to a cave location.
@@ -43,6 +58,8 @@
 | Review | Approve/Reject Changes |
 |--|--|
 | <img src="https://i.imgur.com/Zim5lsN.png" width="540"/> | <img src="https://i.imgur.com/ZhKDpsU.png" width="300"/> |
+
+
 
 **Users**
 * Once approved, have access to all cave locations, maps, etc.
