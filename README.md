@@ -5,9 +5,14 @@
 * View all information and any available maps on a specific cave.
 * Add a new cave or make changes to an existing one.
 
-| Point Information | Point Table | Add a Point |
-|--|--|--|
-| <img width="300" src="https://i.imgur.com/WBpzp0j.png"/> | <img width="530" src="https://i.imgur.com/fepNNMb.png"/> | <img width="440" src="https://i.imgur.com/crvbsVl.png"/> |
+| Point Information | Point List |
+|--|--|--|--|
+| <img width="700" src="https://i.imgur.com/X0yLkiR.png"/> | <img width="890" src="https://i.imgur.com/8K9yifv.png"/> | <img width="870" src="https://i.imgur.com/QlhAFMy.png"/> | <img width="700" src="https://i.imgur.com/dsExdqS.png"/>
+
+| Add a Point | Advanced Search |
+|--|--|--|--|
+| <img width="700" src="https://i.imgur.com/QlhAFMy.png"/> | <img width="890" src="https://i.imgur.com/dsExdqS.png"/>
+
 
 **Dashboard**
 * View submissions created by the logged-in user.
@@ -45,7 +50,7 @@
 * Add leads that have been checked and don't go anywhere.
 
 ## Home Page
-<img src="https://i.imgur.com/yYtVHQV.jpg" width="530"/>
+<img src="https://i.imgur.com/1GVA0EX.png" width="530"/>
 
 ## Technologies Used
 **Server:** Node, Express, Passport, MongoDB, and Typescript
