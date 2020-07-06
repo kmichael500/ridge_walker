@@ -1,6 +1,6 @@
 ## Features
 #### Cave Locations
-* View all caves in the database in a table format.
+* View all 10,000+ caves in the database.
 * Search by property (length, pit depth, county, etc)
 * View all information and any available maps on a specific cave.
 * Add a new cave or make changes to an existing one.
