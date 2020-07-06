@@ -253,6 +253,52 @@ class MapView extends Component<Props, State> {
             opacity={1}
           />
         </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="Google Maps Street">
+          <WMSTileLayer
+            url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+            maxZoom={20}
+            attribution="Map data ©2020 Google"
+            subdomains={['mt0','mt1','mt2','mt3']}
+            opacity={1}
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="Google Maps Hybrid">
+          <WMSTileLayer
+            url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
+            maxZoom={20}
+            attribution="Map data ©2020 Google"
+            subdomains={['mt0','mt1','mt2','mt3']}
+            opacity={1}
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="Google Maps Satellite">
+          <WMSTileLayer
+            url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+            maxZoom={20}
+            attribution="Map data ©2020 Google"
+            subdomains={['mt0','mt1','mt2','mt3']}
+            opacity={1}
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="Google Maps Terrain">
+          <WMSTileLayer
+            url="http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
+            maxZoom={20}
+            attribution="Map data ©2020 Google"
+            subdomains={['mt0','mt1','mt2','mt3']}
+            opacity={1}
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="Property">
+          <TileLayer
+            url="https://tnmap.tn.gov/arcgis/rest/services/CADASTRAL/STATEWIDE_PARCELS_WEB_MERCATOR/MapServer/tile/{z}/{y}/{x}?token=GkXMOL4i2Eq_ub2-BFPCza9OMgu1L6gNeNWmLbj2kQBE4sXNRpfLiLMFHQMjeXFj1nVlQJgdYQmGnkfZcj25T4B1QLM3QHssxD4BNWtEa08."
+            maxZoom={20}
+            attribution="Map data ©2020 Google"
+            accessToken="GkXMOL4i2Eq_ub2-BFPCza9OMgu1L6gNeNWmLbj2kQBE4sXNRpfLiLMFHQMjeXFj1nVlQJgdYQmGnkfZcj25T4B1QLM3QHssxD4BNWtEa08."
+            // subdomains={['mt0','mt1','mt2','mt3']}
+            opacity={1}
+          />
+        </LayersControl.BaseLayer>
         <LayersControl.BaseLayer name="Open Street Maps">
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
