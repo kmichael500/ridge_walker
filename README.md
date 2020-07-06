@@ -6,12 +6,12 @@
 * Add a new cave or make changes to an existing one.
 
 | Point Information | Point List |
-|--|--|--|--|
-| <img width="700" src="https://i.imgur.com/X0yLkiR.png"/> | <img width="890" src="https://i.imgur.com/8K9yifv.png"/> | <img width="870" src="https://i.imgur.com/QlhAFMy.png"/> | <img width="700" src="https://i.imgur.com/dsExdqS.png"/>
+|--|--|
+| <img width="500" src="https://i.imgur.com/X0yLkiR.png"/> | <img width="640" src="https://i.imgur.com/8K9yifv.png"/> | 
 
 | Add a Point | Advanced Search |
-|--|--|--|--|
-| <img width="700" src="https://i.imgur.com/QlhAFMy.png"/> | <img width="890" src="https://i.imgur.com/dsExdqS.png"/>
+|--|--|
+| <img width="500" src="https://i.imgur.com/QlhAFMy.png"/> | <img width="640" src="https://i.imgur.com/dsExdqS.png"/>|
 
 
 **Dashboard**
