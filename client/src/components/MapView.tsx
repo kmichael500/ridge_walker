@@ -4,8 +4,9 @@ import L from 'leaflet';
 import {Helmet} from 'react-helmet';
 // import { map, LayerGroup, latLng, Icon } from 'leaflet';
 import Control from 'react-leaflet-control';
+import LocateControl from './LocateControl';
 import {FullscreenOutlined} from '@ant-design/icons';
-import {Row, Button, Typography, Divider} from 'antd';
+import {Row, Button, Typography, Divider, Col} from 'antd';
 import {
   Map,
   TileLayer,
@@ -51,7 +52,7 @@ interface State {
   center: any; // starting map loc
   currentCenter?: any;
   zoom: number;
-  maxZoom: number;
+  // maxZoom: number;
   height: number;
   isLoading: boolean;
   isLeadsLoading: boolean;
@@ -90,7 +91,7 @@ class MapView extends Component<Props, State> {
           : this.props.center, // starting map loc
       currentCenter: this.props.center,
       zoom: this.props.zoom,
-      maxZoom: 18,
+      // maxZoom: 18,
       height: null,
       isLoading: true,
       isLeadsLoading: true,
@@ -241,15 +242,35 @@ class MapView extends Component<Props, State> {
       <LayersControl position="topright">
         <LayersControl.BaseLayer name="Open Topo" checked={true}>
           <TileLayer
-            maxZoom={25}
+            maxZoom={16}
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
           />
         </LayersControl.BaseLayer>
         <LayersControl.BaseLayer name="3DEP Elevation">
           <WMSTileLayer
+            maxZoom={20}
+            // maxNativeZoom={25}
             url="https://elevation.nationalmap.gov/arcgis/services/3DEPElevation/ImageServer/WMSServer?"
             layers="3DEPElevation:Hillshade Gray"
+            opacity={1}
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="Satellite">
+          <WMSTileLayer
+            url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
+            maxZoom={20}
+            attribution="Map data ©2020 Google"
+            subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+            opacity={1}
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="Google Maps Terrain">
+          <WMSTileLayer
+            url="http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
+            maxZoom={15}
+            attribution="Map data ©2020 Google"
+            subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
             opacity={1}
           />
         </LayersControl.BaseLayer>
@@ -330,7 +351,7 @@ class MapView extends Component<Props, State> {
               style={{height: height}}
               center={this.state.center}
               zoom={this.state.zoom}
-              maxZoom={this.state.maxZoom}
+              // maxZoom={this.state.maxZoom}
               doubleClickZoom={true}
               oncontextmenu={this.handleRightClick} //event lister for right click
               onViewportChange={vp => {
@@ -369,6 +390,16 @@ class MapView extends Component<Props, State> {
                   </Row>
                 </Control>
               )}
+              <LocateControl
+                options={{
+                  position: 'bottomright',
+                  strings: {
+                    title: 'Show me where I am, yo!',
+                  },
+                  onActivate: () => {},
+                }}
+                // startDirectly
+              />
               {/* USGS Lidar and OSM Layers that you can toggle */}
               {this.renderLayers()}
 
