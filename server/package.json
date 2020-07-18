@@ -20,6 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@mapbox/togeojson": "^0.16.0",
+    "@types/axios": "^0.14.0",
     "@types/bcrypt": "^3.0.0",
     "@types/compression": "^1.7.0",
     "@types/csvtojson": "^1.1.5",
@@ -32,6 +33,7 @@
     "@types/passport-jwt": "^3.0.3",
     "@types/passport-local": "^1.0.33",
     "@types/pdf-image": "^2.0.0",
+    "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
     "blob": "^0.1.0",
     "compression": "^1.7.4",

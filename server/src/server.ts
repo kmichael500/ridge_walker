@@ -77,7 +77,7 @@ import {statisticsAPI} from './endpoints/statistics';
 import {leadPointAPI} from './endpoints/leadPointAPI';
 
 import {noPendingUsers} from './auth/restrictFunctions';
-
+import {parcelAPI} from './endpoints/parcelAPI';
 // Routes
 app.use('/api/user', userAPI);
 app.use('/api/stats', statisticsAPI);
@@ -92,6 +92,10 @@ app.use(
   passport.authenticate('jwt', {session: false}),
   noPendingUsers(),
   leadPointAPI
+);
+app.use(
+  '/api/parcel',
+  parcelAPI
 );
 app.use(
   '/api/maps',
