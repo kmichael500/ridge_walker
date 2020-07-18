@@ -4,7 +4,7 @@ import L from 'leaflet';
 import {Helmet} from 'react-helmet';
 // import { map, LayerGroup, latLng, Icon } from 'leaflet';
 import Control from 'react-leaflet-control';
-import LocateControl from './LocateControl'
+import LocateControl from './LocateControl';
 import {FullscreenOutlined} from '@ant-design/icons';
 import {Row, Button, Typography, Divider, Col} from 'antd';
 import {
@@ -261,7 +261,7 @@ class MapView extends Component<Props, State> {
             url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
             maxZoom={20}
             attribution="Map data ©2020 Google"
-            subdomains={['mt0','mt1','mt2','mt3']}
+            subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
             opacity={1}
           />
         </LayersControl.BaseLayer>
@@ -270,7 +270,7 @@ class MapView extends Component<Props, State> {
             url="http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
             maxZoom={15}
             attribution="Map data ©2020 Google"
-            subdomains={['mt0','mt1','mt2','mt3']}
+            subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
             opacity={1}
           />
         </LayersControl.BaseLayer>
@@ -362,7 +362,6 @@ class MapView extends Component<Props, State> {
                 // }
               }}
             >
-              
               {this.props.showFullScreen && (
                 <Control position="topright">
                   <Row
@@ -391,14 +390,15 @@ class MapView extends Component<Props, State> {
                   </Row>
                 </Control>
               )}
-              <LocateControl options={{
-                position: 'bottomright',
-                strings: {
-                    title: 'Show me where I am, yo!'
-                },
-                onActivate: () => {}
-              }}
-              // startDirectly
+              <LocateControl
+                options={{
+                  position: 'bottomright',
+                  strings: {
+                    title: 'Show me where I am, yo!',
+                  },
+                  onActivate: () => {},
+                }}
+                // startDirectly
               />
               {/* USGS Lidar and OSM Layers that you can toggle */}
               {this.renderLayers()}
