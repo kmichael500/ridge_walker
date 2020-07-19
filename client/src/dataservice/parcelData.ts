@@ -17,7 +17,6 @@ async function getParcelByCoordinates(
   try {
     const coordinateCopy = JSON.parse(JSON.stringify(coordinates));
     const coordinatesAsString = coordinateCopy.coordinates.reverse().join(',');
-    console.log(coordinatesAsString);
     const getLeadPointResponse = await axiosInstance.get(
       '/api/parcel/' + coordinatesAsString,
       {
