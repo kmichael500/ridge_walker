@@ -86,31 +86,31 @@ masterPointsAPI.post('/upload', upload.single('csv'), (req, res, next) => {
     });
 });
 
-var mcache = require('memory-cache');
+const mcache = require('memory-cache');
 
 // cache based on duration and request url
-var cache = (duration: any) => {
+const cache = (duration: any) => {
   return (req: any, res: any, next: any) => {
-    let matched = /[^?]*/g.exec(req.originalUrl);
-    let key = "";
-    if (matched !== null){
-      key = '_express_' + matched[0]
+    const matched = /[^?]*/g.exec(req.originalUrl);
+    let key = '';
+    if (matched !== null) {
+      key = '_express_' + matched[0];
     }
-    console.log("key", key)
-    let cachedBody = mcache.get(key);
+    console.log('key', key);
+    const cachedBody = mcache.get(key);
     if (cachedBody) {
       res.send(cachedBody);
       return;
     } else {
       res.sendResponse = res.send;
-      res.send = (body: any) =>{
+      res.send = (body: any) => {
         mcache.put(key, body, duration * 1000);
         res.sendResponse(body);
-      }
+      };
       next();
     }
-  }
-}
+  };
+};
 
 // // get all master points
 // // cache is updated every 30 seconds
@@ -122,7 +122,7 @@ var cache = (duration: any) => {
 //       } else {
 //         res.send(requestedPoints);
 //       }
-//     }).lean();  
+//     }).lean();
 // // cache based on duration and request url
 // const noPending = (userType: string) => {
 //   return (req: any, res: any, next: any) => {
@@ -168,7 +168,7 @@ masterPointsAPI.post('/', (req, res, next) => {
     page,
     limit,
     pagination,
-    sortBy
+    sortBy,
   } = req.body as MasterPointPaginationReq;
 
   interface comparisonI {
@@ -276,62 +276,59 @@ masterPointsAPI.post('/', (req, res, next) => {
 
   // sort options
   const isNarrSearch = searchParams.narr.match(/\S/); // has user searched by narrative
-  const isLengthSearch = searchParams.lengthL !== null || searchParams.lengthR !== null;
+  const isLengthSearch =
+    searchParams.lengthL !== null || searchParams.lengthR !== null;
   const isPDSearch = searchParams.pdepL !== null || searchParams.pdepR !== null;
-  const isDepthSearch = searchParams.depthL !== null || searchParams.depthR !== null;
-  const isElevSearch = searchParams.elevL !== null || searchParams.elevR !== null;
+  const isDepthSearch =
+    searchParams.depthL !== null || searchParams.depthR !== null;
+  const isElevSearch =
+    searchParams.elevL !== null || searchParams.elevR !== null;
   const isPSSearch = searchParams.psL !== null || searchParams.psR !== null;
 
   let sortParams = {} as any;
-  switch(sortBy){
+  switch (sortBy) {
     case 'relevance':
-      if (isNarrSearch){
-        sortParams = { score : { $meta : 'textScore' } };
-      }
-      else if (isLengthSearch){
+      if (isNarrSearch) {
+        sortParams = {score: {$meta: 'textScore'}};
+      } else if (isLengthSearch) {
         sortParams = {
-          ['properties.' + "length"]: sortOrder,
-        }
-      }
-      else if (isPDSearch){
+          ['properties.' + 'length']: sortOrder,
+        };
+      } else if (isPDSearch) {
         sortParams = {
-          ['properties.' + "pdep"]: sortOrder,
-        }
-      }
-      else if (isDepthSearch){
+          ['properties.' + 'pdep']: sortOrder,
+        };
+      } else if (isDepthSearch) {
         sortParams = {
-          ['properties.' + "depth"]: sortOrder,
-        }
-      }
-      else if (isElevSearch){
+          ['properties.' + 'depth']: sortOrder,
+        };
+      } else if (isElevSearch) {
         sortParams = {
-          ['properties.' + "elev"]: sortOrder,
-        }
-      }
-      else if (isPSSearch){
+          ['properties.' + 'elev']: sortOrder,
+        };
+      } else if (isPSSearch) {
         sortParams = {
-          ['properties.' + "ps"]: sortOrder,
-        }
-      }
-      else{
+          ['properties.' + 'ps']: sortOrder,
+        };
+      } else {
         sortParams = {
-          ['properties.' + "length"]: sortOrder,
-        }
+          ['properties.' + 'length']: sortOrder,
+        };
       }
       break;
     default:
       sortParams = {
         ['properties.' + sortBy]: sortOrder,
-      }
+      };
       break;
   }
 
   // narr search options
   let narrSearchParams = {};
-  if (isNarrSearch){
+  if (isNarrSearch) {
     narrSearchParams = {
-      $text: { $search : searchParams.narr},
-    }
+      $text: {$search: searchParams.narr},
+    };
   }
   const query = {
     'properties.name': {$regex: name, $options: 'i'},
@@ -355,7 +352,7 @@ masterPointsAPI.post('/', (req, res, next) => {
     pagination,
     page,
     limit,
-    projection:{score: {$meta: 'textScore'}},
+    projection: {score: {$meta: 'textScore'}},
     orderBy: sortOrder,
     lean: true,
     collation: {
@@ -364,8 +361,7 @@ masterPointsAPI.post('/', (req, res, next) => {
     sort: sortParams,
   } as PaginateOptions;
 
-
-  MasterPoint.find({field: "value"}, { score: { $meta: 'textScore' } })
+  MasterPoint.find({field: 'value'}, {score: {$meta: 'textScore'}});
   MasterPoint.paginate(query, options, (err, requestedPoints) => {
     if (err) {
       console.log("\n Can't get master submissions");

@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import * as bcrypt from 'bcrypt';
-import { query } from 'express';
+import {query} from 'express';
 const Schema = mongoose.Schema;
 
 export interface UserInterface extends mongoose.Document {
@@ -115,7 +115,7 @@ const UserSchema = new Schema({
 UserSchema.pre<UserInterface>('save', async function (next: any) {
   //'this' refers to the current document about to be saved
   const user = this;
-  if (user.isModified('password')){
+  if (user.isModified('password')) {
     //Hash the password with a salt round of 10, the higher the rounds the more secure, but the slower
     //your application becomes.
     const hash = await bcrypt.hash(this.password, 10);

@@ -13,7 +13,9 @@ import {
   Input,
   Popconfirm,
 } from 'antd';
+import {EyeOutlined} from '@ant-design/icons';
 import {getMasterPoint} from '../dataservice/getPoints';
+import {getParcelByCoordinates} from '../dataservice/parcelData';
 import {
   addSubmittedPoint,
   getSubmittedPoint,
@@ -26,8 +28,9 @@ import {MapView} from '../components/MapView';
 import DisplayAllMaps from '../components/DisplayAllMaps';
 import {Feature} from '../interfaces/geoJsonInterface';
 import {userContext} from '../context/userContext';
-import {withRouter} from 'react-router-dom';
+import {withRouter, Link} from 'react-router-dom';
 import {Breakpoint} from 'antd/lib/_util/responsiveObserve';
+import {ParcelResponseInterface} from '../interfaces/parcelResponseInterface';
 
 const {Paragraph, Title, Text} = Typography;
 const {TextArea} = Input;
@@ -41,6 +44,7 @@ interface State {
   role: string;
   submittedPoint?: SubmittedPoint;
   loadingButtons: any;
+  parcelData: ParcelResponseInterface;
 }
 
 interface Props {
@@ -83,6 +87,7 @@ class CaveInfo extends Component<Props, State> {
       pointCopy: undefined,
       role: this.props.action,
       loadingButtons: {approveloading: false, rejectloading: false},
+      parcelData: {} as ParcelResponseInterface,
       point: {
         type: 'Feature',
         properties: {
@@ -117,6 +122,7 @@ class CaveInfo extends Component<Props, State> {
     this.renderDescription = this.renderDescription.bind(this);
     this.renderTitle = this.renderTitle.bind(this);
     this.proposeChangesBar = this.proposeChangesBar.bind(this);
+    this.renderParcelData = this.renderParcelData.bind(this);
   }
 
   componentDidMount() {
@@ -132,6 +138,9 @@ class CaveInfo extends Component<Props, State> {
       getMasterPoint(tcsnumber).then(requestedPoint => {
         const pointCopy = JSON.parse(JSON.stringify(requestedPoint));
         this.setState({point: requestedPoint, pointCopy, isLoading: false});
+        getParcelByCoordinates(requestedPoint.geometry).then(parcelData => {
+          this.setState({parcelData});
+        });
       });
     } else {
       getSubmittedPoint(this.props.submittedPoint).then(requestedPoint => {
@@ -169,7 +178,6 @@ class CaveInfo extends Component<Props, State> {
         );
       });
     }
-
     return (
       <div>
         <Descriptions bordered column={this.props.descriptionColProps}>
@@ -580,6 +588,73 @@ class CaveInfo extends Component<Props, State> {
     );
   }
 
+  renderParcelData() {
+    if (this.state.parcelData.fields !== undefined) {
+      return (
+        <div>
+          Please note, this data might not be up to date.
+          <Space direction="vertical">
+            {this.state.parcelData.fields.owner !== null && (
+              <Descriptions bordered column={this.props.descriptionColProps}>
+                <Descriptions.Item label="Owner 1">
+                  {this.state.parcelData.fields.owner}
+                </Descriptions.Item>
+                {this.state.parcelData.fields.owner2 !== null && (
+                  <Descriptions.Item label="Owner 2">
+                    {this.state.parcelData.fields.owner2}
+                  </Descriptions.Item>
+                )}
+                <Descriptions.Item label="Address">
+                  {this.state.parcelData.fields.address}
+                </Descriptions.Item>
+                <Descriptions.Item label="City">
+                  {this.state.parcelData.fields.scity}
+                </Descriptions.Item>
+                <Descriptions.Item label="Zip">
+                  {this.state.parcelData.fields.szip}
+                </Descriptions.Item>
+                <Descriptions.Item label="Acreage">
+                  {this.state.parcelData.fields.gisacre}
+                </Descriptions.Item>
+                <Descriptions.Item label="Use Description">
+                  {this.state.parcelData.fields.usedesc}
+                </Descriptions.Item>
+                <Descriptions.Item label="Mailing Address">
+                  {this.state.parcelData.fields.mailadd}
+                </Descriptions.Item>
+                <Descriptions.Item label="Mailing City">
+                  {this.state.parcelData.fields.mailadd}
+                </Descriptions.Item>
+                <Descriptions.Item label="Mailing City">
+                  {this.state.parcelData.fields.mail_city}
+                </Descriptions.Item>
+                <Descriptions.Item label="Mailing State">
+                  {this.state.parcelData.fields.mail_state2}
+                </Descriptions.Item>
+                <Descriptions.Item label="Mailing Zip">
+                  {this.state.parcelData.fields.mail_zip}
+                </Descriptions.Item>
+                <Descriptions.Item label="Last Sale Date">
+                  {this.state.parcelData.fields.saledate}
+                </Descriptions.Item>
+                <Descriptions.Item label="More Info">
+                  <a
+                    target="_blank"
+                    href={'https://landgrid.com' + this.state.parcelData.path}
+                  >
+                    Landgrid
+                  </a>
+                </Descriptions.Item>
+              </Descriptions>
+            )}
+          </Space>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+
   renderTitle = () => {
     return (
       <div>
@@ -859,7 +934,8 @@ class CaveInfo extends Component<Props, State> {
               </div>
             )}
             <Meta description={this.renderDescription()}></Meta>
-
+            <Divider orientation="left">Parcel Data</Divider>
+            {this.renderParcelData()}
             {this.props.showMap && (
               <div>
                 <Divider orientation="left">Location</Divider>

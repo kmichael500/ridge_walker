@@ -26,9 +26,9 @@ The file looks like this:
 */
 
 // Connect to MongoDB
-let connectionString = "mongodb://localhost"; // for dev
-if (process.env.MONGOURI){
-  connectionString = process.env.MONGOURI
+let connectionString = 'mongodb://localhost'; // for dev
+if (process.env.MONGOURI) {
+  connectionString = process.env.MONGOURI;
 }
 mongoose
   .connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true})
@@ -77,7 +77,7 @@ import {statisticsAPI} from './endpoints/statistics';
 import {leadPointAPI} from './endpoints/leadPointAPI';
 
 import {noPendingUsers} from './auth/restrictFunctions';
-
+import {parcelAPI} from './endpoints/parcelAPI';
 // Routes
 app.use('/api/user', userAPI);
 app.use('/api/stats', statisticsAPI);
@@ -92,6 +92,12 @@ app.use(
   passport.authenticate('jwt', {session: false}),
   noPendingUsers(),
   leadPointAPI
+);
+app.use(
+  '/api/parcel',
+  passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
+  parcelAPI
 );
 app.use(
   '/api/maps',
