@@ -648,6 +648,9 @@ class CaveInfo extends Component<Props, State> {
               </Descriptions>
             )}
           </Space>
+          <pre>
+            {/* {JSON.stringify(this.state.parcelData.geometry, null, 2)} */}
+          </pre>
         </div>
       );
     } else {
@@ -946,6 +949,7 @@ class CaveInfo extends Component<Props, State> {
                       .slice()
                       .reverse()}
                     zoom={15}
+                    singlePoint={this.state.point}
                     showFullScreen={true}
                   />
                 </div>
