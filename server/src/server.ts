@@ -95,6 +95,8 @@ app.use(
 );
 app.use(
   '/api/parcel',
+  passport.authenticate('jwt', {session: false}),
+  noPendingUsers(),
   parcelAPI
 );
 app.use(
