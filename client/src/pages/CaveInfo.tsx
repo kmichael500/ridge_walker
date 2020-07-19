@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Helmet} from 'react-helmet';
+import {FaDirections} from 'react-icons/fa'
 import {
   Card,
   Descriptions,
@@ -12,6 +13,7 @@ import {
   Button,
   Input,
   Popconfirm,
+  Tooltip,
 } from 'antd';
 import {EyeOutlined} from '@ant-design/icons';
 import {getMasterPoint} from '../dataservice/getPoints';
@@ -181,7 +183,21 @@ class CaveInfo extends Component<Props, State> {
     return (
       <div>
         <Descriptions bordered column={this.props.descriptionColProps}>
-          <Descriptions.Item label="Coordinates">
+          <Descriptions.Item
+            label={
+                <Space>Coordinates
+                <a
+                  href={"https://www.google.com/maps/dir/?api=1&destination="+this.state.point.geometry.coordinates[1]+","+this.state.point.geometry.coordinates[0]+"&travelmode=car"}
+                  target="_blank"
+                >
+                  <Tooltip title="Directions">
+                    <FaDirections size="15"/>
+                  </Tooltip>
+                </a>
+                </Space>
+              
+            }
+          >
             <Text
               editable={
                 this.state.proposedChanges && {
