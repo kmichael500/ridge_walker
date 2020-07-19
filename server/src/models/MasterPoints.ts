@@ -102,7 +102,7 @@ const masterPointSchema = new Schema({
   },
 });
 
-masterPointSchema.index({"properties.narr":"text"});
+masterPointSchema.index({'properties.narr': 'text'});
 
 masterPointSchema.plugin(mongoosePaginate);
 

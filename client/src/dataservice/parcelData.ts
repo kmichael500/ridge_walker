@@ -1,7 +1,7 @@
 import axios, {AxiosResponse} from 'axios';
 import {serverBaseURL} from '../config/urlConfig';
-import {ParcelResponseInterface} from '../interfaces/parcelResponseInterface'
-import {Geometry} from '../interfaces/geoJsonInterface'
+import {ParcelResponseInterface} from '../interfaces/parcelResponseInterface';
+import {Geometry} from '../interfaces/geoJsonInterface';
 const axiosInstance = axios.create({
   baseURL: serverBaseURL,
 });
@@ -11,21 +11,23 @@ const axiosInstance = axios.create({
  * @param coordinates coordinates of cave
  * @returns Promise<ParcelResponseInterface[]>
  */
-async function getParcelByCoordinates(coordinates: Geometry): Promise<ParcelResponseInterface> {
+async function getParcelByCoordinates(
+  coordinates: Geometry
+): Promise<ParcelResponseInterface> {
   try {
-    const coordinateCopy = JSON.parse(JSON.stringify(coordinates))
-    const coordinatesAsString = coordinateCopy.coordinates.reverse().join(','); 
+    const coordinateCopy = JSON.parse(JSON.stringify(coordinates));
+    const coordinatesAsString = coordinateCopy.coordinates.reverse().join(',');
     console.log(coordinatesAsString);
-    const getLeadPointResponse = await axiosInstance.get('/api/parcel/'+coordinatesAsString, {
-      params: {secret_token: localStorage.getItem('JWT')},
-    });
+    const getLeadPointResponse = await axiosInstance.get(
+      '/api/parcel/' + coordinatesAsString,
+      {
+        params: {secret_token: localStorage.getItem('JWT')},
+      }
+    );
     return getLeadPointResponse.data as ParcelResponseInterface;
   } catch (error) {
     return error;
   }
 }
 
-
-export {
-    getParcelByCoordinates,
-};
+export {getParcelByCoordinates};

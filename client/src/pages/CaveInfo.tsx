@@ -13,9 +13,9 @@ import {
   Input,
   Popconfirm,
 } from 'antd';
-import {EyeOutlined} from '@ant-design/icons'
+import {EyeOutlined} from '@ant-design/icons';
 import {getMasterPoint} from '../dataservice/getPoints';
-import {getParcelByCoordinates} from '../dataservice/parcelData'
+import {getParcelByCoordinates} from '../dataservice/parcelData';
 import {
   addSubmittedPoint,
   getSubmittedPoint,
@@ -30,7 +30,7 @@ import {Feature} from '../interfaces/geoJsonInterface';
 import {userContext} from '../context/userContext';
 import {withRouter, Link} from 'react-router-dom';
 import {Breakpoint} from 'antd/lib/_util/responsiveObserve';
-import { ParcelResponseInterface } from '../interfaces/parcelResponseInterface';
+import {ParcelResponseInterface} from '../interfaces/parcelResponseInterface';
 
 const {Paragraph, Title, Text} = Typography;
 const {TextArea} = Input;
@@ -44,7 +44,7 @@ interface State {
   role: string;
   submittedPoint?: SubmittedPoint;
   loadingButtons: any;
-  parcelData: ParcelResponseInterface
+  parcelData: ParcelResponseInterface;
 }
 
 interface Props {
@@ -138,7 +138,7 @@ class CaveInfo extends Component<Props, State> {
       getMasterPoint(tcsnumber).then(requestedPoint => {
         const pointCopy = JSON.parse(JSON.stringify(requestedPoint));
         this.setState({point: requestedPoint, pointCopy, isLoading: false});
-        getParcelByCoordinates(requestedPoint.geometry).then((parcelData)=>{
+        getParcelByCoordinates(requestedPoint.geometry).then(parcelData => {
           this.setState({parcelData});
         });
       });
@@ -588,22 +588,22 @@ class CaveInfo extends Component<Props, State> {
     );
   }
 
-  renderParcelData(){
+  renderParcelData() {
     if (this.state.parcelData.fields !== undefined) {
-      return(
+      return (
         <div>
           Please note, this data might not be up to date.
           <Space direction="vertical">
-            {this.state.parcelData.fields.owner !== null &&
+            {this.state.parcelData.fields.owner !== null && (
               <Descriptions bordered column={this.props.descriptionColProps}>
                 <Descriptions.Item label="Owner 1">
                   {this.state.parcelData.fields.owner}
                 </Descriptions.Item>
-                {this.state.parcelData.fields.owner2 !== null &&
+                {this.state.parcelData.fields.owner2 !== null && (
                   <Descriptions.Item label="Owner 2">
-                  {this.state.parcelData.fields.owner2}
-                </Descriptions.Item>
-                }
+                    {this.state.parcelData.fields.owner2}
+                  </Descriptions.Item>
+                )}
                 <Descriptions.Item label="Address">
                   {this.state.parcelData.fields.address}
                 </Descriptions.Item>
@@ -638,19 +638,20 @@ class CaveInfo extends Component<Props, State> {
                   {this.state.parcelData.fields.saledate}
                 </Descriptions.Item>
                 <Descriptions.Item label="More Info">
-                  <a target="_blank" href={"https://landgrid.com" + this.state.parcelData.path}>
+                  <a
+                    target="_blank"
+                    href={'https://landgrid.com' + this.state.parcelData.path}
+                  >
                     Landgrid
                   </a>
                 </Descriptions.Item>
-              </Descriptions> 
-            }
+              </Descriptions>
+            )}
           </Space>
         </div>
-      )
-    }
-    else{
+      );
+    } else {
       return null;
-
     }
   }
 

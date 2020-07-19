@@ -252,26 +252,23 @@ userAPI.put(
             next(err);
           } else if (requestedUser) {
             //change password
-            if (req.body.password){
+            if (req.body.password) {
               requestedUser.password = req.body.password;
             }
             // use save to trigger password change (if applicable)
-            requestedUser.save((err, user)=>{
-              if (err){
+            requestedUser.save((err, user) => {
+              if (err) {
                 console.log("\nuserAPI.put('/:id')  save error");
                 next(err);
-              }
-              else{
+              } else {
                 res.sendStatus(200);
               }
-            })
-
+            });
           }
         }
       );
-    } else{
+    } else {
       const err = new Error('Unauthorized');
-
     }
   }
 );

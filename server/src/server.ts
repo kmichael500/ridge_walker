@@ -26,9 +26,9 @@ The file looks like this:
 */
 
 // Connect to MongoDB
-let connectionString = "mongodb://localhost"; // for dev
-if (process.env.MONGOURI){
-  connectionString = process.env.MONGOURI
+let connectionString = 'mongodb://localhost'; // for dev
+if (process.env.MONGOURI) {
+  connectionString = process.env.MONGOURI;
 }
 mongoose
   .connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true})

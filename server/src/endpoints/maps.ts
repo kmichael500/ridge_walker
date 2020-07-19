@@ -44,7 +44,7 @@ var upload = multer({storage: storage});
 mapsAPI.get('/image/:mapName.png', (req, res, next) => {
   try {
     let rootFolder = './';
-    if (process.env.ROOTFOLDER){
+    if (process.env.ROOTFOLDER) {
       rootFolder = process.env.ROOTFOLDER;
     }
     const pdfPath = rootFolder + '/public/maps/' + req.params.mapName + '.pdf';
@@ -61,12 +61,12 @@ mapsAPI.get('/image/:mapName.png', (req, res, next) => {
     });
     pdfImage.setConvertExtension('png');
 
-    if (rootFolder !== './'){
-      rootFolder = '/'
+    if (rootFolder !== './') {
+      rootFolder = '/';
     }
     pdfImage.convertPage(0).then(
       imagePath => {
-        console.log("imgpath", imagePath)
+        console.log('imgpath', imagePath);
         res.sendFile(imagePath, {root: rootFolder});
       },
       err => {
@@ -83,32 +83,38 @@ mapsAPI.get('/image/:mapName.png', (req, res, next) => {
 mapsAPI.get('/:id/getAll', (req, res, next) => {
   const searchString = req.params.id + '_*.pdf';
   let rootFolder = './';
-  if (process.env.ROOTFOLDER){
+  if (process.env.ROOTFOLDER) {
     rootFolder = process.env.ROOTFOLDER;
   }
-  console.log(rootFolder + "public/maps");
-  glob(searchString, {cwd: rootFolder + "public/maps", root:rootFolder}, (err, files) => {
-    console.log(files);
-    if (err) {
-      console.log(err);
-    } else {
-      try {
-        res.json(files);
-      } catch (error) {
-        res.sendStatus(404);
+  console.log(rootFolder + 'public/maps');
+  glob(
+    searchString,
+    {cwd: rootFolder + 'public/maps', root: rootFolder},
+    (err, files) => {
+      console.log(files);
+      if (err) {
+        console.log(err);
+      } else {
+        try {
+          res.json(files);
+        } catch (error) {
+          res.sendStatus(404);
+        }
       }
     }
-  });
+  );
 });
 
 // Download a map as pdf
 mapsAPI.get('/:id', (req, res, next) => {
   try {
     let rootFolder = './';
-    if (process.env.ROOTFOLDER){
+    if (process.env.ROOTFOLDER) {
       rootFolder = process.env.ROOTFOLDER;
     }
-    const file = fs.createReadStream(rootFolder + '/public/maps/' + req.params.id);
+    const file = fs.createReadStream(
+      rootFolder + '/public/maps/' + req.params.id
+    );
     const stat = fs.statSync(rootFolder + '/public/maps/' + req.params.id);
     res.setHeader('Content-Length', stat.size);
     res.setHeader('Content-Type', 'application/pdf');

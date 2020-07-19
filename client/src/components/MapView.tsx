@@ -313,8 +313,7 @@ class MapView extends Component<Props, State> {
         center: [this.props.match.params.lat, this.props.match.params.long],
         zoom: 15,
       });
-    }
-    else if (this.props.data === undefined) {
+    } else if (this.props.data === undefined) {
       getAllMasterPoints().then(requestedPoints => {
         this.setState({data: requestedPoints, isLoading: false});
         this.setState({
