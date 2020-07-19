@@ -314,7 +314,7 @@ class MapView extends Component<Props, State> {
         zoom: 15,
       });
     }
-    if (this.props.data === undefined) {
+    else if (this.props.data === undefined) {
       getAllMasterPoints().then(requestedPoints => {
         this.setState({data: requestedPoints, isLoading: false});
         this.setState({
