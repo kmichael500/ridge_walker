@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Helmet} from 'react-helmet';
-import {FaDirections} from 'react-icons/fa'
+import {FaDirections} from 'react-icons/fa';
 import {
   Card,
   Descriptions,
@@ -185,17 +185,23 @@ class CaveInfo extends Component<Props, State> {
         <Descriptions bordered column={this.props.descriptionColProps}>
           <Descriptions.Item
             label={
-                <Space>Coordinates
+              <Space>
+                Coordinates
                 <a
-                  href={"https://www.google.com/maps/dir/?api=1&destination="+this.state.point.geometry.coordinates[1]+","+this.state.point.geometry.coordinates[0]+"&travelmode=car"}
+                  href={
+                    'https://www.google.com/maps/dir/?api=1&destination=' +
+                    this.state.point.geometry.coordinates[1] +
+                    ',' +
+                    this.state.point.geometry.coordinates[0] +
+                    '&travelmode=car'
+                  }
                   target="_blank"
                 >
                   <Tooltip title="Directions">
-                    <FaDirections size="15"/>
+                    <FaDirections size="15" />
                   </Tooltip>
                 </a>
-                </Space>
-              
+              </Space>
             }
           >
             <Text
