@@ -1,4 +1,5 @@
 import React, {Component, useState, Fragment} from 'react';
+import {FaDirections} from 'react-icons/fa';
 import {
   getAllMasterPoints,
   getPaginatedMasterPoints,
@@ -396,6 +397,23 @@ class listPoints extends Component<Props, State> {
                           More Info
                         </Button>
                       </Link>,
+                      <a
+                        href={
+                          'https://www.google.com/maps/dir/?api=1&destination=' +
+                          point.geometry.coordinates[1] +
+                          ',' +
+                          point.geometry.coordinates[0] +
+                          '&travelmode=car'
+                        }
+                        target="_blank"
+                      >
+                        <Button>
+                          <Space>
+                            <FaDirections/>
+                            Directions
+                          </Space>
+                          </Button>
+                      </a>
                     ]}
                   >
                     {this.renderDescription(point)}
