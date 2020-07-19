@@ -34,8 +34,8 @@ import {withRouter} from 'react-router-dom';
 import {Feature, Geometry} from '../interfaces/geoJsonInterface';
 import {LeadFeature} from '../interfaces/LeadPointInterface';
 import {UserSlider} from './userInfo/UserSlider';
-import { ParcelResponseInterface } from '../interfaces/parcelResponseInterface';
-import { getParcelByCoordinates } from '../dataservice/parcelData';
+import {ParcelResponseInterface} from '../interfaces/parcelResponseInterface';
+import {getParcelByCoordinates} from '../dataservice/parcelData';
 
 const {Paragraph} = Typography;
 // marker for adding points (right click)
@@ -57,7 +57,7 @@ interface State {
   // maxZoom: number;
   height: number;
   isLoading: boolean;
-  isParcelDataLoading: boolean
+  isParcelDataLoading: boolean;
   isLeadsLoading: boolean;
   data: Feature[];
   deadLeads: LeadFeature[];
@@ -150,12 +150,11 @@ class MapView extends Component<Props, State> {
             pointToLayer={this.pointToLayer}
           />
         </div>
-        
       );
     }
   }
-   // renders geoJSON data
-   getParcelGeoJson() {
+  // renders geoJSON data
+  getParcelGeoJson() {
     if (!this.state.isParcelDataLoading) {
       return (
         <GeoJSON
@@ -316,13 +315,13 @@ class MapView extends Component<Props, State> {
             {this.getLeadGeoJSON()}
           </MarkerClusterGroup>
         </LayersControl.Overlay>
-        {!this.state.isParcelDataLoading &&
-        <LayersControl.Overlay name="Parcel Data" checked>
-          <MarkerClusterGroup spiderfyOnMaxZoom={true}>
-            {this.getParcelGeoJson()}
-          </MarkerClusterGroup>
-        </LayersControl.Overlay>
-        }
+        {!this.state.isParcelDataLoading && (
+          <LayersControl.Overlay name="Parcel Data" checked>
+            <MarkerClusterGroup spiderfyOnMaxZoom={true}>
+              {this.getParcelGeoJson()}
+            </MarkerClusterGroup>
+          </LayersControl.Overlay>
+        )}
       </LayersControl>
     );
   }
@@ -352,7 +351,7 @@ class MapView extends Component<Props, State> {
         zoom: 15,
       });
     } else if (this.props.data === undefined) {
-      if (!this.props.showFullScreen){
+      if (!this.props.showFullScreen) {
         getAllMasterPoints().then(requestedPoints => {
           this.setState({data: requestedPoints, isLoading: false});
           this.setState({
@@ -360,34 +359,36 @@ class MapView extends Component<Props, State> {
           });
         });
       } else {
-        const centerCopy = JSON.parse(JSON.stringify(this.props.center))
+        const centerCopy = JSON.parse(JSON.stringify(this.props.center));
         const center = {
-          coordinates: this.props.singlePoint.geometry.coordinates
-        } as Geometry
+          coordinates: this.props.singlePoint.geometry.coordinates,
+        } as Geometry;
         getParcelByCoordinates(center).then(parcelData => {
           const parcelFeature = {
-            type: "FeatureCollection",
+            type: 'FeatureCollection',
             features: [
               {
-                type: "Feature",
+                type: 'Feature',
                 properties: {},
-                geometry: parcelData.geometry
-              }
-            ]
-          }
+                geometry: parcelData.geometry,
+              },
+            ],
+          };
 
           const pointAsArray = [this.props.singlePoint];
 
-          this.setState({data: pointAsArray, isLoading: false, parcelData: parcelFeature.features, isParcelDataLoading: false});
+          this.setState({
+            data: pointAsArray,
+            isLoading: false,
+            parcelData: parcelFeature.features,
+            isParcelDataLoading: false,
+          });
           this.setState({
             searchProvider: new CustomOpenStreetMap(pointAsArray),
           });
         });
-        
       }
     }
-
-    
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateDimensions.bind(this));
