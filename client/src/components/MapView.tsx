@@ -267,7 +267,7 @@ class MapView extends Component<Props, State> {
         <LayersControl.BaseLayer name="Open Topo" checked={true}>
           <TileLayer
             maxZoom={16}
-            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            attribution='&amp;copy <a href="http://osm.org/copyright" target="_blank">OpenStreetMap</a> contributors'
             url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
           />
         </LayersControl.BaseLayer>
@@ -276,6 +276,7 @@ class MapView extends Component<Props, State> {
             maxZoom={20}
             // maxNativeZoom={25}
             url="https://elevation.nationalmap.gov/arcgis/services/3DEPElevation/ImageServer/WMSServer?"
+            attribution='<a href="https://viewer.nationalmap.gov/advanced-viewer/" target="_blank">USGS The National Map: 3DEP Elevation Program</a>'
             layers="3DEPElevation:Hillshade Gray"
             opacity={1}
           />
