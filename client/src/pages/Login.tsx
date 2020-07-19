@@ -47,11 +47,11 @@ class Login extends Component<Props, State> {
       .then(response => {
         this.context.setUser(response);
         this.context.setAuthenticated(true, () => {
-          let redirectPath = '/map';
+          let redirectPath = '/points';
           try {
             redirectPath = this.props.location.state.from;
           } catch (error) {
-            redirectPath = '/map';
+            redirectPath = '/points';
           }
 
           this.props.history.push(redirectPath);
