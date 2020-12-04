@@ -111,7 +111,7 @@ class Register extends Component<Props, State> {
         city: value.city,
         state: value.state,
         zipCode: Number(value.zipcode),
-        phoneNumber: value.phonenumber,
+        phoneNumber: '1111111111',
         nssNumber: Number(value.nssnumber),
         privateFields,
       },
@@ -318,49 +318,6 @@ class Register extends Component<Props, State> {
                   </Col>
                 </Row>
               </Col>
-              {/* Phone Number */}
-              <Col {...colSpanProps}>
-                <Row>
-                  <Col span={24}>
-                    <Form.Item
-                      label="Phone Number"
-                      name="phonenumber"
-                      rules={[
-                        {
-                          required: true,
-                          type: 'string',
-                          message: 'Phone number required!',
-                          whitespace: true,
-                        },
-                        ({getFieldValue, setFieldsValue}) => ({
-                          validator(rule, value) {
-                            const phoneNumber =
-                              value !== undefined
-                                ? parsePhoneNumberFromString(value)
-                                : false;
-                            if (phoneNumber) {
-                              if (phoneNumber.isValid()) {
-                                return Promise.resolve();
-                              } else {
-                                return Promise.reject('Invalid phone number');
-                              }
-                            } else {
-                              return Promise.reject('Invalid phone number');
-                            }
-                          },
-                        }),
-                      ]}
-                    >
-                      <PhoneInput
-                        defaultCountry="US"
-                        value=""
-                        onChange={() => {}}
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Col>
-
               {/* Email */}
               <Col span={24}>
                 <Row>
