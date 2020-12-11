@@ -11,22 +11,25 @@ import * as bodyParser from 'body-parser';
 import * as passport from 'passport';
 import './auth/passport';
 
+import {config as dotenvConfig} from 'dotenv';
+dotenvConfig();
+
 const app = Express();
 
 /*
 
 DB Config
 Add your MongoDB connection string in the keys file.
-This keys file is stored in /config/keys.ts
+This keys file is stored in a .env file at the root of the server folder
 Do not commit this file.
 The file looks like this:
 
-  export const mongoURI = ""
+  MONGOURI=connectionstringhere
 
 */
 
 // Connect to MongoDB
-let connectionString = 'mongodb://localhost'; // for dev
+let connectionString = '';
 if (process.env.MONGOURI) {
   connectionString = process.env.MONGOURI;
 }

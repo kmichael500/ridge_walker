@@ -12,7 +12,7 @@ const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 // Endpoint to get a single submission by tcsnumber
 parcelAPI.get('/:coords', async (req, res, next) => {
-  console.log("Getting Parcel Data...");
+  console.log('Getting Parcel Data...');
   let parcelDataURL = '';
   console.log(req.params.coords);
   try {

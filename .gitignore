@@ -1,5 +1,6 @@
 # config files
 /server/src/config/keys.ts
+server/.env
 
 # dependencies
 /client/.pnp
