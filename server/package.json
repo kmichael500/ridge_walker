@@ -35,7 +35,7 @@
     "@types/passport-local": "^1.0.33",
     "@types/pdf-image": "^2.0.0",
     "axios": "^0.19.2",
-    "bcrypt": "^4.0.1",
+    "bcrypt": "^5.0.0",
     "blob": "^0.1.0",
     "compression": "^1.7.4",
     "csv2geojson": "^5.1.1",
