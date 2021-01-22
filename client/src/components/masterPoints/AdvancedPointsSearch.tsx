@@ -450,7 +450,7 @@ class AdvancedPointsSearch extends Component<Props, State> {
             {/* Search by ent_type */}
             <Col {...colSpanProps}>
               <Row>
-                Enterance Type
+                Entrance Type
                 <Col span={24}>
                   <Select
                     size="large"
