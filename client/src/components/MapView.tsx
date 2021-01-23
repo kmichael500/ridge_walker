@@ -49,7 +49,7 @@ const MyMarker = props => {
   const duckIcon = new L.Icon({
     iconUrl: 'https://api.iconify.design/fa-solid:map-marker.svg?height=35',
     popupAnchor: [0,-30], // centers popup over point
-    iconAnchor: [13, 30] // makes bottom of point where you clicked
+    iconAnchor: [13, 35] // makes bottom of point where you clicked
     
   });
 
