@@ -430,7 +430,7 @@ class CaveInfo extends Component<Props, State> {
               {this.state.point.properties.gear + ''}
             </Text>
           </Descriptions.Item>
-          <Descriptions.Item label="Enterance Type">
+          <Descriptions.Item label="Entrance Type">
             <Text
               editable={
                 this.state.proposedChanges && {
@@ -440,7 +440,7 @@ class CaveInfo extends Component<Props, State> {
                       point.properties.ent_type = val;
                       this.setState({point});
                     } else {
-                      message.warn("Enterance type can't be blank.");
+                      message.warn("Entrance type can't be blank.");
                     }
                   },
                 }
