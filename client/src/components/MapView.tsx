@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ReactDOMServer from 'react-dom/server';
-import L from 'leaflet';
+import L, { icon, Icon } from 'leaflet';
 import {Helmet} from 'react-helmet';
 // import { map, LayerGroup, latLng, Icon } from 'leaflet';
 import Control from 'react-leaflet-control';
@@ -45,8 +45,15 @@ const MyMarker = props => {
       ref.leafletElement.openPopup();
     }
   };
+  
+  const duckIcon = new L.Icon({
+    iconUrl: 'https://api.iconify.design/fa-solid:map-marker.svg?height=35',
+    popupAnchor: [0,-30], // centers popup over point
+    iconAnchor: [13, 30] // makes bottom of point where you clicked
+    
+  });
 
-  return <Marker ref={initMarker} {...props} />;
+  return <Marker ref={initMarker} icon = {duckIcon} {...props} />;
 };
 
 interface State {
@@ -452,7 +459,7 @@ class MapView extends Component<Props, State> {
                 options={{
                   position: 'bottomright',
                   strings: {
-                    title: 'Show me where I am, yo!',
+                    title: 'Show me where I am!',
                   },
                   onActivate: () => {},
                 }}
@@ -465,8 +472,8 @@ class MapView extends Component<Props, State> {
               {this.state.currentPos && (
                 <MyMarker position={this.state.currentPos}>
                   <Popup position={this.state.currentPos}>
-                    Current location:{' '}
-                    <pre>{JSON.stringify(this.state.currentPos, null, 2)}</pre>
+                    Current position:{' '}
+                    <pre>{this.state.currentPos.lat+", " + this.state.currentPos.lng}</pre>
                   </Popup>
                 </MyMarker>
               )}
