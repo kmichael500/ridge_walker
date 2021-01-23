@@ -220,7 +220,7 @@ class listPoints extends Component<Props, State> {
       }
       if (key === 'ent_type' && this.state.renderedFeatures[key]) {
         renderedItems.push(
-          <Descriptions.Item label="Enterance Type">
+          <Descriptions.Item label="Entrance Type">
             {point.properties.ent_type}
           </Descriptions.Item>
         );
@@ -327,7 +327,7 @@ class listPoints extends Component<Props, State> {
                   {label: 'Topo', value: 'topo_name'},
                   {label: 'Topo Indication', value: 'topo_indi'},
                   {label: 'Gear', value: 'gear'},
-                  {label: 'Enterance Type', value: 'ent_type'},
+                  {label: 'Entrance Type', value: 'ent_type'},
                   {label: 'Field Indication', value: 'field_indi'},
                   {label: 'Map Status', value: 'map_status'},
                   {label: 'Geology', value: 'geology'},
