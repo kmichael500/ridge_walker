@@ -176,7 +176,7 @@ class AddCave extends Component<any, State> {
       '2. Specific directions to cave including prominent field and topographic landmarks. Include Distances, compass angles, and sketch map.'
     );
     narrPlaceholderArr.push(
-      '3. Complete narrative description of the cave including interesting scientific and historical information. Describe how the enterance appears in the field, dimmentions of enterance.'
+      '3. Complete narrative description of the cave including interesting scientific and historical information. Describe how the entrance appears in the field, dimmentions of entrance.'
     );
 
     let narrPlaceholder = '';
@@ -414,12 +414,12 @@ class AddCave extends Component<any, State> {
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  label="Enterance Number"
+                  label="Entrance Number"
                   name="ent_num"
                   rules={[
                     {
                       required: true,
-                      message: 'Enterance number required!',
+                      message: 'Entrance number required!',
                       whitespace: true,
                     },
                   ]}
@@ -427,12 +427,12 @@ class AddCave extends Component<any, State> {
                   <Input defaultValue={1} min={1} />
                 </Form.Item>
                 <Form.Item
-                  label="Number of Enterances"
+                  label="Number of Entrances"
                   name="num_of_ent"
                   rules={[
                     {
                       required: true,
-                      message: 'Number of enterances required!',
+                      message: 'Number of entrances required!',
                       whitespace: true,
                       type: 'number',
                     },
@@ -446,7 +446,7 @@ class AddCave extends Component<any, State> {
                   rules={[
                     {
                       required: true,
-                      message: 'Enterance number required!',
+                      message: 'Entrance number required!',
                       whitespace: true,
                     },
                   ]}
@@ -548,12 +548,12 @@ class AddCave extends Component<any, State> {
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  label="Enterance Description"
+                  label="Entrance Description"
                   name="ent_description"
                   rules={[
                     {
                       required: true,
-                      message: 'Enterance description required!',
+                      message: 'Entrance description required!',
                       whitespace: true,
                     },
                   ]}
@@ -709,7 +709,7 @@ class AddCave extends Component<any, State> {
                   rules={[
                     {
                       required: true,
-                      message: 'Geologic rormation required!',
+                      message: 'Geologic formation required!',
                       whitespace: true,
                     },
                   ]}
