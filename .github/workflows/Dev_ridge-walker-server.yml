@@ -20,8 +20,13 @@ jobs:
       with:
         node-version: '12.x'
 
+    - name: install pdf conversion dependencies
+      run: |
+        sudo apt-get install imagemagick ghostscript poppler-utils
+
     - name: npm install, build, and test
       run: |
+        cd server
         npm install
         npm run build --if-present
         npm run test --if-present

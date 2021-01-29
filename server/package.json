@@ -6,6 +6,7 @@
   "scripts": {
     "start": "ts-node src/server.ts",
     "dev": "ts-node-dev src/server.ts --max-old-space-size=4096",
+    "build": "npm i && npm run compile",
     "test": "echo \"Error: no test specified\" && exit 1",
     "check": "gts check",
     "clean": "gts clean",
