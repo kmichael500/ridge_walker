@@ -97,24 +97,24 @@ MONGOURI=mongo_connection_string_here
 **Install dependencies**
 ```bash
 # Install required global dependencies
-> npm i typescript -g
-> npm i ts-node -g
+npm i typescript -g
+npm i ts-node -g
 
 # Install required server dependencies
-> npm i
+npm i
 
 # Install required client dependencies
-> npm i
+npm i
 ```
 **Starting the server**
 ``` bash
 # Start running the server
-> npm run dev
+npm run dev
 ```
 **Starting the client**
 ```bash
 # Start running the client
-> npm start
+npm start
 ```
 
 **Registering a user**
