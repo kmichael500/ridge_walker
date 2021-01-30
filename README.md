@@ -77,10 +77,12 @@
 ## How to Run
 After installing [NodeJS](https://nodejs.org/en/download/) you will need to setup a few config files.
 
+The server has been removed from this repository and is now located [here](https://github.com/kmichael500/ridge_walker_server).
+
 **Client config**
 
 ```typescript
-// create the ./client/src/config/urlConfig.ts file
+// create the ./src/config/urlConfig.ts file
 const serverBaseURL = "http://server_ip_address_here:5000/";
 const siteBaseURL = "http://client_ip_address_here:3000/";
 
@@ -88,9 +90,9 @@ export { serverBaseURL, siteBaseURL };
 ```
 **Server config**
 
-```typescript
-// create the ./server/src/config/keys.ts file
-export const mongoURI = "mongo_connection_string_here"
+```bash
+# create a .env file in the project root dirrecotry
+MONGOURI=mongo_connection_string_here
 ```
 **Install dependencies**
 ```bash
@@ -99,23 +101,19 @@ export const mongoURI = "mongo_connection_string_here"
 > npm i ts-node -g
 
 # Install required server dependencies
-> cd server
 > npm i
 
 # Install required client dependencies
-> cd client
 > npm i
 ```
 **Starting the server**
 ``` bash
 # Start running the server
-> cd server
 > npm run dev
 ```
 **Starting the client**
 ```bash
 # Start running the client
-> cd client
 > npm start
 ```
 
