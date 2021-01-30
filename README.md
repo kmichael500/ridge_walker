@@ -82,11 +82,13 @@ The server has been removed from this repository and is now located [here](https
 **Client config**
 
 ```typescript
-// create the ./src/config/urlConfig.ts file
-const serverBaseURL = "http://server_ip_address_here:5000/";
-const siteBaseURL = "http://client_ip_address_here:3000/";
+// edit the ./src/config/urlConfig.ts file
+const serverBaseURL = process.env.REACT_APP_SERVER_BASE_URL
+  ? process.env.REACT_APP_SERVER_BASE_URL
+  : 'http://your_ip_here:5000/';
+const siteBaseURL = 'http://server_url_or_ip_here:3000/';
 
-export { serverBaseURL, siteBaseURL };
+export {serverBaseURL, siteBaseURL};
 ```
 **Server config**
 

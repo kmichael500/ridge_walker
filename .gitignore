@@ -40,9 +40,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# config
-/src/config
-
 # dependencies
 /.pnp
 .pnp.js
